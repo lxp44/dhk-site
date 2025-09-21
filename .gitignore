@@ -1,0 +1,14 @@
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Node / build junk (if you ever add npm)
+node_modules/
+dist/
+build/
+
+# Logs
+*.log
+
+# Env files (in case you add secrets later)
+.env
