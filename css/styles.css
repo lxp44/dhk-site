@@ -38,18 +38,74 @@ p { color: #ccc; font-size: 18px; font-family: "Roboto", sans-serif; }
 .color-scheme-3 { color: #fff; background-color: #242833; }
 .color-scheme-4 { color: #fff; background-color: #000; }
 
-/* =========================
-   Announcement / Utility bar
-   ========================= */
-.utility-bar { font-family: "Roboto", sans-serif; font-size: 12px; letter-spacing: .08em; }
+/* ===== Announcement / Utility bar (Dawn-like) ===== */
+.utility-bar {
+  font-family: "Roboto", sans-serif;
+  font-size: 12px;
+  letter-spacing: .08em;
+}
+.utility-bar--bottom-border { border-bottom: 1px solid rgba(255,255,255,.08); }
+
 .utility-bar__grid {
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
   align-items: center;
   min-height: 36px;
+  gap: 12px;
+  grid-template-columns: 1fr auto; /* default two columns */
 }
-.utility-bar__center { text-align: center; opacity: .85; }
-.utility-bar__msg { text-transform: uppercase; }
+.utility-bar__grid--2-col { grid-template-columns: 1fr auto; }
+.utility-bar__grid--3-col { grid-template-columns: 1fr auto 1fr; }
+
+.list-social {
+  list-style: none; margin: 0; padding: 0;
+  display: flex; gap: 12px; align-items: center;
+}
+.list-social a {
+  color: #fff; text-decoration: none; opacity: .85; text-transform: uppercase; letter-spacing: .08em;
+}
+.list-social a:hover { opacity: 1; text-decoration: underline; }
+
+/* Announcement slider bits */
+.announcement-bar {
+  display: grid; grid-template-columns: auto 1fr auto;
+  align-items: center; gap: 8px; justify-content: center;
+  text-align: center;
+}
+.announcement-track {
+  display: grid;
+  grid-auto-flow: column;
+  gap: 0;
+  overflow: hidden;
+  position: relative;
+}
+.announcement-bar__message {
+  min-width: 100%;
+  margin: 0;
+  color: #fff;
+  opacity: .95;
+  white-space: nowrap;
+  display: grid; place-items: center;
+  padding: 6px 0;
+}
+.announcement-bar__link {
+  color: #fff; text-decoration: none; opacity: .95;
+}
+.announcement-bar__link:hover { text-decoration: underline; opacity: 1; }
+
+/* Slider buttons (kept minimal like Dawn’s caret buttons) */
+.slider-button {
+  background: transparent; border: 0; color: #fff; cursor: pointer;
+  font-size: 18px; line-height: 1; padding: 2px 6px; opacity: .8;
+}
+.slider-button:hover { opacity: 1; }
+.slider-button[hidden] { display: none !important; }
+
+/* Small screens: make socials wrap or hide if needed */
+@media (max-width: 640px) {
+  .utility-bar__grid { grid-template-columns: 1fr; gap: 6px; }
+  .list-social { justify-content: center; flex-wrap: wrap; }
+}
+
 
 /* =========================
    Header
