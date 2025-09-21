@@ -420,3 +420,13 @@ a:hover, button:hover, .hoverable:hover, input[type="submit"]:hover { transform:
 .policies { display: flex; gap: 10px; }
 .policies a { color: #fff; text-decoration: none; opacity: .85; }
 .policies a:hover { opacity: 1; text-decoration: underline; }
+/* ===== Announcement bar hide/reveal ===== */
+.utility-bar {
+  transition: transform .24s ease, opacity .24s ease;
+  will-change: transform, opacity;
+}
+
+.utility-bar.hide {
+  transform: translateY(-100%);
+  opacity: 0;
+}
