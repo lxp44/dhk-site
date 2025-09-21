@@ -1,121 +1,216 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const popup   = document.getElementById('storm-popup');
-  const thunder = document.getElementById('storm-thunder');
-  const rain    = document.getElementById('storm-rain');
-  const overlay = document.getElementById('storm-overlay');
+// js/storm_shopify_style.js
+(function () {
+  const $ = (sel) => document.querySelector(sel);
+  const on = (el, ev, fn, opts) => el && el.addEventListener(ev, fn, opts || false);
 
-  let hasInteracted = false;
+  // Elements
+  let popup, overlay, canvas, ctx;
+  let A = {}; // audio elements
+  let rafId = null;
+  let hasStarted = false;
 
-  // Bypass via URL: #bypass or ?preview=1
-  const url = new URL(window.location.href);
-  const bypass = url.hash.includes('bypass') || url.search.includes('preview=1');
+  // Stage handling
+  const STAGES = /** @type const */ (["light", "med", "heavy"]);
+  let currentStage = "light";
+  let targetStage = "light";
+  const VOLS = { light: 0.22, med: 0.35, heavy: 0.5 };  // overall loudness caps
+  const thunderBias = { light: 0.25, med: 0.45, heavy: 0.7 }; // thunder relative to rain
 
-  if (bypass) {
-    localStorage.setItem('stormEntered', 'true');
+  // URL-based routing (tweak to your filenames)
+  function inferStageFromURL() {
+    const p = location.pathname.toLowerCase();
+    if (p.endsWith("/shop.html") || p.includes("/collections") || p.includes("/products")) return "med";
+    if (p.includes("cart") || p.includes("checkout") || p.endsWith("/checkout.html")) return "heavy";
+    return "light";
   }
 
-  function hidePopup() {
-    if (!popup) return;
-    popup.style.opacity = '0';
-    setTimeout(() => popup.remove(), 500);
+  // Bypass helpers
+  function hasBypass() {
+    const url = new URL(location.href);
+    return url.hash.includes("bypass") || url.search.includes("preview=1");
   }
 
-  function safePlay(audioEl, vol = 0.4) {
-    if (!audioEl) return Promise.resolve();
-    audioEl.volume = vol;
+  // Safe audio play wrapper
+  async function safePlay(el) {
+    if (!el) return;
     try {
-      const p = audioEl.play();
-      return p && typeof p.then === 'function' ? p.catch(() => {}) : Promise.resolve();
-    } catch (_) { return Promise.resolve(); }
+      await el.play();
+    } catch (_) {
+      // ignored: will still clear UI even if audio blocked
+    }
   }
 
-  function startRain() {
-    overlay.style.display = 'block';
-    const canvas = document.getElementById('rain-canvas');
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    canvas.width  = window.innerWidth;
-    canvas.height = window.innerHeight;
+  // Prepare audio refs
+  function hookAudio() {
+    A = {
+      rain: {
+        light: $("#rain-light"),
+        med: $("#rain-med"),
+        heavy: $("#rain-heavy"),
+      },
+      thunder: {
+        light: $("#thunder-light"),
+        med: $("#thunder-med"),
+        heavy: $("#thunder-heavy"),
+      },
+    };
+    // Prime volumes low
+    for (const k of STAGES) {
+      if (A.rain[k]) A.rain[k].volume = 0;
+      if (A.thunder[k]) A.thunder[k].volume = 0;
+    }
+  }
 
-    const drops = Array.from({ length: 250 }).map(() => ({
+  // Fade helper
+  function fadeTo(el, to, ms = 600) {
+    if (!el) return;
+    const from = el.volume;
+    if (Math.abs(from - to) < 0.01) { el.volume = to; return; }
+    const start = performance.now();
+    function step(t) {
+      const k = Math.min(1, (t - start) / ms);
+      el.volume = from + (to - from) * k;
+      if (k < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  // Switch stage by crossfading sources
+  function setStage(next) {
+    if (!STAGES.includes(next)) next = "light";
+    targetStage = next;
+    if (currentStage === next) return;
+    currentStage = next;
+
+    // Start all tracks (muted), then fade selected up & others down
+    for (const k of STAGES) {
+      safePlay(A.rain[k]);
+      safePlay(A.thunder[k]);
+    }
+    const rTarget = VOLS[next];
+    const tTarget = Math.min(1, rTarget * thunderBias[next]);
+
+    for (const k of STAGES) {
+      fadeTo(A.rain[k], k === next ? rTarget : 0);
+      fadeTo(A.thunder[k], k === next ? tTarget : 0);
+    }
+  }
+
+  // Lightning + rain visual
+  function startVisuals() {
+    overlay.style.display = "block";
+    canvas.width = innerWidth;
+    canvas.height = innerHeight;
+    const drops = Array.from({ length: 260 }).map(() => ({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
-      len: Math.random() * 20 + 10,
-      speed: Math.random() * 3 + 2
+      len: Math.random() * 22 + 10,
+      speed: Math.random() * 3 + 2.4,
     }));
 
     function draw() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.strokeStyle = 'rgba(255,255,255,0.2)';
+      ctx.strokeStyle = "rgba(255,255,255,0.22)";
       ctx.lineWidth = 1;
       ctx.beginPath();
-      for (let d of drops) {
+      for (const d of drops) {
         ctx.moveTo(d.x, d.y);
         ctx.lineTo(d.x, d.y + d.len);
       }
       ctx.stroke();
-      for (let d of drops) {
+      for (const d of drops) {
         d.y += d.speed;
         if (d.y > canvas.height) {
           d.y = -d.len;
           d.x = Math.random() * canvas.width;
         }
       }
-      requestAnimationFrame(draw);
+      rafId = requestAnimationFrame(draw);
     }
     draw();
+
+    // Lightning pulses
+    function flashOnce() {
+      overlay.style.backgroundColor = "rgba(255,255,255,0.28)";
+      setTimeout(() => (overlay.style.backgroundColor = "transparent"), 100);
+      setTimeout(() => { if (Math.random() > 0.55) flashOnce(); }, Math.random() * 8000 + 2500);
+    }
+    setTimeout(flashOnce, 1800);
   }
 
-  function flashLightning() {
-    function flashOnce() {
-      overlay.style.backgroundColor = 'rgba(255,255,255,0.3)';
-      setTimeout(() => { overlay.style.backgroundColor = 'transparent'; }, 100);
-      setTimeout(() => { if (Math.random() > 0.6) flashOnce(); }, Math.random() * 10000 + 3000);
-    }
-    setTimeout(flashOnce, 2000);
+  function hidePopup() {
+    if (!popup) return;
+    popup.style.opacity = "0";
+    setTimeout(() => popup.remove(), 450);
   }
 
   async function startStorm() {
-    if (hasInteracted) return;
-    hasInteracted = true;
+    if (hasStarted) return;
+    hasStarted = true;
 
     hidePopup();
-    startRain();
-    flashLightning();
+    startVisuals();
 
-    // Try audio, but never block UI if it fails
-    await Promise.all([
-      safePlay(thunder, 0.3),
-      safePlay(rain, 0.35)
-    ]).catch(() => { /* ignore */ });
-
-    localStorage.setItem('stormEntered', 'true');
-  }
-
-  // If user already entered, skip popup
-  if (localStorage.getItem('stormEntered') === 'true') {
-    if (popup) popup.remove();
-    startStorm();
-    return;
-  }
-
-  // If bypass flag present, skip immediately
-  if (bypass) {
-    if (popup) popup.remove();
-    startStorm();
-    return;
-  }
-
-  // Start on first user interaction
-  ['click', 'touchstart', 'keydown', 'scroll'].forEach(evt => {
-    document.addEventListener(evt, () => startStorm(), { once: true, passive: true });
-  });
-
-  // Absolute fallback: auto-hide after 3s to avoid trapping users
-  setTimeout(() => {
-    if (!hasInteracted) {
-      hidePopup();
-      startStorm(); // proceed without audio if needed
+    // Play all quietly, then set stage (so crossfades work)
+    hookAudio();
+    for (const k of STAGES) {
+      await safePlay(A.rain[k]);
+      await safePlay(A.thunder[k]);
     }
-  }, 3000);
-});
+    setStage(inferStageFromURL());
+    localStorage.setItem("stormEntered", "true");
+  }
+
+  // Link-based proximity boosts (hovering Checkout/Cart ramps to heavy)
+  function attachProximityBoosts() {
+    const boostSel = [
+      'a[href*="checkout"]',
+      'a[href*="cart"]',
+      'a[data-loud="heavy"]', // you can add this attr to any link/button you want to get loud
+      '.button--checkout',
+      '.button--cart',
+    ].join(",");
+
+    document.querySelectorAll(boostSel).forEach((el) => {
+      on(el, "mouseenter", () => setStage("heavy"));
+      on(el, "focus", () => setStage("heavy"));
+      on(el, "mouseleave", () => setStage(inferStageFromURL()));
+      on(el, "blur", () => setStage(inferStageFromURL()));
+    });
+  }
+
+  // Init after DOM ready
+  document.addEventListener("DOMContentLoaded", () => {
+    popup = $("#storm-popup");
+    overlay = $("#storm-overlay");
+    canvas = $("#rain-canvas");
+    ctx = canvas.getContext("2d");
+
+    const bypass = hasBypass() || localStorage.getItem("stormEntered") === "true";
+
+    attachProximityBoosts();
+
+    if (bypass) {
+      if (popup) popup.remove();
+      startStorm();
+      return;
+    }
+
+    // Start on first user interaction
+    ["click", "touchstart", "keydown", "scroll"].forEach((evt) =>
+      on(document, evt, startStorm, { once: true, passive: true })
+    );
+
+    // Absolute fallback — avoid trapping users
+    setTimeout(() => {
+      if (!hasStarted) startStorm();
+    }, 3000);
+
+    // Keep canvas sized
+    on(window, "resize", () => {
+      if (!canvas) return;
+      canvas.width = innerWidth;
+      canvas.height = innerHeight;
+    });
+  });
+})();
