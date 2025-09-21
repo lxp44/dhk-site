@@ -254,4 +254,55 @@ a:hover, button:hover, .hoverable:hover, input[type="submit"]:hover { transform:
   font-family: "Roboto", sans-serif;
   font-size: 13px; color: #ddd; letter-spacing: .02em;
 }
+/* ===== Dawn-like sticky header + hide/reveal ===== */
+
+/* Fallback header height so content isn't hidden under sticky header */
+:root { --header-height: 72px; }
+
+/* Make the header wrapper sticky, like Dawn's .section-header */
+.section-header.header-wrapper {
+  position: sticky;
+  top: 0;
+  z-index: 2000;
+  background: transparent; /* header has its own background */
+}
+
+/* Optional subtle divider like Dawn's header-wrapper--border-bottom */
+.header-wrapper--border-bottom {
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+/* Transition container (Dawn toggles these classes via JS) */
+.section-header .header {
+  will-change: transform, background-color, box-shadow;
+  transition: transform .24s ease, background-color .24s ease, box-shadow .24s ease;
+}
+
+/* When “sticky mode” is active (mirrors .shopify-section-header-sticky) */
+.shopify-section-header-sticky .header {
+  background: rgba(0,0,0,0.78);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.28);
+  backdrop-filter: blur(6px);
+}
+
+/* When hidden while scrolling down (mirrors .shopify-section-header-hidden) */
+.shopify-section-header-hidden .header {
+  transform: translateY(-100%);
+}
+
+/* Helper class Dawn uses when animating */
+.section-header .header.animate {
+  transition: transform .24s ease, background-color .24s ease, box-shadow .24s ease, opacity .24s ease;
+}
+
+/* Keep the hero from tucking under the sticky header on browsers that respect scroll-padding */
+html { scroll-padding-top: var(--header-height); }
+
+/* Slightly smaller header height on mobile */
+@media (max-width: 900px) {
+  :root { --header-height: 60px; }
+}
+
+/* Ensure our header grid respects the height visually */
+.header-grid { min-height: var(--header-height); }
 
