@@ -1,32 +1,25 @@
 // js/storm_shopify_style.js
 (function () {
-  "use strict";
-
-  // ======= tiny helpers =======
   const $ = (sel) => document.querySelector(sel);
   const on = (el, ev, fn, opts) => el && el.addEventListener(ev, fn, opts || false);
-  const dbg = (...a) => { /* console.log('[storm]', ...a); */ };
 
-  // ======= DOM refs =======
+  // Elements
   let popup, overlay, canvas, ctx;
-  let A = { rain: {}, thunder: {} };   // audio elements
+  let A = {}; // audio elements
   let rafId = null;
   let hasStarted = false;
 
-  // ======= stages / volumes =======
+  // Stage handling
   const STAGES = /** @type const */ (["light", "med", "heavy"]);
   let currentStage = "light";
+  let targetStage = "light";
 
-  // master caps; we’ll keep total reasonable for mobile
-  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-  const VOLS = isMobile
-    ? { light: 0.16, med: 0.25, heavy: 0.35 }
-    : { light: 0.22, med: 0.35, heavy: 0.5 };
+  // Loudness caps (slightly higher so we can hear it clearly)
+  const VOLS = { light: 0.35, med: 0.5, heavy: 0.7 };
+  const thunderBias = { light: 0.35, med: 0.6, heavy: 0.85 };
 
-  // thunder relative to rain
-  const thunderBias = { light: 0.25, med: 0.45, heavy: 0.7 };
+  // --- Helpers ---------------------------------------------------------------
 
-  // ======= routing → stage =======
   function inferStageFromURL() {
     const p = location.pathname.toLowerCase();
     if (p.endsWith("/shop.html") || p.includes("/collections") || p.includes("/products")) return "med";
@@ -34,24 +27,22 @@
     return "light";
   }
 
-  // ======= bypass helpers =======
   function hasBypass() {
     const url = new URL(location.href);
     return url.hash.includes("bypass") || url.search.includes("preview=1");
   }
 
-  // ======= safe audio play wrapper =======
   async function safePlay(el) {
     if (!el) return;
     try {
+      el.muted = false;
+      el.volume = Math.min(el.volume || 0, 1);
       await el.play();
-    } catch (e) {
-      // browsers may block until a user gesture; that's fine, we’ll retry after interaction
-      dbg("play blocked (will retry on interaction)", el.id);
+    } catch (_) {
+      // ignored, will try again on next interaction
     }
   }
 
-  // ======= wire up audio elements =======
   function hookAudio() {
     A = {
       rain: {
@@ -65,21 +56,18 @@
         heavy: $("#thunder-heavy"),
       },
     };
-
-    // normalize initial volumes & loop flags (safety)
     for (const k of STAGES) {
-      if (A.rain[k]) { A.rain[k].volume = 0; A.rain[k].loop = true; }
-      if (A.thunder[k]) { A.thunder[k].volume = 0; A.thunder[k].loop = true; }
+      const r = A.rain[k], t = A.thunder[k];
+      if (r) { r.muted = true; r.volume = 0; }
+      if (t) { t.muted = true; t.volume = 0; }
     }
   }
 
-  // ======= volume fading =======
-  function fadeTo(el, to, ms = 600) {
+  function fadeTo(el, to, ms = 450) {
     if (!el) return;
-    const from = el.volume ?? 0;
+    const from = el.volume || 0;
     if (Math.abs(from - to) < 0.01) { el.volume = to; return; }
     const start = performance.now();
-
     function step(t) {
       const k = Math.min(1, (t - start) / ms);
       el.volume = from + (to - from) * k;
@@ -88,18 +76,17 @@
     requestAnimationFrame(step);
   }
 
-  // ======= stage switching (crossfade) =======
   function setStage(next) {
     if (!STAGES.includes(next)) next = "light";
-    if (currentStage === next) return;
-    currentStage = next;
+    targetStage = next;
+    if (currentStage !== next) currentStage = next;
 
-    dbg("setStage →", next);
-
-    // ensure everything is playing (muted), then fade desired pair up
+    // Start all (unmuted) then crossfade to targets
     for (const k of STAGES) {
       safePlay(A.rain[k]);
       safePlay(A.thunder[k]);
+      if (A.rain[k]) A.rain[k].muted = false;
+      if (A.thunder[k]) A.thunder[k].muted = false;
     }
 
     const rTarget = VOLS[next];
@@ -111,14 +98,10 @@
     }
   }
 
-  // ======= visuals (rain + lightning) =======
   function startVisuals() {
-    if (!overlay || !canvas) return;
     overlay.style.display = "block";
     canvas.width = innerWidth;
     canvas.height = innerHeight;
-    ctx = canvas.getContext("2d");
-    if (!ctx) return;
 
     const drops = Array.from({ length: 260 }).map(() => ({
       x: Math.random() * canvas.width,
@@ -148,52 +131,45 @@
     }
     draw();
 
-    // Lightning pulses
     function flashOnce() {
       overlay.style.backgroundColor = "rgba(255,255,255,0.28)";
       setTimeout(() => (overlay.style.backgroundColor = "transparent"), 100);
       setTimeout(() => { if (Math.random() > 0.55) flashOnce(); }, Math.random() * 8000 + 2500);
     }
     setTimeout(flashOnce, 1800);
-
-    // resize handler
-    on(window, "resize", () => {
-      canvas.width = innerWidth;
-      canvas.height = innerHeight;
-    });
   }
 
   function hidePopup() {
     if (!popup) return;
     popup.style.opacity = "0";
-    setTimeout(() => popup && popup.remove(), 450);
+    setTimeout(() => popup.remove(), 350);
   }
 
-  // ======= main start =======
+  async function unlockAudioAll() {
+    // Force-unlock and play every track immediately after interaction
+    for (const k of STAGES) {
+      await safePlay(A.rain[k]);
+      await safePlay(A.thunder[k]);
+      if (A.rain[k]) A.rain[k].muted = false;
+      if (A.thunder[k]) A.thunder[k].muted = false;
+    }
+  }
+
   async function startStorm() {
     if (hasStarted) return;
     hasStarted = true;
-    dbg("storm starting");
 
     hidePopup();
     startVisuals();
 
     hookAudio();
+    await unlockAudioAll();            // <— ensure audio is unlocked and playing now
+    setStage(inferStageFromURL());     // <— and immediately fade to the right loudness
 
-    // Try to start everything; if blocked, user already interacted (we're in an event), so it should work now.
-    for (const k of STAGES) {
-      await safePlay(A.rain[k]);
-      await safePlay(A.thunder[k]);
-    }
-
-    // initial stage from URL
-    setStage(inferStageFromURL());
-
-    // remember entry so #bypass not required on next visits
-    try { localStorage.setItem("stormEntered", "true"); } catch {}
+    // Remember that user entered (but don’t auto-skip popup unless #bypass)
+    localStorage.setItem("stormEntered", "true");
   }
 
-  // ======= hover boosts (checkout/cart) =======
   function attachProximityBoosts() {
     const boostSel = [
       'a[href*="checkout"]',
@@ -211,44 +187,37 @@
     });
   }
 
-  // ======= page visibility (pause when tab hidden) =======
-  function handleVisibility() {
-    if (document.hidden) {
-      // fade to 0 to be polite (keeps play state intact)
-      for (const k of STAGES) {
-        fadeTo(A.rain[k], 0, 300);
-        fadeTo(A.thunder[k], 0, 300);
-      }
-    } else {
-      // restore current stage
-      setStage(currentStage);
-    }
-  }
+  // --- Init ------------------------------------------------------------------
 
-  // ======= boot =======
   document.addEventListener("DOMContentLoaded", () => {
     popup = $("#storm-popup");
     overlay = $("#storm-overlay");
     canvas = $("#rain-canvas");
+    ctx = canvas && canvas.getContext("2d");
 
     attachProximityBoosts();
 
-    // If #bypass or already entered before, skip gate
-    const bypass = hasBypass() || localStorage.getItem("stormEntered") === "true";
+    const bypass = hasBypass();
     if (bypass) {
+      // Developer shortcut — skip popup, start immediately
       if (popup) popup.remove();
       startStorm();
-    } else {
-      // Start on first user interaction (satisfies autoplay policies)
-      ["click", "touchstart", "keydown", "scroll"].forEach((evt) =>
-        on(document, evt, startStorm, { once: true, passive: true })
-      );
-
-      // Absolute fallback so users aren’t stuck
-      setTimeout(() => { if (!hasStarted) startStorm(); }, 3500);
+      return;
     }
 
-    // Lower CPU when page is backgrounded
-    on(document, "visibilitychange", handleVisibility);
+    // Do NOT auto-dismiss popup anymore; require interaction
+    // Start storm on first user gesture (including clicking the popup text)
+    ["click", "touchstart", "keydown", "scroll"].forEach((evt) =>
+      on(document, evt, startStorm, { once: true, passive: true })
+    );
+
+    if (popup) on(popup, "click", startStorm, { once: true, passive: true });
+
+    // Keep canvas sized
+    on(window, "resize", () => {
+      if (!canvas) return;
+      canvas.width = innerWidth;
+      canvas.height = innerHeight;
+    });
   });
 })();
