@@ -14,16 +14,33 @@
   <div id="storm-popup">ENTER THE STORM</div>
   <div class="lightning-flash"></div>
 
-  <!-- Multi-level storm audio -->
-  <audio id="rain-light" loop><source src="assets/audio/light-rain.mp3" type="audio/mpeg"></audio>
-  <audio id="rain-med" loop><source src="assets/audio/med-rain.mp3" type="audio/mpeg"></audio>
-  <audio id="rain-heavy" loop><source src="assets/audio/heavy-rain.mp3" type="audio/mpeg"></audio>
-  <audio id="thunder-light" loop><source src="assets/audio/light-thunder.mp3" type="audio/mpeg"></audio>
-  <audio id="thunder-med" loop><source src="assets/audio/med-thunder.mp3" type="audio/mpeg"></audio>
-  <audio id="thunder-heavy" loop><source src="assets/audio/heavy-thunder.mp3" type="audio/mpeg"></audio>
+  <!-- Storm audio (rain + thunder) -->
+  <!-- Keep filenames simple, no spaces -->
+  <audio id="rain-light" loop>
+    <source src="assets/audio/light-rain.mp3" type="audio/mpeg">
+  </audio>
+  <audio id="rain-med" loop>
+    <source src="assets/audio/med-rain.mp3" type="audio/mpeg">
+  </audio>
+  <audio id="rain-heavy" loop>
+    <source src="assets/audio/heavy-rain.mp3" type="audio/mpeg">
+  </audio>
+
+  <audio id="thunder-light" loop>
+    <source src="assets/audio/light-thunder.mp3" type="audio/mpeg">
+  </audio>
+  <audio id="thunder-med" loop>
+    <source src="assets/audio/med-thunder.mp3" type="audio/mpeg">
+  </audio>
+  <audio id="thunder-heavy" loop>
+    <source src="assets/audio/heavy-thunder.mp3" type="audio/mpeg">
+  </audio>
 
   <!-- Storm overlay -->
-  <div id="storm-overlay"><canvas id="rain-canvas"></canvas></div>
+  <div id="storm-overlay">
+    <canvas id="rain-canvas"></canvas>
+  </div>
+
 
   <!-- Minimal header placeholder -->
   <header class="header">
