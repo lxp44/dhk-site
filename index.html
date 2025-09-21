@@ -5,9 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>DHK — Home</title>
 
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
   <link rel="stylesheet" href="css/styles.css"/>
 </head>
 <body class="template-page">
@@ -42,7 +45,7 @@
   <header class="site-header color-scheme-4 gradient">
     <div class="page-width header-grid">
       <!-- Left: nav (desktop) -->
-      <nav class="nav-left desktop-only">
+      <nav class="nav-left desktop-only" aria-label="Primary">
         <a href="index.html" class="nav-link">Home</a>
         <a href="shop.html" class="nav-link">Shop All</a>
         <a href="collections.html" class="nav-link">Collections</a>
@@ -72,7 +75,7 @@
       </nav>
 
       <!-- Mobile: hamburger + cart -->
-      <button id="menu-toggle" class="mobile-only icon-button" aria-label="Open menu">
+      <button id="menu-toggle" class="mobile-only icon-button" aria-label="Open menu" aria-controls="mobile-drawer" aria-expanded="false">
         <span class="bar"></span><span class="bar"></span><span class="bar"></span>
       </button>
       <a href="cart.html" class="mobile-only icon-button" data-loud="heavy" aria-label="Cart">
@@ -83,7 +86,7 @@
     </div>
 
     <!-- Mobile slideout -->
-    <nav id="mobile-drawer" class="mobile-drawer">
+    <nav id="mobile-drawer" class="mobile-drawer" aria-hidden="true" aria-label="Mobile">
       <a href="index.html" class="drawer-link">Home</a>
       <a href="shop.html" class="drawer-link">Shop All</a>
       <a href="collections.html" class="drawer-link">Collections</a>
@@ -92,6 +95,9 @@
       <a href="cart.html" class="drawer-link" data-loud="heavy">Cart</a>
     </nav>
   </header>
+
+  <!-- Backdrop for mobile drawer -->
+  <div id="drawer-backdrop" class="drawer-backdrop" hidden></div>
 
   <!-- HERO -->
   <main id="MainContent">
