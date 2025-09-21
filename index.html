@@ -30,16 +30,45 @@
   <!-- Storm overlay -->
   <div id="storm-overlay"><canvas id="rain-canvas"></canvas></div>
 
-  <!-- Announcement / Utility bar -->
-  <div class="utility-bar color-scheme-4 gradient">
-    <div class="page-width utility-bar__grid">
-      <div class="utility-bar__left"></div>
-      <div class="utility-bar__center">
-        <span class="utility-bar__msg">Welcome to the Storm</span>
+ <!-- ===== Announcement / Utility Bar (Dawn-like) ===== -->
+<div class="utility-bar color-scheme-4 gradient utility-bar--bottom-border">
+  <div class="page-width utility-bar__grid utility-bar__grid--2-col">
+    <!-- Socials (optional – link these or remove this <ul>) -->
+    <ul class="list-social">
+      <li><a href="#" aria-label="Instagram">Instagram</a></li>
+      <li><a href="#" aria-label="TikTok">TikTok</a></li>
+      <li><a href="#" aria-label="YouTube">YouTube</a></li>
+    </ul>
+
+    <!-- Announcements: put 1 or more .announcement-bar__message items -->
+    <div class="announcement-bar" role="region" aria-label="Site announcements">
+      <button type="button" class="slider-button slider-button--prev" aria-label="Previous" hidden>‹</button>
+
+      <div class="announcement-track" id="AnnouncementTrack"
+           data-autoplay="true" data-speed="5000">
+        <!-- Message 1 -->
+        <p class="announcement-bar__message h5">
+          <span>Welcome to the Storm</span>
+        </p>
+        <!-- Message 2 (sample) -->
+        <p class="announcement-bar__message h5">
+          <a class="announcement-bar__link" href="shop.html">
+            <span>New drops live — Shop all</span>
+          </a>
+        </p>
+        <!-- Add/remove messages as you like -->
       </div>
-      <div class="utility-bar__right"></div>
+
+      <button type="button" class="slider-button slider-button--next" aria-label="Next" hidden>›</button>
+    </div>
+
+    <!-- Localization (placeholder – remove if not used) -->
+    <div class="localization-wrapper small-hide medium-hide">
+      <!-- country / language selectors would go here if you add them later -->
     </div>
   </div>
+</div>
+
 
   <!-- Site Header -->
   <div class="section-header header-wrapper color-scheme-4 gradient" data-sticky-type="on-scroll-up">
