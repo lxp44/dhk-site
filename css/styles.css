@@ -49,3 +49,110 @@ a:hover, button:hover, .hoverable:hover, input[type="submit"]:hover { transform:
 @media (max-width: 640px) {
   #hero-dhk-2 .banner__box { margin-top: 8px; }
 }
+/* ---------- Layout helpers ---------- */
+.page-width { max-width: 1200px; margin: 0 auto; padding: 0 16px; }
+.gradient { background: transparent; } /* placeholder so classes don't error */
+
+/* Shopify-like color schemes used by header/utility bar */
+.color-scheme-3 { color: #fff; background-color: #242833; }
+.color-scheme-4 { color: #fff; background-color: #000; }
+
+/* ---------- Announcement / Utility bar ---------- */
+.utility-bar { font-family: "Roboto", sans-serif; font-size: 12px; letter-spacing: .08em; }
+.utility-bar__grid {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  min-height: 36px;
+}
+.utility-bar__center { text-align: center; opacity: .85; }
+.utility-bar__msg { text-transform: uppercase; }
+
+/* ---------- Header ---------- */
+.site-header { position: relative; z-index: 100; }
+.header-grid {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 12px;
+  min-height: 72px;
+}
+.header__logo { display: inline-flex; align-items: center; justify-content: center; }
+.header__heading-logo { display:block; height: 64px; width: auto; }
+
+/* Nav links */
+.nav-left, .nav-right { display: flex; gap: 16px; align-items: center; }
+.nav-link {
+  font-family: "Roboto", sans-serif;
+  text-transform: uppercase;
+  font-size: 12px;
+  letter-spacing: .12em;
+  color: #fff;
+  text-decoration: none;
+  opacity: .85;
+}
+.nav-link:hover { opacity: 1; text-decoration: underline; }
+
+/* Ghost button style (Cart on desktop right) */
+.button--ghost {
+  padding: 8px 12px;
+  border: 1px solid rgba(255,255,255,.25);
+  border-radius: 8px;
+}
+.button--ghost:hover { background: rgba(255,255,255,.08); }
+
+/* Desktop/Mobile visibility */
+.desktop-only { display: flex; }
+.mobile-only { display: none; }
+@media (max-width: 900px) {
+  .desktop-only { display: none !important; }
+  .mobile-only { display: inline-flex; }
+  .header-grid { grid-template-columns: auto 1fr auto; }
+  .header__heading-logo { height: 52px; }
+}
+
+/* ---------- Mobile drawer ---------- */
+.icon-button {
+  background: none; border: 0; padding: 8px; color: #fff; cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.icon-button .bar {
+  display:block; width:22px; height:2px; background:#fff; margin:3px 0;
+}
+
+.mobile-drawer {
+  position: fixed; inset: 0 0 0 auto; width: 78vw; max-width: 360px;
+  background: #0a0a0a; color: #fff; z-index: 9998;
+  transform: translateX(100%); transition: transform .28s ease;
+  padding: 20px;
+  display: flex; flex-direction: column; gap: 14px;
+  border-left: 1px solid rgba(255,255,255,.12);
+}
+.mobile-drawer.open { transform: translateX(0%); }
+.drawer-link {
+  color:#fff; text-decoration:none; font-family:"Roboto",sans-serif; font-size:14px; letter-spacing:.12em;
+  padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,.08);
+}
+.drawer-link:hover { opacity: .9; }
+
+/* ---------- Buttons (hero CTA parity) ---------- */
+.button { cursor: pointer; }
+.button--secondary {
+  border: 1px solid #fff; color:#fff; background:transparent;
+  text-transform: uppercase; letter-spacing:.08em;
+}
+.button--secondary:hover { background: rgba(255,255,255,.08); }
+
+/* ---------- Hero spacing tweaks ---------- */
+.banner { position: relative; width:100%; min-height: calc(100vh - 108px); display:grid; align-items:end; }
+@media (max-width: 900px) { .banner { min-height: calc(100vh - 88px); } }
+
+/* ---------- Bat cursor fallbacks (ensure no 404s) ---------- */
+/* Keep these if you uploaded the two PNGs to assets/img/ as we planned */
+html, body { cursor: url('assets/img/cursor-bat-16.png') 8 8, auto; }
+a, button, .hoverable, input[type="submit"] { cursor: url('assets/img/cursor-bat-32.png') 16 16, auto; }
+
+/* ---------- Storm overlay stays on top of header ---------- */
+#storm-overlay { z-index: 10000; }
+.lightning-flash { z-index: 9999; }
+#storm-popup { z-index: 10001; }
