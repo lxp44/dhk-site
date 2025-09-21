@@ -1,26 +1,40 @@
 /* =========================
    Base theme
    ========================= */
+:root {
+  --header-height: 72px;            /* used for sticky spacing */
+  --hero-overlay: 0.40;             /* tweak to match Shopify's 40% */
+}
+
+@media (max-width: 900px) {
+  :root { --header-height: 60px; }
+}
+
+html { scroll-padding-top: var(--header-height); }
+
 body.template-page {
   background: #0a0a0a;
   color: #f1f1f1;
   font-family: "Cinzel", serif;
   text-transform: uppercase;
 }
+
 h1, h2, h3 {
   color: #fff;
   text-shadow: 0 0 8px #fff;
   font-family: "Cinzel", serif;
 }
+
 p { color: #ccc; font-size: 18px; font-family: "Roboto", sans-serif; }
+
 .flicker { animation: flicker 2s infinite alternate; color: #fff; }
 @keyframes flicker { 0%,100%{opacity:1} 50%{opacity:.4} }
 
 /* Layout helpers */
 .page-width { max-width: 1200px; margin: 0 auto; padding: 0 16px; }
-.gradient { background: transparent; } /* placeholder so classes don't error */
+.gradient { background: transparent; } /* placeholder like Dawn */
 
-/* Shopify-like color schemes used by header/utility bar */
+/* Shopify-like color schemes */
 .color-scheme-3 { color: #fff; background-color: #242833; }
 .color-scheme-4 { color: #fff; background-color: #000; }
 
@@ -40,16 +54,43 @@ p { color: #ccc; font-size: 18px; font-family: "Roboto", sans-serif; }
 /* =========================
    Header
    ========================= */
+.section-header.header-wrapper {
+  position: sticky;
+  top: 0;
+  z-index: 2000;
+  background: transparent;
+}
+.header-wrapper--border-bottom {
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
 .site-header { position: relative; z-index: 100; }
 .header-grid {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
   gap: 12px;
-  min-height: 72px;
+  min-height: var(--header-height);
 }
 .header__logo { display: inline-flex; align-items: center; justify-content: center; }
 .header__heading-logo { display: block; height: 64px; width: auto; }
+
+/* Dawn-like transitions on the header element */
+.section-header .header {
+  will-change: transform, background-color, box-shadow;
+  transition: transform .24s ease, background-color .24s ease, box-shadow .24s ease;
+}
+.shopify-section-header-sticky .header {
+  background: rgba(0,0,0,0.78);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.28);
+  backdrop-filter: blur(6px);
+}
+.shopify-section-header-hidden .header {
+  transform: translateY(-100%);
+}
+.section-header .header.animate {
+  transition: transform .24s ease, background-color .24s ease, box-shadow .24s ease, opacity .24s ease;
+}
 
 /* Nav links */
 .nav-left, .nav-right { display: flex; gap: 16px; align-items: center; }
@@ -93,7 +134,7 @@ p { color: #ccc; font-size: 18px; font-family: "Roboto", sans-serif; }
 
 .mobile-drawer {
   position: fixed; inset: 0 0 0 auto; width: 78vw; max-width: 360px;
-  background: #0a0a0a; color: #fff; z-index: 9998;
+  background: #0a0a0a; color: #fff; z-index: 2100;
   transform: translateX(100%); transition: transform .28s ease;
   padding: 20px;
   display: flex; flex-direction: column; gap: 14px;
@@ -110,7 +151,7 @@ p { color: #ccc; font-size: 18px; font-family: "Roboto", sans-serif; }
 
 .drawer-backdrop {
   position: fixed; inset: 0; background: rgba(0,0,0,0.55);
-  z-index: 9997; opacity: 0; pointer-events: none;
+  z-index: 2050; opacity: 0; pointer-events: none;
   transition: opacity .2s ease;
 }
 .drawer-backdrop.show { opacity: 1; pointer-events: auto; }
@@ -131,11 +172,11 @@ body.drawer-open { overflow: hidden; }
 /* =========================
    Hero banner
    ========================= */
-.banner { position: relative; width:100%; min-height: calc(100vh - 108px); display:grid; align-items:end; }
-.banner--large { min-height: calc(100vh - 108px); }
+.banner { position: relative; width:100%; min-height: calc(100vh - var(--header-height)); display:grid; align-items:end; }
+.banner--large { min-height: calc(100vh - var(--header-height)); }
 .banner__media { position:absolute; inset:0; overflow:hidden; }
 .banner__img { width:100%; height:100%; object-fit:cover; display:block; }
-#hero-dhk::after { content:""; position:absolute; inset:0; background:#000; opacity:.4; pointer-events:none; }
+#hero-dhk::after { content:""; position:absolute; inset:0; background:#000; opacity: var(--hero-overlay); pointer-events:none; }
 .banner__content { position:relative; z-index:2; width:100%; display:grid; place-items:center; padding:32px 16px; }
 .banner__box {
   background: rgba(0,0,0,.35);
@@ -144,10 +185,6 @@ body.drawer-open { overflow: hidden; }
 }
 .banner__buttons .button { text-decoration:none; display:inline-block; }
 .banner__buttons .button:hover { transform: translateY(-1px); }
-
-@media (max-width: 900px) {
-  .banner, .banner--large { min-height: calc(100vh - 88px); }
-}
 
 /* spacing between first and second banner on mobile (keep for later if needed) */
 @media (max-width: 640px) {
@@ -159,13 +196,17 @@ body.drawer-open { overflow: hidden; }
    ========================= */
 #storm-overlay {
   position: fixed; inset: 0; pointer-events: none;
-  z-index: 10000; mix-blend-mode: screen; display: none;
+  z-index: 3000; mix-blend-mode: screen; display: none;
 }
 #storm-overlay canvas { width: 100%; height: 100%; }
-.lightning-flash { position: fixed; inset: 0; background: white; opacity: 0; z-index: 9999; pointer-events: none; animation: lightning 4s infinite; }
+.lightning-flash {
+  position: fixed; inset: 0; background: white; opacity: 0;
+  z-index: 2999; pointer-events: none; animation: lightning 4s infinite;
+}
 @keyframes lightning { 0%,97%,100%{opacity:0} 98%{opacity:.3} 99%{opacity:0} }
+
 #storm-popup {
-  position: fixed; z-index: 10001; inset: 0; display: flex; align-items: center; justify-content: center;
+  position: fixed; z-index: 3100; inset: 0; display: flex; align-items: center; justify-content: center;
   background: black; color: white; font-size: 3rem; font-family: 'Cinzel', serif; letter-spacing: 2px;
   opacity: 1; transition: opacity 1s ease;
 }
@@ -177,10 +218,12 @@ body.drawer-open { overflow: hidden; }
 html, body { cursor: url('assets/img/cursor-bat-16.png') 8 8, auto; }
 a, button, .hoverable, input[type="submit"] { cursor: url('assets/img/cursor-bat-32.png') 16 16, auto; transition: transform 0.1s ease; }
 a:hover, button:hover, .hoverable:hover, input[type="submit"]:hover { transform: scale(1.05); }
-/* ---------- Section wrapper ---------- */
+
+/* =========================
+   Sections & Featured collection (stub)
+   ========================= */
 .section { padding: 44px 0 36px; }
 
-/* ---------- Featured collection ---------- */
 .fc__header {
   display: flex; align-items: center; justify-content: space-between;
   gap: 16px; margin-bottom: 20px;
@@ -208,7 +251,7 @@ a:hover, button:hover, .hoverable:hover, input[type="submit"]:hover { transform:
 }
 .fc__view-all:hover { opacity: .9; }
 
-/* Grid: 4 desktop, 2 mobile (Shopify setting columns_desktop=4, columns_mobile=2) */
+/* Grid: 4 desktop, 2 mobile */
 .product-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -218,7 +261,7 @@ a:hover, button:hover, .hoverable:hover, input[type="submit"]:hover { transform:
   .product-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
-/* Product card (clean, no quick add, no vendor/rating) */
+/* Product card */
 .product-card {
   display: grid;
   gap: 8px;
@@ -236,7 +279,7 @@ a:hover, button:hover, .hoverable:hover, input[type="submit"]:hover { transform:
   border-color: rgba(255,255,255,.18);
 }
 
-/* Image ratio: adapt (don’t crop) */
+/* Image ratio: adapt */
 .pc__media {
   width: 100%; aspect-ratio: 1 / 1;
   background: rgba(255,255,255,.03);
@@ -254,55 +297,3 @@ a:hover, button:hover, .hoverable:hover, input[type="submit"]:hover { transform:
   font-family: "Roboto", sans-serif;
   font-size: 13px; color: #ddd; letter-spacing: .02em;
 }
-/* ===== Dawn-like sticky header + hide/reveal ===== */
-
-/* Fallback header height so content isn't hidden under sticky header */
-:root { --header-height: 72px; }
-
-/* Make the header wrapper sticky, like Dawn's .section-header */
-.section-header.header-wrapper {
-  position: sticky;
-  top: 0;
-  z-index: 2000;
-  background: transparent; /* header has its own background */
-}
-
-/* Optional subtle divider like Dawn's header-wrapper--border-bottom */
-.header-wrapper--border-bottom {
-  border-bottom: 1px solid rgba(255,255,255,0.08);
-}
-
-/* Transition container (Dawn toggles these classes via JS) */
-.section-header .header {
-  will-change: transform, background-color, box-shadow;
-  transition: transform .24s ease, background-color .24s ease, box-shadow .24s ease;
-}
-
-/* When “sticky mode” is active (mirrors .shopify-section-header-sticky) */
-.shopify-section-header-sticky .header {
-  background: rgba(0,0,0,0.78);
-  box-shadow: 0 6px 14px rgba(0,0,0,0.28);
-  backdrop-filter: blur(6px);
-}
-
-/* When hidden while scrolling down (mirrors .shopify-section-header-hidden) */
-.shopify-section-header-hidden .header {
-  transform: translateY(-100%);
-}
-
-/* Helper class Dawn uses when animating */
-.section-header .header.animate {
-  transition: transform .24s ease, background-color .24s ease, box-shadow .24s ease, opacity .24s ease;
-}
-
-/* Keep the hero from tucking under the sticky header on browsers that respect scroll-padding */
-html { scroll-padding-top: var(--header-height); }
-
-/* Slightly smaller header height on mobile */
-@media (max-width: 900px) {
-  :root { --header-height: 60px; }
-}
-
-/* Ensure our header grid respects the height visually */
-.header-grid { min-height: var(--header-height); }
-
