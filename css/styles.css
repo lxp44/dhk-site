@@ -1,55 +1,22 @@
-
-
-/* Base theme */
+/* =========================
+   Base theme
+   ========================= */
 body.template-page {
   background: #0a0a0a;
   color: #f1f1f1;
   font-family: "Cinzel", serif;
   text-transform: uppercase;
 }
-h1,h2,h3 { color:#fff; text-shadow:0 0 8px #fff; font-family:"Cinzel", serif; }
-p { color:#ccc; font-size:18px; font-family:"Roboto", sans-serif; }
-.flicker { animation: flicker 2s infinite alternate; color:#fff; }
+h1, h2, h3 {
+  color: #fff;
+  text-shadow: 0 0 8px #fff;
+  font-family: "Cinzel", serif;
+}
+p { color: #ccc; font-size: 18px; font-family: "Roboto", sans-serif; }
+.flicker { animation: flicker 2s infinite alternate; color: #fff; }
 @keyframes flicker { 0%,100%{opacity:1} 50%{opacity:.4} }
 
-.header .inner { max-width:1200px; margin:0 auto; padding:16px; display:flex; align-items:center; justify-content:space-between; gap:16px; }
-.nav .button.small { padding:8px 12px; font-size:12px; }
-
-
-
-/* Bat cursor */
-html, body { cursor: url('assets/img/cursor-bat-16.png') 8 8, auto; }
-a, button, .hoverable, input[type="submit"] { cursor: url('assets/img/cursor-bat-32.png') 16 16, auto; transition: transform 0.1s ease; }
-a:hover, button:hover, .hoverable:hover, input[type="submit"]:hover { transform: scale(1.05); }
-
-
-
-/* Hero banner */
-.banner { position: relative; width:100%; min-height: calc(100vh - 80px); display:grid; align-items:end; }
-.banner--large { min-height: 88vh; }
-.banner__media { position:absolute; inset:0; overflow:hidden; }
-.banner__img { width:100%; height:100%; object-fit:cover; display:block; }
-#hero-dhk::after { content:""; position:absolute; inset:0; background:#000; opacity:.4; pointer-events:none; }
-.banner__content { position:relative; z-index:2; width:100%; display:grid; place-items:center; padding:32px 16px; }
-.banner__box { background: rgba(0,0,0,.35); border:1px solid rgba(255,255,255,.12); padding:16px 22px; border-radius:12px; }
-.banner__buttons .button { text-decoration:none; display:inline-block; padding:12px 18px; border:1px solid #fff; color:#fff; background:transparent; letter-spacing:.08em; }
-.banner__buttons .button:hover { background: rgba(255,255,255,.08); transform: translateY(-1px); }
-
-
-
-/* Storm overlay + lightning */
-#storm-overlay { position:fixed; inset:0; pointer-events:none; z-index:9999; mix-blend-mode:screen; display:none; }
-#storm-overlay canvas { width:100%; height:100%; }
-.lightning-flash { position:fixed; inset:0; background:white; opacity:0; z-index:9998; pointer-events:none; animation: lightning 4s infinite; }
-@keyframes lightning { 0%,97%,100%{opacity:0} 98%{opacity:.3} 99%{opacity:0} }
-#storm-popup { position:fixed; z-index:10000; inset:0; display:flex; align-items:center; justify-content:center; background:black; color:white; font-size:3rem; font-family:'Cinzel', serif; letter-spacing:2px; opacity:1; transition: opacity 1s ease; }
-
-
-/* spacing between first and second banner on mobile */
-@media (max-width: 640px) {
-  #hero-dhk-2 .banner__box { margin-top: 8px; }
-}
-/* ---------- Layout helpers ---------- */
+/* Layout helpers */
 .page-width { max-width: 1200px; margin: 0 auto; padding: 0 16px; }
 .gradient { background: transparent; } /* placeholder so classes don't error */
 
@@ -57,7 +24,9 @@ a:hover, button:hover, .hoverable:hover, input[type="submit"]:hover { transform:
 .color-scheme-3 { color: #fff; background-color: #242833; }
 .color-scheme-4 { color: #fff; background-color: #000; }
 
-/* ---------- Announcement / Utility bar ---------- */
+/* =========================
+   Announcement / Utility bar
+   ========================= */
 .utility-bar { font-family: "Roboto", sans-serif; font-size: 12px; letter-spacing: .08em; }
 .utility-bar__grid {
   display: grid;
@@ -68,7 +37,9 @@ a:hover, button:hover, .hoverable:hover, input[type="submit"]:hover { transform:
 .utility-bar__center { text-align: center; opacity: .85; }
 .utility-bar__msg { text-transform: uppercase; }
 
-/* ---------- Header ---------- */
+/* =========================
+   Header
+   ========================= */
 .site-header { position: relative; z-index: 100; }
 .header-grid {
   display: grid;
@@ -78,7 +49,7 @@ a:hover, button:hover, .hoverable:hover, input[type="submit"]:hover { transform:
   min-height: 72px;
 }
 .header__logo { display: inline-flex; align-items: center; justify-content: center; }
-.header__heading-logo { display:block; height: 64px; width: auto; }
+.header__heading-logo { display: block; height: 64px; width: auto; }
 
 /* Nav links */
 .nav-left, .nav-right { display: flex; gap: 16px; align-items: center; }
@@ -91,9 +62,9 @@ a:hover, button:hover, .hoverable:hover, input[type="submit"]:hover { transform:
   text-decoration: none;
   opacity: .85;
 }
-.nav-link:hover { opacity: 1; text-decoration: underline; }
+.nav-link:hover, .nav-link:focus { opacity: 1; text-decoration: underline; }
 
-/* Ghost button style (Cart on desktop right) */
+/* Ghost button (desktop Cart) */
 .button--ghost {
   padding: 8px 12px;
   border: 1px solid rgba(255,255,255,.25);
@@ -111,14 +82,14 @@ a:hover, button:hover, .hoverable:hover, input[type="submit"]:hover { transform:
   .header__heading-logo { height: 52px; }
 }
 
-/* ---------- Mobile drawer ---------- */
+/* =========================
+   Mobile drawer + backdrop
+   ========================= */
 .icon-button {
   background: none; border: 0; padding: 8px; color: #fff; cursor: pointer;
   display: inline-flex; align-items: center; justify-content: center;
 }
-.icon-button .bar {
-  display:block; width:22px; height:2px; background:#fff; margin:3px 0;
-}
+.icon-button .bar { display:block; width:22px; height:2px; background:#fff; margin:3px 0; }
 
 .mobile-drawer {
   position: fixed; inset: 0 0 0 auto; width: 78vw; max-width: 360px;
@@ -127,32 +98,82 @@ a:hover, button:hover, .hoverable:hover, input[type="submit"]:hover { transform:
   padding: 20px;
   display: flex; flex-direction: column; gap: 14px;
   border-left: 1px solid rgba(255,255,255,.12);
+  will-change: transform;
 }
 .mobile-drawer.open { transform: translateX(0%); }
+
 .drawer-link {
   color:#fff; text-decoration:none; font-family:"Roboto",sans-serif; font-size:14px; letter-spacing:.12em;
-  padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,.08);
+  padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,.08);
 }
-.drawer-link:hover { opacity: .9; }
+.drawer-link:hover, .drawer-link:focus { opacity: .9; }
 
-/* ---------- Buttons (hero CTA parity) ---------- */
+.drawer-backdrop {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.55);
+  z-index: 9997; opacity: 0; pointer-events: none;
+  transition: opacity .2s ease;
+}
+.drawer-backdrop.show { opacity: 1; pointer-events: auto; }
+
+/* Lock scroll when drawer open */
+body.drawer-open { overflow: hidden; }
+
+/* =========================
+   Buttons (hero CTA parity)
+   ========================= */
 .button { cursor: pointer; }
 .button--secondary {
   border: 1px solid #fff; color:#fff; background:transparent;
-  text-transform: uppercase; letter-spacing:.08em;
+  text-transform: uppercase; letter-spacing:.08em; padding: 12px 18px;
 }
 .button--secondary:hover { background: rgba(255,255,255,.08); }
 
-/* ---------- Hero spacing tweaks ---------- */
+/* =========================
+   Hero banner
+   ========================= */
 .banner { position: relative; width:100%; min-height: calc(100vh - 108px); display:grid; align-items:end; }
-@media (max-width: 900px) { .banner { min-height: calc(100vh - 88px); } }
+.banner--large { min-height: calc(100vh - 108px); }
+.banner__media { position:absolute; inset:0; overflow:hidden; }
+.banner__img { width:100%; height:100%; object-fit:cover; display:block; }
+#hero-dhk::after { content:""; position:absolute; inset:0; background:#000; opacity:.4; pointer-events:none; }
+.banner__content { position:relative; z-index:2; width:100%; display:grid; place-items:center; padding:32px 16px; }
+.banner__box {
+  background: rgba(0,0,0,.35);
+  border: 1px solid rgba(255,255,255,.12);
+  padding: 16px 22px; border-radius: 12px;
+}
+.banner__buttons .button { text-decoration:none; display:inline-block; }
+.banner__buttons .button:hover { transform: translateY(-1px); }
 
-/* ---------- Bat cursor fallbacks (ensure no 404s) ---------- */
-/* Keep these if you uploaded the two PNGs to assets/img/ as we planned */
+@media (max-width: 900px) {
+  .banner, .banner--large { min-height: calc(100vh - 88px); }
+}
+
+/* spacing between first and second banner on mobile (keep for later if needed) */
+@media (max-width: 640px) {
+  #hero-dhk-2 .banner__box { margin-top: 8px; }
+}
+
+/* =========================
+   Storm overlay + lightning
+   ========================= */
+#storm-overlay {
+  position: fixed; inset: 0; pointer-events: none;
+  z-index: 10000; mix-blend-mode: screen; display: none;
+}
+#storm-overlay canvas { width: 100%; height: 100%; }
+.lightning-flash { position: fixed; inset: 0; background: white; opacity: 0; z-index: 9999; pointer-events: none; animation: lightning 4s infinite; }
+@keyframes lightning { 0%,97%,100%{opacity:0} 98%{opacity:.3} 99%{opacity:0} }
+#storm-popup {
+  position: fixed; z-index: 10001; inset: 0; display: flex; align-items: center; justify-content: center;
+  background: black; color: white; font-size: 3rem; font-family: 'Cinzel', serif; letter-spacing: 2px;
+  opacity: 1; transition: opacity 1s ease;
+}
+
+/* =========================
+   Bat cursor (optional PNGs)
+   ========================= */
+/* Keep these only if you uploaded both PNGs to assets/img/ */
 html, body { cursor: url('assets/img/cursor-bat-16.png') 8 8, auto; }
-a, button, .hoverable, input[type="submit"] { cursor: url('assets/img/cursor-bat-32.png') 16 16, auto; }
-
-/* ---------- Storm overlay stays on top of header ---------- */
-#storm-overlay { z-index: 10000; }
-.lightning-flash { z-index: 9999; }
-#storm-popup { z-index: 10001; }
+a, button, .hoverable, input[type="submit"] { cursor: url('assets/img/cursor-bat-32.png') 16 16, auto; transition: transform 0.1s ease; }
+a:hover, button:hover, .hoverable:hover, input[type="submit"]:hover { transform: scale(1.05); }
