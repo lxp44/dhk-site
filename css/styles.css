@@ -430,3 +430,75 @@ a:hover, button:hover, .hoverable:hover, input[type="submit"]:hover { transform:
   transform: translateY(-100%);
   opacity: 0;
 }
+/* ===== A11y helpers ===== */
+.visually-hidden,
+.sr-only {
+  position:absolute !important;
+  width:1px; height:1px; padding:0; margin:-1px;
+  overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0;
+}
+a:focus-visible, button:focus-visible, input:focus-visible {
+  outline:2px dashed #fff; outline-offset:2px;
+}
+
+/* ===== Sticky header polish (shrink logo on stick) ===== */
+.shopify-section-header-sticky .header__heading-logo {
+  height: 52px;
+}
+@media (max-width: 900px) {
+  .shopify-section-header-sticky .header__heading-logo {
+    height: 44px;
+  }
+}
+
+/* ===== Search modal (styles only; JS/HTML next) ===== */
+.search-modal {
+  position: fixed; inset: 0; z-index: 3500; display: none;
+}
+.search-modal.open { display: block; }
+.search-modal__overlay {
+  position: absolute; inset: 0; background: rgba(0,0,0,.55);
+  backdrop-filter: blur(2px);
+}
+.search-modal__dialog {
+  position: relative; z-index: 1;
+  max-width: 720px; margin: 12vh auto 0; padding: 0;
+  background: #0a0a0a; border: 1px solid rgba(255,255,255,.14); border-radius: 12px;
+  box-shadow: 0 14px 40px rgba(0,0,0,.45);
+}
+.search-modal__header {
+  display:flex; align-items:center; gap:10px; padding:12px 14px;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
+.search-input {
+  flex:1 1 auto; min-width:0;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 8px; padding: 10px 12px; color:#fff;
+  font-family:"Roboto",sans-serif; font-size:14px;
+}
+.search-input::placeholder { color:#bdbdbd; }
+.search-close {
+  background: transparent; border: 1px solid rgba(255,255,255,.18);
+  color:#fff; border-radius: 8px; padding:8px 10px; cursor:pointer;
+}
+.search-close:hover { background: rgba(255,255,255,.08); }
+
+.search-results {
+  max-height: 60vh; overflow:auto; padding: 10px 14px;
+  display:grid; gap:10px;
+}
+.search-result {
+  display:flex; gap:10px; align-items:center;
+  padding:10px; border:1px solid rgba(255,255,255,.10);
+  border-radius:10px; background: rgba(255,255,255,.02);
+}
+.search-result__img {
+  width:60px; height:60px; border-radius:8px; overflow:hidden;
+  background: rgba(255,255,255,.05);
+}
+.search-result__img img { width:100%; height:100%; object-fit:cover; display:block; }
+.search-result__meta { display:grid; gap:2px; }
+.search-result__title { color:#fff; font-size:14px; font-family:"Roboto",sans-serif; margin:0; }
+.search-result__price { color:#ddd; font-size:13px; font-family:"Roboto",sans-serif; }
+
