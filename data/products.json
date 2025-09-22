@@ -1,0 +1,27 @@
+[
+  {
+    "id": "storm-tee-black",
+    "title": "Storm Tee — Black",
+    "price": 35.00,
+    "images": [
+      "assets/products/storm-tee-black-1.jpg",
+      "assets/products/storm-tee-black-2.jpg"
+    ],
+    "thumbnail": "assets/products/storm-tee-black-1.jpg",
+    "options": ["S","M","L","XL"],
+    "description": "Premium cotton. Lightning chest hit. True to size."
+  },
+  {
+    "id": "hoodie-midnight",
+    "title": "Midnight Hoodie",
+    "price": 78.00,
+    "images": [
+      "assets/products/hoodie-midnight-1.jpg",
+      "assets/products/hoodie-midnight-2.jpg"
+    ],
+    "thumbnail": "assets/products/hoodie-midnight-1.jpg",
+    "options": ["S","M","L","XL"],
+    "description": "Heavyweight fleece. Embroidered crest."
+  }
+]
+
