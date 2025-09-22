@@ -114,6 +114,10 @@
         <nav class="nav-right desktop-only">
           <a href="about.html" class="nav-link">About</a>
           <a href="contact.html" class="nav-link">Contact</a>
+
+          <!-- Search trigger (desktop) -->
+          <button id="search-open" class="nav-link button--ghost" aria-label="Open search">Search</button>
+
           <a href="cart.html" class="nav-link button--ghost" data-loud="heavy" aria-label="Cart">
             <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
               <path d="M7 4h-2l-1 2v2h2l3.6 7.59-1.35 2.41a1.994 1.994 0 0 0 1.75 2.99H19v-2H10.42c-.14 0-.25-.11-.25-.25l.03-.12L11 16h6.31a2 2 0 0 0 1.79-1.11L22 8H7.42l-.94-2Z" fill="currentColor"/>
@@ -121,6 +125,9 @@
             Cart
           </a>
         </nav>
+
+        <!-- Mobile search trigger (optional) -->
+        <button id="search-open-mobile" class="mobile-only icon-button" aria-label="Open search">Search</button>
       </div>
     </header>
   </div>
@@ -308,10 +315,24 @@
     </div>
   </footer>
 
+  <!-- ===== Search Modal ===== -->
+  <div id="search-modal" class="search-modal" role="dialog" aria-modal="true" aria-labelledby="search-title" aria-hidden="true">
+    <div class="search-modal__overlay" data-close-search></div>
+    <div class="search-modal__dialog" role="document">
+      <div class="search-modal__header">
+        <h2 id="search-title" class="sr-only">Search</h2>
+        <input id="search-input" class="search-input" type="search" placeholder="Search products..." autocomplete="off" aria-label="Search" />
+        <button id="search-close" class="search-close" aria-label="Close search">Close</button>
+      </div>
+      <div id="search-results" class="search-results" aria-live="polite"></div>
+    </div>
+  </div>
+
   <!-- Scripts -->
   <script src="js/storm_shopify_style.js"></script>
   <script src="js/nav.js"></script>
   <script src="js/announce.js"></script>
+  <script src="js/search.js"></script>
   <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
 </body>
 </html>
