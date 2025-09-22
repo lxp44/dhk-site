@@ -85,7 +85,6 @@
                     <li><a href="about.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">About</a></li>
                     <li><a href="contact.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">Contact</a></li>
                     <li><a href="cart.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset" data-loud="heavy">Cart</a></li>
-                    <!-- Optional: search in drawer -->
                     <li>
                       <button id="search-open-mobile" type="button" class="menu-drawer__menu-item link link--text list-menu__item focus-inset">Search</button>
                     </li>
@@ -157,7 +156,7 @@
       </div>
     </section>
 
-    <!-- Featured products (auto from data/products.json) -->
+    <!-- Featured products (hidden on homepage by design) -->
     <section id="featured-products" class="section color-scheme-1">
       <div class="page-width">
         <header class="fc__header">
@@ -165,11 +164,8 @@
           <a class="fc__view-all button button--primary" href="shop.html" aria-label="View all products">View all</a>
         </header>
 
-        <div id="featured-grid" class="product-grid" aria-live="polite" aria-busy="true">
-          <!-- JS will inject product cards here -->
-          <noscript>
-            <p style="color:#ccc">Enable JavaScript to see featured products.</p>
-          </noscript>
+        <div class="empty-state" style="text-align:center; padding:2rem; opacity:.85;">
+          <p>Browse our full collection in <a href="shop.html">Shop All</a>.</p>
         </div>
       </div>
     </section>
@@ -270,7 +266,7 @@
   <script src="js/storm_shopify_style.js"></script>
   <script src="js/nav.js"></script>
   <script src="js/announce.js"></script>
-  <script src="js/home.js"></script>
+  <!-- Removed home.js so nothing renders products on the homepage -->
   <script src="js/search.js"></script>
   <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
 </body>
