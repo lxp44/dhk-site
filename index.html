@@ -85,6 +85,10 @@
                     <li><a href="about.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">About</a></li>
                     <li><a href="contact.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">Contact</a></li>
                     <li><a href="cart.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset" data-loud="heavy">Cart</a></li>
+                    <!-- Optional: search in drawer -->
+                    <li>
+                      <button id="search-open-mobile" type="button" class="menu-drawer__menu-item link link--text list-menu__item focus-inset">Search</button>
+                    </li>
                   </ul>
                 </nav>
               </div>
@@ -125,9 +129,6 @@
             Cart
           </a>
         </nav>
-
-        <!-- Mobile search trigger (optional) -->
-        <button id="search-open-mobile" class="mobile-only icon-button" aria-label="Open search">Search</button>
       </div>
     </header>
   </div>
@@ -315,18 +316,24 @@
     </div>
   </footer>
 
-  <!-- ===== Search Modal ===== -->
-  <div id="search-modal" class="search-modal" role="dialog" aria-modal="true" aria-labelledby="search-title" aria-hidden="true">
+  <!-- ===== Search Modal (matches CSS/JS hooks) ===== -->
+  <div id="search-modal" class="search-modal" aria-hidden="true">
     <div class="search-modal__overlay" data-close-search></div>
-    <div class="search-modal__dialog" role="document">
-      <div class="search-modal__header">
-        <h2 id="search-title" class="sr-only">Search</h2>
-        <input id="search-input" class="search-input" type="search" placeholder="Search products..." autocomplete="off" aria-label="Search" />
-        <button id="search-close" class="search-close" aria-label="Close search">Close</button>
+
+    <div class="search-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="search-title">
+      <header class="search-modal__header">
+        <h2 id="search-title">Search</h2>
+        <button id="search-close" class="search-modal__close" aria-label="Close search">×</button>
+      </header>
+
+      <div class="search-modal__field">
+        <input id="search-input" type="search" placeholder="Search products…  ( /  or  ⌘/Ctrl+K )" autocomplete="off" />
       </div>
-      <div id="search-results" class="search-results" aria-live="polite"></div>
+
+      <div id="search-results" class="search-modal__results" aria-live="polite"></div>
     </div>
   </div>
+  <!-- /Search Modal -->
 
   <!-- Scripts -->
   <script src="js/storm_shopify_style.js"></script>
