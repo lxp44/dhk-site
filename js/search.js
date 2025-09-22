@@ -1,3 +1,89 @@
+// js/search.js
+// Live search modal
+
+async function loadProducts() {
+  const res = await fetch("data/products.json");
+  const data = await res.json();
+  return data.products;
+}
+
+function openSearch() {
+  document.querySelector("#search-modal").setAttribute("aria-hidden", "false");
+  document.querySelector("#search-input").focus();
+  document.body.classList.add("no-scroll");
+}
+
+function closeSearch() {
+  document.querySelector("#search-modal").setAttribute("aria-hidden", "true");
+  document.body.classList.remove("no-scroll");
+}
+
+function renderResults(products, query) {
+  const results = document.querySelector("#search-results");
+  if (!results) return;
+
+  if (!query) {
+    results.innerHTML = "<p>Type to search...</p>";
+    return;
+  }
+
+  const matches = products.filter((p) =>
+    p.title.toLowerCase().includes(query.toLowerCase())
+  );
+
+  if (!matches.length) {
+    results.innerHTML = "<p>No products found.</p>";
+    return;
+  }
+
+  results.innerHTML = matches
+    .map(
+      (p) => `
+      <a href="${p.url}" class="product-card">
+        <div class="pc__media">
+          <img src="${p.thumbnail}" alt="${p.title}" loading="lazy">
+        </div>
+        <div class="pc__info">
+          <h3 class="pc__title">${p.title}</h3>
+          <div class="pc__price">$${(p.price / 100).toFixed(2)}</div>
+        </div>
+      </a>
+    `
+    )
+    .join("");
+}
+
+document.addEventListener("DOMContentLoaded", async () => {
+  const products = await loadProducts();
+
+  // Open triggers
+  document.querySelectorAll("#search-open, #search-open-mobile").forEach((btn) =>
+    btn.addEventListener("click", openSearch)
+  );
+
+  // Close triggers
+  document
+    .querySelector("#search-close")
+    .addEventListener("click", closeSearch);
+  document
+    .querySelector(".search-modal__overlay")
+    .addEventListener("click", closeSearch);
+
+  // Keyboard shortcuts
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeSearch();
+    if ((e.key === "/" || (e.metaKey && e.key === "k")) && e.target.tagName !== "INPUT") {
+      e.preventDefault();
+      openSearch();
+    }
+  });
+
+  // Input listener
+  const input = document.querySelector("#search-input");
+  input.addEventListener("input", () =>
+    renderResults(products, input.value.trim())
+  );
+});
 /* =========================================================
    Simple search modal (no backend) — DHK clone
    - Opens via "Search" buttons, "/" or Cmd/Ctrl+K
