@@ -1,11 +1,35 @@
 <!doctype html>
 <html lang="en">
 <head>
+  <!-- NEW: early skip logic + prepaint class -->
+ <script>
+  (function () {
+    const p = new URLSearchParams(location.search);
+    if (p.has('skipStorm') && p.get('skipStorm') !== '0') {
+      localStorage.setItem('stormEntered', '1');
+      // remove the param from the URL without reloading
+      const url = new URL(location.href);
+      url.searchParams.delete('skipStorm');
+      history.replaceState({}, '', url);
+    }
+    if (localStorage.getItem('stormEntered') === '1') {
+      document.documentElement.classList.add('storm-skipped');
+    }
+  })();
+</script>
+
+  <!-- NEW: CSS to hide storm UI when skipped -->
+  <style>
+    .storm-skipped #storm-popup,
+    .storm-skipped #storm-overlay,
+    .storm-skipped .lightning-flash { display: none !important; }
+  </style>
+
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>DHK — Home</title>
 
-  <!-- Fonts -->
+<!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -14,7 +38,7 @@
   <link rel="stylesheet" href="css/styles.css"/>
 </head>
 <body class="template-page">
-
+  
   <!-- Storm Welcome -->
   <div id="storm-popup">ENTER THE STORM</div>
   <div class="lightning-flash"></div>
@@ -301,8 +325,24 @@
   </div>
   <!-- /Cart Drawer -->
 
+   <!-- NEW: final safety net before storm script runs -->
+  <script>
+    // Let storm script know we want to bypass if set
+    window.STORM_BYPASS = localStorage.getItem('stormEntered') === '1';
+
+    // Remove storm nodes if bypassing (in case the script tries to touch them)
+    if (window.STORM_BYPASS) {
+      document.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('storm-popup')?.remove();
+        document.getElementById('storm-overlay')?.remove();
+        document.querySelector('.lightning-flash')?.remove();
+      });
+    }
+  </script>
+
+
   <!-- Scripts -->
-  <script src="js/storm_shopify_style.js"></script>
+  <script src="js/storm_shopify_style.js?v=3"></script>
   <script src="js/nav.js"></script>
   <script src="js/announce.js"></script>
   <!-- No home.js so homepage shows zero products -->
