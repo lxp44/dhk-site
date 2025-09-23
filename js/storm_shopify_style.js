@@ -1,3 +1,5 @@
+if (window.STORM_BYPASS) { /* skip storm init entirely */ }
+
 // js/storm_shopify_style.js
 (function () {
   const $ = (sel) => document.querySelector(sel);
@@ -187,37 +189,69 @@
     });
   }
 
-  // --- Init ------------------------------------------------------------------
+ // === INIT: run after DOM is ready ===
+document.addEventListener('DOMContentLoaded', () => {
+  const html    = document.documentElement;
+  const popup   = document.getElementById('storm-popup');
+  const overlay = document.getElementById('storm-overlay');
+  const flash   = document.querySelector('.lightning-flash');
+  const canvas  = document.getElementById('rain-canvas');
 
-  document.addEventListener("DOMContentLoaded", () => {
-    popup = $("#storm-popup");
-    overlay = $("#storm-overlay");
-    canvas = $("#rain-canvas");
-    ctx = canvas && canvas.getContext("2d");
+  // Helper: check bypass from multiple sources
+  const hasBypass = () => {
+    if (window.STORM_BYPASS === true) return true;
+    if (localStorage.getItem('stormEntered') === '1') return true;
+    const p = new URLSearchParams(location.search);
+    // accept skipStorm=1, true, yes (anything not "0")
+    return p.has('skipStorm') && p.get('skipStorm') !== '0';
+  };
 
+  // If index.html already hid things pre-paint, remove nodes and bail
+  if (html.classList.contains('storm-skipped')) {
+    popup?.remove();
+    overlay?.remove();
+    flash?.remove();
+    return; // do not start storm; completely skipped
+  }
+
+  // Dev shortcut: if bypass is set but no prepaint class, remove popup and start immediately
+  if (hasBypass()) {
+    popup?.remove();
+    // If your intention is to truly SKIP the storm entirely, comment out the next line:
+    if (typeof startStorm === 'function') startStorm();
+    return;
+  }
+
+  // Optional: attach any hover/proximity boosts if your file defines this
+  if (typeof attachProximityBoosts === 'function') {
     attachProximityBoosts();
+  }
 
-    const bypass = hasBypass();
-    if (bypass) {
-      // Developer shortcut — skip popup, start immediately
-      if (popup) popup.remove();
-      startStorm();
-      return;
-    }
+  // Require a user gesture to start the storm (no auto-start)
+  const onFirstGesture = () => {
+    if (typeof startStorm === 'function') startStorm();
+  };
 
-    // Do NOT auto-dismiss popup anymore; require interaction
-    // Start storm on first user gesture (including clicking the popup text)
-    ["click", "touchstart", "keydown", "scroll"].forEach((evt) =>
-      on(document, evt, startStorm, { once: true, passive: true })
-    );
-
-    if (popup) on(popup, "click", startStorm, { once: true, passive: true });
-
-    // Keep canvas sized
-    on(window, "resize", () => {
-      if (!canvas) return;
-      canvas.width = innerWidth;
-      canvas.height = innerHeight;
-    });
+  ['click', 'touchstart', 'keydown', 'scroll'].forEach((evt) => {
+    // if you have a helper "on", use it; otherwise use addEventListener
+    (typeof on === 'function' ? on(document, evt, onFirstGesture, { once: true, passive: true })
+                              : document.addEventListener(evt, onFirstGesture, { once: true, passive: true }));
   });
-})();
+
+  // Also allow clicking the popup itself
+  if (popup) {
+    (typeof on === 'function' ? on(popup, 'click', onFirstGesture, { once: true, passive: true })
+                              : popup.addEventListener('click', onFirstGesture, { once: true, passive: true }));
+  }
+
+  // Keep the canvas sized to the viewport
+  const onResize = () => {
+    if (!canvas) return;
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+  };
+  window.addEventListener('resize', onResize);
+  onResize(); // size once at start
+});
+
+
