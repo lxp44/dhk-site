@@ -1,57 +1,28 @@
-{
-  "products": [
-    {
-      "id": "storm-tee-black",
-      "title": "Storm Tee — Black",
-      "price": 3500,
-      "images": [
-        "assets/img/products/storm-tee-black-1.jpg",
-        "assets/img/products/storm-tee-black-2.jpg"
-      ],
-      "thumbnail": "assets/img/products/storm-tee-black-1.jpg",
-      "options": ["S", "M", "L", "XL"],
-      "description": "Premium cotton. Lightning chest hit. True to size.",
-      "url": "product.html?handle=storm-tee-black"
-    },
-    {
-      "id": "hoodie-midnight",
-      "title": "Midnight Hoodie",
-      "price": 7800,
-      "images": [
-        "assets/img/products/hoodie-midnight-1.jpg",
-        "assets/img/products/hoodie-midnight-2.jpg"
-      ],
-      "thumbnail": "assets/img/products/hoodie-midnight-1.jpg",
-      "options": ["S", "M", "L", "XL"],
-      "description": "Heavyweight fleece. Embroidered crest.",
-      "url": "product.html?handle=hoodie-midnight"
-    }
-  ]
-}
 [
   {
     "id": "storm-tee-black",
     "title": "Storm Tee — Black",
-    "price": 35.00,
+    "price": 3500,
     "images": [
-      "assets/products/storm-tee-black-1.jpg",
-      "assets/products/storm-tee-black-2.jpg"
+      "assets/img/products/storm-tee-black-1.jpg",
+      "assets/img/products/storm-tee-black-2.jpg"
     ],
-    "thumbnail": "assets/products/storm-tee-black-1.jpg",
-    "options": ["S","M","L","XL"],
-    "description": "Premium cotton. Lightning chest hit. True to size."
+    "thumbnail": "assets/img/products/storm-tee-black-1.jpg",
+    "options": ["S", "M", "L", "XL"],
+    "description": "Premium cotton. Lightning chest hit. True to size.",
+    "url": "product.html?handle=storm-tee-black"
   },
   {
     "id": "hoodie-midnight",
     "title": "Midnight Hoodie",
-    "price": 78.00,
+    "price": 7800,
     "images": [
-      "assets/products/hoodie-midnight-1.jpg",
-      "assets/products/hoodie-midnight-2.jpg"
+      "assets/img/products/hoodie-midnight-1.jpg",
+      "assets/img/products/hoodie-midnight-2.jpg"
     ],
-    "thumbnail": "assets/products/hoodie-midnight-1.jpg",
-    "options": ["S","M","L","XL"],
-    "description": "Heavyweight fleece. Embroidered crest."
+    "thumbnail": "assets/img/products/hoodie-midnight-1.jpg",
+    "options": ["S", "M", "L", "XL"],
+    "description": "Heavyweight fleece. Embroidered crest.",
+    "url": "product.html?handle=hoodie-midnight"
   }
 ]
-
