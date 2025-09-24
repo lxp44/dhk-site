@@ -100,7 +100,7 @@ if (window.STORM_BYPASS) { /* skip storm init entirely */ }
     }
   }
 
-  function startVisuals() {
+  function startVisuals() { if (!overlay || !canvas || !ctx) return;
     overlay.style.display = "block";
     canvas.width = innerWidth;
     canvas.height = innerHeight;
