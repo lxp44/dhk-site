@@ -43,7 +43,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   try {
     const res = await fetch('data/products.json');
-    const products = await res.json();
+   // Example
+const res = await fetch('data/products.json');
+const products = await res.json(); // NOW an array, not obj.products
+
 
     grid.innerHTML = products.map(p => `
       <a href="product.html?id=${encodeURIComponent(p.id)}" class="product-card" aria-label="${p.title}">
