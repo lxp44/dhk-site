@@ -78,7 +78,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   try {
     const res = await fetch('data/products.json');
-    const products = await res.json();
+    // Example
+const res = await fetch('data/products.json');
+const products = await res.json(); // NOW an array, not obj.products
+
     const p = products.find(x => x.id === id);
     if (!p) {
       root.innerHTML = '<p style="color:#ccc">Product not found.</p>';
