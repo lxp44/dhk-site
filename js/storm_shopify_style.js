@@ -4,14 +4,18 @@
 
   // Elements (assigned after DOMContentLoaded)
   let popup, overlay, canvas, ctx;
-  // Audio
+
+  // Audio refs
   let A = {};
   const STAGES = ["light", "med", "heavy"];
   let hasStarted = false;
 
-  // loudness
+  // Loudness caps
   const VOLS = { light: 0.35, med: 0.5, heavy: 0.7 };
   const thunderBias = { light: 0.35, med: 0.6, heavy: 0.85 };
+
+  // --------- Helpers ---------
+  const clamp01 = (v) => Math.max(0, Math.min(1, Number.isFinite(v) ? v : 0));
 
   function inferStageFromURL() {
     const p = location.pathname.toLowerCase();
@@ -20,14 +24,14 @@
     return "light";
   }
 
-  function safePlay(el) {
-    if (!el) return Promise.resolve();
+  async function safePlay(el) {
+    if (!el) return;
     try {
       el.muted = false;
-      if (!Number.isFinite(el.volume)) el.volume = 0;
-      return el.play().catch(() => {});
+      el.volume = clamp01(el.volume);
+      await el.play();
     } catch {
-      return Promise.resolve();
+      /* autoplay will re-try on next gesture */
     }
   }
 
@@ -35,12 +39,12 @@
     A = {
       rain: {
         light: document.querySelector("#rain-light"),
-        med: document.querySelector("#rain-med"),
+        med:   document.querySelector("#rain-med"),
         heavy: document.querySelector("#rain-heavy"),
       },
       thunder: {
         light: document.querySelector("#thunder-light"),
-        med: document.querySelector("#thunder-med"),
+        med:   document.querySelector("#thunder-med"),
         heavy: document.querySelector("#thunder-heavy"),
       },
     };
@@ -51,10 +55,7 @@
     }
   }
 
-  // Clamp helper
-  const clamp01 = (v) => Math.max(0, Math.min(1, v || 0));
-
-  function fadeTo(el.volume = Math.max(0, Math.min(1, from + (to - from) * k));
+  function fadeTo(el, to, ms = 450) {
     if (!el) return;
     const from = clamp01(el.volume);
     to = clamp01(to);
@@ -62,8 +63,7 @@
     const start = performance.now();
     function step(t) {
       const k = Math.min(1, (t - start) / ms);
-      const v = clamp01(from + (to - from) * k);
-      el.volume = v;
+      el.volume = clamp01(from + (to - from) * k);
       if (k < 1) requestAnimationFrame(step);
     }
     requestAnimationFrame(step);
@@ -72,7 +72,7 @@
   function setStage(next) {
     if (!STAGES.includes(next)) next = "light";
 
-    // ensure all playing & unmuted
+    // Ensure all tracks are playing & unmuted so we can crossfade
     for (const k of STAGES) {
       safePlay(A.rain[k]);
       safePlay(A.thunder[k]);
@@ -84,7 +84,7 @@
     const tTarget = clamp01(rTarget * thunderBias[next]);
 
     for (const k of STAGES) {
-      fadeTo(A.rain[k], k === next ? rTarget : 0);
+      fadeTo(A.rain[k],    k === next ? rTarget : 0);
       fadeTo(A.thunder[k], k === next ? tTarget : 0);
     }
   }
@@ -159,7 +159,7 @@
     await unlockAudioAll();
     setStage(inferStageFromURL());
 
-    // remember entry
+    // Remember entry (used by optional bypass)
     localStorage.setItem("stormEntered", "1");
   }
 
@@ -173,14 +173,15 @@
     ].join(",");
     document.querySelectorAll(boostSel).forEach((el) => {
       on(el, "mouseenter", () => setStage("heavy"));
-      on(el, "focus", () => setStage("heavy"));
+      on(el, "focus",     () => setStage("heavy"));
       on(el, "mouseleave", () => setStage(inferStageFromURL()));
-      on(el, "blur", () => setStage(inferStageFromURL()));
+      on(el, "blur",       () => setStage(inferStageFromURL()));
     });
   }
 
+  // ---------- INIT ----------
   document.addEventListener("DOMContentLoaded", () => {
-    // IMPORTANT: assign to outer variables (don’t shadow)
+    // Assign (no shadowing)
     popup   = document.getElementById("storm-popup");
     overlay = document.getElementById("storm-overlay");
     canvas  = document.getElementById("rain-canvas");
@@ -195,6 +196,7 @@
       return p.has("skipStorm") && p.get("skipStorm") !== "0";
     };
 
+    // If prepaint skip class is present, remove storm nodes and bail
     if (html.classList.contains("storm-skipped")) {
       popup?.remove();
       overlay?.remove();
@@ -202,9 +204,10 @@
       return;
     }
 
+    // Dev/param bypass
     if (hasBypass()) {
       popup?.remove();
-      // comment out next line if you want a true no-storm bypass
+      // Comment the next line if you want a *true* no-storm bypass
       startStorm();
       return;
     }
@@ -217,6 +220,7 @@
     );
     popup && popup.addEventListener("click", onFirstGesture, { once: true, passive: true });
 
+    // Keep canvas sized
     window.addEventListener("resize", () => {
       if (!canvas) return;
       canvas.width = innerWidth;
