@@ -1,26 +1,17 @@
-if (window.STORM_BYPASS) { /* skip storm init entirely */ }
-
 // js/storm_shopify_style.js
 (function () {
-  const $ = (sel) => document.querySelector(sel);
   const on = (el, ev, fn, opts) => el && el.addEventListener(ev, fn, opts || false);
 
-  // Elements
+  // Elements (assigned after DOMContentLoaded)
   let popup, overlay, canvas, ctx;
-  let A = {}; // audio elements
-  let rafId = null;
+  // Audio
+  let A = {};
+  const STAGES = ["light", "med", "heavy"];
   let hasStarted = false;
 
-  // Stage handling
-  const STAGES = /** @type const */ (["light", "med", "heavy"]);
-  let currentStage = "light";
-  let targetStage = "light";
-
-  // Loudness caps (slightly higher so we can hear it clearly)
+  // loudness
   const VOLS = { light: 0.35, med: 0.5, heavy: 0.7 };
   const thunderBias = { light: 0.35, med: 0.6, heavy: 0.85 };
-
-  // --- Helpers ---------------------------------------------------------------
 
   function inferStageFromURL() {
     const p = location.pathname.toLowerCase();
@@ -29,33 +20,28 @@ if (window.STORM_BYPASS) { /* skip storm init entirely */ }
     return "light";
   }
 
-  function hasBypass() {
-    const url = new URL(location.href);
-    return url.hash.includes("bypass") || url.search.includes("preview=1");
-  }
-
-  async function safePlay(el) {
-    if (!el) return;
+  function safePlay(el) {
+    if (!el) return Promise.resolve();
     try {
       el.muted = false;
-      el.volume = Math.min(el.volume || 0, 1);
-      await el.play();
-    } catch (_) {
-      // ignored, will try again on next interaction
+      if (!Number.isFinite(el.volume)) el.volume = 0;
+      return el.play().catch(() => {});
+    } catch {
+      return Promise.resolve();
     }
   }
 
   function hookAudio() {
     A = {
       rain: {
-        light: $("#rain-light"),
-        med: $("#rain-med"),
-        heavy: $("#rain-heavy"),
+        light: document.querySelector("#rain-light"),
+        med: document.querySelector("#rain-med"),
+        heavy: document.querySelector("#rain-heavy"),
       },
       thunder: {
-        light: $("#thunder-light"),
-        med: $("#thunder-med"),
-        heavy: $("#thunder-heavy"),
+        light: document.querySelector("#thunder-light"),
+        med: document.querySelector("#thunder-med"),
+        heavy: document.querySelector("#thunder-heavy"),
       },
     };
     for (const k of STAGES) {
@@ -65,14 +51,19 @@ if (window.STORM_BYPASS) { /* skip storm init entirely */ }
     }
   }
 
+  // Clamp helper
+  const clamp01 = (v) => Math.max(0, Math.min(1, v || 0));
+
   function fadeTo(el, to, ms = 450) {
     if (!el) return;
-    const from = el.volume || 0;
+    const from = clamp01(el.volume);
+    to = clamp01(to);
     if (Math.abs(from - to) < 0.01) { el.volume = to; return; }
     const start = performance.now();
     function step(t) {
       const k = Math.min(1, (t - start) / ms);
-      el.volume = from + (to - from) * k;
+      const v = clamp01(from + (to - from) * k);
+      el.volume = v;
       if (k < 1) requestAnimationFrame(step);
     }
     requestAnimationFrame(step);
@@ -80,10 +71,8 @@ if (window.STORM_BYPASS) { /* skip storm init entirely */ }
 
   function setStage(next) {
     if (!STAGES.includes(next)) next = "light";
-    targetStage = next;
-    if (currentStage !== next) currentStage = next;
 
-    // Start all (unmuted) then crossfade to targets
+    // ensure all playing & unmuted
     for (const k of STAGES) {
       safePlay(A.rain[k]);
       safePlay(A.thunder[k]);
@@ -91,8 +80,8 @@ if (window.STORM_BYPASS) { /* skip storm init entirely */ }
       if (A.thunder[k]) A.thunder[k].muted = false;
     }
 
-    const rTarget = VOLS[next];
-    const tTarget = Math.min(1, rTarget * thunderBias[next]);
+    const rTarget = clamp01(VOLS[next]);
+    const tTarget = clamp01(rTarget * thunderBias[next]);
 
     for (const k of STAGES) {
       fadeTo(A.rain[k], k === next ? rTarget : 0);
@@ -100,10 +89,13 @@ if (window.STORM_BYPASS) { /* skip storm init entirely */ }
     }
   }
 
-  function startVisuals() { if (!overlay || !canvas || !ctx) return;
+  function startVisuals() {
+    if (!overlay || !canvas) return;
     overlay.style.display = "block";
     canvas.width = innerWidth;
     canvas.height = innerHeight;
+    if (!ctx) ctx = canvas.getContext("2d");
+    if (!ctx) return;
 
     const drops = Array.from({ length: 260 }).map(() => ({
       x: Math.random() * canvas.width,
@@ -129,7 +121,7 @@ if (window.STORM_BYPASS) { /* skip storm init entirely */ }
           d.x = Math.random() * canvas.width;
         }
       }
-      rafId = requestAnimationFrame(draw);
+      requestAnimationFrame(draw);
     }
     draw();
 
@@ -144,11 +136,10 @@ if (window.STORM_BYPASS) { /* skip storm init entirely */ }
   function hidePopup() {
     if (!popup) return;
     popup.style.opacity = "0";
-    setTimeout(() => popup.remove(), 350);
+    setTimeout(() => popup && popup.remove(), 350);
   }
 
   async function unlockAudioAll() {
-    // Force-unlock and play every track immediately after interaction
     for (const k of STAGES) {
       await safePlay(A.rain[k]);
       await safePlay(A.thunder[k]);
@@ -165,11 +156,11 @@ if (window.STORM_BYPASS) { /* skip storm init entirely */ }
     startVisuals();
 
     hookAudio();
-    await unlockAudioAll();            // <— ensure audio is unlocked and playing now
-    setStage(inferStageFromURL());     // <— and immediately fade to the right loudness
+    await unlockAudioAll();
+    setStage(inferStageFromURL());
 
-    // Remember that user entered (but don’t auto-skip popup unless #bypass)
-    localStorage.setItem("stormEntered", "true");
+    // remember entry
+    localStorage.setItem("stormEntered", "1");
   }
 
   function attachProximityBoosts() {
@@ -180,7 +171,6 @@ if (window.STORM_BYPASS) { /* skip storm init entirely */ }
       '.button--checkout',
       '.button--cart',
     ].join(",");
-
     document.querySelectorAll(boostSel).forEach((el) => {
       on(el, "mouseenter", () => setStage("heavy"));
       on(el, "focus", () => setStage("heavy"));
@@ -189,69 +179,48 @@ if (window.STORM_BYPASS) { /* skip storm init entirely */ }
     });
   }
 
-// === INIT: run after DOM is ready ===
-document.addEventListener('DOMContentLoaded', () => {
-  const html  = document.documentElement;
+  document.addEventListener("DOMContentLoaded", () => {
+    // IMPORTANT: assign to outer variables (don’t shadow)
+    popup   = document.getElementById("storm-popup");
+    overlay = document.getElementById("storm-overlay");
+    canvas  = document.getElementById("rain-canvas");
+    ctx     = canvas ? canvas.getContext("2d") : null;
 
-  // Assign to the OUTER variables so helpers can use them
-  popup   = document.getElementById('storm-popup');
-  overlay = document.getElementById('storm-overlay');
-  const flash = document.querySelector('.lightning-flash');
-  canvas  = document.getElementById('rain-canvas');
-  ctx     = canvas ? canvas.getContext('2d') : null;
+    const html = document.documentElement;
 
-  // Helper: unified bypass check
-  const hasBypassFlag = () => {
-    if (window.STORM_BYPASS === true) return true;
-    if (localStorage.getItem('stormEntered') === '1') return true;
-    const p = new URLSearchParams(location.search);
-    return p.has('skipStorm') && p.get('skipStorm') !== '0';
-  };
+    const hasBypass = () => {
+      if (window.STORM_BYPASS === true) return true;
+      if (localStorage.getItem("stormEntered") === "1") return true;
+      const p = new URLSearchParams(location.search);
+      return p.has("skipStorm") && p.get("skipStorm") !== "0";
+    };
 
-  // If index.html pre-hid storm, remove nodes and fully skip
-  if (html.classList.contains('storm-skipped')) {
-    if (popup) popup.remove();
-    if (overlay) overlay.remove();
-    if (flash) flash.remove();
-    return;
-  }
+    if (html.classList.contains("storm-skipped")) {
+      popup?.remove();
+      overlay?.remove();
+      document.querySelector(".lightning-flash")?.remove();
+      return;
+    }
 
-  // Dev shortcut: if bypass flag present but no prepaint class, remove popup and (optionally) start
-  if (hasBypassFlag()) {
-    if (popup) popup.remove();
-    // If you truly want to SKIP the storm entirely, comment out the next line
-    startStorm();
-    return;
-  }
+    if (hasBypass()) {
+      popup?.remove();
+      // comment out next line if you want a true no-storm bypass
+      startStorm();
+      return;
+    }
 
-  // Optional proximity boosts
-  if (typeof attachProximityBoosts === 'function') {
     attachProximityBoosts();
-  }
 
-  // Require a user gesture to start the storm
-  const onFirstGesture = () => startStorm();
+    const onFirstGesture = () => startStorm();
+    ["click", "touchstart", "keydown", "scroll"].forEach((evt) =>
+      document.addEventListener(evt, onFirstGesture, { once: true, passive: true })
+    );
+    popup && popup.addEventListener("click", onFirstGesture, { once: true, passive: true });
 
-  ['click', 'touchstart', 'keydown', 'scroll'].forEach((evt) => {
-    document.addEventListener(evt, onFirstGesture, { once: true, passive: true });
+    window.addEventListener("resize", () => {
+      if (!canvas) return;
+      canvas.width = innerWidth;
+      canvas.height = innerHeight;
+    });
   });
-
-  if (popup) {
-    popup.addEventListener('click', onFirstGesture, { once: true, passive: true });
-  }
-
-  // Keep canvas sized
-  const onResize = () => {
-    if (!canvas) return;
-    canvas.width  = window.innerWidth;
-    canvas.height = window.innerHeight;
-  };
-  window.addEventListener('resize', onResize);
-  onResize();
-});
-
-// CLOSE the IIFE
 })();
-
-
-
