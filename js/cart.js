@@ -20,6 +20,35 @@
       el.className = 'cart-count-bubble';
       cartLink.appendChild(el);
     }
+    // Safe cart helpers
+function readCart() {
+  try {
+    const raw = localStorage.getItem("cart");
+    const parsed = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
+function writeCart(items) {
+  localStorage.setItem("cart", JSON.stringify(Array.isArray(items) ? items : []));
+}
+
+// Example usage in your existing code:
+document.addEventListener("DOMContentLoaded", () => {
+  const items = readCart();
+
+  function updateHeaderCount() {
+    const els = document.querySelectorAll("[data-cart-count]");
+    const count = items.reduce((sum, it) => sum + (Number(it.qty) || 0), 0);
+    els.forEach((el) => (el.textContent = String(count)));
+  }
+
+  // ...when you add/remove items, always call writeCart(items) then updateHeaderCount()
+  updateHeaderCount();
+});
+
     const qty = items.reduce((n, it) => n + (it.qty || 1), 0);
     el.textContent = qty > 0 ? qty : '';
   }
