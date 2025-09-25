@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>DHK — G4LLERY</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="https://darkharlemknight.com/cdn/shop/files/DHK_transparent.gif?v=1756069281" type="image/gif">
+  <link rel="stylesheet" href="css/styles.css"/>
+  <style>
+    /* page-specific (kept tiny) */
+    .gallery-grid{display:grid;gap:12px;grid-template-columns:repeat(4,1fr)}
+    @media(max-width:900px){.gallery-grid{grid-template-columns:repeat(2,1fr)}}
+    .gallery-tile{position:relative;overflow:hidden;border:1px solid rgba(255,255,255,.12);border-radius:10px;background:rgba(255,255,255,.02)}
+    .gallery-tile img{width:100%;height:100%;aspect-ratio:1/1;object-fit:cover;display:block;transition:transform .25s ease}
+    .gallery-tile:hover img{transform:scale(1.04)}
+    /* lightbox */
+    .lb{position:fixed;inset:0;background:rgba(0,0,0,.9);display:none;align-items:center;justify-content:center;z-index:5000}
+    .lb.open{display:flex}
+    .lb__img{max-width:92vw;max-height:88vh}
+    .lb__close,.lb__prev,.lb__next{position:absolute;top:16px;background:transparent;border:1px solid rgba(255,255,255,.25);color:#fff;border-radius:8px;padding:8px 10px;cursor:pointer}
+    .lb__close{right:16px}
+    .lb__prev{left:16px;top:50%;transform:translateY(-50%)}
+    .lb__next{right:16px;top:50%;transform:translateY(-50%)}
+  </style>
+</head>
+<body class="template-page">
+  <!-- header (same as other pages, trimmed) -->
+  <div class="section-header header-wrapper color-scheme-4 gradient" data-sticky-type="on-scroll-up">
+    <header class="site-header header header--middle-left header--mobile-center">
+      <div class="page-width header-grid">
+        <nav class="nav-left desktop-only" aria-label="Primary">
+          <a href="index.html" class="nav-link">Home</a>
+          <a href="shop.html" class="nav-link">Shop All</a>
+          <a href="G4LLERY.html" class="nav-link">G4LLERY</a>
+        </nav>
+        <a class="header__logo" href="index.html" aria-label="DarkHarlemKnight">
+          <img src="https://darkharlemknight.com/cdn/shop/files/DHK_transparent.gif?v=1756069281&width=190" width="190" height="190" class="header__heading-logo" alt="DarkHarlemKnight"/>
+        </a>
+        <nav class="nav-right desktop-only">
+          <a href="about.html" class="nav-link">About</a>
+          <a href="contact.html" class="nav-link">Contact</a>
+          <a href="cart.html" class="nav-link button--ghost" data-cart-open aria-label="Cart">Cart</a>
+        </nav>
+      </div>
+    </header>
+  </div>
+
+  <main id="MainContent" class="section">
+    <div class="page-width">
+      <header class="fc__header">
+        <h1 class="fc__title h2">G4LLERY</h1>
+      </header>
+
+      <!-- gallery -->
+      <div id="gallery" class="gallery-grid" aria-live="polite">
+        <!-- tiles are generated below or paste static <a> tiles -->
+      </div>
+    </div>
+  </main>
+
+  <!-- lightbox -->
+  <div class="lb" id="lightbox" aria-hidden="true">
+    <img class="lb__img" id="lb-img" alt="">
+    <button class="lb__close" id="lb-close" aria-label="Close">×</button>
+    <button class="lb__prev" id="lb-prev" aria-label="Previous">‹</button>
+    <button class="lb__next" id="lb-next" aria-label="Next">›</button>
+  </div>
+
+  <!-- footer (reuse if you want; omitted for brevity) -->
+
+  <script>
+    // Simple data source: put your gallery images under assets/img/gallery/
+    const GALLERY = [
+      "assets/img/gallery/shot-01.jpg",
+      "assets/img/gallery/shot-02.jpg",
+      "assets/img/gallery/shot-03.jpg",
+      "assets/img/gallery/shot-04.jpg"
+      // add more…
+    ];
+
+    const grid = document.getElementById('gallery');
+    grid.innerHTML = GALLERY.map((src,i)=>`
+      <a href="${src}" class="gallery-tile" data-idx="${i}">
+        <img src="${src}" alt="Gallery ${i+1}" loading="lazy">
+      </a>`).join('');
+
+    // lightbox
+    const lb = document.getElementById('lightbox');
+    const lbImg = document.getElementById('lb-img');
+    const btnClose = document.getElementById('lb-close');
+    const btnPrev = document.getElementById('lb-prev');
+    const btnNext = document.getElementById('lb-next');
+    let idx = 0;
+
+    function openLB(i){ idx=i; lbImg.src = GALLERY[idx]; lb.classList.add('open'); lb.setAttribute('aria-hidden','false'); }
+    function closeLB(){ lb.classList.remove('open'); lb.setAttribute('aria-hidden','true'); lbImg.removeAttribute('src'); }
+    function prev(){ idx = (idx-1+GALLERY.length)%GALLERY.length; lbImg.src = GALLERY[idx]; }
+    function next(){ idx = (idx+1)%GALLERY.length; lbImg.src = GALLERY[idx]; }
+
+    grid.addEventListener('click', (e)=>{
+      const a = e.target.closest('.gallery-tile'); if(!a) return;
+      e.preventDefault(); openLB(Number(a.dataset.idx||0));
+    });
+    btnClose.addEventListener('click', closeLB);
+    btnPrev.addEventListener('click', prev);
+    btnNext.addEventListener('click', next);
+    lb.addEventListener('click', (e)=>{ if(e.target===lb) closeLB(); });
+    document.addEventListener('keydown', (e)=>{
+      if(!lb.classList.contains('open')) return;
+      if(e.key==='Escape') closeLB();
+      if(e.key==='ArrowLeft') prev();
+      if(e.key==='ArrowRight') next();
+    });
+  </script>
+
+  <script src="js/cart.js"></script>
+</body>
+</html>
