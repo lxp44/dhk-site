@@ -25,4 +25,20 @@
     "description": "Heavyweight fleece. Embroidered crest.",
     "url": "product.html?handle=hoodie-midnight"
   }
+
+    // EXAMPLE: new or updated product
+  {
+    "id": "bolt-cap",
+    "title": "Bolt Cap",
+    "price": 3200,
+    "images": [
+      "assets/img/products/bolt-cap-1.jpg",
+      "assets/img/products/bolt-cap-2.jpg"
+    ],
+    "thumbnail": "assets/img/products/bolt-cap-1.jpg",
+    "options": ["One Size"],
+    "description": "Structured crown. Embroidered bolt. Adjustable.",
+    "url": "product.html?handle=bolt-cap"
+  }
+]
 ]
