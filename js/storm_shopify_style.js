@@ -190,11 +190,11 @@
     const html = document.documentElement;
 
     const hasBypass = () => {
-      if (window.STORM_BYPASS === true) return true;
-      if (localStorage.getItem("stormEntered") === "1") return true;
-      const p = new URLSearchParams(location.search);
-      return p.has("skipStorm") && p.get("skipStorm") !== "0";
-    };
+  // Only skip if explicitly requested
+  if (window.STORM_BYPASS === true) return true;
+  const p = new URLSearchParams(location.search);
+  return p.has('skipStorm') && p.get('skipStorm') !== '0';
+};
 
     // If prepaint skip class is present, remove storm nodes and bail
     if (html.classList.contains("storm-skipped")) {
@@ -205,12 +205,14 @@
     }
 
     // Dev/param bypass
-    if (hasBypass()) {
-      popup?.remove();
-      // Comment the next line if you want a *true* no-storm bypass
-      startStorm();
-      return;
-    }
+ if (hasBypass()) {
+  document.documentElement.classList.add('storm-skipped');
+  popup?.remove();
+  overlay?.remove();
+  document.querySelector('.lightning-flash')?.remove();
+  return;
+}
+
 
     attachProximityBoosts();
 
