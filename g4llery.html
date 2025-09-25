@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>DHK — G4LLERY</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/styles.css"/>
+</head>
+<body class="template-page">
+
+  <!-- Reuse your header exactly like index.html -->
+  <!-- (Copy the whole header block from index.html and replace this comment with it) -->
+
+  <main id="MainContent" class="section">
+    <div class="page-width">
+      <header class="fc__header">
+        <h1 class="fc__title h2">G4LLERY</h1>
+      </header>
+
+      <!-- Slideshow -->
+      <div class="lxp-slideshow" aria-roledescription="carousel">
+        <div class="lxp-slides" id="lxpSlides" style="transform:translateX(0%)">
+          <!-- Slides (corrected URLs & quotes) -->
+          <figure class="lxp-slide">
+            <img src="https://cdn.shopify.com/s/files/1/0628/9011/5159/files/lxp_4_bag.png?v=1748914724" alt="Bag shot" />
+          </figure>
+          <figure class="lxp-slide">
+            <img src="https://cdn.shopify.com/s/files/1/0628/9011/5159/files/4506-DK.png?v=1745202327" alt="Look 4506" />
+          </figure>
+          <figure class="lxp-slide">
+            <img src="https://cdn.shopify.com/s/files/1/0628/9011/5159/files/IMG_5920_2_dk.png?v=1750107808" alt="Studio still" />
+          </figure>
+          <figure class="lxp-slide">
+            <img src="https://cdn.shopify.com/s/files/1/0628/9011/5159/files/5545_DK.png?v=1745207710" alt="Look 5545" />
+          </figure>
+          <figure class="lxp-slide">
+            <img src="https://cdn.shopify.com/s/files/1/0628/9011/5159/files/4718_DK.png?v=1756069991" alt="Look 4718" />
+          </figure>
+          <figure class="lxp-slide">
+            <img src="https://cdn.shopify.com/s/files/1/0628/9011/5159/files/IMG_7733_dk.png?v=1756069987" alt="Street look" />
+          </figure>
+        </div>
+
+        <div class="lxp-nav">
+          <button class="lxp-btn" type="button" aria-label="Previous slide" id="lxpPrev">‹</button>
+          <div class="lxp-dots" id="lxpDots" aria-hidden="true"></div>
+          <button class="lxp-btn" type="button" aria-label="Next slide" id="lxpNext">›</button>
+        </div>
+      </div>
+      <!-- /Slideshow -->
+    </div>
+  </main>
+
+  <!-- Reuse your footer from index.html (or the new footer from step 2 below) -->
+
+  <!-- Scripts -->
+  <script src="js/nav.js"></script>
+  <script src="js/announce.js"></script>
+  <script src="js/cart.js"></script>
+
+  <script>
+    // Minimal slider logic (no dependencies)
+    (function () {
+      const track = document.getElementById('lxpSlides');
+      const slides = Array.from(track.children);
+      const dotsWrap = document.getElementById('lxpDots');
+
+      let i = 0;
+      const N = slides.length;
+
+      // Build dots
+      slides.forEach((_, idx) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'lxp-dot' + (idx === 0 ? ' is-active' : '');
+        b.setAttribute('aria-label', 'Go to slide ' + (idx + 1));
+        b.addEventListener('click', () => go(idx, true));
+        dotsWrap.appendChild(b);
+      });
+
+      const dots = Array.from(dotsWrap.children);
+
+      function go(idx, user = false) {
+        i = (idx + N) % N;
+        track.style.transform = `translateX(-${i * 100}%)`;
+        dots.forEach(d => d.classList.remove('is-active'));
+        dots[i].classList.add('is-active');
+        if (user) resetAuto();
+      }
+
+      document.getElementById('lxpNext').addEventListener('click', () => go(i + 1, true));
+      document.getElementById('lxpPrev').addEventListener('click', () => go(i - 1, true));
+
+      let timer = null;
+      function resetAuto() {
+        clearInterval(timer);
+        timer = setInterval(() => go(i + 1, false), 5000);
+      }
+      resetAuto();
+
+      // Swipe (very light)
+      let startX = 0;
+      track.addEventListener('touchstart', (e) => (startX = e.touches[0].clientX), {passive:true});
+      track.addEventListener('touchend', (e) => {
+        const dx = e.changedTouches[0].clientX - startX;
+        if (Math.abs(dx) > 40) go(i + (dx < 0 ? 1 : -1), true);
+      });
+    })();
+  </script>
+</body>
+</html>
