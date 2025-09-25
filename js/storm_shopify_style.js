@@ -54,7 +54,7 @@
   // Clamp helper
   const clamp01 = (v) => Math.max(0, Math.min(1, v || 0));
 
-  function fadeTo(el, to, ms = 450) {
+  function fadeTo(el.volume = Math.max(0, Math.min(1, from + (to - from) * k));
     if (!el) return;
     const from = clamp01(el.volume);
     to = clamp01(to);
