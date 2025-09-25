@@ -1,10 +1,12 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <link rel="icon" href="https://darkharlemknight.com/cdn/shop/files/DHK_transparent.gif?v=1756069281&width=190" type="image/gif" sizes="any">
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>DHK — Product</title>
+
+  <!-- Favicon (pointing at your GIF) -->
+  <link rel="icon" href="https://darkharlemknight.com/cdn/shop/files/DHK_transparent.gif?v=1756069281&width=190" type="image/gif" sizes="any">
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -67,7 +69,7 @@
                   <ul class="menu-drawer__menu has-submenu list-menu" role="list">
                     <li><a href="index.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">Home</a></li>
                     <li><a href="shop.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">Shop All</a></li>
-                    <li><a href="g4llery.html" class="menu-drawer__menu-item">G4LLERY</a></li>
+                    <li><a href="g4llery.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">G4LLERY</a></li>
                     <li><a href="collections.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">Collections</a></li>
                     <li><a href="about.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">About</a></li>
                     <li><a href="contact.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">Contact</a></li>
@@ -83,7 +85,7 @@
         </details>
       </header-drawer>
 
-      <!-- Header grid -->
+      <!-- Header grid (desktop) -->
       <div class="page-width header-grid">
         <nav class="nav-left desktop-only" aria-label="Primary">
           <a href="index.html" class="nav-link">Home</a>
@@ -105,9 +107,7 @@
         <nav class="nav-right desktop-only">
           <a href="about.html" class="nav-link">About</a>
           <a href="contact.html" class="nav-link">Contact</a>
-
           <button id="search-open" class="nav-link button--ghost" aria-label="Open search">Search</button>
-
           <a href="cart.html" class="nav-link button--ghost" data-loud="heavy" aria-label="Cart" data-cart-open>
             <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
               <path d="M7 4h-2l-1 2v2h2l3.6 7.59-1.35 2.41a1.994 1.994 0 0 0 1.75 2.99H19v-2H10.42c-.14 0-.25-.11-.25-.25l.03-.12L11 16h6.31a2 2 0 0 0 1.79-1.11L22 8H7.42l-.94-2Z" fill="currentColor"/>
@@ -128,96 +128,93 @@
 
   <!-- ===== Footer ===== -->
   <footer class="footer color-scheme-4 gradient section footer--static">
-  <div class="footer__content-top page-width">
-    <div class="footer__blocks-wrapper grid grid--1-col grid--2-col grid--4-col-tablet">
-      <!-- Links -->
-      <div class="footer-block footer-block--menu grid__item">
-        <h2 class="footer-block__heading inline-richtext">Shop</h2>
-        <ul class="footer-block__details-content list-unstyled">
-          <li><a class="link link--text list-menu__item list-menu__item--link" href="collections.html">Collections</a></li>
-          <li><a class="link link--text list-menu__item list-menu__item--link" href="shop.html">All Products</a></li>
-          <li><a class="link link--text list-menu__item list-menu__item--link" href="g4llery.html">G4LLERY</a></li>
-          <li><a class="link link--text list-menu__item list-menu__item--link" href="about.html">About</a></li>
-          <li><a class="link link--text list-menu__item list-menu__item--link" href="contact.html">Contact</a></li>
-        </ul>
-      </div>
-
-      <!-- Brand blurb + social -->
-      <div class="footer-block grid__item">
-        <h2 class="footer-block__heading inline-richtext">Dark Harlem Knight</h2>
-        <div class="footer-block__details-content rte">
-          <p>Forged in the storm. Streetwear with thunder in its veins.</p>
+    <div class="footer__content-top page-width">
+      <div class="footer__blocks-wrapper grid grid--1-col grid--2-col grid--4-col-tablet">
+        <!-- Links -->
+        <div class="footer-block footer-block--menu grid__item">
+          <h2 class="footer-block__heading inline-richtext">Shop</h2>
+          <ul class="footer-block__details-content list-unstyled">
+            <li><a class="link link--text list-menu__item list-menu__item--link" href="collections.html">Collections</a></li>
+            <li><a class="link link--text list-menu__item list-menu__item--link" href="shop.html">All Products</a></li>
+            <li><a class="link link--text list-menu__item list-menu__item--link" href="g4llery.html">G4LLERY</a></li>
+            <li><a class="link link--text list-menu__item list-menu__item--link" href="about.html">About</a></li>
+            <li><a class="link link--text list-menu__item list-menu__item--link" href="contact.html">Contact</a></li>
+          </ul>
         </div>
-        <ul class="footer__list-social">
-          <li><a aria-label="Instagram" href="#" class="social-link">Instagram</a></li>
-          <li><a aria-label="TikTok" href="#" class="social-link">TikTok</a></li>
-          <li><a aria-label="YouTube" href="#" class="social-link">YouTube</a></li>
-        </ul>
-      </div>
 
-      <!-- Newsletter -->
-      <div class="footer-block footer-block--newsletter grid__item">
-        <h2 class="footer-block__heading inline-richtext">Join the storm</h2>
-        <form class="footer__newsletter newsletter-form" action="#" method="post" onsubmit="return false;">
-          <div class="newsletter-form__field-wrapper">
-            <div class="field">
-              <input class="field__input" type="email" placeholder="Email address" required>
-              <button class="newsletter-form__button field__button" type="submit" aria-label="Subscribe">→</button>
-            </div>
+        <!-- Brand blurb + social -->
+        <div class="footer-block grid__item">
+          <h2 class="footer-block__heading inline-richtext">Dark Harlem Knight</h2>
+          <div class="footer-block__details-content rte">
+            <p>Forged in the storm. Streetwear with thunder in its veins.</p>
           </div>
-        </form>
-      </div>
+          <ul class="footer__list-social">
+            <li><a aria-label="Instagram" href="#" class="social-link">Instagram</a></li>
+            <li><a aria-label="TikTok" href="#" class="social-link">TikTok</a></li>
+            <li><a aria-label="YouTube" href="#" class="social-link">YouTube</a></li>
+          </ul>
+        </div>
 
-      <!-- Brand image -->
-      <div class="footer-block footer-block-image grid__item center">
-        <img src="https://darkharlemknight.com/cdn/shop/files/DHK_transparent.gif?v=1756069281&width=190"
-             alt="DarkHarlemKnight" width="120" height="120" loading="lazy">
+        <!-- Newsletter -->
+        <div class="footer-block footer-block--newsletter grid__item">
+          <h2 class="footer-block__heading inline-richtext">Join the storm</h2>
+          <form class="footer__newsletter newsletter-form" action="#" method="post" onsubmit="return false;">
+            <div class="newsletter-form__field-wrapper">
+              <div class="field">
+                <input class="field__input" type="email" placeholder="Email address" required>
+                <button class="newsletter-form__button field__button" type="submit" aria-label="Subscribe">→</button>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <!-- Brand image -->
+        <div class="footer-block footer-block-image grid__item center">
+          <img src="https://darkharlemknight.com/cdn/shop/files/DHK_transparent.gif?v=1756069281&width=190"
+               alt="DarkHarlemKnight" width="120" height="120" loading="lazy">
+        </div>
       </div>
     </div>
-  </div>
 
-  <div class="footer__content-bottom">
-    <div class="footer__content-bottom-wrapper page-width">
-      <div class="footer__column footer__column--info">
-        <div class="footer__payment">
-          <ul class="list list-payment" role="list">
-            <li class="list-payment__item">Visa</li>
-            <li class="list-payment__item">Mastercard</li>
-            <li class="list-payment__item">Amex</li>
-            <li class="list-payment__item">PayPal</li>
+    <div class="footer__content-bottom">
+      <div class="footer__content-bottom-wrapper page-width">
+        <div class="footer__column footer__column--info">
+          <div class="footer__payment">
+            <ul class="list list-payment" role="list">
+              <li class="list-payment__item">Visa</li>
+              <li class="list-payment__item">Mastercard</li>
+              <li class="list-payment__item">Amex</li>
+              <li class="list-payment__item">PayPal</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer__content-bottom-wrapper page-width footer__content-bottom-wrapper--center">
+        <div class="footer__copyright caption">
+          <small class="copyright__content">© <span id="year"></span>, Dark Harlem Knight</small>
+          <small class="copyright__content">Powered by the Storm</small>
+          <ul class="policies list-unstyled">
+            <li><small class="copyright__content"><a href="#">Privacy Policy</a></small></li>
+            <li><small class="copyright__content"><a href="#">Terms of Service</a></small></li>
           </ul>
         </div>
       </div>
     </div>
-
-    <div class="footer__content-bottom-wrapper page-width footer__content-bottom-wrapper--center">
-      <div class="footer__copyright caption">
-        <small class="copyright__content">© <span id="year"></span>, Dark Harlem Knight</small>
-        <small class="copyright__content">Powered by the Storm</small>
-        <ul class="policies list-unstyled">
-          <li><small class="copyright__content"><a href="#">Privacy Policy</a></small></li>
-          <li><small class="copyright__content"><a href="#">Terms of Service</a></small></li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</footer>
-<script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+  </footer>
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
 
   <!-- ===== Search Modal ===== -->
   <div id="search-modal" class="search-modal" aria-hidden="true">
     <div class="search-modal__overlay" data-close-search></div>
-
     <div class="search-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="search-title">
       <header class="search-modal__header">
         <h2 id="search-title">Search</h2>
         <button id="search-close" class="search-modal__close" aria-label="Close search">×</button>
       </header>
-
       <div class="search-modal__field">
         <input id="search-input" type="search" placeholder="Search products…  ( /  or  ⌘/Ctrl+K )" autocomplete="off" />
       </div>
-
       <div id="search-results" class="search-modal__results" aria-live="polite"></div>
     </div>
   </div>
@@ -226,13 +223,11 @@
   <!-- ===== Cart Drawer ===== -->
   <div id="cart-drawer" class="cart-drawer" aria-hidden="true">
     <div class="cart-drawer__overlay" data-cart-close></div>
-
     <aside class="cart-drawer__panel" role="dialog" aria-modal="true" aria-labelledby="cart-drawer-title" tabindex="-1">
       <header class="cart-drawer__header">
         <h2 id="cart-drawer-title" class="cart-drawer__heading">Your Cart</h2>
         <button class="cart-drawer__close" type="button" aria-label="Close cart" data-cart-close>×</button>
       </header>
-
       <div class="cart-drawer__body">
         <div id="cart-items" class="cart-items"></div>
         <div id="cart-empty" class="cart-empty" hidden>
@@ -240,14 +235,12 @@
           <a href="shop.html" class="button button--secondary">Continue shopping</a>
         </div>
       </div>
-
       <footer class="cart-drawer__footer">
         <div class="cart-totals">
           <span class="cart-totals__label">Estimated total</span>
           <span id="cart-subtotal" class="cart-totals__value">$0.00</span>
         </div>
         <small class="cart-note">Taxes & shipping calculated at checkout.</small>
-
         <div class="cart-ctas">
           <a href="cart.html" class="button">View cart</a>
           <button class="button" type="button" id="cart-checkout" disabled>Checkout</button>
@@ -257,38 +250,21 @@
   </div>
   <!-- /Cart Drawer -->
 
-  <!-- Scripts -->
+  <!-- ===== Hidden storm audio (to enable storm script on product pages) ===== -->
+  <audio id="rain-light"   src="assets/audio/rain-light.mp3" loop preload="auto" hidden></audio>
+  <audio id="rain-med"     src="assets/audio/rain-med.mp3"   loop preload="auto" hidden></audio>
+  <audio id="rain-heavy"   src="assets/audio/rain-heavy.mp3" loop preload="auto" hidden></audio>
+  <audio id="thunder-light" src="assets/audio/thunder-light.mp3" loop preload="auto" hidden></audio>
+  <audio id="thunder-med"   src="assets/audio/thunder-med.mp3"   loop preload="auto" hidden></audio>
+  <audio id="thunder-heavy" src="assets/audio/thunder-heavy.mp3" loop preload="auto" hidden></audio>
+
+  <!-- Scripts (order matters: cart before product.js) -->
   <script src="js/nav.js"></script>
   <script src="js/announce.js"></script>
   <script src="js/cart.js"></script>
   <script src="js/search.js"></script>
   <script src="js/product.js"></script>
+  <script src="js/storm_shopify_style.js"></script>
   <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
 </body>
 </html>
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>DHK — Product</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css"/>
-</head>
-<body class="template-page">
-
-  <!-- Reuse announcement + header -->
-
-  <main id="MainContent" class="section">
-    <div class="page-width" id="product-root" aria-live="polite"></div>
-  </main>
-
-  <!-- Reuse footer -->
-
-  <script src="js/cart.js"></script>
-  <script src="js/product.js"></script>
-</body>
-</html>
-
