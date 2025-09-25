@@ -271,8 +271,8 @@ body.drawer-open { overflow: hidden; }
    Bat cursor (optional PNGs)
    ========================= */
 /* Keep these only if you uploaded both PNGs to assets/img/ */
-html, body { cursor: url('assets/img/cursor-bat-16.png') 8 8, auto; }
-a, button, .hoverable, input[type="submit"] { cursor: url('assets/img/cursor-bat-32.png') 16 16, auto; transition: transform 0.1s ease; }
+html, body { cursor: url('../assets/img/cursor-bat-16.png') 8 8, auto; }
+a, button, .hoverable, input[type="submit"] { cursor: url('../assets/img/cursor-bat-32.png') 16 16, auto; transition: transform 0.1s ease; }
 a:hover, button:hover, .hoverable:hover, input[type="submit"]:hover { transform: scale(1.05); }
 
 /* =========================
@@ -353,6 +353,7 @@ a:hover, button:hover, .hoverable:hover, input[type="submit"]:hover { transform:
   font-family: "Roboto", sans-serif;
   font-size: 13px; color: #ddd; letter-spacing: .02em;
 }
+
 /* ===== Footer (Dawn-like) ===== */
 .footer { margin-top: 0; }
 .section.footer--static { padding: 44px 0 36px; }
@@ -420,16 +421,17 @@ a:hover, button:hover, .hoverable:hover, input[type="submit"]:hover { transform:
 .policies { display: flex; gap: 10px; }
 .policies a { color: #fff; text-decoration: none; opacity: .85; }
 .policies a:hover { opacity: 1; text-decoration: underline; }
+
 /* ===== Announcement bar hide/reveal ===== */
 .utility-bar {
   transition: transform .24s ease, opacity .24s ease;
   will-change: transform, opacity;
 }
-
 .utility-bar.hide {
   transform: translateY(-100%);
   opacity: 0;
 }
+
 /* ===== A11y helpers ===== */
 .visually-hidden,
 .sr-only {
@@ -442,20 +444,21 @@ a:focus-visible, button:focus-visible, input:focus-visible {
 }
 
 /* ===== Sticky header polish (shrink logo on stick) ===== */
-.shopify-section-header-sticky .header__heading-logo {
-  height: 52px;
-}
+.shopify-section-header-sticky .header__heading-logo { height: 52px; }
 @media (max-width: 900px) {
-  .shopify-section-header-sticky .header__heading-logo {
-    height: 44px;
-  }
+  .shopify-section-header-sticky .header__heading-logo { height: 44px; }
 }
 
-/* ===== Search modal (styles only; JS/HTML next) ===== */
-.search-modal {
+/* ===== Search modal (styles) ===== */
+/* Support both your classes and your IDs used in HTML */
+.search-modal,
+#search-modal {
   position: fixed; inset: 0; z-index: 3500; display: none;
 }
-.search-modal.open { display: block; }
+.search-modal.open,
+#search-modal[aria-hidden="false"] {
+  display: block;
+}
 .search-modal__overlay {
   position: absolute; inset: 0; background: rgba(0,0,0,.55);
   backdrop-filter: blur(2px);
@@ -470,21 +473,27 @@ a:focus-visible, button:focus-visible, input:focus-visible {
   display:flex; align-items:center; gap:10px; padding:12px 14px;
   border-bottom: 1px solid rgba(255,255,255,.08);
 }
-.search-input {
+.search-input,
+#search-input {
   flex:1 1 auto; min-width:0;
   background: rgba(255,255,255,.04);
   border: 1px solid rgba(255,255,255,.14);
   border-radius: 8px; padding: 10px 12px; color:#fff;
   font-family:"Roboto",sans-serif; font-size:14px;
+  width: 100%;
 }
-.search-input::placeholder { color:#bdbdbd; }
-.search-close {
+.search-input::placeholder,
+#search-input::placeholder { color:#bdbdbd; }
+.search-close,
+#search-close {
   background: transparent; border: 1px solid rgba(255,255,255,.18);
   color:#fff; border-radius: 8px; padding:8px 10px; cursor:pointer;
 }
-.search-close:hover { background: rgba(255,255,255,.08); }
+.search-close:hover,
+#search-close:hover { background: rgba(255,255,255,.08); }
 
-.search-results {
+.search-results,
+#search-results {
   max-height: 60vh; overflow:auto; padding: 10px 14px;
   display:grid; gap:10px;
 }
@@ -502,3 +511,13 @@ a:focus-visible, button:focus-visible, input:focus-visible {
 .search-result__title { color:#fff; font-size:14px; font-family:"Roboto",sans-serif; margin:0; }
 .search-result__price { color:#ddd; font-size:13px; font-family:"Roboto",sans-serif; }
 
+/* ===== Cart count bubble (optional) ===== */
+.cart-count-bubble {
+  display:inline-grid; place-items:center;
+  min-width: 18px; height: 18px; padding: 0 5px;
+  margin-left: 6px;
+  background:#fff; color:#000;
+  border-radius: 999px;
+  font-family: "Roboto", sans-serif;
+  font-size: 12px; line-height: 1;
+}
