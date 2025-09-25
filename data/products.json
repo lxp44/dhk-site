@@ -17,7 +17,7 @@
   {
     "id": "hoodie-midnight",
     "title": "Midnight Hoodie",
-    "price": 78.00,
+    "price": 7800,
     "images": [
       "assets/img/products/hoodie-midnight-1.jpg",
       "assets/img/products/hoodie-midnight-2.jpg"
@@ -30,7 +30,7 @@
   {
     "id": "bolt-cap",
     "title": "Bolt Cap",
-    "price": 32.00,
+    "price": 3200,
     "images": [
       "assets/img/products/bolt-cap-1.jpg",
       "assets/img/products/bolt-cap-2.jpg"
@@ -43,7 +43,7 @@
   {
     "id": "storm-hoodie-grey",
     "title": "Storm Hoodie — Grey",
-    "price": 80.00,
+    "price": 8000,
     "images": [
       "assets/img/products/storm-hoodie-grey-1.jpg",
       "assets/img/products/storm-hoodie-grey-2.jpg"
