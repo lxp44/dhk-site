@@ -4,8 +4,6 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>DHK — G4LLERY</title>
-  <link rel="stylesheet" href="css/styles.css"/>
-<body class="template-page">
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,9 +12,85 @@
 
   <!-- Styles -->
   <link rel="stylesheet" href="css/styles.css"/>
-</head>
-<body class="template-page">
 
+  <!-- Page-scoped gallery tweaks -->
+  <style>
+    /* Make only the gallery section full-bleed, while keeping the page header/footer boxed */
+    .g4llery-page .g4llery-bleed {
+      width: 100vw;
+      margin-left: calc(50% - 50vw);  /* escape .page-width “bracket” */
+      margin-right: calc(50% - 50vw);
+    }
+
+    /* Base slider layout */
+    .g4llery-page .lxp-slideshow {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+    }
+    .g4llery-page .lxp-slides {
+      display: flex;
+      will-change: transform;
+      transition: transform 0.8s ease-in-out;
+    }
+    .g4llery-page .lxp-slide {
+      min-width: 100%; /* one slide = full viewport width because container is 100vw */
+      box-sizing: border-box;
+    }
+
+    /* Image presentation: show true size where possible, but stay responsive */
+    .g4llery-page .lxp-slide img {
+      display: block;
+      margin: 0 auto;
+      width: auto;          /* don’t stretch horizontally by default */
+      max-width: 100%;      /* never overflow the viewport width */
+      height: auto;         /* maintain intrinsic aspect */
+      /* If you want a taller presentation, you can also cap height:
+         max-height: 88vh; object-fit: contain; */
+    }
+
+    /* Nav arrows + dots (kept simple) */
+    .g4llery-page .lxp-nav {
+      position: absolute;
+      inset: 0 0 0 0;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      pointer-events: none;
+    }
+    .g4llery-page .lxp-btn {
+      pointer-events: all;
+      border: 0;
+      background: rgba(0,0,0,.4);
+      color: #fff;
+      font-size: 2rem;
+      line-height: 1;
+      padding: .45rem .8rem;
+      cursor: pointer;
+      transition: background .2s ease;
+    }
+    .g4llery-page .lxp-btn:hover { background: rgba(0,0,0,.65); }
+    .g4llery-page #lxpPrev { justify-self: start; margin-left: .5rem; }
+    .g4llery-page #lxpNext { justify-self: end; margin-right: .5rem; }
+
+    .g4llery-page .lxp-dots {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      justify-content: center;
+      pointer-events: all;
+    }
+    .g4llery-page .lxp-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: rgba(255,255,255,.45);
+      border: 0;
+      cursor: pointer;
+    }
+    .g4llery-page .lxp-dot.is-active { background: #fff; }
+  </style>
+</head>
+
+<body class="template-page g4llery-page">
   <!-- ===== Announcement / Utility Bar ===== -->
   <div class="utility-bar color-scheme-4 gradient utility-bar--bottom-border">
     <div class="page-width utility-bar__grid utility-bar__grid--2-col">
@@ -44,18 +118,13 @@
   <!-- ===== Sticky Header Wrapper ===== -->
   <div class="section-header header-wrapper color-scheme-4 gradient" data-sticky-type="on-scroll-up">
     <header class="site-header header header--middle-left header--mobile-center">
-
-      <!-- Header drawer (mobile) -->
+      <!-- Mobile drawer -->
       <header-drawer data-breakpoint="tablet">
         <details id="Details-menu-drawer-container" class="menu-drawer-container">
           <summary class="header__icon header__icon--menu header__icon--summary link focus-inset" aria-label="Menu">
             <span aria-hidden="true">
-              <svg width="22" height="22" viewBox="0 0 24 24">
-                <path d="M3 6h18v2H3zM3 11h18v2H3zM3 16h18v2H3z" fill="currentColor"/>
-              </svg>
-              <svg width="22" height="22" viewBox="0 0 24 24">
-                <path d="M18.3 5.7 12 12l6.3 6.3-1.4 1.4L10.6 13.4 4.3 19.7 2.9 18.3 9.2 12 2.9 5.7 4.3 4.3 10.6 10.6 16.9 4.3z" fill="currentColor"/>
-              </svg>
+              <svg width="22" height="22" viewBox="0 0 24 24"><path d="M3 6h18v2H3zM3 11h18v2H3zM3 16h18v2H3z" fill="currentColor"/></svg>
+              <svg width="22" height="22" viewBox="0 0 24 24"><path d="M18.3 5.7 12 12l6.3 6.3-1.4 1.4L10.6 13.4 4.3 19.7 2.9 18.3 9.2 12 2.9 5.7 4.3 4.3 10.6 10.6 16.9 4.3z" fill="currentColor"/></svg>
             </span>
           </summary>
 
@@ -80,7 +149,7 @@
         </details>
       </header-drawer>
 
-      <!-- Header grid (desktop nav + logo + desktop right) -->
+      <!-- Header grid -->
       <div class="page-width header-grid">
         <nav class="nav-left desktop-only" aria-label="Primary">
           <a href="index.html" class="nav-link">Home</a>
@@ -102,9 +171,7 @@
         <nav class="nav-right desktop-only">
           <a href="about.html" class="nav-link">About</a>
           <a href="contact.html" class="nav-link">Contact</a>
-
           <button id="search-open" class="nav-link button--ghost" aria-label="Open search">Search</button>
-
           <a href="cart.html" class="nav-link button--ghost" data-loud="heavy" aria-label="Cart" data-cart-open>
             <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
               <path d="M7 4h-2l-1 2v2h2l3.6 7.59-1.35 2.41a1.994 1.994 0 0 0 1.75 2.99H19v-2H10.42c-.14 0-.25-.11-.25-.25l.03-.12L11 16h6.31a2 2 0 0 0 1.79-1.11L22 8H7.42l-.94-2Z" fill="currentColor"/>
@@ -117,15 +184,17 @@
   </div>
 
   <main id="MainContent" class="section">
+    <!-- Keep the page title boxed -->
     <div class="page-width">
       <header class="fc__header">
         <h1 class="fc__title h2">G4LLERY</h1>
       </header>
+    </div>
 
-      <!-- Slideshow -->
+    <!-- Full-bleed slideshow -->
+    <div class="g4llery-bleed">
       <div class="lxp-slideshow" aria-roledescription="carousel">
         <div class="lxp-slides" id="lxpSlides" style="transform:translateX(0%)">
-          <!-- Slides (corrected URLs & quotes) -->
           <figure class="lxp-slide">
             <img src="https://cdn.shopify.com/s/files/1/0628/9011/5159/files/lxp_4_bag.png?v=1748914724" alt="Bag shot" />
           </figure>
@@ -152,87 +221,83 @@
           <button class="lxp-btn" type="button" aria-label="Next slide" id="lxpNext">›</button>
         </div>
       </div>
-      <!-- /Slideshow -->
     </div>
+    <!-- /Full-bleed slideshow -->
   </main>
 
-   <!-- ===== Footer ===== -->
- <footer class="footer color-scheme-4 gradient section footer--static">
-  <div class="footer__content-top page-width">
-    <div class="footer__blocks-wrapper grid grid--1-col grid--2-col grid--4-col-tablet">
-      <!-- Links -->
-      <div class="footer-block footer-block--menu grid__item">
-        <h2 class="footer-block__heading inline-richtext">Shop</h2>
-        <ul class="footer-block__details-content list-unstyled">
-          <li><a class="link link--text list-menu__item list-menu__item--link" href="collections.html">Collections</a></li>
-          <li><a class="link link--text list-menu__item list-menu__item--link" href="shop.html">All Products</a></li>
-          <li><a class="link link--text list-menu__item list-menu__item--link" href="g4llery.html">G4LLERY</a></li>
-          <li><a class="link link--text list-menu__item list-menu__item--link" href="about.html">About</a></li>
-          <li><a class="link link--text list-menu__item list-menu__item--link" href="contact.html">Contact</a></li>
-        </ul>
-      </div>
-
-      <!-- Brand blurb + social -->
-      <div class="footer-block grid__item">
-        <h2 class="footer-block__heading inline-richtext">Dark Harlem Knight</h2>
-        <div class="footer-block__details-content rte">
-          <p>Forged in the storm. Streetwear with thunder in its veins.</p>
+  <!-- ===== Footer ===== -->
+  <footer class="footer color-scheme-4 gradient section footer--static">
+    <div class="footer__content-top page-width">
+      <div class="footer__blocks-wrapper grid grid--1-col grid--2-col grid--4-col-tablet">
+        <div class="footer-block footer-block--menu grid__item">
+          <h2 class="footer-block__heading inline-richtext">Shop</h2>
+          <ul class="footer-block__details-content list-unstyled">
+            <li><a class="link link--text list-menu__item list-menu__item--link" href="collections.html">Collections</a></li>
+            <li><a class="link link--text list-menu__item list-menu__item--link" href="shop.html">All Products</a></li>
+            <li><a class="link link--text list-menu__item list-menu__item--link" href="g4llery.html">G4LLERY</a></li>
+            <li><a class="link link--text list-menu__item list-menu__item--link" href="about.html">About</a></li>
+            <li><a class="link link--text list-menu__item list-menu__item--link" href="contact.html">Contact</a></li>
+          </ul>
         </div>
-        <ul class="footer__list-social">
-          <li><a aria-label="Instagram" href="#" class="social-link">Instagram</a></li>
-          <li><a aria-label="TikTok" href="#" class="social-link">TikTok</a></li>
-          <li><a aria-label="YouTube" href="#" class="social-link">YouTube</a></li>
-        </ul>
-      </div>
 
-      <!-- Newsletter -->
-      <div class="footer-block footer-block--newsletter grid__item">
-        <h2 class="footer-block__heading inline-richtext">Join the storm</h2>
-        <form class="footer__newsletter newsletter-form" action="#" method="post" onsubmit="return false;">
-          <div class="newsletter-form__field-wrapper">
-            <div class="field">
-              <input class="field__input" type="email" placeholder="Email address" required>
-              <button class="newsletter-form__button field__button" type="submit" aria-label="Subscribe">→</button>
-            </div>
+        <div class="footer-block grid__item">
+          <h2 class="footer-block__heading inline-richtext">Dark Harlem Knight</h2>
+          <div class="footer-block__details-content rte">
+            <p>Forged in the storm. Streetwear with thunder in its veins.</p>
           </div>
-        </form>
-      </div>
+          <ul class="footer__list-social">
+            <li><a aria-label="Instagram" href="#" class="social-link">Instagram</a></li>
+            <li><a aria-label="TikTok" href="#" class="social-link">TikTok</a></li>
+            <li><a aria-label="YouTube" href="#" class="social-link">YouTube</a></li>
+          </ul>
+        </div>
 
-      <!-- Brand image -->
-      <div class="footer-block footer-block-image grid__item center">
-        <img src="https://darkharlemknight.com/cdn/shop/files/DHK_transparent.gif?v=1756069281&width=190"
-             alt="DarkHarlemKnight" width="120" height="120" loading="lazy">
+        <div class="footer-block footer-block--newsletter grid__item">
+          <h2 class="footer-block__heading inline-richtext">Join the storm</h2>
+          <form class="footer__newsletter newsletter-form" action="#" method="post" onsubmit="return false;">
+            <div class="newsletter-form__field-wrapper">
+              <div class="field">
+                <input class="field__input" type="email" placeholder="Email address" required>
+                <button class="newsletter-form__button field__button" type="submit" aria-label="Subscribe">→</button>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <div class="footer-block footer-block-image grid__item center">
+          <img src="https://darkharlemknight.com/cdn/shop/files/DHK_transparent.gif?v=1756069281&width=190"
+               alt="DarkHarlemKnight" width="120" height="120" loading="lazy">
+        </div>
       </div>
     </div>
-  </div>
 
-  <div class="footer__content-bottom">
-    <div class="footer__content-bottom-wrapper page-width">
-      <div class="footer__column footer__column--info">
-        <div class="footer__payment">
-          <ul class="list list-payment" role="list">
-            <li class="list-payment__item">Visa</li>
-            <li class="list-payment__item">Mastercard</li>
-            <li class="list-payment__item">Amex</li>
-            <li class="list-payment__item">PayPal</li>
+    <div class="footer__content-bottom">
+      <div class="footer__content-bottom-wrapper page-width">
+        <div class="footer__column footer__column--info">
+          <div class="footer__payment">
+            <ul class="list list-payment" role="list">
+              <li class="list-payment__item">Visa</li>
+              <li class="list-payment__item">Mastercard</li>
+              <li class="list-payment__item">Amex</li>
+              <li class="list-payment__item">PayPal</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer__content-bottom-wrapper page-width footer__content-bottom-wrapper--center">
+        <div class="footer__copyright caption">
+          <small class="copyright__content">© <span id="year"></span>, Dark Harlem Knight</small>
+          <small class="copyright__content">Powered by the Storm</small>
+          <ul class="policies list-unstyled">
+            <li><small class="copyright__content"><a href="#">Privacy Policy</a></small></li>
+            <li><small class="copyright__content"><a href="#">Terms of Service</a></small></li>
           </ul>
         </div>
       </div>
     </div>
-
-    <div class="footer__content-bottom-wrapper page-width footer__content-bottom-wrapper--center">
-      <div class="footer__copyright caption">
-        <small class="copyright__content">© <span id="year"></span>, Dark Harlem Knight</small>
-        <small class="copyright__content">Powered by the Storm</small>
-        <ul class="policies list-unstyled">
-          <li><small class="copyright__content"><a href="#">Privacy Policy</a></small></li>
-          <li><small class="copyright__content"><a href="#">Terms of Service</a></small></li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</footer>
-<script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+  </footer>
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
 
   <!-- ===== Search Modal ===== -->
   <div id="search-modal" class="search-modal" aria-hidden="true">
@@ -270,6 +335,7 @@
           <span id="cart-subtotal" class="cart-totals__value">$0.00</span>
         </div>
         <small class="cart-note">Taxes & shipping calculated at checkout.</small>
+
         <div class="cart-ctas">
           <a href="cart.html" class="button">View cart</a>
           <button class="button" type="button" id="cart-checkout" disabled>Checkout</button>
@@ -292,56 +358,57 @@
   <script src="js/cart.js"></script>
   <script src="js/search.js"></script>
   <script src="js/storm_shopify_style.js"></script>
-  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+
+  <!-- Minimal slider logic (unchanged) -->
   <script>
-  (function () {
-    const track = document.getElementById('lxpSlides');
-    if (!track) return;
+    (function () {
+      const track = document.getElementById('lxpSlides');
+      if (!track) return;
 
-    const slides = Array.from(track.children);
-    const dotsWrap = document.getElementById('lxpDots');
+      const slides = Array.from(track.children);
+      const dotsWrap = document.getElementById('lxpDots');
 
-    let i = 0;
-    const N = slides.length;
+      let i = 0;
+      const N = slides.length;
 
-    // Build dots
-    slides.forEach((_, idx) => {
-      const b = document.createElement('button');
-      b.type = 'button';
-      b.className = 'lxp-dot' + (idx === 0 ? ' is-active' : '');
-      b.setAttribute('aria-label', 'Go to slide ' + (idx + 1));
-      b.addEventListener('click', () => go(idx, true));
-      dotsWrap.appendChild(b);
-    });
+      // Build dots
+      slides.forEach((_, idx) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'lxp-dot' + (idx === 0 ? ' is-active' : '');
+        b.setAttribute('aria-label', 'Go to slide ' + (idx + 1));
+        b.addEventListener('click', () => go(idx, true));
+        dotsWrap.appendChild(b);
+      });
 
-    const dots = Array.from(dotsWrap.children);
+      const dots = Array.from(dotsWrap.children);
 
-    function go(idx, user = false) {
-      i = (idx + N) % N;
-      track.style.transform = `translateX(-${i * 100}%)`;
-      dots.forEach(d => d.classList.remove('is-active'));
-      dots[i].classList.add('is-active');
-      if (user) resetAuto();
-    }
+      function go(idx, user = false) {
+        i = (idx + N) % N;
+        track.style.transform = `translateX(-${i * 100}%)`;
+        dots.forEach(d => d.classList.remove('is-active'));
+        dots[i].classList.add('is-active');
+        if (user) resetAuto();
+      }
 
-    document.getElementById('lxpNext').addEventListener('click', () => go(i + 1, true));
-    document.getElementById('lxpPrev').addEventListener('click', () => go(i - 1, true));
+      document.getElementById('lxpNext').addEventListener('click', () => go(i + 1, true));
+      document.getElementById('lxpPrev').addEventListener('click', () => go(i - 1, true));
 
-    let timer = null;
-    function resetAuto() {
-      clearInterval(timer);
-      timer = setInterval(() => go(i + 1, false), 5000);
-    }
-    resetAuto();
+      let timer = null;
+      function resetAuto() {
+        clearInterval(timer);
+        timer = setInterval(() => go(i + 1, false), 5000);
+      }
+      resetAuto();
 
-    // Touch swipe
-    let startX = 0;
-    track.addEventListener('touchstart', (e) => (startX = e.touches[0].clientX), {passive:true});
-    track.addEventListener('touchend', (e) => {
-      const dx = e.changedTouches[0].clientX - startX;
-      if (Math.abs(dx) > 40) go(i + (dx < 0 ? 1 : -1), true);
-    });
-  })();
-</script>
+      // Touch swipe
+      let startX = 0;
+      track.addEventListener('touchstart', (e) => (startX = e.touches[0].clientX), {passive:true});
+      track.addEventListener('touchend', (e) => {
+        const dx = e.changedTouches[0].clientX - startX;
+        if (Math.abs(dx) > 40) go(i + (dx < 0 ? 1 : -1), true);
+      });
+    })();
+  </script>
 </body>
 </html>
