@@ -1,23 +1,23 @@
 [
-{
-  "id": "the-dark-harlem-white-knight",
-  "title": "The Dark Harlem White Knight",
-  "price": 5500,
-  "thumbnail": "assets/img/products/the-dark-harlem-white-knight.gif",
-  "images": [
-    "assets/img/products/the-dark-harlem-white-knight-1.png",
-    "assets/img/products/the-dark-harlem-white-knight-2.png",
-    "assets/img/products/the-dark-harlem-white-knight-3.png",
-    "assets/img/products/the-dark-harlem-white-knight-4.png"
-  ],
-  "options": ["S", "M", "L", "XL", "2XL", "3XL"],
-  "description": "<div style='background-color: #0a0a0a; color: #f1f1f1; font-family: Cinzel, serif; padding: 20px; position: relative; overflow: hidden;'><h2 class='flicker' style='color: #ffffff; text-transform: uppercase; text-shadow: 0 0 5px #ffffff;'>The 44 Shirt w/ Silk Bag</h2><p style='font-size: 16px; line-height: 1.6; color: #cccccc;'>Official uniform of the Dark Harlem Knight.<br><br>Minimal but bold — featuring the 44 logo printed in reflective on heavyweight cotton.<br><br>Comes sealed in a custom silk logo bag</p><p style='font-size: 16px; line-height: 1.6; color: #cccccc;'>Presentation is power.</p><h3 style='color: #ffffff; margin-top: 20px;'>Details:</h3><ul style='list-style-type: none; padding: 0; color: #cccccc; font-size: 15px;'><li>• Sizes: S–3XL</li><li>• Materials: Cotton</li><li>• Colors: White</li><li>• Includes: 44 logo shirt + matching silk bag</li><li>• Limited drop. Harlem made. Gotham certified.</li></ul><!-- Bats Video Overlay --><video style='position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.1; pointer-events: none;' loop muted autoplay><source type='video/mp4' src='https://cdn.shopify.com/videos/c/o/v/8046ce6fca4246889bdfa3b7f48c742c.mov'></video></div><style>@keyframes flicker {0%, 100% { opacity: 1; } 50% { opacity: 0.3; }}.flicker {animation: flicker 1.5s infinite alternate;}</style>",
-  "url": "product.html?id=the-dark-harlem-white-knight"
-}
+  {
+    "id": "the-dark-harlem-white-knight",
+    "title": "The Dark Harlem White Knight",
+    "price": 55.00,
+    "thumbnail": "assets/img/products/the-dark-harlem-white-knight.gif",
+    "images": [
+      "assets/img/products/the-dark-harlem-white-knight-1.png",
+      "assets/img/products/the-dark-harlem-white-knight-2.png",
+      "assets/img/products/the-dark-harlem-white-knight-3.png",
+      "assets/img/products/the-dark-harlem-white-knight-4.png"
+    ],
+    "options": ["S", "M", "L", "XL", "2XL", "3XL"],
+    "description": "<div style='background-color: #0a0a0a; color: #f1f1f1; font-family: Cinzel, serif; padding: 20px; position: relative; overflow: hidden;'><h2 class='flicker' style='color: #ffffff; text-transform: uppercase; text-shadow: 0 0 5px #ffffff;'>The 44 Shirt w/ Silk Bag</h2><p style='font-size: 16px; line-height: 1.6; color: #cccccc;'>Official uniform of the Dark Harlem Knight.<br><br>Minimal but bold — featuring the 44 logo printed in reflective on heavyweight cotton.<br><br>Comes sealed in a custom silk logo bag</p><p style='font-size: 16px; line-height: 1.6; color: #cccccc;'>Presentation is power.</p><h3 style='color: #ffffff; margin-top: 20px;'>Details:</h3><ul style='list-style-type: none; padding: 0; color: #cccccc; font-size: 15px;'><li>• Sizes: S–3XL</li><li>• Materials: Cotton</li><li>• Colors: White</li><li>• Includes: 44 logo shirt + matching silk bag</li><li>• Limited drop. Harlem made. Gotham certified.</li></ul><!-- Bats Video Overlay --><video style='position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.1; pointer-events: none;' loop muted autoplay><source type='video/mp4' src='https://cdn.shopify.com/videos/c/o/v/8046ce6fca4246889bdfa3b7f48c742c.mov'></video></div><style>@keyframes flicker {0%, 100% { opacity: 1; } 50% { opacity: 0.3; }}.flicker {animation: flicker 1.5s infinite alternate;}</style>",
+    "url": "product.html?id=the-dark-harlem-white-knight"
+  },
   {
     "id": "hoodie-midnight",
     "title": "Midnight Hoodie",
-    "price": 7800,
+    "price": 78.00,
     "images": [
       "assets/img/products/hoodie-midnight-1.jpg",
       "assets/img/products/hoodie-midnight-2.jpg"
@@ -25,12 +25,12 @@
     "thumbnail": "assets/img/products/hoodie-midnight-1.jpg",
     "options": ["S", "M", "L", "XL"],
     "description": "Heavyweight fleece. Embroidered crest.",
-    "url": "product.html?handle=hoodie-midnight"
+    "url": "product.html?id=hoodie-midnight"
   },
   {
     "id": "bolt-cap",
     "title": "Bolt Cap",
-    "price": 3200,
+    "price": 32.00,
     "images": [
       "assets/img/products/bolt-cap-1.jpg",
       "assets/img/products/bolt-cap-2.jpg"
@@ -38,12 +38,12 @@
     "thumbnail": "assets/img/products/bolt-cap-1.jpg",
     "options": ["One Size"],
     "description": "Structured crown. Embroidered bolt. Adjustable.",
-    "url": "product.html?handle=bolt-cap"
+    "url": "product.html?id=bolt-cap"
   },
   {
     "id": "storm-hoodie-grey",
     "title": "Storm Hoodie — Grey",
-    "price": 8000,
+    "price": 80.00,
     "images": [
       "assets/img/products/storm-hoodie-grey-1.jpg",
       "assets/img/products/storm-hoodie-grey-2.jpg"
@@ -51,6 +51,6 @@
     "thumbnail": "assets/img/products/storm-hoodie-grey-1.jpg",
     "options": ["S", "M", "L", "XL"],
     "description": "Midweight fleece. Printed lightning graphic.",
-    "url": "product.html?handle=storm-hoodie-grey"
+    "url": "product.html?id=storm-hoodie-grey"
   }
 ]
