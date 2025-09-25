@@ -1,67 +1,51 @@
 // js/shop.js
-// Render product grid on shop.html
+(() => {
+  const GRID_ID = "shop-grid";
+  const DATA_URL = "data/products.json";
 
-async function loadProducts() {
-  try {
-    const res = await fetch("data/products.json");
-    const data = await res.json();
-    return data.products;
-  } catch (err) {
-    console.error("Error loading products:", err);
-    return [];
+  async function fetchProducts() {
+    try {
+      const resp = await fetch(DATA_URL, { cache: "no-store" });
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      const list = await resp.json();
+      return Array.isArray(list) ? list : (list.products || []);
+    } catch (err) {
+      console.error("Failed to load products:", err);
+      return [];
+    }
   }
-}
 
-function renderShop(products) {
-  const grid = document.querySelector("#shop-grid");
-  if (!grid) return;
+  const fmt = (cents) => `$${(Number(cents || 0) / 100).toFixed(2)}`;
 
-  grid.innerHTML = products
-    .map(
-      (p) => `
-      <a href="${p.url}" class="product-card">
+  function cardHTML(p) {
+    const thumb = p.thumbnail || (p.images && p.images[0]) || "";
+    const url = p.url || `product.html?handle=${encodeURIComponent(p.id)}`;
+    return `
+      <a class="product-card" href="${url}">
         <div class="pc__media">
-          <img src="${p.thumbnail}" alt="${p.title}" loading="lazy">
+          ${thumb ? `<img src="${thumb}" alt="${p.title}" loading="lazy">` : ""}
         </div>
         <div class="pc__info">
           <h3 class="pc__title">${p.title}</h3>
-          <div class="pc__price">$${(p.price / 100).toFixed(2)}</div>
+          <div class="pc__price">${fmt(p.price)}</div>
         </div>
       </a>
-    `
-    )
-    .join("");
-}
-
-document.addEventListener("DOMContentLoaded", async () => {
-  const products = await loadProducts();
-  renderShop(products);
-});
-(async function () {
-  const grid = document.getElementById('shop-grid');
-  if (!grid) return;
-
-  try {
-    const res = await fetch('data/products.json');
-   // Example
-const res = await fetch('data/products.json');
-const products = await res.json(); // NOW an array, not obj.products
-
-
-    grid.innerHTML = products.map(p => `
-      <a href="product.html?id=${encodeURIComponent(p.id)}" class="product-card" aria-label="${p.title}">
-        <div class="pc__media">
-          <img src="${p.thumbnail}" alt="${p.title}" loading="lazy">
-        </div>
-        <div class="pc__info">
-          <h3 class="pc__title">${p.title}</h3>
-          <div class="pc__price">$${p.price.toFixed(2)}</div>
-        </div>
-      </a>
-    `).join('');
-  } catch (e) {
-    grid.innerHTML = `<p style="color:#ccc">Could not load products.</p>`;
-    console.error(e);
+    `;
   }
+
+  async function renderGrid() {
+    const grid = document.getElementById(GRID_ID);
+    if (!grid) return;
+    grid.innerHTML = `<div class="loading">Loading…</div>`;
+
+    const products = await fetchProducts();
+    if (!products.length) {
+      grid.innerHTML = `<p>No products yet.</p>`;
+      return;
+    }
+
+    grid.innerHTML = products.map(cardHTML).join("");
+  }
+
+  document.addEventListener("DOMContentLoaded", renderGrid);
 })();
-
