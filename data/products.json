@@ -24,8 +24,7 @@
     "options": ["S", "M", "L", "XL"],
     "description": "Heavyweight fleece. Embroidered crest.",
     "url": "product.html?handle=hoodie-midnight"
-  }
-
+  },
   {
     "id": "bolt-cap",
     "title": "Bolt Cap",
@@ -38,5 +37,18 @@
     "options": ["One Size"],
     "description": "Structured crown. Embroidered bolt. Adjustable.",
     "url": "product.html?handle=bolt-cap"
+  },
+  {
+    "id": "storm-hoodie-grey",
+    "title": "Storm Hoodie — Grey",
+    "price": 8000,
+    "images": [
+      "assets/img/products/storm-hoodie-grey-1.jpg",
+      "assets/img/products/storm-hoodie-grey-2.jpg"
+    ],
+    "thumbnail": "assets/img/products/storm-hoodie-grey-1.jpg",
+    "options": ["S", "M", "L", "XL"],
+    "description": "Midweight fleece. Printed lightning graphic.",
+    "url": "product.html?handle=storm-hoodie-grey"
   }
 ]
