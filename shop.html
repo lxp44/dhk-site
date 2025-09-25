@@ -48,11 +48,9 @@
         <details id="Details-menu-drawer-container" class="menu-drawer-container">
           <summary class="header__icon header__icon--menu header__icon--summary link focus-inset" aria-label="Menu">
             <span aria-hidden="true">
-              <!-- hamburger -->
               <svg width="22" height="22" viewBox="0 0 24 24">
                 <path d="M3 6h18v2H3zM3 11h18v2H3zM3 16h18v2H3z" fill="currentColor"/>
               </svg>
-              <!-- close -->
               <svg width="22" height="22" viewBox="0 0 24 24">
                 <path d="M18.3 5.7 12 12l6.3 6.3-1.4 1.4L10.6 13.4 4.3 19.7 2.9 18.3 9.2 12 2.9 5.7 4.3 4.3 10.6 10.6 16.9 4.3z" fill="currentColor"/>
               </svg>
@@ -69,7 +67,7 @@
                     <li><a href="collections.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">Collections</a></li>
                     <li><a href="about.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">About</a></li>
                     <li><a href="contact.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">Contact</a></li>
-                    <li><a href="cart.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset" data-loud="heavy" data-cart-open>Cart</a></li>
+                    <li><a href="cart.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset" data-loud="heavy" data-cart-open>Cart<span class="cart-count-bubble" data-cart-count></span></a></li>
                     <li><button id="search-open-mobile" type="button" class="menu-drawer__menu-item link link--text list-menu__item focus-inset">Search</button></li>
                   </ul>
                 </nav>
@@ -101,15 +99,13 @@
           <a href="about.html" class="nav-link">About</a>
           <a href="contact.html" class="nav-link">Contact</a>
 
-          <!-- Search trigger (desktop) -->
           <button id="search-open" class="nav-link button--ghost" aria-label="Open search">Search</button>
 
-          <!-- Cart trigger (desktop) -->
           <a href="cart.html" class="nav-link button--ghost" data-loud="heavy" aria-label="Cart" data-cart-open>
             <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
               <path d="M7 4h-2l-1 2v2h2l3.6 7.59-1.35 2.41a1.994 1.994 0 0 0 1.75 2.99H19v-2H10.42c-.14 0-.25-.11-.25-.25l.03-.12L11 16h6.31a2 2 0 0 0 1.79-1.11L22 8H7.42l-.94-2Z" fill="currentColor"/>
             </svg>
-            Cart
+            Cart <span class="cart-count-bubble" data-cart-count></span>
           </a>
         </nav>
       </div>
@@ -173,19 +169,6 @@
     </div>
 
     <div class="footer__content-bottom">
-      <div class="footer__content-bottom-wrapper page-width">
-        <div class="footer__column footer__column--info">
-          <div class="footer__payment">
-            <ul class="list list-payment" role="list">
-              <li class="list-payment__item">Visa</li>
-              <li class="list-payment__item">Mastercard</li>
-              <li class="list-payment__item">Amex</li>
-              <li class="list-payment__item">PayPal</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
       <div class="footer__content-bottom-wrapper page-width footer__content-bottom-wrapper--center">
         <div class="footer__copyright caption">
           <small class="copyright__content">© <span id="year"></span>, Dark Harlem Knight</small>
@@ -213,7 +196,6 @@
       <div id="search-results" class="search-modal__results" aria-live="polite"></div>
     </div>
   </div>
-  <!-- /Search Modal -->
 
   <!-- ===== Cart Drawer ===== -->
   <div id="cart-drawer" class="cart-drawer" aria-hidden="true">
@@ -243,17 +225,16 @@
       </footer>
     </aside>
   </div>
-  <!-- /Cart Drawer -->
 
-  <!-- ===== Hidden storm audio ===== -->
-  <audio id="rain-light"   src="assets/audio/rain-light.mp3" loop preload="auto" hidden></audio>
-  <audio id="rain-med"     src="assets/audio/rain-med.mp3"   loop preload="auto" hidden></audio>
-  <audio id="rain-heavy"   src="assets/audio/rain-heavy.mp3" loop preload="auto" hidden></audio>
-  <audio id="thunder-light" src="assets/audio/thunder-light.mp3" loop preload="auto" hidden></audio>
-  <audio id="thunder-med"   src="assets/audio/thunder-med.mp3"   loop preload="auto" hidden></audio>
-  <audio id="thunder-heavy" src="assets/audio/thunder-heavy.mp3" loop preload="auto" hidden></audio>
+  <!-- Hidden storm audio so storm can run here too -->
+  <audio id="rain-light"   src="assets/audio/light-rain.mp3"   loop preload="auto" hidden></audio>
+  <audio id="rain-med"     src="assets/audio/med-rain.mp3"     loop preload="auto" hidden></audio>
+  <audio id="rain-heavy"   src="assets/audio/heavy-rain.mp3"   loop preload="auto" hidden></audio>
+  <audio id="thunder-light" src="assets/audio/light-thunder.mp3" loop preload="auto" hidden></audio>
+  <audio id="thunder-med"   src="assets/audio/med-thunder.mp3"   loop preload="auto" hidden></audio>
+  <audio id="thunder-heavy" src="assets/audio/heavy-thunder.mp3" loop preload="auto" hidden></audio>
 
-  <!-- ===== Scripts (order matters) ===== -->
+  <!-- Scripts -->
   <script src="js/nav.js"></script>
   <script src="js/announce.js"></script>
   <script src="js/cart.js"></script>
