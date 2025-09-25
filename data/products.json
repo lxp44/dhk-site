@@ -26,7 +26,6 @@
     "url": "product.html?handle=hoodie-midnight"
   }
 
-    // EXAMPLE: new or updated product
   {
     "id": "bolt-cap",
     "title": "Bolt Cap",
@@ -40,5 +39,4 @@
     "description": "Structured crown. Embroidered bolt. Adjustable.",
     "url": "product.html?handle=bolt-cap"
   }
-]
 ]
