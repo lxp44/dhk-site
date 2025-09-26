@@ -111,25 +111,23 @@
   </div>
 
 <main id="MainContent" class="section">
-  <!-- FULL-BLEED, TALL SLIDESHOW -->
   <style>
-    /* Full-bleed wrapper pulls the slideshow out of any page gutters */
+    /* Kill the page section padding only on the gallery page */
+    .g4llery-page #MainContent { padding-top: 0; padding-bottom: 0; }
+
+    /* Full-bleed wrapper */
     .lxp-bleed {
       width: 100vw;
       margin-left: 50%;
       transform: translateX(-50%);
     }
 
-    /* Viewport-height stage (tall, cinematic) */
-    :root { 100vh }
-    @media (max-width: 750px) { :root { --g4-h: 78vh; } }
-
+    /* We’ll compute --hdr (header+utility height) via JS */
+    :root { --hdr: 0px; }
     .lxp-slideshow {
       position: relative;
-      height: var(--g4-h);
+      height: calc(100vh - var(--hdr)); /* removes the “brackets” */
       overflow: hidden;
-      /* optional subtle dark edge—remove if you want zero frame */
-      box-shadow: none;
     }
 
     .lxp-slides {
@@ -138,41 +136,27 @@
       transition: transform .8s ease-in-out;
       will-change: transform;
     }
-
-    .lxp-slide {
-      min-width: 100%;
-      height: 100%;
-      position: relative;
-    }
-
-    /* Fill the stage completely */
+    .lxp-slide { min-width: 100%; height: 100%; position: relative; }
     .lxp-slide img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover; /* no letterboxing */
-      display: block;
+      width: 100%; height: 100%;
+      object-fit: cover; display: block;
     }
 
-    /* Arrows overlay */
+    /* Arrows */
     .lxp-nav {
       position: absolute; inset: 0;
       display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
       pointer-events: none;
     }
-    .lxp-nav button {
-      pointer-events: all;
-      background: rgba(0,0,0,.5);
-      color: #fff;
-      font-size: 2rem;
-      border: 0;
-      cursor: pointer;
-      padding: .5rem 1rem;
+    .lxp-btn {
+      pointer-events: all; border: 0; cursor: pointer;
+      background: rgba(0,0,0,.5); color: #fff;
+      font-size: 2rem; line-height: 1; padding: .5rem 1rem;
       transition: background .2s ease;
-      user-select: none;
     }
-    .lxp-nav button:hover { background: rgba(0,0,0,.8); }
-    .lxp-prev { justify-self: start; margin-left: .5rem; }
-    .lxp-next { justify-self: end;   margin-right: .5rem; }
+    .lxp-btn:hover { background: rgba(0,0,0,.8); }
+    #lxpPrev { justify-self: start; margin-left: .5rem; }
+    #lxpNext { justify-self: end;   margin-right: .5rem; }
   </style>
 
   <div class="lxp-bleed">
@@ -199,16 +183,27 @@
       </div>
 
       <div class="lxp-nav" aria-hidden="true">
-        <button class="lxp-prev" type="button" aria-label="Previous" onclick="lxpPrev()">‹</button>
+        <button class="lxp-btn" id="lxpPrev" type="button" aria-label="Previous">‹</button>
         <div></div>
-        <button class="lxp-next" type="button" aria-label="Next" onclick="lxpNext()">›</button>
+        <button class="lxp-btn" id="lxpNext" type="button" aria-label="Next">›</button>
       </div>
     </div>
   </div>
 
   <script>
     (function () {
-      let i = 0;
+      // 1) Compute header + utility bar height and store in --hdr
+      function setHdrVar() {
+        const util  = document.querySelector('.utility-bar');
+        const head  = document.querySelector('.section-header');
+        const h = (util?.offsetHeight || 0) + (head?.offsetHeight || 0);
+        document.documentElement.style.setProperty('--hdr', h + 'px');
+      }
+      setHdrVar();
+      window.addEventListener('resize', setHdrVar);
+
+      // 2) Basic slider
+      let i = 0, timer = null;
       const track = document.getElementById('lxpSlides');
       if (!track) return;
       const N = track.children.length;
@@ -217,30 +212,30 @@
         i = (idx + N) % N;
         track.style.transform = `translateX(-${i * 100}%)`;
       }
-      window.lxpNext = () => show(i + 1);
-      window.lxpPrev = () => show(i - 1);
+      function start() { timer = setInterval(() => show(i + 1), 5000); }
+      function stop()  { clearInterval(timer); }
 
-      // auto-rotate (5s)
-      let timer = setInterval(() => window.lxpNext(), 5000);
-      // pause on hover for desktop
-      track.closest('.lxp-slideshow').addEventListener('mouseenter', () => clearInterval(timer));
-      track.closest('.lxp-slideshow').addEventListener('mouseleave', () => {
-        clearInterval(timer);
-        timer = setInterval(() => window.lxpNext(), 5000);
-      });
+      document.getElementById('lxpNext').addEventListener('click', () => { stop(); show(i + 1); start(); });
+      document.getElementById('lxpPrev').addEventListener('click', () => { stop(); show(i - 1); start(); });
 
-      // basic swipe
+      const stage = track.closest('.lxp-slideshow');
+      stage.addEventListener('mouseenter', stop);
+      stage.addEventListener('mouseleave', () => { stop(); start(); });
+
+      // swipe
       let startX = 0;
       track.addEventListener('touchstart', e => (startX = e.touches[0].clientX), { passive: true });
       track.addEventListener('touchend', e => {
         const dx = e.changedTouches[0].clientX - startX;
-        if (Math.abs(dx) > 40) (dx < 0 ? window.lxpNext() : window.lxpPrev());
+        if (Math.abs(dx) > 40) (dx < 0 ? show(i + 1) : show(i - 1));
       });
 
       show(0);
+      start();
     })();
   </script>
 </main>
+
 
   <!-- ===== Footer ===== -->
   <footer class="footer color-scheme-4 gradient section footer--static">
