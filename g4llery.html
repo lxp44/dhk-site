@@ -110,130 +110,42 @@
     </header>
   </div>
 
-<main id="MainContent" class="section">
-  <style>
-    /* Kill the page section padding only on the gallery page */
-    .g4llery-page #MainContent { padding-top: 0; padding-bottom: 0; }
-
-    /* Full-bleed wrapper */
-    .lxp-bleed {
-      width: 100vw;
-      margin-left: 50%;
-      transform: translateX(-50%);
-    }
-
-    /* We’ll compute --hdr (header+utility height) via JS */
-    :root { --hdr: 0px; }
-    .lxp-slideshow {
-      position: relative;
-      height: calc(100vh - var(--hdr)); /* removes the “brackets” */
-      overflow: hidden;
-    }
-
-    .lxp-slides {
-      display: flex;
-      height: 100%;
-      transition: transform .8s ease-in-out;
-      will-change: transform;
-    }
-    .lxp-slide { min-width: 100%; height: 100%; position: relative; }
-    .lxp-slide img {
-      width: 100%; height: 100%;
-      object-fit: cover; display: block;
-    }
-
-    /* Arrows */
-    .lxp-nav {
-      position: absolute; inset: 0;
-      display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
-      pointer-events: none;
-    }
-    .lxp-btn {
-      pointer-events: all; border: 0; cursor: pointer;
-      background: rgba(0,0,0,.5); color: #fff;
-      font-size: 2rem; line-height: 1; padding: .5rem 1rem;
-      transition: background .2s ease;
-    }
-    .lxp-btn:hover { background: rgba(0,0,0,.8); }
-    #lxpPrev { justify-self: start; margin-left: .5rem; }
-    #lxpNext { justify-self: end;   margin-right: .5rem; }
-  </style>
-
-  <div class="lxp-bleed">
+<main id="MainContent" class="section g4llery-full">
+  <!-- Full-bleed wrapper (escapes page max-width) -->
+  <div class="g4llery-bleed">
     <div class="lxp-slideshow" aria-roledescription="carousel">
-      <div class="lxp-slides" id="lxpSlides">
-        <div class="lxp-slide">
-          <img src="https://cdn.shopify.com/s/files/1/0628/9011/5159/files/lxp_4_bag.png?v=1748914724" alt="Gallery Image 1">
-        </div>
-        <div class="lxp-slide">
-          <img src="https://cdn.shopify.com/s/files/1/0628/9011/5159/files/4506-DK.png?v=1745202327" alt="Gallery Image 2">
-        </div>
-        <div class="lxp-slide">
-          <img src="https://cdn.shopify.com/s/files/1/0628/9011/5159/files/IMG_5920_2_dk.png?v=1750107808" alt="Gallery Image 3">
-        </div>
-        <div class="lxp-slide">
-          <img src="https://cdn.shopify.com/s/files/1/0628/9011/5159/files/5545_DK.png?v=1745207710" alt="Gallery Image 4">
-        </div>
-        <div class="lxp-slide">
-          <img src="https://cdn.shopify.com/s/files/1/0628/9011/5159/files/4718_DK.png?v=1756069991" alt="Gallery Image 5">
-        </div>
-        <div class="lxp-slide">
-          <img src="https://cdn.shopify.com/s/files/1/0628/9011/5159/files/IMG_7733_dk.png?v=1756069987" alt="Gallery Image 6">
-        </div>
+      <div class="lxp-slides" id="lxpSlides" style="transform:translateX(0%)">
+        <figure class="lxp-slide">
+          <img src="https://cdn.shopify.com/s/files/1/0628/9011/5159/files/lxp_4_bag.png?v=1748914724" alt="Gallery image 1" />
+        </figure>
+        <figure class="lxp-slide">
+          <img src="https://cdn.shopify.com/s/files/1/0628/9011/5159/files/4506-DK.png?v=1745202327" alt="Gallery image 2" />
+        </figure>
+        <figure class="lxp-slide">
+          <img src="https://cdn.shopify.com/s/files/1/0628/9011/5159/files/IMG_5920_2_dk.png?v=1750107808" alt="Gallery image 3" />
+        </figure>
+        <figure class="lxp-slide">
+          <img src="https://cdn.shopify.com/s/files/1/0628/9011/5159/files/5545_DK.png?v=1745207710" alt="Gallery image 4" />
+        </figure>
+        <figure class="lxp-slide">
+          <img src="https://cdn.shopify.com/s/files/1/0628/9011/5159/files/4718_DK.png?v=1756069991" alt="Gallery image 5" />
+        </figure>
+        <figure class="lxp-slide">
+          <img src="https://cdn.shopify.com/s/files/1/0628/9011/5159/files/IMG_7733_dk.png?v=1756069987" alt="Gallery image 6" />
+        </figure>
       </div>
 
+      <!-- arrows -->
       <div class="lxp-nav" aria-hidden="true">
-        <button class="lxp-btn" id="lxpPrev" type="button" aria-label="Previous">‹</button>
+        <button class="lxp-btn" type="button" aria-label="Previous slide" id="lxpPrev">‹</button>
         <div></div>
-        <button class="lxp-btn" id="lxpNext" type="button" aria-label="Next">›</button>
+        <button class="lxp-btn" type="button" aria-label="Next slide" id="lxpNext">›</button>
       </div>
+
+      <!-- counter -->
+      <div class="lxp-visual" id="lxpCounter" aria-hidden="true">1/6</div>
     </div>
   </div>
-
-  <script>
-    (function () {
-      // 1) Compute header + utility bar height and store in --hdr
-      function setHdrVar() {
-        const util  = document.querySelector('.utility-bar');
-        const head  = document.querySelector('.section-header');
-        const h = (util?.offsetHeight || 0) + (head?.offsetHeight || 0);
-        document.documentElement.style.setProperty('--hdr', h + 'px');
-      }
-      setHdrVar();
-      window.addEventListener('resize', setHdrVar);
-
-      // 2) Basic slider
-      let i = 0, timer = null;
-      const track = document.getElementById('lxpSlides');
-      if (!track) return;
-      const N = track.children.length;
-
-      function show(idx) {
-        i = (idx + N) % N;
-        track.style.transform = `translateX(-${i * 100}%)`;
-      }
-      function start() { timer = setInterval(() => show(i + 1), 5000); }
-      function stop()  { clearInterval(timer); }
-
-      document.getElementById('lxpNext').addEventListener('click', () => { stop(); show(i + 1); start(); });
-      document.getElementById('lxpPrev').addEventListener('click', () => { stop(); show(i - 1); start(); });
-
-      const stage = track.closest('.lxp-slideshow');
-      stage.addEventListener('mouseenter', stop);
-      stage.addEventListener('mouseleave', () => { stop(); start(); });
-
-      // swipe
-      let startX = 0;
-      track.addEventListener('touchstart', e => (startX = e.touches[0].clientX), { passive: true });
-      track.addEventListener('touchend', e => {
-        const dx = e.changedTouches[0].clientX - startX;
-        if (Math.abs(dx) > 40) (dx < 0 ? show(i + 1) : show(i - 1));
-      });
-
-      show(0);
-      start();
-    })();
-  </script>
 </main>
 
 
