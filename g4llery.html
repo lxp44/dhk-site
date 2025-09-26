@@ -88,6 +88,45 @@
     }
     .g4llery-page .lxp-dot.is-active { background: #fff; }
   </style>
+  /* Full-bleed gallery page (no page-width gutters) */
+.g4llery-page .g4llery-main { padding: 0; }
+.g4llery-page .g4llery-title {
+  padding: 28px 0;        /* slim top/bottom spacing */
+  text-align: center;
+}
+
+/* Slider full-bleed + image sizing */
+.g4llery-page .lxp-slideshow {
+  width: 100vw;
+  margin-left: 50%;
+  transform: translateX(-50%); /* escape any parent constraints */
+  position: relative;
+  overflow: hidden;
+}
+.g4llery-page .lxp-slides { display: flex; transition: transform .8s ease-in-out; }
+.g4llery-page .lxp-slide { min-width: 100vw; }
+
+.g4llery-page .lxp-slide img {
+  display: block;
+  width: 100%;     /* fills the viewport width */
+  height: auto;    /* keeps aspect ratio */
+}
+
+/* Nav */
+.g4llery-page .lxp-nav {
+  position: absolute; inset: 0;
+  display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
+  pointer-events: none;
+}
+.g4llery-page .lxp-btn {
+  pointer-events: all; border: 0; cursor: pointer;
+  background: rgba(0,0,0,.4); color: #fff; font-size: 2rem; padding: .45rem .8rem;
+}
+.g4llery-page #lxpPrev { justify-self: start; margin-left: .5rem; }
+.g4llery-page #lxpNext { justify-self: end; margin-right: .5rem; }
+.g4llery-page .lxp-dots { pointer-events: all; display: flex; gap: 6px; }
+.g4llery-page .lxp-dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,.45); border: 0; }
+.g4llery-page .lxp-dot.is-active { background: #fff; }
 </head>
 
 <body class="template-page g4llery-page">
@@ -184,12 +223,6 @@
   </div>
 
   <main id="MainContent" class="section">
-    <!-- Keep the page title boxed -->
-    <div class="page-width">
-      <header class="fc__header">
-        <h1 class="fc__title h2">G4LLERY</h1>
-      </header>
-    </div>
 
     <!-- Full-bleed slideshow -->
     <div class="g4llery-bleed">
