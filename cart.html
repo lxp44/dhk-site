@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Your Cart — DHK</title>
+  <link rel="stylesheet" href="css/styles.css"/>
+</head>
+<body class="template-cart">
+
+  <!-- include your header/nav here -->
+
+  <main class="section page-width">
+    <h1>Your Cart</h1>
+    <div id="cart-items"></div>
+    <div id="cart-empty" hidden>
+      <p>Your cart is empty.</p>
+      <a href="shop.html" class="button button--secondary">Continue shopping</a>
+    </div>
+    <div id="cart-summary" hidden>
+      <p>Subtotal: <span id="cart-subtotal"></span></p>
+      <small>Taxes & shipping calculated at checkout.</small>
+      <div class="cart-ctas">
+        <button id="cart-checkout" class="button">Checkout</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- include your footer here -->
+
+  <script src="js/cart.js"></script>
+</body>
+</html>
