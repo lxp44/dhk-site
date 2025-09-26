@@ -110,10 +110,108 @@
     </header>
   </div>
 
-  <main id="MainContent" class="section">
-    <!-- Full-bleed slideshow (unchanged) -->
-    <!-- ... your slideshow markup ... -->
-  </main>
+<main id="MainContent" class="section">
+  <!-- LXP Slideshow -->
+  <style>
+    .lxp-slideshow {
+      position: relative;
+      width: 100%;
+      max-width: 100%;
+      overflow: hidden;
+    }
+    .lxp-slides {
+      display: flex;
+      transition: transform 0.8s ease-in-out;
+      width: 100%;
+    }
+    .lxp-slide {
+      min-width: 100%;
+      box-sizing: border-box;
+    }
+    .lxp-slide img {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: cover;
+    }
+    .lxp-nav {
+      position: absolute;
+      top: 50%;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      transform: translateY(-50%);
+      z-index: 2;
+      pointer-events: none;
+    }
+    .lxp-nav button {
+      background-color: rgba(0,0,0,0.5);
+      color: white;
+      font-size: 2rem;
+      border: none;
+      cursor: pointer;
+      pointer-events: all;
+      padding: 0.5rem 1rem;
+      transition: background 0.3s ease;
+    }
+    .lxp-nav button:hover {
+      background-color: rgba(0,0,0,0.8);
+    }
+  </style>
+
+  <div class="lxp-slideshow">
+    <div class="lxp-slides" id="lxpSlides">
+      <div class="lxp-slide">
+        <img src="https://cdn.shopify.com/s/files/1/0628/9011/5159/files/lxp_4_bag.png?v=1748914724" alt="Gallery Image 1">
+      </div>
+      <div class="lxp-slide">
+        <img src="https://cdn.shopify.com/s/files/1/0628/9011/5159/files/4506-DK.png?v=1745202327" alt="Gallery Image 2">
+      </div>
+      <div class="lxp-slide">
+        <img src="https://cdn.shopify.com/s/files/1/0628/9011/5159/files/IMG_5920_2_dk.png?v=1750107808" alt="Gallery Image 3">
+      </div>
+      <div class="lxp-slide">
+        <img src="https://cdn.shopify.com/s/files/1/0628/9011/5159/files/5545_DK.png?v=1745207710" alt="Gallery Image 4">
+      </div>
+      <div class="lxp-slide">
+        <img src="https://cdn.shopify.com/s/files/1/0628/9011/5159/files/4718_DK.png?v=1756069991" alt="Gallery Image 5">
+      </div>
+      <div class="lxp-slide">
+        <img src="https://cdn.shopify.com/s/files/1/0628/9011/5159/files/IMG_7733_dk.png?v=1756069987" alt="Gallery Image 6">
+      </div>
+    </div>
+
+    <div class="lxp-nav">
+      <button onclick="lxpPrev()">‹</button>
+      <button onclick="lxpNext()">›</button>
+    </div>
+  </div>
+
+  <script>
+    let lxpIndex = 0;
+    const lxpSlides = document.getElementById("lxpSlides");
+    const totalSlides = lxpSlides.children.length;
+
+    function showSlide(index) {
+      lxpSlides.style.transform = `translateX(-${index * 100}%)`;
+    }
+
+    function lxpNext() {
+      lxpIndex = (lxpIndex + 1) % totalSlides;
+      showSlide(lxpIndex);
+    }
+
+    function lxpPrev() {
+      lxpIndex = (lxpIndex - 1 + totalSlides) % totalSlides;
+      showSlide(lxpIndex);
+    }
+
+    setInterval(() => {
+      lxpNext();
+    }, 5000);
+  </script>
+</main>
+
 
   <!-- ===== Footer ===== -->
   <footer class="footer color-scheme-4 gradient section footer--static">
