@@ -10,123 +10,67 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 
-  <!-- Styles -->
+  <!-- Global styles -->
   <link rel="stylesheet" href="css/styles.css"/>
 
-  <!-- Page-scoped gallery tweaks -->
+  <!-- Page-scoped gallery styles -->
   <style>
-    /* Make only the gallery section full-bleed, while keeping the page header/footer boxed */
+    /* Escape page gutters just for the gallery strip */
     .g4llery-page .g4llery-bleed {
       width: 100vw;
-      margin-left: calc(50% - 50vw);  /* escape .page-width “bracket” */
+      margin-left: calc(50% - 50vw);
       margin-right: calc(50% - 50vw);
     }
 
-    /* Base slider layout */
+    /* Slider */
     .g4llery-page .lxp-slideshow {
       position: relative;
-      width: 100%;
+      width: 100vw;
+      margin-left: 50%;
+      transform: translateX(-50%);
       overflow: hidden;
     }
     .g4llery-page .lxp-slides {
       display: flex;
-      will-change: transform;
       transition: transform 0.8s ease-in-out;
+      will-change: transform;
     }
     .g4llery-page .lxp-slide {
-      min-width: 100%; /* one slide = full viewport width because container is 100vw */
+      min-width: 100vw;
       box-sizing: border-box;
     }
-
-    /* Image presentation: show true size where possible, but stay responsive */
     .g4llery-page .lxp-slide img {
       display: block;
-      margin: 0 auto;
-      width: auto;          /* don’t stretch horizontally by default */
-      max-width: 100%;      /* never overflow the viewport width */
-      height: auto;         /* maintain intrinsic aspect */
-      /* If you want a taller presentation, you can also cap height:
-         max-height: 88vh; object-fit: contain; */
+      width: 100%;
+      height: auto;
     }
 
-    /* Nav arrows + dots (kept simple) */
+    /* Arrows + dots */
     .g4llery-page .lxp-nav {
-      position: absolute;
-      inset: 0 0 0 0;
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
-      align-items: center;
+      position: absolute; inset: 0;
+      display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
       pointer-events: none;
     }
     .g4llery-page .lxp-btn {
       pointer-events: all;
-      border: 0;
-      background: rgba(0,0,0,.4);
-      color: #fff;
-      font-size: 2rem;
-      line-height: 1;
-      padding: .45rem .8rem;
-      cursor: pointer;
+      border: 0; cursor: pointer;
+      background: rgba(0,0,0,.4); color: #fff;
+      font-size: 2rem; line-height: 1; padding: .45rem .8rem;
       transition: background .2s ease;
     }
     .g4llery-page .lxp-btn:hover { background: rgba(0,0,0,.65); }
     .g4llery-page #lxpPrev { justify-self: start; margin-left: .5rem; }
     .g4llery-page #lxpNext { justify-self: end; margin-right: .5rem; }
-
     .g4llery-page .lxp-dots {
-      display: flex;
-      gap: 6px;
-      align-items: center;
-      justify-content: center;
+      display: flex; gap: 6px; align-items: center; justify-content: center;
       pointer-events: all;
     }
     .g4llery-page .lxp-dot {
       width: 8px; height: 8px; border-radius: 50%;
-      background: rgba(255,255,255,.45);
-      border: 0;
-      cursor: pointer;
+      background: rgba(255,255,255,.45); border: 0; cursor: pointer;
     }
     .g4llery-page .lxp-dot.is-active { background: #fff; }
   </style>
-  /* Full-bleed gallery page (no page-width gutters) */
-.g4llery-page .g4llery-main { padding: 0; }
-.g4llery-page .g4llery-title {
-  padding: 28px 0;        /* slim top/bottom spacing */
-  text-align: center;
-}
-
-/* Slider full-bleed + image sizing */
-.g4llery-page .lxp-slideshow {
-  width: 100vw;
-  margin-left: 50%;
-  transform: translateX(-50%); /* escape any parent constraints */
-  position: relative;
-  overflow: hidden;
-}
-.g4llery-page .lxp-slides { display: flex; transition: transform .8s ease-in-out; }
-.g4llery-page .lxp-slide { min-width: 100vw; }
-
-.g4llery-page .lxp-slide img {
-  display: block;
-  width: 100%;     /* fills the viewport width */
-  height: auto;    /* keeps aspect ratio */
-}
-
-/* Nav */
-.g4llery-page .lxp-nav {
-  position: absolute; inset: 0;
-  display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
-  pointer-events: none;
-}
-.g4llery-page .lxp-btn {
-  pointer-events: all; border: 0; cursor: pointer;
-  background: rgba(0,0,0,.4); color: #fff; font-size: 2rem; padding: .45rem .8rem;
-}
-.g4llery-page #lxpPrev { justify-self: start; margin-left: .5rem; }
-.g4llery-page #lxpNext { justify-self: end; margin-right: .5rem; }
-.g4llery-page .lxp-dots { pointer-events: all; display: flex; gap: 6px; }
-.g4llery-page .lxp-dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,.45); border: 0; }
-.g4llery-page .lxp-dot.is-active { background: #fff; }
 </head>
 
 <body class="template-page g4llery-page">
@@ -223,7 +167,6 @@
   </div>
 
   <main id="MainContent" class="section">
-
     <!-- Full-bleed slideshow -->
     <div class="g4llery-bleed">
       <div class="lxp-slideshow" aria-roledescription="carousel">
@@ -347,7 +290,7 @@
     </div>
   </div>
 
-  <!-- Hidden storm audio so storm can run here too -->
+  <!-- Hidden storm audio -->
   <audio id="rain-light"   src="assets/audio/light-rain.mp3"   loop preload="auto" hidden></audio>
   <audio id="rain-med"     src="assets/audio/med-rain.mp3"     loop preload="auto" hidden></audio>
   <audio id="rain-heavy"   src="assets/audio/heavy-rain.mp3"   loop preload="auto" hidden></audio>
@@ -362,7 +305,7 @@
   <script src="js/search.js"></script>
   <script src="js/storm_shopify_style.js"></script>
 
-  <!-- Minimal slider logic (unchanged) -->
+  <!-- Minimal slider logic -->
   <script>
     (function () {
       const track = document.getElementById('lxpSlides');
