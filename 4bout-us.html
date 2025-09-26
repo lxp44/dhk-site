@@ -10,8 +10,52 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 
-  <!-- Styles -->
+  <!-- Site styles -->
   <link rel="stylesheet" href="css/styles.css"/>
+
+  <!-- Page-scoped styles to match Shopify rich-text (full_width: true + custom_css) -->
+  <style>
+    /* Section spacing to mirror Shopify settings */
+    .about-content {
+      padding-top: 40px;
+      padding-bottom: 52px;
+    }
+
+    /* Glowing headings from Shopify custom_css */
+    #about-content h1,
+    #about-content h2,
+    #about-content h3 {
+      color: #ffffff;
+      text-shadow: 0 0 5px #ffffff;
+    }
+
+    /* Full-bleed black band (escapes the page-width container) */
+    .about-band {
+      width: 100vw;
+      margin-left: 50%;
+      transform: translateX(-50%);
+      background: #0a0a0a;
+    }
+
+    /* Paragraph styling from Shopify custom_css */
+    .about-band p {
+      color: #f1f1f1;
+      font-family: Cinzel, serif;
+      text-transform: uppercase;
+      text-align: center;
+      font-size: 18px;
+      line-height: 1.6;
+      font-weight: bold;
+      margin: 0;
+      padding: 28px 16px; /* inner spacing inside the black band */
+    }
+
+    /* Optional: center the hero title above the band */
+    .about-hero {
+      text-align: center;
+      margin-bottom: 8px;
+    }
+  </style>
 </head>
 <body class="template-page">
 
@@ -113,18 +157,23 @@
         <h1 class="fc__title h2">4bout us</h1>
       </header>
 
-      <!-- ABOUT CONTENT -->
       <article class="rte about-content" id="about-content">
-        <!-- I’ll convert your Shopify JSON content into HTML and drop it here. -->
-        <p>Loading…</p>
+        <header class="about-hero">
+          <h1 class="h1">The Empire</h1>
+        </header>
+
+        <!-- Full-bleed rich text band (matches Shopify full_width true) -->
+        <section class="about-band">
+          <p>
+            <em>44 is the shadow you feel, not the light you see. Born from pain, built on truth — we don’t chase the crown, we carry it. Brick by brick, we stand where others fall. Harlem’s heart, Gotham’s grit. We speak in silence, strike with purpose. This ain’t for show — it’s for those who know. Loyalty. Legacy. Power. 44 forever.</em>
+          </p>
+        </section>
       </article>
     </div>
   </main>
 
-  <!-- ===== Footer (matches other pages) ===== -->
-  <!-- (reuse the same footer you already have on product/g4llery pages) -->
+  <!-- ===== Footer (same as other pages) ===== -->
   <footer class="footer color-scheme-4 gradient section footer--static">
-    <!-- ... keep your existing footer markup exactly the same ... -->
     <div class="footer__content-bottom-wrapper page-width footer__content-bottom-wrapper--center">
       <div class="footer__copyright caption">
         <small class="copyright__content">© <span id="year"></span>, Dark Harlem Knight</small>
@@ -143,12 +192,5 @@
   <script src="js/announce.js"></script>
   <script src="js/cart.js"></script>
   <script src="js/search.js"></script>
-
-  <!-- This little script will inject converted HTML once we build it -->
-  <script>
-    // We'll replace this with real HTML after you paste the Shopify JSON.
-    document.getElementById('about-content').innerHTML =
-      '<p>Dark Harlem Knight is forged in the storm. Real content coming next.</p>';
-  </script>
 </body>
 </html>
