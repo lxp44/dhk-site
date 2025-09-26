@@ -218,36 +218,7 @@
       <div id="search-results" class="search-modal__results" aria-live="polite"></div>
     </div>
   </div>
-
-  <!-- ===== Cart Drawer ===== -->
-  <div id="cart-drawer" class="cart-drawer" aria-hidden="true">
-    <div class="cart-drawer__overlay" data-cart-close></div>
-    <aside class="cart-drawer__panel" role="dialog" aria-modal="true" aria-labelledby="cart-drawer-title" tabindex="-1">
-      <header class="cart-drawer__header">
-        <h2 id="cart-drawer-title" class="cart-drawer__heading">Your Cart</h2>
-        <button class="cart-drawer__close" type="button" aria-label="Close cart" data-cart-close>×</button>
-      </header>
-      <div class="cart-drawer__body">
-        <div id="cart-items" class="cart-items"></div>
-        <div id="cart-empty" class="cart-empty" hidden>
-          <p>Your cart is empty.</p>
-          <a href="shop.html" class="button button--secondary">Continue shopping</a>
-        </div>
-      </div>
-      <footer class="cart-drawer__footer">
-        <div class="cart-totals">
-          <span class="cart-totals__label">Estimated total</span>
-          <span id="cart-subtotal" class="cart-totals__value">$0.00</span>
-        </div>
-        <small class="cart-note">Taxes & shipping calculated at checkout.</small>
-        <div class="cart-ctas">
-          <a href="cart.html" class="button">View cart</a>
-          <button class="button" type="button" id="cart-checkout" disabled>Checkout</button>
-        </div>
-      </footer>
-    </aside>
-  </div>
-
+  
   <!-- Hidden storm audio so storm can run here too -->
   <audio id="rain-light"   src="assets/audio/light-rain.mp3"   loop preload="auto" hidden></audio>
   <audio id="rain-med"     src="assets/audio/med-rain.mp3"     loop preload="auto" hidden></audio>
