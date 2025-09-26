@@ -13,48 +13,53 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 
-  <!-- Styles -->
+  <!-- Global styles -->
   <link rel="stylesheet" href="css/styles.css"/>
 
+  <!-- Contact section styles to mimic Shopify contact-form.liquid -->
   <style>
-    /* Contact “section: contact-form” vibe (scheme-4 + comfortable padding) */
-    .contact-section { padding: 36px 0; }
-    .contact-card {
-      background: var(--color-background, #0b0b0b);
-      border: 1px solid rgba(255,255,255,.08);
-      border-radius: 10px;
-      padding: 24px;
-    }
-    .contact-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 16px;
-    }
+    /* Color scheme wrapper like: <div class="color-scheme-4 gradient"> */
+    .contact-wrap.color-scheme-4.gradient { background: var(--gradient, transparent); }
+
+    /* section-{{id}}-padding equivalent, using 36px desktop / 27px mobile by default */
+    .section-contact-padding { padding-top: 27px; padding-bottom: 27px; }
     @media (min-width: 750px) {
-      .contact-grid { grid-template-columns: 1fr 1fr; }
+      .section-contact-padding { padding-top: 36px; padding-bottom: 36px; }
     }
-    .field { display: grid; gap: 6px; }
-    .field label { font-weight: 500; }
-    .field input,
-    .field textarea {
-      background: #111;
-      color: #fff;
-      border: 1px solid rgba(255,255,255,.12);
-      border-radius: 8px;
-      padding: 12px 14px;
-      width: 100%;
+
+    /* Narrow page width container */
+    .page-width--narrow { max-width: 720px; margin-inline: auto; }
+
+    /* Contact form class names match Dawn’s conventions */
+    .contact .title { margin: 0 0 18px; }
+    .contact__fields { display: grid; gap: 14px; grid-template-columns: 1fr; }
+    @media (min-width: 750px) { .contact__fields { grid-template-columns: 1fr 1fr; } }
+
+    .field { position: relative; display: grid; gap: 6px; }
+    .field__input, .text-area.field__input {
+      background: #0f0f10; color: #fff;
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: 8px; padding: 12px 14px; width: 100%;
     }
-    .field input::placeholder,
-    .field textarea::placeholder { color: #9aa; }
-    .help { font-size: 12px; opacity: .8; }
-    .actions { margin-top: 14px; display: flex; gap: 10px; align-items: center; }
-    .alert {
-      margin-top: 16px; padding: 12px 14px; border-radius: 8px;
-      background: rgba(0, 180, 80, .12); color: #c8f7da; border: 1px solid rgba(0,180,80,.3);
+    .field__label { font-size: 12px; opacity: .85; }
+
+    .contact__button { margin-top: 16px; }
+
+    /* Messages */
+    .form-status { display: flex; align-items: center; gap: 8px; margin: 12px 0; }
+    .form-status-list { margin: 8px 0 0; padding-left: 18px; }
+    .form__message { display: inline-flex; align-items: center; gap: 6px; }
+
+    /* Visually hidden for fallback heading when empty */
+    .visually-hidden {
+      position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
+      overflow: hidden; clip: rect(0 0 0 0); border: 0;
     }
-    .alert--error { background: rgba(255,40,0,.12); color: #ffd2c8; border-color: rgba(255,40,0,.3); }
-    /* Honeypot (hidden) */
-    .hp { position: absolute; left: -5000px; opacity: 0; width: 1px; height: 1px; }
+
+    /* Simple success/error banners (front-end mimic) */
+    .alert { margin-top: 14px; padding: 12px 14px; border-radius: 8px; }
+    .alert--ok { background: rgba(0,180,80,.12); color: #c8f7da; border: 1px solid rgba(0,180,80,.3); }
+    .alert--err { background: rgba(255,40,0,.12); color: #ffd2c8; border: 1px solid rgba(255,40,0,.3); }
   </style>
 </head>
 <body class="template-page">
@@ -92,12 +97,8 @@
         <details id="Details-menu-drawer-container" class="menu-drawer-container">
           <summary class="header__icon header__icon--menu header__icon--summary link focus-inset" aria-label="Menu">
             <span aria-hidden="true">
-              <svg width="22" height="22" viewBox="0 0 24 24">
-                <path d="M3 6h18v2H3zM3 11h18v2H3zM3 16h18v2H3z" fill="currentColor"/>
-              </svg>
-              <svg width="22" height="22" viewBox="0 0 24 24">
-                <path d="M18.3 5.7 12 12l6.3 6.3-1.4 1.4L10.6 13.4 4.3 19.7 2.9 18.3 9.2 12 2.9 5.7 4.3 4.3 10.6 10.6 16.9 4.3z" fill="currentColor"/>
-              </svg>
+              <svg width="22" height="22" viewBox="0 0 24 24"><path d="M3 6h18v2H3zM3 11h18v2H3zM3 16h18v2H3z" fill="currentColor"/></svg>
+              <svg width="22" height="22" viewBox="0 0 24 24"><path d="M18.3 5.7 12 12l6.3 6.3-1.4 1.4L10.6 13.4 4.3 19.7 2.9 18.3 9.2 12 2.9 5.7 4.3 4.3 10.6 10.6 16.9 4.3z" fill="currentColor"/></svg>
             </span>
           </summary>
 
@@ -158,58 +159,93 @@
 
   <!-- ===== MAIN ===== -->
   <main id="MainContent" class="section">
-    <!-- Page “main” is disabled in Shopify JSON, so we only render the form section -->
-    <section class="contact-section color-scheme-4 gradient">
-      <div class="page-width">
-        <header class="fc__header" style="margin-bottom:16px;">
-          <h1 class="fc__title h2">Contact</h1>
-        </header>
+    <!-- Mirrors: <div class="color-{{ section.settings.color_scheme }} gradient"> -->
+    <div class="contact-wrap color-scheme-4 gradient">
+      <!-- Mirrors: <div class="contact page-width page-width--narrow section-{{ id }}-padding"> -->
+      <div class="contact page-width page-width--narrow section-contact-padding">
+        <!-- Heading behavior: empty by default, so use visually hidden fallback -->
+        <h2 class="visually-hidden">Contact</h2>
 
-        <div class="contact-card">
-          <form id="contact-form" novalidate>
-            <!-- Honeypot -->
-            <input type="text" name="company" class="hp" tabindex="-1" autocomplete="off" />
+        <!-- Form wrapper class “isolate” like Dawn -->
+        <form id="ContactForm" class="isolate" novalidate>
+          <!-- Success & error blocks like Dawn -->
+          <div id="cf-success" class="form-status form-status-list form__message alert alert--ok" hidden>
+            <!-- svg icon placeholder -->
+            <span>✓</span> Thanks — your message was received.
+          </div>
 
-            <div class="contact-grid">
-              <div class="field">
-                <label for="cf-name">Name</label>
-                <input id="cf-name" name="name" type="text" placeholder="Your name" required>
-              </div>
-              <div class="field">
-                <label for="cf-email">Email</label>
-                <input id="cf-email" name="email" type="email" placeholder="you@example.com" required>
-              </div>
+          <div id="cf-errors" class="form__message" hidden>
+            <h2 class="form-status caption-large text-body" role="alert" tabindex="-1">
+              <!-- svg icon placeholder -->
+              <span>⚠</span> There was an error sending your message.
+            </h2>
+            <ul class="form-status-list caption-large" role="list">
+              <li><a href="#ContactForm-email" class="link">Email is required</a></li>
+            </ul>
+          </div>
+
+          <!-- contact__fields (name + email) -->
+          <div class="contact__fields">
+            <div class="field">
+              <input
+                class="field__input"
+                autocomplete="name"
+                type="text"
+                id="ContactForm-name"
+                name="name"
+                placeholder="Name">
+              <label class="field__label" for="ContactForm-name">Name</label>
             </div>
 
-            <div class="contact-grid">
-              <div class="field">
-                <label for="cf-phone">Phone (optional)</label>
-                <input id="cf-phone" name="phone" type="tel" placeholder="(555) 000-0000" inputmode="tel">
-                <span class="help">We’ll only use this if we need to reach you about your message.</span>
-              </div>
-              <div class="field">
-                <label for="cf-order">Order # (optional)</label>
-                <input id="cf-order" name="order" type="text" placeholder="If applicable">
-              </div>
+            <div class="field field--with-error">
+              <input
+                autocomplete="email"
+                type="email"
+                id="ContactForm-email"
+                class="field__input"
+                name="email"
+                spellcheck="false"
+                autocapitalize="off"
+                aria-required="true"
+                placeholder="Email *">
+              <label class="field__label" for="ContactForm-email">Email <span aria-hidden="true">*</span></label>
+              <small class="contact__field-error" id="ContactForm-email-error" hidden>
+                <span class="visually-hidden">Error</span>
+                <span class="form__message"><span class="svg-wrapper">⚠</span> Please enter a valid email.</span>
+              </small>
             </div>
+          </div>
 
-            <div class="field" style="margin-top:8px;">
-              <label for="cf-message">Message</label>
-              <textarea id="cf-message" name="message" rows="6" placeholder="How can we help?" required></textarea>
-            </div>
+          <!-- Phone -->
+          <div class="field">
+            <input
+              type="tel"
+              id="ContactForm-phone"
+              class="field__input"
+              autocomplete="tel"
+              name="phone"
+              pattern="[0-9\-() +]*"
+              placeholder="Phone">
+            <label class="field__label" for="ContactForm-phone">Phone</label>
+          </div>
 
-            <div class="actions">
-              <button class="button" type="submit">Send</button>
-              <span id="cf-status" role="status" aria-live="polite"></span>
-            </div>
-          </form>
+          <!-- Message -->
+          <div class="field">
+            <textarea
+              rows="10"
+              id="ContactForm-body"
+              class="text-area field__input"
+              name="message"
+              placeholder="Message"></textarea>
+            <label class="form__label field__label" for="ContactForm-body">Message</label>
+          </div>
 
-          <!-- Success / error placeholders -->
-          <div id="cf-success" class="alert" hidden>Thanks — your message was received.</div>
-          <div id="cf-error" class="alert alert--error" hidden>Something went wrong. Please try again.</div>
-        </div>
+          <div class="contact__button">
+            <button type="submit" class="button">Send</button>
+          </div>
+        </form>
       </div>
-    </section>
+    </div>
   </main>
 
   <!-- ===== Footer ===== -->
@@ -318,41 +354,37 @@
   <script src="js/cart.js"></script>
   <script src="js/search.js"></script>
   <script src="js/storm_shopify_style.js"></script>
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
 
-  <!-- Contact form handler (front-end only for now) -->
+  <!-- Front-end handler: validates like Dawn & fakes success until you wire a backend -->
   <script>
     (function () {
-      const form     = document.getElementById('contact-form');
-      const success  = document.getElementById('cf-success');
-      const errorBox = document.getElementById('cf-error');
-      const status   = document.getElementById('cf-status');
+      const form = document.getElementById('ContactForm');
+      const ok = document.getElementById('cf-success');
+      const errsWrap = document.getElementById('cf-errors');
+      const email = document.getElementById('ContactForm-email');
+      const emailErr = document.getElementById('ContactForm-email-error');
 
       function show(el, on) { if (el) el.hidden = !on; }
 
       form?.addEventListener('submit', (e) => {
         e.preventDefault();
-
-        // Basic validation
-        const data = new FormData(form);
-        if (data.get('company')) { return; } // honeypot
-        const name = (data.get('name')||'').toString().trim();
-        const email= (data.get('email')||'').toString().trim();
-        const msg  = (data.get('message')||'').toString().trim();
-
-        if (!name || !email || !msg) {
-          show(errorBox, true);
-          status.textContent = 'Please fill required fields.';
+        const valid = email.value.trim().length > 3 && email.value.includes('@');
+        if (!valid) {
+          show(ok, false);
+          show(errsWrap, true);
+          email.setAttribute('aria-invalid', 'true');
+          email.setAttribute('aria-describedby', 'ContactForm-email-error');
+          show(emailErr, true);
           return;
         }
-
-        // FRONT-END ONLY: mimic success (wire to backend or service later)
-        show(errorBox, false);
-        show(success, true);
-        status.textContent = 'Sent ✔';
+        email.removeAttribute('aria-invalid');
+        email.removeAttribute('aria-describedby');
+        show(emailErr, false);
+        show(errsWrap, false);
+        show(ok, true);
         form.reset();
       });
-
-      document.getElementById('year').textContent = new Date().getFullYear();
     })();
   </script>
 </body>
