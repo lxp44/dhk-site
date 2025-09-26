@@ -306,8 +306,8 @@
         return items.find(it => it.key === key);
       }
 
-      // Quantity + remove handlers (built only with Cart.add/remove)
-      $items.addEventListener('click', (e) => {
+      // Quantity + remove handlers
+      document.getElementById('cartp-items').addEventListener('click', (e) => {
         const row = e.target.closest('.cart-item');
         if (!row) return;
         const key = row.getAttribute('data-key');
@@ -338,7 +338,6 @@
           if (qty <= 1) {
             window.Cart?.remove(key);
           } else {
-            // Set to (qty - 1): remove, then re-add (qty-1) times.
             window.Cart?.remove(key);
             for (let n = 0; n < qty - 1; n++) {
               window.Cart?.add({
@@ -355,20 +354,16 @@
         }
       });
 
-      // Fake checkout button (wire to your real checkout when ready)
+      // Fake checkout
       document.getElementById('cartp-checkout')?.addEventListener('click', () => {
-        // Replace this with your actual checkout flow/url:
         alert('Checkout coming soon. Taxes & shipping calculated at checkout.');
       });
 
-      // Initial render + update if storage changes in another tab
       document.addEventListener('DOMContentLoaded', render);
       window.addEventListener('storage', (e) => {
         if (e.key && e.key.includes('dhk_cart')) render();
       });
     })();
   </script>
-
-  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
 </body>
 </html>
