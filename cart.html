@@ -117,21 +117,27 @@
     </header>
   </div>
 
-  <main class="section page-width">
-    <h1>Your Cart</h1>
-    <div id="cart-items"></div>
-    <div id="cart-empty" hidden>
+ <main id="MainContent" class="section">
+  <div class="page-width" id="cart-page">
+    <h1 class="fc__title">Your Cart</h1>
+
+    <div id="cartp-empty" class="cart-empty" hidden>
       <p>Your cart is empty.</p>
       <a href="shop.html" class="button button--secondary">Continue shopping</a>
     </div>
-    <div id="cart-summary" hidden>
-      <p>Subtotal: <span id="cart-subtotal"></span></p>
-      <small>Taxes & shipping calculated at checkout.</small>
-      <div class="cart-ctas">
-        <button id="cart-checkout" class="button">Checkout</button>
-      </div>
+
+    <div id="cartp-items" class="cart-items"></div>
+
+    <div class="cart-totals" style="margin-top:16px">
+      <span class="cart-totals__label">Estimated total</span>
+      <span id="cartp-subtotal" class="cart-totals__value">$0.00</span>
     </div>
-  </main>
+
+    <div class="cart-ctas" style="margin-top:12px">
+      <button class="button" type="button" id="cartp-checkout" disabled>Checkout</button>
+    </div>
+  </div>
+</main>
 
   <!-- ===== Footer ===== -->
  <footer class="footer color-scheme-4 gradient section footer--static">
