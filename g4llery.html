@@ -111,104 +111,134 @@
   </div>
 
 <main id="MainContent" class="section">
-  <!-- LXP Slideshow -->
+  <!-- FULL-BLEED, TALL SLIDESHOW -->
   <style>
+    /* Full-bleed wrapper pulls the slideshow out of any page gutters */
+    .lxp-bleed {
+      width: 100vw;
+      margin-left: 50%;
+      transform: translateX(-50%);
+    }
+
+    /* Viewport-height stage (tall, cinematic) */
+    :root { --g4-h: 85vh; }
+    @media (max-width: 750px) { :root { --g4-h: 78vh; } }
+
     .lxp-slideshow {
       position: relative;
-      width: 100%;
-      max-width: 100%;
+      height: var(--g4-h);
       overflow: hidden;
+      /* optional subtle dark edge—remove if you want zero frame */
+      box-shadow: none;
     }
+
     .lxp-slides {
       display: flex;
-      transition: transform 0.8s ease-in-out;
-      width: 100%;
+      height: 100%;
+      transition: transform .8s ease-in-out;
+      will-change: transform;
     }
+
     .lxp-slide {
       min-width: 100%;
-      box-sizing: border-box;
+      height: 100%;
+      position: relative;
     }
+
+    /* Fill the stage completely */
     .lxp-slide img {
       width: 100%;
-      height: auto;
+      height: 100%;
+      object-fit: cover; /* no letterboxing */
       display: block;
-      object-fit: cover;
     }
+
+    /* Arrows overlay */
     .lxp-nav {
-      position: absolute;
-      top: 50%;
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      transform: translateY(-50%);
-      z-index: 2;
+      position: absolute; inset: 0;
+      display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
       pointer-events: none;
     }
     .lxp-nav button {
-      background-color: rgba(0,0,0,0.5);
-      color: white;
-      font-size: 2rem;
-      border: none;
-      cursor: pointer;
       pointer-events: all;
-      padding: 0.5rem 1rem;
-      transition: background 0.3s ease;
+      background: rgba(0,0,0,.5);
+      color: #fff;
+      font-size: 2rem;
+      border: 0;
+      cursor: pointer;
+      padding: .5rem 1rem;
+      transition: background .2s ease;
+      user-select: none;
     }
-    .lxp-nav button:hover {
-      background-color: rgba(0,0,0,0.8);
-    }
+    .lxp-nav button:hover { background: rgba(0,0,0,.8); }
+    .lxp-prev { justify-self: start; margin-left: .5rem; }
+    .lxp-next { justify-self: end;   margin-right: .5rem; }
   </style>
 
-  <div class="lxp-slideshow">
-    <div class="lxp-slides" id="lxpSlides">
-      <div class="lxp-slide">
-        <img src="https://cdn.shopify.com/s/files/1/0628/9011/5159/files/lxp_4_bag.png?v=1748914724" alt="Gallery Image 1">
+  <div class="lxp-bleed">
+    <div class="lxp-slideshow" aria-roledescription="carousel">
+      <div class="lxp-slides" id="lxpSlides">
+        <div class="lxp-slide">
+          <img src="https://cdn.shopify.com/s/files/1/0628/9011/5159/files/lxp_4_bag.png?v=1748914724" alt="Gallery Image 1">
+        </div>
+        <div class="lxp-slide">
+          <img src="https://cdn.shopify.com/s/files/1/0628/9011/5159/files/4506-DK.png?v=1745202327" alt="Gallery Image 2">
+        </div>
+        <div class="lxp-slide">
+          <img src="https://cdn.shopify.com/s/files/1/0628/9011/5159/files/IMG_5920_2_dk.png?v=1750107808" alt="Gallery Image 3">
+        </div>
+        <div class="lxp-slide">
+          <img src="https://cdn.shopify.com/s/files/1/0628/9011/5159/files/5545_DK.png?v=1745207710" alt="Gallery Image 4">
+        </div>
+        <div class="lxp-slide">
+          <img src="https://cdn.shopify.com/s/files/1/0628/9011/5159/files/4718_DK.png?v=1756069991" alt="Gallery Image 5">
+        </div>
+        <div class="lxp-slide">
+          <img src="https://cdn.shopify.com/s/files/1/0628/9011/5159/files/IMG_7733_dk.png?v=1756069987" alt="Gallery Image 6">
+        </div>
       </div>
-      <div class="lxp-slide">
-        <img src="https://cdn.shopify.com/s/files/1/0628/9011/5159/files/4506-DK.png?v=1745202327" alt="Gallery Image 2">
-      </div>
-      <div class="lxp-slide">
-        <img src="https://cdn.shopify.com/s/files/1/0628/9011/5159/files/IMG_5920_2_dk.png?v=1750107808" alt="Gallery Image 3">
-      </div>
-      <div class="lxp-slide">
-        <img src="https://cdn.shopify.com/s/files/1/0628/9011/5159/files/5545_DK.png?v=1745207710" alt="Gallery Image 4">
-      </div>
-      <div class="lxp-slide">
-        <img src="https://cdn.shopify.com/s/files/1/0628/9011/5159/files/4718_DK.png?v=1756069991" alt="Gallery Image 5">
-      </div>
-      <div class="lxp-slide">
-        <img src="https://cdn.shopify.com/s/files/1/0628/9011/5159/files/IMG_7733_dk.png?v=1756069987" alt="Gallery Image 6">
-      </div>
-    </div>
 
-    <div class="lxp-nav">
-      <button onclick="lxpPrev()">‹</button>
-      <button onclick="lxpNext()">›</button>
+      <div class="lxp-nav" aria-hidden="true">
+        <button class="lxp-prev" type="button" aria-label="Previous" onclick="lxpPrev()">‹</button>
+        <div></div>
+        <button class="lxp-next" type="button" aria-label="Next" onclick="lxpNext()">›</button>
+      </div>
     </div>
   </div>
 
   <script>
-    let lxpIndex = 0;
-    const lxpSlides = document.getElementById("lxpSlides");
-    const totalSlides = lxpSlides.children.length;
+    (function () {
+      let i = 0;
+      const track = document.getElementById('lxpSlides');
+      if (!track) return;
+      const N = track.children.length;
 
-    function showSlide(index) {
-      lxpSlides.style.transform = `translateX(-${index * 100}%)`;
-    }
+      function show(idx) {
+        i = (idx + N) % N;
+        track.style.transform = `translateX(-${i * 100}%)`;
+      }
+      window.lxpNext = () => show(i + 1);
+      window.lxpPrev = () => show(i - 1);
 
-    function lxpNext() {
-      lxpIndex = (lxpIndex + 1) % totalSlides;
-      showSlide(lxpIndex);
-    }
+      // auto-rotate (5s)
+      let timer = setInterval(() => window.lxpNext(), 5000);
+      // pause on hover for desktop
+      track.closest('.lxp-slideshow').addEventListener('mouseenter', () => clearInterval(timer));
+      track.closest('.lxp-slideshow').addEventListener('mouseleave', () => {
+        clearInterval(timer);
+        timer = setInterval(() => window.lxpNext(), 5000);
+      });
 
-    function lxpPrev() {
-      lxpIndex = (lxpIndex - 1 + totalSlides) % totalSlides;
-      showSlide(lxpIndex);
-    }
+      // basic swipe
+      let startX = 0;
+      track.addEventListener('touchstart', e => (startX = e.touches[0].clientX), { passive: true });
+      track.addEventListener('touchend', e => {
+        const dx = e.changedTouches[0].clientX - startX;
+        if (Math.abs(dx) > 40) (dx < 0 ? window.lxpNext() : window.lxpPrev());
+      });
 
-    setInterval(() => {
-      lxpNext();
-    }, 5000);
+      show(0);
+    })();
   </script>
 </main>
 
