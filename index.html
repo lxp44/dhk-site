@@ -307,5 +307,36 @@
   </script>
 
   <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+  <style>
+  /* Keep header centered & stacked at ALL widths (not just under mobile/tablet breakpoints) */
+  .section-header .page-width.header-grid{
+    max-width: 1100px;         /* mimic Shopify's constrained middle */
+    margin-inline: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    text-align: center;
+  }
+  .section-header .nav-row{
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .section-header .header__logo{ 
+    display: block; 
+    margin-inline: auto;
+  }
+
+  /* Keep the hamburger from floating based on header height */
+  .header__icon--menu{
+    top: 56px;                 /* was calc(100% + 6px); that varies with layout */
+    transform: none;
+  }
+
+  /* Make sure the search modal always sits above storm overlay */
+  #search-modal{ z-index: 2147483647; }
+  body.search-open #storm-overlay{ opacity:0 !important; pointer-events:none !important; }
+</style>
 </body>
 </html>
