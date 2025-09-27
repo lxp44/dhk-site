@@ -59,6 +59,18 @@
 </head>
 <body class="template-page">
 
+   <!-- Keep search above storm and fade storm while search is open -->
+  <style>
+    #search-modal{ z-index:2147483647; }
+    body.search-open #storm-overlay{ opacity:0 !important; pointer-events:none !important; transition:opacity .15s ease; }
+  </style>
+</head>
+<body class="template-page">
+  
+  <!-- Storm UI (added) -->
+  <div class="lightning-flash"></div>
+  <div id="storm-overlay"><canvas id="rain-canvas"></canvas></div>
+
   <!-- ===== Announcement / Utility Bar ===== -->
   <div class="utility-bar color-scheme-4 gradient utility-bar--bottom-border">
     <div class="page-width utility-bar__grid">
