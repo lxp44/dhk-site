@@ -188,6 +188,21 @@
   </footer>
   <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
 
+   <!-- ===== Search Modal ===== -->
+  <div id="search-modal" class="search-modal" aria-hidden="true">
+    <div class="search-modal__overlay" data-close-search></div>
+    <div class="search-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="search-title">
+      <header class="search-modal__header">
+        <h2 id="search-title">Search</h2>
+        <button id="search-close" class="search-modal__close" aria-label="Close search">×</button>
+      </header>
+      <div class="search-modal__field">
+        <input id="search-input" type="search" placeholder="Search products…  ( /  or  ⌘/Ctrl+K )" autocomplete="off" />
+      </div>
+      <div id="search-results" class="search-modal__results" aria-live="polite"></div>
+    </div>
+  </div>
+
   <!-- Storm audio (kept) -->
   <audio id="rain-light"   src="assets/audio/light-rain.mp3"   loop preload="auto" hidden></audio>
   <audio id="rain-med"     src="assets/audio/med-rain.mp3"     loop preload="auto" hidden></audio>
