@@ -2,44 +2,110 @@
 (() => {
   const STORAGE_KEY = 'dhk_cart_v1';
 
-  // ---------- Storage ----------
+  // ---------- Helpers ----------
+  // Convert any reasonable price input to integer cents.
+  function toCents(v) {
+    if (v == null) return 0;
+    // If it's already cents (integer >= 100 and no '.'), accept via hint key priceCents
+    if (typeof v === 'number' && Number.isFinite(v)) {
+      // Heuristic: treat small numbers as dollars, big as cents
+      return v >= 1000 ? Math.round(v) : Math.round(v * 100);
+    }
+    if (typeof v === 'string') {
+      // strip $ and commas and spaces
+      const clean = v.replace(/[$,\s]/g, '');
+      if (clean === '') return 0;
+      // if it's integer-like (no dot) assume dollars
+      if (!clean.includes('.')) {
+        const n = Number(clean);
+        return Number.isFinite(n) ? Math.round(n * 100) : 0;
+      }
+      // has decimal
+      const n = Number(clean);
+      return Number.isFinite(n) ? Math.round(n * 100) : 0;
+    }
+    // Fallback
+    const n = Number(v);
+    return Number.isFinite(n) ? Math.round(n * 100) : 0;
+  }
+
+  const fmt = (n) => (n || 0).toLocaleString(undefined, { style: 'currency', currency: 'USD' });
+  const keyFor = (item) => item.id + (item.variant ? `__${item.variant}` : '');
+
+  // ---------- Storage (with migration) ----------
+  function migrateItems(items) {
+    // Ensure each item has priceCents (integer) and sane qty
+    const out = (items || []).map((it) => {
+      const copy = { ...it };
+      if (copy.priceCents == null) {
+        // try legacy fields
+        if (copy.price != null) {
+          copy.priceCents = toCents(copy.price);
+          delete copy.price; // reduce confusion going forward
+        } else {
+          copy.priceCents = 0;
+        }
+      } else {
+        copy.priceCents = Math.round(Number(copy.priceCents)) || 0;
+      }
+      copy.qty = Math.max(1, Math.round(Number(copy.qty) || 1));
+      return copy;
+    });
+    return out;
+  }
+
   function read() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       const parsed = raw ? JSON.parse(raw) : [];
-      return Array.isArray(parsed) ? parsed : [];
+      const items = Array.isArray(parsed) ? parsed : [];
+      const migrated = migrateItems(items);
+      // If migration changed shape, persist it back
+      if (JSON.stringify(items) !== JSON.stringify(migrated)) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(migrated));
+      }
+      return migrated;
     } catch {
       localStorage.removeItem(STORAGE_KEY);
       return [];
     }
   }
+
   function write(items) {
-    const safe = Array.isArray(items) ? items : [];
+    const safe = migrateItems(Array.isArray(items) ? items : []);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(safe));
     render();
     updateHeaderCount();
   }
+
   function clear() { write([]); }
 
-  // ---------- Utils ----------
-  const fmt = (n) => (n || 0).toLocaleString(undefined, { style: 'currency', currency: 'USD' });
-  const keyFor = (item) => item.id + (item.variant ? `__${item.variant}` : '');
-  const subtotal = (items) => (items || []).reduce((sum, it) => sum + (Number(it.priceCents) || 0) * (Number(it.qty) || 1), 0);
+  // ---------- Totals ----------
+  const subtotalCents = (items) =>
+    (items || []).reduce((sum, it) => sum + (Number(it.priceCents) || 0) * (Number(it.qty) || 1), 0);
 
   // ---------- Public API ----------
   function add(item, options = { open: true }) {
     const items = read();
     const key = keyFor(item);
     const i = items.findIndex((it) => it.key === key);
+
+    // Prefer item.priceCents if provided; else derive from item.price (string/number dollars)
+    const priceCents =
+      item.priceCents != null
+        ? Math.round(Number(item.priceCents)) || 0
+        : toCents(item.price);
+
     if (i >= 0) {
       items[i].qty = (Number(items[i].qty) || 1) + 1;
+      // If the product’s price was missing previously for some reason, backfill it
+      if (!items[i].priceCents && priceCents) items[i].priceCents = priceCents;
     } else {
       items.push({
         key,
         id: item.id,
         title: item.title,
-        // always store in cents
-        priceCents: Math.round((Number(item.price) || 0) * 100),
+        priceCents,
         variant: item.variant || null,
         thumbnail: item.thumbnail || null,
         qty: 1,
@@ -65,6 +131,7 @@
     overlay:    document.querySelector('#cart-drawer .cart-drawer__overlay'),
     panel:      document.querySelector('#cart-drawer .cart-drawer__panel'),
   });
+
   const pageEls = () => ({
     wrapper:    document.getElementById('cart-page'),
     items:      document.getElementById('cartp-items'),
@@ -146,7 +213,7 @@
 
     ctx.empty.hidden = true;
     ctx.items.innerHTML = items.map(rowHtml).join('');
-    ctx.subtotal.textContent = fmt(subtotal(items) / 100);
+    ctx.subtotal.textContent = fmt(subtotalCents(items) / 100);
     if (ctx.checkout) ctx.checkout.disabled = false;
   }
 
@@ -190,7 +257,7 @@
     if (idx === -1) return;
 
     if (e.target.matches('[data-incr]')) {
-      items[idx].qty += 1;
+      items[idx].qty = (Number(items[idx].qty) || 1) + 1;
       write(items);
     } else if (e.target.matches('[data-decr]')) {
       const next = Math.max(0, (Number(items[idx].qty) || 1) - 1);
@@ -246,5 +313,6 @@
     bindGlobalEvents();
   });
 
+  // Expose API
   window.Cart = { add, remove, clear, read, open: openDrawer, close: closeDrawer };
 })();
