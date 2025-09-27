@@ -1,32 +1,42 @@
 // js/cart.js
 (() => {
+  if (window.__DHK_CART_LOADED__) return;           // --- Singleton guard ---
+  window.__DHK_CART_LOADED__ = true;
+
   const STORAGE_KEY = 'dhk_cart_v1';
 
-  // ---------- Helpers ----------
-  // Convert any reasonable price input to integer cents.
+  // ---------- Price helpers ----------
   function toCents(v) {
     if (v == null) return 0;
-    // If it's already cents (integer >= 100 and no '.'), accept via hint key priceCents
     if (typeof v === 'number' && Number.isFinite(v)) {
       // Heuristic: treat small numbers as dollars, big as cents
       return v >= 1000 ? Math.round(v) : Math.round(v * 100);
     }
     if (typeof v === 'string') {
-      // strip $ and commas and spaces
       const clean = v.replace(/[$,\s]/g, '');
-      if (clean === '') return 0;
-      // if it's integer-like (no dot) assume dollars
-      if (!clean.includes('.')) {
-        const n = Number(clean);
-        return Number.isFinite(n) ? Math.round(n * 100) : 0;
-      }
-      // has decimal
+      if (!clean) return 0;
       const n = Number(clean);
-      return Number.isFinite(n) ? Math.round(n * 100) : 0;
+      if (!Number.isFinite(n)) return 0;
+      // If original had a dot, we know it was dollars
+      return v.includes('.') ? Math.round(n * 100) : Math.round(n * 100);
     }
-    // Fallback
     const n = Number(v);
     return Number.isFinite(n) ? Math.round(n * 100) : 0;
+  }
+
+  // Pull price from a button/element if present (as a last resort).
+  function centsFromElement(el) {
+    if (!el) return 0;
+    // prefer cents attribute
+    const pc = el.getAttribute('data-price-cents');
+    if (pc != null) {
+      const n = Number(pc);
+      return Number.isFinite(n) ? Math.round(n) : 0;
+    }
+    // fallback dollars attribute
+    const pd = el.getAttribute('data-price');
+    if (pd != null) return toCents(pd);
+    return 0;
   }
 
   const fmt = (n) => (n || 0).toLocaleString(undefined, { style: 'currency', currency: 'USD' });
@@ -34,37 +44,35 @@
 
   // ---------- Storage (with migration) ----------
   function migrateItems(items) {
-    // Ensure each item has priceCents (integer) and sane qty
-    const out = (items || []).map((it) => {
-      const copy = { ...it };
-      if (copy.priceCents == null) {
-        // try legacy fields
-        if (copy.price != null) {
-          copy.priceCents = toCents(copy.price);
-          delete copy.price; // reduce confusion going forward
+    return (Array.isArray(items) ? items : []).map((it) => {
+      const out = { ...it };
+      // normalize qty
+      out.qty = Math.max(1, Math.round(Number(out.qty) || 1));
+      // normalize price
+      if (out.priceCents == null) {
+        if (out.price != null) {
+          out.priceCents = toCents(out.price);
+          delete out.price;
         } else {
-          copy.priceCents = 0;
+          out.priceCents = 0;
         }
       } else {
-        copy.priceCents = Math.round(Number(copy.priceCents)) || 0;
+        out.priceCents = Math.round(Number(out.priceCents)) || 0;
       }
-      copy.qty = Math.max(1, Math.round(Number(copy.qty) || 1));
-      return copy;
+      return out;
     });
-    return out;
   }
 
   function read() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       const parsed = raw ? JSON.parse(raw) : [];
-      const items = Array.isArray(parsed) ? parsed : [];
-      const migrated = migrateItems(items);
-      // If migration changed shape, persist it back
-      if (JSON.stringify(items) !== JSON.stringify(migrated)) {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(migrated));
+      const items = migrateItems(parsed);
+      // Persist if migration changed the shape
+      if (JSON.stringify(parsed) !== JSON.stringify(items)) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
       }
-      return migrated;
+      return items;
     } catch {
       localStorage.removeItem(STORAGE_KEY);
       return [];
@@ -72,7 +80,7 @@
   }
 
   function write(items) {
-    const safe = migrateItems(Array.isArray(items) ? items : []);
+    const safe = migrateItems(items || []);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(safe));
     render();
     updateHeaderCount();
@@ -90,15 +98,18 @@
     const key = keyFor(item);
     const i = items.findIndex((it) => it.key === key);
 
-    // Prefer item.priceCents if provided; else derive from item.price (string/number dollars)
-    const priceCents =
-      item.priceCents != null
-        ? Math.round(Number(item.priceCents)) || 0
-        : toCents(item.price);
+    // Resolve price in cents with multiple fallbacks
+    let priceCents = 0;
+    if (item.priceCents != null) {
+      priceCents = Math.round(Number(item.priceCents)) || 0;
+    } else if (item.price != null) {
+      priceCents = toCents(item.price);
+    } else if (item.el) {
+      priceCents = centsFromElement(item.el);
+    }
 
     if (i >= 0) {
       items[i].qty = (Number(items[i].qty) || 1) + 1;
-      // If the product’s price was missing previously for some reason, backfill it
       if (!items[i].priceCents && priceCents) items[i].priceCents = priceCents;
     } else {
       items.push({
@@ -131,7 +142,6 @@
     overlay:    document.querySelector('#cart-drawer .cart-drawer__overlay'),
     panel:      document.querySelector('#cart-drawer .cart-drawer__panel'),
   });
-
   const pageEls = () => ({
     wrapper:    document.getElementById('cart-page'),
     items:      document.getElementById('cartp-items'),
@@ -167,8 +177,8 @@
 
   // ---------- Row HTML ----------
   function rowHtml(it) {
-    const priceEach = fmt((Number(it.priceCents) || 0) / 100);
-    const linePrice = fmt(((Number(it.priceCents) || 0) * (Number(it.qty) || 1)) / 100);
+    const each = fmt((Number(it.priceCents) || 0) / 100);
+    const line = fmt(((Number(it.priceCents) || 0) * (Number(it.qty) || 1)) / 100);
     const thumb = it.thumbnail ? `<img src="${it.thumbnail}" alt="" loading="lazy" />` : '';
     const variant = it.variant ? `<div class="ci__variant">${it.variant}</div>` : '';
     const titleHtml = it.url
@@ -181,7 +191,7 @@
         <div class="ci__info">
           ${titleHtml}
           ${variant}
-          <div class="ci__price-each">${priceEach} ea</div>
+          <div class="ci__price-each">${each} ea</div>
           <div class="ci__controls">
             <button class="ci__qty-btn" type="button" data-decr aria-label="Decrease quantity">−</button>
             <span class="ci__qty" aria-live="polite">${Number(it.qty) || 1}</span>
@@ -189,7 +199,7 @@
             <button class="ci__remove" type="button" data-remove aria-label="Remove">Remove</button>
           </div>
         </div>
-        <div class="ci__line">${linePrice}</div>
+        <div class="ci__line">${line}</div>
       </div>`;
   }
 
@@ -261,16 +271,14 @@
       write(items);
     } else if (e.target.matches('[data-decr]')) {
       const next = Math.max(0, (Number(items[idx].qty) || 1) - 1);
-      if (next === 0) {
-        items.splice(idx, 1);
-      } else {
-        items[idx].qty = next;
-      }
+      if (next === 0) items.splice(idx, 1);
+      else items[idx].qty = next;
       write(items);
     }
   }
 
   function bindGlobalEvents() {
+    // Drawer open/close
     document.addEventListener('click', (e) => {
       if (e.target.closest('[data-cart-open]')) {
         e.preventDefault();
@@ -284,24 +292,27 @@
       if (type === 'drawer' && overlay && e.target === overlay) {
         closeDrawer();
       }
-    });
+    }, { passive: true });
 
+    // Esc
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') closeDrawer();
     });
 
+    // Items (delegate once per container)
     const attach = () => {
       const ctx = getContext();
       const container = ctx.items;
-      if (container && !container._dhkBound) {
+      if (container && !container.__dhkBound) {
         container.addEventListener('click', onItemsClick);
-        container._dhkBound = true;
+        container.__dhkBound = true;
       }
     };
+
     attach();
-    const origRender = render;
-    render = function patchedRender() {
-      origRender();
+    const _render = render;
+    render = function patchedRender() { // eslint-disable-line no-func-assign
+      _render();
       attach();
     };
   }
