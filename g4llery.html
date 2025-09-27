@@ -12,6 +12,61 @@
 
   <!-- Global styles -->
   <link rel="stylesheet" href="css/styles.css"/>
+  <!-- Drawer (mobile) typography + glow to match site -->
+<style>
+  /* Drawer panel background + layering so it always sits above storm */
+  #menu-drawer {
+    background: rgba(10, 10, 12, 0.88);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border-right: 1px solid rgba(255,255,255,.08);
+    box-shadow: 0 10px 40px rgba(0,0,0,.55);
+    z-index: 2147483646; /* sit above storm overlay */
+  }
+
+  /* Menu list items: Cinzel, uppercase, tight tracking, subtle glow */
+  .menu-drawer__menu-item,
+  .menu-drawer__menu .list-menu__item.link {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .18em;
+    font-size: 13px;              /* adjust: 12px–14px to taste */
+    color: #e6e6e6;
+    text-shadow: 0 0 6px rgba(255,255,255,.12);
+  }
+
+  /* Hover/active polish */
+  .menu-drawer__menu-item:hover,
+  .menu-drawer__menu .list-menu__item.link:hover,
+  .menu-drawer__menu-item:focus-visible {
+    color: #ffffff;
+    text-shadow: 0 0 10px rgba(255,255,255,.28);
+  }
+
+  /* Make dividers/submenus feel consistent if present */
+  .menu-drawer__menu .list-menu__item + .list-menu__item {
+    border-top: 1px solid rgba(255,255,255,.06);
+  }
+
+  /* Hamburger icon: match glow */
+  .header__icon--menu svg {
+    filter: drop-shadow(0 0 6px rgba(255,255,255,.28));
+  }
+
+  /* When the drawer is open, fade storm overlay so text remains crisp */
+  details[open] ~ .menu-drawer,
+  details[open] #menu-drawer {
+    z-index: 2147483646;
+  }
+  details[open] ~ #storm-overlay,
+  details[open] #storm-overlay {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transition: opacity .15s ease;
+  }
+</style>
+
 <style>
   /* Center the announcement row and hide extras */
   .utility-bar .page-width { max-width: none; padding: 0; }
