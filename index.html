@@ -22,6 +22,62 @@
   <link rel="stylesheet" href="css/section-footer.css">
   <link rel="stylesheet" href="css/styles.css">
 
+  <style>
+  /* Search modal: hidden vs visible */
+  #search-modal {
+    display: none;               /* hidden by default */
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+  }
+  #search-modal[aria-hidden="false"] {
+    display: block;              /* show when toggled */
+  }
+
+  /* Backdrop */
+  #search-modal .search-modal__overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,.6);
+    backdrop-filter: blur(2px);
+  }
+
+  /* Dialog */
+  #search-modal .search-modal__dialog {
+    position: relative;
+    max-width: 720px;
+    margin: 8vh auto 0;
+    background: #0c0c0c;
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 20px 60px rgba(0,0,0,.6);
+  }
+
+  /* Optional focus style on input */
+  #search-modal input[type="search"] {
+    width: 100%;
+    font-size: 16px;
+    padding: 12px 14px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,.12);
+    background: #121212;
+    color: #fff;
+    outline: none;
+  }
+  #search-modal input[type="search"]:focus {
+    border-color: rgba(255,255,255,.35);
+    box-shadow: 0 0 0 3px rgba(255,255,255,.08);
+  }
+
+  /* Prevent scroll when modal open */
+  body.search-open {
+    overflow: hidden;
+    touch-action: none;
+  }
+</style>
+
+
   <!-- Page-scoped tweaks for centered header/announcement -->
   <style>
     /* Announcement bar: center the text, hide extras */
@@ -304,20 +360,52 @@
     })();
 
     // Search triggers (desktop + mobile)
-    (function () {
-      const modal   = document.getElementById('search-modal');
-      const openers = [document.getElementById('search-open'), document.getElementById('search-open-mobile')].filter(Boolean);
-      const closer  = document.getElementById('search-close');
-      const overlay = modal?.querySelector('.search-modal__overlay');
+     (function () {
+    const modal   = document.getElementById('search-modal');
+    if (!modal) return;
 
-      function open()  { modal?.setAttribute('aria-hidden','false'); }
-      function close() { modal?.setAttribute('aria-hidden','true');  }
+    const dialog  = modal.querySelector('.search-modal__dialog');
+    const input   = document.getElementById('search-input');
+    const closeBtn= document.getElementById('search-close');
+    const overlay = modal.querySelector('.search-modal__overlay');
 
-      openers.forEach(btn => btn.addEventListener('click', open));
-      closer?.addEventListener('click', close);
-      overlay?.addEventListener('click', close);
-    })();
-  </script>
+    const openers = [
+      document.getElementById('search-open'),
+      document.getElementById('search-open-mobile')
+    ].filter(Boolean);
+
+    function openModal() {
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('search-open');
+      // focus the input after paint
+      setTimeout(() => input?.focus(), 0);
+    }
+
+    function closeModal() {
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('search-open');
+    }
+
+    // open via buttons
+    openers.forEach(btn => btn.addEventListener('click', openModal));
+
+    // close via X or overlay
+    closeBtn?.addEventListener('click', closeModal);
+    overlay?.addEventListener('click', closeModal);
+
+    // close via ESC
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal.getAttribute('aria-hidden') === 'false') {
+        closeModal();
+      }
+    });
+
+    // basic form behavior: prevent full-page submit if you wire it later
+    dialog?.addEventListener('submit', (e) => {
+      e.preventDefault();
+    });
+  })();
+</script>
 
   <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
 </body>
