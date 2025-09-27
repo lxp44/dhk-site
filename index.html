@@ -22,6 +22,38 @@
   <link rel="stylesheet" href="css/section-footer.css">
   <link rel="stylesheet" href="css/styles.css">
 
+ <style id="footer-size-home">
+  /* Base size for footer body text */
+  .footer { font-size: 12px; line-height: 1.5; }
+
+  /* Make all common text inside footer inherit that size */
+  .footer p,
+  .footer a,
+  .footer li,
+  .footer small,
+  .footer span,
+  .footer .caption { 
+    font-size: inherit !important;
+  }
+
+  /* Slightly larger for column headings */
+  .footer .footer-block__heading {
+    font-size: 13px !important;
+    font-weight: 700;
+    letter-spacing: .04em;
+  }
+
+  /* Tiny text for bottom bar if you want it tighter */
+  .footer .footer__content-bottom .copyright__content,
+  .footer .policies a {
+    font-size: 11px !important;
+  }
+
+  /* Optional: nudge down a bit more on phones */
+  @media (max-width: 750px){
+    .footer { font-size: 11px; }
+    .footer .footer-block__heading { font-size: 12px !important; }
+  }
  <style>
   /* Center the announcement row and hide extras */
   .utility-bar .page-width { max-width: none; padding: 0; }
