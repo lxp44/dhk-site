@@ -168,10 +168,11 @@
     </section>
   </main>
 
-  <!-- ===== Footer ===== -->
+ <!-- ===== Footer ===== -->
   <footer class="footer color-scheme-4 gradient section footer--static">
     <div class="footer__content-top page-width">
       <div class="footer__blocks-wrapper grid grid--1-col grid--2-col grid--4-col-tablet">
+        <!-- Links -->
         <div class="footer-block footer-block--menu grid__item">
           <h2 class="footer-block__heading inline-richtext">Shop</h2>
           <ul class="footer-block__details-content list-unstyled">
@@ -183,33 +184,23 @@
           </ul>
         </div>
 
+        <!-- Brand blurb + social (fixed structure) -->
         <div class="footer-block grid__item">
           <h2 class="footer-block__heading inline-richtext">Dark Harlem Knight</h2>
           <div class="footer-block__details-content rte">
             <p>Forged in the storm. Streetwear with thunder in its veins.</p>
           </div>
-         <ul class="footer__list-social">
-  <li>
-    <a
-      aria-label="Instagram"
-      class="social-link"
-      href="https://www.instagram.com/darkharlemknight/"
-      target="_blank"
-      rel="noopener"
-    >Instagram</a>
-  </li>
-  <li>
-    <a
-      aria-label="TikTok"
-      class="social-link"
-      href="https://www.tiktok.com/@darkharlemknight"
-      target="_blank"
-      rel="noopener"
-    >TikTok</a>
-  </li>
-</ul>
+          <ul class="footer__list-social">
+            <li>
+              <a aria-label="Instagram" class="social-link" href="https://www.instagram.com/darkharlemknight/" target="_blank" rel="noopener">Instagram</a>
+            </li>
+            <li>
+              <a aria-label="TikTok" class="social-link" href="https://www.tiktok.com/@darkharlemknight" target="_blank" rel="noopener">TikTok</a>
+            </li>
+          </ul>
         </div>
 
+        <!-- Newsletter -->
         <div class="footer-block footer-block--newsletter grid__item">
           <h2 class="footer-block__heading inline-richtext">Join the storm</h2>
           <form class="footer__newsletter newsletter-form" action="#" method="post" onsubmit="return false;">
@@ -222,6 +213,7 @@
           </form>
         </div>
 
+        <!-- Brand image -->
         <div class="footer-block footer-block-image grid__item center">
           <img src="https://darkharlemknight.com/cdn/shop/files/DHK_transparent.gif?v=1756069281&width=190"
                alt="DarkHarlemKnight" width="120" height="120" loading="lazy">
@@ -255,6 +247,7 @@
       </div>
     </div>
   </footer>
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
 
   <!-- ===== Search Modal ===== -->
   <div id="search-modal" class="search-modal" aria-hidden="true">
@@ -272,53 +265,12 @@
   </div>
   
   <!-- Scripts -->
-  <script src="js/storm_shopify_style.js"></script>
   <script src="js/nav.js"></script>
   <script src="js/announce.js"></script>
   <script src="js/cart.js"></script>
   <script src="js/search.js"></script>
-
-  <!-- Drawer fallback init (kept) -->
-  <script>
-    (function(){
-      const details = document.getElementById('Details-menu-drawer-container');
-      if (!details) return;
-      const summary = details.querySelector('summary');
-      summary?.addEventListener('click', () => {
-        requestAnimationFrame(() => {
-          const open = details.hasAttribute('open');
-          document.body.classList.toggle('menu-drawer-open', open);
-        });
-      });
-    })();
-  </script>
-
-  <!-- Search fallback init (works even if js/search.js fails) -->
-  <script>
-    (function () {
-      const modal   = document.getElementById('search-modal');
-      if (!modal) return;
-      const openers = [document.getElementById('search-open'), document.getElementById('search-open-mobile')].filter(Boolean);
-      const closeBtn= document.getElementById('search-close');
-      const overlay = modal.querySelector('.search-modal__overlay');
-      const input   = document.getElementById('search-input');
-
-      function openModal(){ modal.setAttribute('aria-hidden','false'); document.body.classList.add('search-open'); setTimeout(()=>input?.focus(),0); }
-      function closeModal(){ modal.setAttribute('aria-hidden','true');  document.body.classList.remove('search-open'); }
-
-      openers.forEach(b => b.addEventListener('click', openModal));
-      closeBtn?.addEventListener('click', closeModal);
-      overlay?.addEventListener('click', closeModal);
-      document.addEventListener('keydown', (e)=>{
-        if (e.key === 'Escape' && modal.getAttribute('aria-hidden') === 'false') closeModal();
-        if ((e.key === '/' && !e.ctrlKey && !e.metaKey && !e.altKey) ||
-            (e.key.toLowerCase() === 'k' && (e.ctrlKey || e.metaKey))) {
-          const t = document.activeElement?.tagName; if (t!=='INPUT' && t!=='TEXTAREA'){ e.preventDefault(); openModal(); }
-        }
-      });
-    })();
-  </script>
-
+  <script src="js/shop.js"></script>
+  <script src="js/storm_shopify_style.js"></script>
   <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
 </body>
 </html>
