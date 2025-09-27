@@ -15,52 +15,62 @@
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/component-list-menu.css">
   <link rel="stylesheet" href="css/component-menu-drawer.css">
+  <link rel="stylesheet" href="css/component-list-social.css">
   <link rel="stylesheet" href="css/component-list-payment.css">
   <link rel="stylesheet" href="css/component-newsletter.css">
   <link rel="stylesheet" href="css/section-image-banner.css">
   <link rel="stylesheet" href="css/section-footer.css">
   <link rel="stylesheet" href="css/styles.css">
 
-  <!-- Page-scoped tweaks for header/announcement + glow -->
+  <!-- Page-scoped cleanups -->
   <style>
-    /* Announcement strip: centered text, no socials */
-    .utility-bar { padding-block: 10px; }
-    .utility-bar .utility-bar__grid { display: grid; place-items: center; }
-    .announcement-bar { width: 100%; text-align: center; }
-    .announcement-track { display: inline-flex; gap: 14px; align-items: center; }
-    .announcement-bar__message { margin: 0; letter-spacing: .06em; text-transform: uppercase; }
-    .announcement-bar__link { text-decoration: none; }
+    /* Make sure storm overlay never blocks header or drawer clicks */
+    #storm-overlay { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+    .header-wrapper { position: sticky; top: 0; z-index: 20; }
 
-    /* Header: logo centered on its own row; nav beneath */
+    /* Announcement / utility bar — center the message, hide top socials for now */
+    .utility-bar .list-social { display: none !important; }
+    .utility-bar .utility-bar__grid { grid-template-columns: 1fr; }
+    .announcement-bar { display: flex; justify-content: center; }
+    .announcement-bar .announcement-track { margin: 0 auto; text-align: center; }
+    .announcement-bar .announcement-bar__message { margin: 0; }
+    .announcement-bar .announcement-bar__message.h5 span { letter-spacing: .12em; }
+
+    /* Header grid: logo centered above the links (Dawn-esque) */
     .header-grid {
       display: grid;
-      grid-template-rows: auto auto;
-      grid-template-columns: 1fr;
+      grid-template-columns: 1fr auto 1fr;
       align-items: center;
-      gap: 8px;
-      padding-block: 12px 16px;
+      gap: 16px;
     }
-    .header__logo { justify-self: center; }
-    .primary-nav {
-      display: flex; flex-wrap: wrap; gap: 18px; justify-content: center; align-items: center;
+    .header__logo { display: flex; justify-content: center; }
+    .header__heading-logo {
+      width: 210px; height: auto; image-rendering: -webkit-optimize-contrast;
+      filter: drop-shadow(0 0 10px rgba(255,255,255,.08));
+      transition: transform .2s ease;
     }
-
-    /* Nav links + glow */
-    .nav-link, .button--ghost, .menu-drawer__menu-item, .list-menu__item {
-      text-transform: uppercase;
-      letter-spacing: .08em;
-      text-shadow: 0 0 6px rgba(255,255,255,.18), 0 0 18px rgba(255,255,255,.08);
+    @media (min-width: 990px) {
+      .header__heading-logo { width: 270px; }
+      .header__heading-logo:hover { transform: scale(1.03); }
     }
 
-    /* Mobile drawer: darker bg + glow title feel */
-    #menu-drawer { backdrop-filter: blur(4px); }
-    #menu-drawer .menu-drawer__menu-item { font-weight: 600; }
+    /* Desktop navs */
+    .nav-left, .nav-right { display: flex; gap: 18px; justify-content: center; }
+    .nav-link { text-transform: uppercase; letter-spacing: .14em; }
 
-    /* Tighter header on mobile */
-    @media (max-width: 749px){
-      .header-grid { gap: 6px; padding-block: 8px 10px; }
-      .primary-nav { gap: 14px; }
+    /* Drawer glow to match site feel */
+    .menu-drawer__menu-item {
+      text-transform: uppercase; letter-spacing: .14em;
+      text-shadow: 0 0 8px rgba(255,255,255,.18);
+      transition: text-shadow .2s ease, transform .2s ease;
     }
+    .menu-drawer__menu-item:hover {
+      text-shadow: 0 0 12px rgba(255,255,255,.45);
+      transform: translateY(-1px);
+    }
+
+    /* Search modal fallback visibility */
+    #search-modal[aria-hidden="false"] { display: block; }
   </style>
 </head>
 <body class="template-page">
@@ -69,7 +79,7 @@
   <div id="storm-popup">ENTER THE STORM</div>
   <div class="lightning-flash"></div>
 
-  <!-- Storm audio (filenames normalized to match storm JS) -->
+  <!-- Storm audio -->
   <audio id="rain-light"   src="assets/audio/light-rain.mp3"   loop preload="auto" hidden></audio>
   <audio id="rain-med"     src="assets/audio/med-rain.mp3"     loop preload="auto" hidden></audio>
   <audio id="rain-heavy"   src="assets/audio/heavy-rain.mp3"   loop preload="auto" hidden></audio>
@@ -80,17 +90,20 @@
   <!-- Storm overlay -->
   <div id="storm-overlay"><canvas id="rain-canvas"></canvas></div>
 
-  <!-- ===== Announcement / Utility Bar (centered) ===== -->
+  <!-- ===== Announcement / Utility Bar ===== -->
   <div class="utility-bar color-scheme-4 gradient utility-bar--bottom-border">
-    <div class="page-width utility-bar__grid">
+    <div class="page-width utility-bar__grid utility-bar__grid--2-col">
+      <!-- socials hidden via CSS for now -->
+
       <div class="announcement-bar" role="region" aria-label="Site announcements">
+        <button type="button" class="slider-button slider-button--prev" aria-label="Previous" hidden>‹</button>
         <div class="announcement-track" id="AnnouncementTrack" data-autoplay="true" data-speed="5000">
           <p class="announcement-bar__message h5"><span>WELCOME TO THE STORM</span></p>
-          <p class="announcement-bar__message h5">
-            <a class="announcement-bar__link" href="shop.html"><span>NEW DROPS LIVE — SHOP ALL</span></a>
-          </p>
         </div>
+        <button type="button" class="slider-button slider-button--next" aria-label="Next" hidden>›</button>
       </div>
+
+      <div class="localization-wrapper small-hide medium-hide"></div>
     </div>
   </div>
 
@@ -101,7 +114,7 @@
       <!-- Header drawer (mobile) -->
       <header-drawer data-breakpoint="tablet">
         <details id="Details-menu-drawer-container" class="menu-drawer-container">
-          <summary class="header__icon header__icon--menu header__icon--summary link focus-inset" aria-label="Menu" id="menu-toggle">
+          <summary class="header__icon header__icon--menu header__icon--summary link focus-inset" aria-label="Menu">
             <span aria-hidden="true">
               <svg width="22" height="22" viewBox="0 0 24 24">
                 <path d="M3 6h18v2H3zM3 11h18v2H3zM3 16h18v2H3z" fill="currentColor"/>
@@ -119,7 +132,7 @@
                   <ul class="menu-drawer__menu has-submenu list-menu" role="list">
                     <li><a href="index.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">Home</a></li>
                     <li><a href="shop.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">Shop All</a></li>
-                    <li><a href="g4llery.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">G4LLERY</a></li>
+                    <li><a href="g4llery.html" class="menu-drawer__menu-item">G4LLERY</a></li>
                     <li><a href="collections.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">Collections</a></li>
                     <li><a href="4bout-us.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">4bout us</a></li>
                     <li><a href="contact.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">Contact</a></li>
@@ -133,28 +146,31 @@
         </details>
       </header-drawer>
 
-      <!-- Header grid (logo centered on its own row; primary nav centered underneath) -->
+      <!-- Header grid (desktop nav + big centered logo + desktop right) -->
       <div class="page-width header-grid">
-        <!-- Centered logo row -->
+        <nav class="nav-left desktop-only" aria-label="Primary">
+          <a href="index.html" class="nav-link">Home</a>
+          <a href="shop.html" class="nav-link">Shop All</a>
+          <a href="g4llery.html" class="nav-link">G4LLERY</a>
+          <a href="collections.html" class="nav-link">Collections</a>
+        </nav>
+
         <a class="header__logo" href="index.html" aria-label="DarkHarlemKnight">
           <img
-            src="https://darkharlemknight.com/cdn/shop/files/DHK_transparent.gif?v=1756069281&width=190"
+            src="https://darkharlemknight.com/cdn/shop/files/DHK_transparent.gif?v=1756069281&width=300"
             alt="DarkHarlemKnight"
-            width="190" height="190"
+            width="300" height="300"
             class="header__heading-logo"
             loading="eager"
           />
         </a>
 
-        <!-- Primary nav row -->
-        <nav class="primary-nav desktop-only" aria-label="Primary">
-          <a href="index.html" class="nav-link">Home</a>
-          <a href="shop.html" class="nav-link">Shop All</a>
-          <a href="g4llery.html" class="nav-link">G4LLERY</a>
-          <a href="collections.html" class="nav-link">Collections</a>
+        <nav class="nav-right desktop-only">
           <a href="4bout-us.html" class="nav-link">4bout us</a>
           <a href="contact.html" class="nav-link">Contact</a>
+
           <button id="search-open" class="nav-link button--ghost" aria-label="Open search">Search</button>
+
           <a href="cart.html" class="nav-link button--ghost" data-loud="heavy" aria-label="Cart">
             <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
               <path d="M7 4h-2l-1 2v2h2l3.6 7.59-1.35 2.41a1.994 1.994 0 0 0 1.75 2.99H19v-2H10.42c-.14 0-.25-.11-.25-.25l.03-.12L11 16h6.31a2 2 0 0 0 1.79-1.11L22 8H7.42l-.94-2Z" fill="currentColor"/>
@@ -168,7 +184,7 @@
 
   <!-- ===== MAIN ===== -->
   <main id="MainContent">
-    <!-- HERO -->
+    <!-- HERO (unchanged) -->
     <section
       id="hero-dhk"
       class="banner banner--content-align-center banner--content-align-mobile-center banner--large banner--desktop-transparent">
@@ -191,7 +207,7 @@
     </section>
   </main>
 
-  <!-- ===== Footer ===== -->
+  <!-- ===== Footer (unchanged) ===== -->
   <footer class="footer color-scheme-4 gradient section footer--static">
     <div class="footer__content-top page-width">
       <div class="footer__blocks-wrapper grid grid--1-col grid--2-col grid--4-col-tablet">
@@ -291,36 +307,22 @@
   <script src="js/cart.js"></script>
   <script src="js/search.js"></script>
 
-  <!-- Drawer fallback: ensure menu opens/closes if <details> isn’t behaving -->
+  <!-- Fallback: ensure search buttons open modal even if search.js isn't binding yet -->
   <script>
     (function(){
-      const details = document.getElementById('Details-menu-drawer-container');
-      const toggle  = document.getElementById('menu-toggle');
-      if (!details || !toggle) return;
+      const modal = document.getElementById('search-modal');
+      const input = document.getElementById('search-input');
+      const openers = [document.getElementById('search-open'), document.getElementById('search-open-mobile')].filter(Boolean);
+      const closeBtn = document.getElementById('search-close');
+      const overlay  = modal?.querySelector('[data-close-search]');
 
-      // If native <details> works, we're good; otherwise force it
-      let supported = (function(){
-        const d = document.createElement('details');
-        if (!('open' in d)) return false;
-        d.innerHTML = '<summary>t</summary>';
-        document.body.appendChild(d);
-        d.querySelector('summary').click();
-        const ok = d.open === true;
-        document.body.removeChild(d);
-        return ok;
-      })();
+      function open()  { if(!modal) return; modal.setAttribute('aria-hidden','false'); input?.focus(); }
+      function close() { if(!modal) return; modal.setAttribute('aria-hidden','true'); }
 
-      if (!supported) {
-        toggle.addEventListener('click', function(e){
-          e.preventDefault();
-          const open = details.getAttribute('data-open') === 'true';
-          details.setAttribute('data-open', String(!open));
-          document.getElementById('menu-drawer').style.display = open ? 'none':'block';
-        });
-        // start closed
-        details.setAttribute('data-open','false');
-        document.getElementById('menu-drawer').style.display = 'none';
-      }
+      openers.forEach(b => b.addEventListener('click', open));
+      closeBtn?.addEventListener('click', close);
+      overlay?.addEventListener('click', close);
+      window.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') close(); });
     })();
   </script>
 
