@@ -24,41 +24,63 @@
 
   <!-- Page-scoped cleanups -->
   <style>
-    /* Make sure storm overlay never blocks header or drawer clicks */
+    /* Storm overlay should never block header/menu clicks */
     #storm-overlay { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
     .header-wrapper { position: sticky; top: 0; z-index: 20; }
 
-    /* Announcement / utility bar — center the message, hide top socials for now */
-    .utility-bar .list-social { display: none !important; }
+    /* Announcement bar: single centered line */
+    .utility-bar .list-social { display: none !important; } /* we’ll add socials later in footer */
     .utility-bar .utility-bar__grid { grid-template-columns: 1fr; }
-    .announcement-bar { display: flex; justify-content: center; }
-    .announcement-bar .announcement-track { margin: 0 auto; text-align: center; }
+    .announcement-bar { display: grid; place-items: center; }
+    .announcement-bar .announcement-track { text-align: center; }
     .announcement-bar .announcement-bar__message { margin: 0; }
     .announcement-bar .announcement-bar__message.h5 span { letter-spacing: .12em; }
 
-    /* Header grid: logo centered above the links (Dawn-esque) */
-    .header-grid {
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
+    /* Header stack = logo row (center) + nav row beneath */
+    .header-stack {
+      display: flex;
+      flex-direction: column;
       align-items: center;
-      gap: 16px;
+      gap: 10px;
+      padding-block: 10px 12px;
     }
-    .header__logo { display: flex; justify-content: center; }
+
+    /* Bigger centered logo */
+    .logo-row .header__logo { display: flex; justify-content: center; }
     .header__heading-logo {
-      width: 210px; height: auto; image-rendering: -webkit-optimize-contrast;
+      width: 260px; height: auto;
       filter: drop-shadow(0 0 10px rgba(255,255,255,.08));
       transition: transform .2s ease;
     }
     @media (min-width: 990px) {
-      .header__heading-logo { width: 270px; }
+      .header__heading-logo { width: 300px; }
       .header__heading-logo:hover { transform: scale(1.03); }
     }
 
-    /* Desktop navs */
-    .nav-left, .nav-right { display: flex; gap: 18px; justify-content: center; }
+    /* Nav row = left group + right group on one line under logo */
+    .nav-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      width: 100%;
+    }
+    .nav-left, .nav-right {
+      display: flex;
+      gap: 18px;
+      align-items: center;
+    }
+    .nav-left { justify-content: flex-start; }
+    .nav-right { justify-content: flex-end; }
     .nav-link { text-transform: uppercase; letter-spacing: .14em; }
 
-    /* Drawer glow to match site feel */
+    /* On narrow screens, hide desktop navs (drawer handles mobile) */
+    @media (max-width: 989.98px){
+      .desktop-only { display: none !important; }
+      .nav-row { display: none; } /* drawer takes over */
+    }
+
+    /* Drawer glow */
     .menu-drawer__menu-item {
       text-transform: uppercase; letter-spacing: .14em;
       text-shadow: 0 0 8px rgba(255,255,255,.18);
@@ -93,8 +115,6 @@
   <!-- ===== Announcement / Utility Bar ===== -->
   <div class="utility-bar color-scheme-4 gradient utility-bar--bottom-border">
     <div class="page-width utility-bar__grid utility-bar__grid--2-col">
-      <!-- socials hidden via CSS for now -->
-
       <div class="announcement-bar" role="region" aria-label="Site announcements">
         <button type="button" class="slider-button slider-button--prev" aria-label="Previous" hidden>‹</button>
         <div class="announcement-track" id="AnnouncementTrack" data-autoplay="true" data-speed="5000">
@@ -102,7 +122,6 @@
         </div>
         <button type="button" class="slider-button slider-button--next" aria-label="Next" hidden>›</button>
       </div>
-
       <div class="localization-wrapper small-hide medium-hide"></div>
     </div>
   </div>
@@ -146,38 +165,40 @@
         </details>
       </header-drawer>
 
-      <!-- Header grid (desktop nav + big centered logo + desktop right) -->
-      <div class="page-width header-grid">
-        <nav class="nav-left desktop-only" aria-label="Primary">
-          <a href="index.html" class="nav-link">Home</a>
-          <a href="shop.html" class="nav-link">Shop All</a>
-          <a href="g4llery.html" class="nav-link">G4LLERY</a>
-          <a href="collections.html" class="nav-link">Collections</a>
-        </nav>
-
-        <a class="header__logo" href="index.html" aria-label="DarkHarlemKnight">
-          <img
-            src="https://darkharlemknight.com/cdn/shop/files/DHK_transparent.gif?v=1756069281&width=300"
-            alt="DarkHarlemKnight"
-            width="300" height="300"
-            class="header__heading-logo"
-            loading="eager"
-          />
-        </a>
-
-        <nav class="nav-right desktop-only">
-          <a href="4bout-us.html" class="nav-link">4bout us</a>
-          <a href="contact.html" class="nav-link">Contact</a>
-
-          <button id="search-open" class="nav-link button--ghost" aria-label="Open search">Search</button>
-
-          <a href="cart.html" class="nav-link button--ghost" data-loud="heavy" aria-label="Cart">
-            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
-              <path d="M7 4h-2l-1 2v2h2l3.6 7.59-1.35 2.41a1.994 1.994 0 0 0 1.75 2.99H19v-2H10.42c-.14 0-.25-.11-.25-.25l.03-.12L11 16h6.31a2 2 0 0 0 1.79-1.11L22 8H7.42l-.94-2Z" fill="currentColor"/>
-            </svg>
-            Cart <span class="cart-count-bubble" data-cart-count></span>
+      <!-- Header stack: LOGO row, then NAV row -->
+      <div class="page-width header-stack">
+        <div class="logo-row">
+          <a class="header__logo" href="index.html" aria-label="DarkHarlemKnight">
+            <img
+              src="https://darkharlemknight.com/cdn/shop/files/DHK_transparent.gif?v=1756069281&width=300"
+              alt="DarkHarlemKnight"
+              width="300" height="300"
+              class="header__heading-logo"
+              loading="eager"
+            />
           </a>
-        </nav>
+        </div>
+
+        <div class="nav-row desktop-only">
+          <nav class="nav-left" aria-label="Primary left">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="shop.html" class="nav-link">Shop All</a>
+            <a href="g4llery.html" class="nav-link">G4LLERY</a>
+            <a href="collections.html" class="nav-link">Collections</a>
+          </nav>
+
+          <nav class="nav-right" aria-label="Primary right">
+            <a href="4bout-us.html" class="nav-link">4bout us</a>
+            <a href="contact.html" class="nav-link">Contact</a>
+            <button id="search-open" class="nav-link button--ghost" aria-label="Open search">Search</button>
+            <a href="cart.html" class="nav-link button--ghost" data-loud="heavy" aria-label="Cart">
+              <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                <path d="M7 4h-2l-1 2v2h2l3.6 7.59-1.35 2.41a1.994 1.994 0 0 0 1.75 2.99H19v-2H10.42c-.14 0-.25-.11-.25-.25l.03-.12L11 16h6.31a2 2 0 0 0 1.79-1.11L22 8H7.42l-.94-2Z" fill="currentColor"/>
+              </svg>
+              Cart <span class="cart-count-bubble" data-cart-count></span>
+            </a>
+          </nav>
+        </div>
       </div>
     </header>
   </div>
