@@ -12,7 +12,33 @@
 
   <!-- Global styles -->
   <link rel="stylesheet" href="css/styles.css"/>
+<style>
+  /* Center the announcement row and hide extras */
+  .utility-bar .page-width { max-width: none; padding: 0; }
+  .utility-bar .utility-bar__grid {
+    display: flex; align-items: center; justify-content: center; gap: 0;
+  }
+  .utility-bar .list-social,
+  .utility-bar .localization-wrapper { display: none !important; }
 
+  /* Keep the track centered */
+  .announcement-bar { width: 100%; display: flex; justify-content: center; }
+  .announcement-track {
+    display: flex; align-items: center; justify-content: center; gap: 24px;
+  }
+  .announcement-bar__message { margin: 0; padding: 10px 0; }
+
+  /* Typography to match your home vibe */
+  .announcement-bar__message span {
+    font-family: 'Cinzel', serif;           /* same family you load */
+    font-weight: 700;
+    font-size: 13px;                        /* tweak if you want it bigger/smaller */
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: #e5e5e5;
+    text-shadow: 0 0 6px rgba(255,255,255,.12);
+  }
+</style>
   <!-- Page-scoped gallery styles -->
 <style>
   /* ===== G4LLERY full-bleed fixes ===== */
