@@ -2,6 +2,37 @@
 (() => {
   const STORAGE_KEY = 'dhk_cart_v1';
 
+  // ---------- Utils ----------
+  // Normalize any incoming value to *cents*
+  function toCents(v) {
+    let n = Number(v) || 0;
+
+    // If it's clearly dollars (e.g., 55 or 55.99), convert to cents
+    if (n < 1000) return Math.round(n * 100);
+
+    // If it's in a reasonable cents range already, keep it
+    if (n >= 1000 && n <= 999999) return Math.round(n);
+
+    // If it's absurdly large, it might be cents * 10/100/1000 — peel zeros
+    // Reduce by factors of 10 while it stays large and divisible
+    while (n > 999999 && n % 10 === 0) n = n / 10;
+
+    // Still large? Fall back once more to /100
+    if (n > 999999) n = n / 100;
+
+    return Math.round(n);
+  }
+
+  // Format cents -> $X,XXX.XX
+  function money(cents) {
+    const n = Number(cents) || 0;
+    return (n / 100).toLocaleString(undefined, { style: 'currency', currency: 'USD' });
+  }
+
+  const keyFor = (item) => item.id + (item.variant ? `__${item.variant}` : '');
+  const subtotal = (items) =>
+    (items || []).reduce((sum, it) => sum + (Number(it.price) || 0) * (Number(it.qty) || 1), 0);
+
   // ---------- Storage ----------
   function read() {
     try {
@@ -21,16 +52,12 @@
   }
   function clear() { write([]); }
 
-  // ---------- Utils ----------
-  const fmt = (n) => (n || 0).toLocaleString(undefined, { style: 'currency', currency: 'USD' });
-  const keyFor = (item) => item.id + (item.variant ? `__${item.variant}` : '');
-  const subtotal = (items) => (items || []).reduce((sum, it) => sum + (Number(it.price) || 0) * (Number(it.qty) || 1), 0);
-
   // ---------- Public API ----------
   function add(item, options = { open: true }) {
     const items = read();
     const key = keyFor(item);
     const i = items.findIndex((it) => it.key === key);
+
     if (i >= 0) {
       items[i].qty = (Number(items[i].qty) || 1) + 1;
     } else {
@@ -38,7 +65,7 @@
         key,
         id: item.id,
         title: item.title,
-        price: Number(item.price) || 0,  // cents
+        price: toCents(item.price),         // <-- always store *cents*
         variant: item.variant || null,
         thumbnail: item.thumbnail || null,
         qty: 1,
@@ -102,8 +129,9 @@
 
   // ---------- Shared row HTML ----------
   function rowHtml(it) {
-    const priceEach = fmt((Number(it.price) || 0) / 100);
-    const linePrice = fmt(((Number(it.price) || 0) * (Number(it.qty) || 1)) / 100);
+    const priceEachCents = Number(it.price) || 0;
+    const lineCents = priceEachCents * (Number(it.qty) || 1);
+
     const thumb = it.thumbnail ? `<img src="${it.thumbnail}" alt="" loading="lazy" />` : '';
     const variant = it.variant ? `<div class="ci__variant">${it.variant}</div>` : '';
     const titleHtml = it.url
@@ -116,7 +144,7 @@
         <div class="ci__info">
           ${titleHtml}
           ${variant}
-          <div class="ci__price-each">${priceEach} ea</div>
+          <div class="ci__price-each">${money(priceEachCents)} ea</div>
           <div class="ci__controls">
             <button class="ci__qty-btn" type="button" data-decr aria-label="Decrease quantity">−</button>
             <span class="ci__qty" aria-live="polite">${Number(it.qty) || 1}</span>
@@ -124,7 +152,7 @@
             <button class="ci__remove" type="button" data-remove aria-label="Remove">Remove</button>
           </div>
         </div>
-        <div class="ci__line">${linePrice}</div>
+        <div class="ci__line">${money(lineCents)}</div>
       </div>`;
   }
 
@@ -142,14 +170,14 @@
     if (items.length === 0) {
       ctx.items.innerHTML = '';
       ctx.empty.hidden = false;
-      ctx.subtotal.textContent = fmt(0);
+      ctx.subtotal.textContent = money(0);
       if (ctx.checkout) ctx.checkout.disabled = true;
       return;
     }
 
     ctx.empty.hidden = true;
     ctx.items.innerHTML = items.map(rowHtml).join('');
-    ctx.subtotal.textContent = fmt(subtotal(items) / 100);
+    ctx.subtotal.textContent = money(subtotal(items));
     if (ctx.checkout) ctx.checkout.disabled = false;
   }
 
