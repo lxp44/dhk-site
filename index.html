@@ -22,77 +22,62 @@
   <link rel="stylesheet" href="css/section-footer.css">
   <link rel="stylesheet" href="css/styles.css">
 
-  <!-- Page-scoped cleanups -->
+  <!-- Page-scoped tweaks for centered header/announcement -->
   <style>
-    /* Storm overlay should never block header/menu clicks */
-    #storm-overlay { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
-    .header-wrapper { position: sticky; top: 0; z-index: 20; }
-
-    /* Announcement bar: single centered line */
-    .utility-bar .list-social { display: none !important; } /* we’ll add socials later in footer */
-    .utility-bar .utility-bar__grid { grid-template-columns: 1fr; }
-    .announcement-bar { display: grid; place-items: center; }
-    .announcement-bar .announcement-track { text-align: center; }
-    .announcement-bar .announcement-bar__message { margin: 0; }
-    .announcement-bar .announcement-bar__message.h5 span { letter-spacing: .12em; }
-
-    /* Header stack = logo row (center) + nav row beneath */
-    .header-stack {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-      padding-block: 10px 12px;
+    /* Announcement bar: center the text, remove spare columns */
+    .utility-bar__grid { 
+      display:flex; 
+      align-items:center; 
+      justify-content:center; 
+      gap:0; 
     }
+    .utility-bar .list-social,
+    .utility-bar .localization-wrapper { display:none !important; }
+    .announcement-bar { width:100%; display:flex; justify-content:center; }
+    .announcement-track { display:flex; gap:24px; align-items:center; justify-content:center; }
+    .announcement-bar__message { margin:0; letter-spacing:.08em; }
 
-    /* Bigger centered logo */
-    .logo-row .header__logo { display: flex; justify-content: center; }
-    .header__heading-logo {
-      width: 260px; height: auto;
-      filter: drop-shadow(0 0 10px rgba(255,255,255,.08));
-      transition: transform .2s ease;
+    /* Header: stack logo ABOVE a single centered nav row */
+    .header-grid {
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:16px;
+      text-align:center;
     }
-    @media (min-width: 990px) {
-      .header__heading-logo { width: 300px; }
-      .header__heading-logo:hover { transform: scale(1.03); }
+    .header-grid .header__logo { order:1; }
+    .nav-row { 
+      order:2;
+      display:flex; 
+      align-items:center; 
+      justify-content:center; 
+      gap:22px; 
+      flex-wrap:wrap;
     }
-
-    /* Nav row = left group + right group on one line under logo */
-    .nav-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 20px;
-      width: 100%;
-    }
-    .nav-left, .nav-right {
-      display: flex;
-      gap: 18px;
-      align-items: center;
-    }
-    .nav-left { justify-content: flex-start; }
-    .nav-right { justify-content: flex-end; }
-    .nav-link { text-transform: uppercase; letter-spacing: .14em; }
-
-    /* On narrow screens, hide desktop navs (drawer handles mobile) */
-    @media (max-width: 989.98px){
-      .desktop-only { display: none !important; }
-      .nav-row { display: none; } /* drawer takes over */
+    .nav-row .nav-link,
+    .nav-row .button--ghost {
+      text-transform:uppercase;
+      letter-spacing:.18em;
+      font-size:12px;
     }
 
-    /* Drawer glow */
-    .menu-drawer__menu-item {
-      text-transform: uppercase; letter-spacing: .14em;
-      text-shadow: 0 0 8px rgba(255,255,255,.18);
-      transition: text-shadow .2s ease, transform .2s ease;
-    }
-    .menu-drawer__menu-item:hover {
-      text-shadow: 0 0 12px rgba(255,255,255,.45);
-      transform: translateY(-1px);
+    /* Bigger centered DHK logo */
+    .header__heading-logo { 
+      width: 320px; 
+      height: auto; 
+      max-width: 60vw;
+      filter: drop-shadow(0 0 10px rgba(255,255,255,.12));
     }
 
-    /* Search modal fallback visibility */
-    #search-modal[aria-hidden="false"] { display: block; }
+    /* Keep the mobile drawer button positioned left */
+    .header__icon--menu { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); }
+
+    /* Make sure the centered header has room on small screens */
+    .site-header.header { position: relative; padding-top: 56px; }
+
+    /* Small polish for Search button look */
+    #search-open { padding:6px 12px; border-radius:8px; }
   </style>
 </head>
 <body class="template-page">
@@ -114,7 +99,7 @@
 
   <!-- ===== Announcement / Utility Bar ===== -->
   <div class="utility-bar color-scheme-4 gradient utility-bar--bottom-border">
-    <div class="page-width utility-bar__grid utility-bar__grid--2-col">
+    <div class="page-width utility-bar__grid">
       <div class="announcement-bar" role="region" aria-label="Site announcements">
         <button type="button" class="slider-button slider-button--prev" aria-label="Previous" hidden>‹</button>
         <div class="announcement-track" id="AnnouncementTrack" data-autoplay="true" data-speed="5000">
@@ -122,7 +107,6 @@
         </div>
         <button type="button" class="slider-button slider-button--next" aria-label="Next" hidden>›</button>
       </div>
-      <div class="localization-wrapper small-hide medium-hide"></div>
     </div>
   </div>
 
@@ -165,47 +149,42 @@
         </details>
       </header-drawer>
 
-      <!-- Header stack: LOGO row, then NAV row -->
-      <div class="page-width header-stack">
-        <div class="logo-row">
-          <a class="header__logo" href="index.html" aria-label="DarkHarlemKnight">
-            <img
-              src="https://darkharlemknight.com/cdn/shop/files/DHK_transparent.gif?v=1756069281&width=300"
-              alt="DarkHarlemKnight"
-              width="300" height="300"
-              class="header__heading-logo"
-              loading="eager"
-            />
+      <!-- Centered logo + centered nav row -->
+      <div class="page-width header-grid">
+        <!-- Logo (centered) -->
+        <a class="header__logo" href="index.html" aria-label="DarkHarlemKnight">
+          <img
+            src="https://darkharlemknight.com/cdn/shop/files/DHK_transparent.gif?v=1756069281&width=600"
+            alt="DarkHarlemKnight"
+            width="600" height="600"
+            class="header__heading-logo"
+            loading="eager"
+          />
+        </a>
+
+        <!-- Single centered nav row -->
+        <nav class="nav-row" aria-label="Primary">
+          <a href="index.html" class="nav-link">Home</a>
+          <a href="shop.html" class="nav-link">Shop All</a>
+          <a href="g4llery.html" class="nav-link">G4LLERY</a>
+          <a href="collections.html" class="nav-link">Collections</a>
+          <a href="4bout-us.html" class="nav-link">4bout us</a>
+          <a href="contact.html" class="nav-link">Contact</a>
+          <button id="search-open" class="nav-link button--ghost" aria-label="Open search">Search</button>
+          <a href="cart.html" class="nav-link button--ghost" data-loud="heavy" aria-label="Cart">
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+              <path d="M7 4h-2l-1 2v2h2l3.6 7.59-1.35 2.41a1.994 1.994 0 0 0 1.75 2.99H19v-2H10.42c-.14 0-.25-.11-.25-.25l.03-.12L11 16h6.31a2 2 0 0 0 1.79-1.11L22 8H7.42l-.94-2Z" fill="currentColor"/>
+            </svg>
+            Cart <span class="cart-count-bubble" data-cart-count></span>
           </a>
-        </div>
-
-        <div class="nav-row desktop-only">
-          <nav class="nav-left" aria-label="Primary left">
-            <a href="index.html" class="nav-link">Home</a>
-            <a href="shop.html" class="nav-link">Shop All</a>
-            <a href="g4llery.html" class="nav-link">G4LLERY</a>
-            <a href="collections.html" class="nav-link">Collections</a>
-          </nav>
-
-          <nav class="nav-right" aria-label="Primary right">
-            <a href="4bout-us.html" class="nav-link">4bout us</a>
-            <a href="contact.html" class="nav-link">Contact</a>
-            <button id="search-open" class="nav-link button--ghost" aria-label="Open search">Search</button>
-            <a href="cart.html" class="nav-link button--ghost" data-loud="heavy" aria-label="Cart">
-              <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
-                <path d="M7 4h-2l-1 2v2h2l3.6 7.59-1.35 2.41a1.994 1.994 0 0 0 1.75 2.99H19v-2H10.42c-.14 0-.25-.11-.25-.25l.03-.12L11 16h6.31a2 2 0 0 0 1.79-1.11L22 8H7.42l-.94-2Z" fill="currentColor"/>
-              </svg>
-              Cart <span class="cart-count-bubble" data-cart-count></span>
-            </a>
-          </nav>
-        </div>
+        </nav>
       </div>
     </header>
   </div>
 
   <!-- ===== MAIN ===== -->
   <main id="MainContent">
-    <!-- HERO (unchanged) -->
+    <!-- HERO (untouched) -->
     <section
       id="hero-dhk"
       class="banner banner--content-align-center banner--content-align-mobile-center banner--large banner--desktop-transparent">
@@ -228,11 +207,10 @@
     </section>
   </main>
 
-  <!-- ===== Footer (unchanged) ===== -->
+  <!-- ===== Footer (untouched) ===== -->
   <footer class="footer color-scheme-4 gradient section footer--static">
     <div class="footer__content-top page-width">
       <div class="footer__blocks-wrapper grid grid--1-col grid--2-col grid--4-col-tablet">
-        <!-- Links -->
         <div class="footer-block footer-block--menu grid__item">
           <h2 class="footer-block__heading inline-richtext">Shop</h2>
           <ul class="footer-block__details-content list-unstyled">
@@ -244,7 +222,6 @@
           </ul>
         </div>
 
-        <!-- Brand blurb + social -->
         <div class="footer-block grid__item">
           <h2 class="footer-block__heading inline-richtext">Dark Harlem Knight</h2>
           <div class="footer-block__details-content rte">
@@ -257,7 +234,6 @@
           </ul>
         </div>
 
-        <!-- Newsletter -->
         <div class="footer-block footer-block--newsletter grid__item">
           <h2 class="footer-block__heading inline-richtext">Join the storm</h2>
           <form class="footer__newsletter newsletter-form" action="#" method="post" onsubmit="return false;">
@@ -270,7 +246,6 @@
           </form>
         </div>
 
-        <!-- Brand image -->
         <div class="footer-block footer-block-image grid__item center">
           <img src="https://darkharlemknight.com/cdn/shop/files/DHK_transparent.gif?v=1756069281&width=190"
                alt="DarkHarlemKnight" width="120" height="120" loading="lazy">
@@ -328,22 +303,35 @@
   <script src="js/cart.js"></script>
   <script src="js/search.js"></script>
 
-  <!-- Fallback: ensure search buttons open modal even if search.js isn't binding yet -->
+  <!-- Ensure drawer + search work on this page too -->
   <script>
+    // Drawer fallback init for this page
     (function(){
-      const modal = document.getElementById('search-modal');
-      const input = document.getElementById('search-input');
+      const details = document.getElementById('Details-menu-drawer-container');
+      if (!details) return;
+      const summary = details.querySelector('summary');
+      summary?.addEventListener('click', (e) => {
+        // allow native <details> toggle
+        requestAnimationFrame(() => {
+          const open = details.hasAttribute('open');
+          document.body.classList.toggle('menu-drawer-open', open);
+        });
+      });
+    })();
+
+    // Search triggers (desktop + mobile)
+    (function () {
+      const modal   = document.getElementById('search-modal');
       const openers = [document.getElementById('search-open'), document.getElementById('search-open-mobile')].filter(Boolean);
-      const closeBtn = document.getElementById('search-close');
-      const overlay  = modal?.querySelector('[data-close-search]');
+      const closer  = document.getElementById('search-close');
+      const overlay = modal?.querySelector('.search-modal__overlay');
 
-      function open()  { if(!modal) return; modal.setAttribute('aria-hidden','false'); input?.focus(); }
-      function close() { if(!modal) return; modal.setAttribute('aria-hidden','true'); }
+      function open()  { modal?.setAttribute('aria-hidden','false'); }
+      function close() { modal?.setAttribute('aria-hidden','true');  }
 
-      openers.forEach(b => b.addEventListener('click', open));
-      closeBtn?.addEventListener('click', close);
+      openers.forEach(btn => btn.addEventListener('click', open));
+      closer?.addEventListener('click', close);
       overlay?.addEventListener('click', close);
-      window.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') close(); });
     })();
   </script>
 
