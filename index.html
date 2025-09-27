@@ -38,9 +38,9 @@
       flex-direction:column;
       align-items:center;
       justify-content:center;
-      gap:10px;                 /* tighter gap so nav sits closer to logo */
+      gap:10px;
       text-align:center;
-      margin-top:8px;           /* pull header up under announcement */
+      margin-top:8px;
     }
     /* Smaller, centered DHK logo */
     .header__heading-logo {
@@ -51,18 +51,27 @@
     }
 
     /* Single centered nav row */
-    .nav-row {
-      display:flex; align-items:center; justify-content:center; gap:22px; flex-wrap:wrap;
-    }
+    .nav-row { display:flex; align-items:center; justify-content:center; gap:22px; flex-wrap:wrap; }
     .nav-row .nav-link,
     .nav-row .button--ghost { text-transform:uppercase; letter-spacing:.18em; font-size:12px; }
 
     /* Keep the mobile drawer button pinned left */
     .header__icon--menu { position:absolute; left:16px; top: calc(100% + 6px); transform: translateY(-50%); }
-    .site-header.header { position:relative; padding-top:40px; } /* gives room for the menu icon */
-    
-    /* Search button look */
+    .site-header.header { position:relative; padding-top:40px; }
     #search-open { padding:6px 12px; border-radius:8px; }
+  </style>
+
+  <!-- Search vs storm overlay fix (minimal + targeted) -->
+  <style>
+    /* Put the search modal above everything on home (storm overlay uses a very high z-index) */
+    #search-modal { z-index: 2147483646; } /* near max int */
+
+    /* While search is open, fade and disable the storm overlay so it can't cover the modal */
+    body.search-open #storm-overlay {
+      opacity: 0 !important;
+      pointer-events: none !important;
+      transition: opacity .15s ease;
+    }
   </style>
 </head>
 <body class="template-page">
@@ -104,12 +113,8 @@
         <details id="Details-menu-drawer-container" class="menu-drawer-container">
           <summary class="header__icon header__icon--menu header__icon--summary link focus-inset" aria-label="Menu">
             <span aria-hidden="true">
-              <svg width="22" height="22" viewBox="0 0 24 24">
-                <path d="M3 6h18v2H3zM3 11h18v2H3zM3 16h18v2H3z" fill="currentColor"/>
-              </svg>
-              <svg width="22" height="22" viewBox="0 0 24 24">
-                <path d="M18.3 5.7 12 12l6.3 6.3-1.4 1.4L10.6 13.4 4.3 19.7 2.9 18.3 9.2 12 2.9 5.7 4.3 4.3 10.6 10.6 16.9 4.3z" fill="currentColor"/>
-              </svg>
+              <svg width="22" height="22" viewBox="0 0 24 24"><path d="M3 6h18v2H3zM3 11h18v2H3zM3 16h18v2H3z" fill="currentColor"/></svg>
+              <svg width="22" height="22" viewBox="0 0 24 24"><path d="M18.3 5.7 12 12l6.3 6.3-1.4 1.4L10.6 13.4 4.3 19.7 2.9 18.3 9.2 12 2.9 5.7 4.3 4.3 10.6 10.6 16.9 4.3z" fill="currentColor"/></svg>
             </span>
           </summary>
 
@@ -157,9 +162,7 @@
           <a href="contact.html" class="nav-link">Contact</a>
           <button id="search-open" class="nav-link button--ghost" aria-label="Open search">Search</button>
           <a href="cart.html" class="nav-link button--ghost" data-loud="heavy" aria-label="Cart">
-            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
-              <path d="M7 4h-2l-1 2v2h2l3.6 7.59-1.35 2.41a1.994 1.994 0 0 0 1.75 2.99H19v-2H10.42c-.14 0-.25-.11-.25-.25l.03-.12L11 16h6.31a2 2 0 0 0 1.79-1.11L22 8H7.42l-.94-2Z" fill="currentColor"/>
-            </svg>
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M7 4h-2l-1 2v2h2l3.6 7.59-1.35 2.41a1.994 1.994 0 0 0 1.75 2.99H19v-2H10.42c-.14 0-.25-.11-.25-.25l.03-.12L11 16h6.31a2 2 0 0 0 1.79-1.11L22 8H7.42l-.94-2Z" fill="currentColor"/></svg>
             Cart <span class="cart-count-bubble" data-cart-count></span>
           </a>
         </nav>
@@ -266,7 +269,7 @@
   </footer>
   <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
 
-  <!-- ===== Search Modal (single source of truth; copied from shop.html) ===== -->
+  <!-- ===== Search Modal (single source of truth; same as shop.html) ===== -->
   <div id="search-modal" class="search-modal" aria-hidden="true">
     <div class="search-modal__overlay" data-close-search></div>
     <div class="search-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="search-title">
