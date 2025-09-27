@@ -24,59 +24,44 @@
 
   <!-- Page-scoped tweaks for centered header/announcement -->
   <style>
-    /* Announcement bar: center the text, remove spare columns */
-    .utility-bar__grid { 
-      display:flex; 
-      align-items:center; 
-      justify-content:center; 
-      gap:0; 
-    }
+    /* Announcement bar: center the text, hide extras */
+    .utility-bar__grid { display:flex; align-items:center; justify-content:center; gap:0; }
     .utility-bar .list-social,
     .utility-bar .localization-wrapper { display:none !important; }
     .announcement-bar { width:100%; display:flex; justify-content:center; }
     .announcement-track { display:flex; gap:24px; align-items:center; justify-content:center; }
     .announcement-bar__message { margin:0; letter-spacing:.08em; }
 
-    /* Header: stack logo ABOVE a single centered nav row */
+    /* Header: logo directly under announcement, nav under logo */
     .header-grid {
       display:flex;
       flex-direction:column;
       align-items:center;
       justify-content:center;
-      gap:16px;
+      gap:10px;                 /* tighter gap so nav sits closer to logo */
       text-align:center;
+      margin-top:8px;           /* pull header up under announcement */
     }
-    .header-grid .header__logo { order:1; }
-    .nav-row { 
-      order:2;
-      display:flex; 
-      align-items:center; 
-      justify-content:center; 
-      gap:22px; 
-      flex-wrap:wrap;
-    }
-    .nav-row .nav-link,
-    .nav-row .button--ghost {
-      text-transform:uppercase;
-      letter-spacing:.18em;
-      font-size:12px;
-    }
-
-    /* Bigger centered DHK logo */
-    .header__heading-logo { 
-      width: 320px; 
-      height: auto; 
-      max-width: 60vw;
+    /* Smaller, centered DHK logo */
+    .header__heading-logo {
+      width: 260px;             /* was larger; now a bit smaller */
+      height: auto;
+      max-width: 45vw;
       filter: drop-shadow(0 0 10px rgba(255,255,255,.12));
     }
 
-    /* Keep the mobile drawer button positioned left */
-    .header__icon--menu { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); }
+    /* Single centered nav row */
+    .nav-row {
+      display:flex; align-items:center; justify-content:center; gap:22px; flex-wrap:wrap;
+    }
+    .nav-row .nav-link,
+    .nav-row .button--ghost { text-transform:uppercase; letter-spacing:.18em; font-size:12px; }
 
-    /* Make sure the centered header has room on small screens */
-    .site-header.header { position: relative; padding-top: 56px; }
-
-    /* Small polish for Search button look */
+    /* Keep the mobile drawer button pinned left */
+    .header__icon--menu { position:absolute; left:16px; top: calc(100% + 6px); transform: translateY(-50%); }
+    .site-header.header { position:relative; padding-top:40px; } /* gives room for the menu icon */
+    
+    /* Search button look */
     #search-open { padding:6px 12px; border-radius:8px; }
   </style>
 </head>
@@ -151,7 +136,7 @@
 
       <!-- Centered logo + centered nav row -->
       <div class="page-width header-grid">
-        <!-- Logo (centered) -->
+        <!-- Logo (centered, directly under announcement) -->
         <a class="header__logo" href="index.html" aria-label="DarkHarlemKnight">
           <img
             src="https://darkharlemknight.com/cdn/shop/files/DHK_transparent.gif?v=1756069281&width=600"
@@ -296,7 +281,7 @@
     </div>
   </div>
 
-  <!-- Scripts (order matters a little) -->
+  <!-- Scripts -->
   <script src="js/storm_shopify_style.js"></script>
   <script src="js/nav.js"></script>
   <script src="js/announce.js"></script>
@@ -310,8 +295,7 @@
       const details = document.getElementById('Details-menu-drawer-container');
       if (!details) return;
       const summary = details.querySelector('summary');
-      summary?.addEventListener('click', (e) => {
-        // allow native <details> toggle
+      summary?.addEventListener('click', () => {
         requestAnimationFrame(() => {
           const open = details.hasAttribute('open');
           document.body.classList.toggle('menu-drawer-open', open);
