@@ -13,8 +13,19 @@
 
   <!-- Styles -->
   <link rel="stylesheet" href="css/styles.css"/>
+
+  <!-- Keep search above storm and fade storm while search is open -->
+  <style>
+    #search-modal{ z-index:2147483647; }
+    body.search-open #storm-overlay{ opacity:0 !important; pointer-events:none !important; transition:opacity .15s ease; }
+  </style>
 </head>
 <body class="template-page">
+
+  <!-- Storm UI (added) -->
+  <div id="storm-popup">ENTER THE STORM</div>
+  <div class="lightning-flash"></div>
+  <div id="storm-overlay"><canvas id="rain-canvas"></canvas></div>
 
   <!-- ===== Announcement / Utility Bar ===== -->
   <div class="utility-bar color-scheme-4 gradient utility-bar--bottom-border">
@@ -142,28 +153,20 @@
           </ul>
         </div>
 
-        <!-- Brand blurb + social -->
-       <ul class="footer__list-social">
-  <li>
-    <a
-      aria-label="Instagram"
-      class="social-link"
-      href="https://www.instagram.com/darkharlemknight/"
-      target="_blank"
-      rel="noopener"
-    >Instagram</a>
-  </li>
-  <li>
-    <a
-      aria-label="TikTok"
-      class="social-link"
-      href="https://www.tiktok.com/@darkharlemknight"
-      target="_blank"
-      rel="noopener"
-    >TikTok</a>
-  </li>
-</ul>
-
+        <!-- Brand blurb + social (fixed structure) -->
+        <div class="footer-block grid__item">
+          <h2 class="footer-block__heading inline-richtext">Dark Harlem Knight</h2>
+          <div class="footer-block__details-content rte">
+            <p>Forged in the storm. Streetwear with thunder in its veins.</p>
+          </div>
+          <ul class="footer__list-social">
+            <li>
+              <a aria-label="Instagram" class="social-link" href="https://www.instagram.com/darkharlemknight/" target="_blank" rel="noopener">Instagram</a>
+            </li>
+            <li>
+              <a aria-label="TikTok" class="social-link" href="https://www.tiktok.com/@darkharlemknight" target="_blank" rel="noopener">TikTok</a>
+            </li>
+          </ul>
         </div>
 
         <!-- Newsletter -->
@@ -230,7 +233,7 @@
     </div>
   </div>
   
-  <!-- Hidden storm audio so storm can run here too -->
+  <!-- Storm audio (kept) -->
   <audio id="rain-light"   src="assets/audio/light-rain.mp3"   loop preload="auto" hidden></audio>
   <audio id="rain-med"     src="assets/audio/med-rain.mp3"     loop preload="auto" hidden></audio>
   <audio id="rain-heavy"   src="assets/audio/heavy-rain.mp3"   loop preload="auto" hidden></audio>
