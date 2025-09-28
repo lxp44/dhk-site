@@ -31,6 +31,8 @@
 
   function render(root, p) {
     const hasOptions = Array.isArray(p.options) && p.options.length > 0;
+    const imgs = Array.isArray(p.images) ? p.images : [];
+    const firstImg = imgs.length ? imgs[0] : "";
 
     root.innerHTML = `
       <article class="product-detail">
@@ -38,24 +40,29 @@
 
           <!-- MAIN IMAGE WRAPPER -->
           <div class="product-main">
-            <img class="pd__img is-active"
-                 src="${p.images[0]}"
-                 alt="${p.title} image 1"
-                 loading="eager">
+            ${
+              firstImg
+                ? `<img class="pd__img is-active" src="${firstImg}" alt="${p.title} image 1" loading="eager">`
+                : `<div class="pd__img fallback" aria-hidden="true" style="height:320px;border-radius:12px;background:#111;display:grid;place-items:center;color:#777">No image</div>`
+            }
           </div>
 
           <!-- THUMBNAILS -->
-          <div class="pd__thumbs">
-            ${p.images
-              .map(
-                (src, i) => `
-                <button class="pd__thumb" data-idx="${i}" aria-label="View image ${i + 1}">
-                  <img src="${src}" alt="">
-                </button>
-              `
-              )
-              .join("")}
-          </div>
+          ${
+            imgs.length
+              ? `<div class="pd__thumbs">
+                  ${imgs
+                    .map(
+                      (src, i) => `
+                    <button class="pd__thumb" data-idx="${i}" aria-label="View image ${i + 1}">
+                      <img src="${src}" alt="">
+                    </button>
+                  `
+                    )
+                    .join("")}
+                 </div>`
+              : ""
+          }
         </div>
 
         <div class="pd__info">
@@ -95,14 +102,14 @@
       btn.addEventListener("click", () => {
         const idx = +btn.dataset.idx || 0;
         const mainImg = root.querySelector(".product-main img");
-        if (mainImg) {
-          mainImg.src = p.images[idx];
+        if (mainImg && imgs[idx]) {
+          mainImg.src = imgs[idx];
           mainImg.alt = `${p.title} image ${idx + 1}`;
         }
       });
     });
 
-    // Add to cart
+    // Add to cart (now includes priceCents + stripePriceId)
     root.querySelector("#add-to-cart")?.addEventListener("click", () => {
       const sizeSel = root.querySelector("#pd-option");
       const variant = sizeSel ? sizeSel.value : null;
@@ -111,10 +118,11 @@
         {
           id: p.id,
           title: p.title,
-          price: p.price, // cents
-          thumbnail: p.thumbnail || p.images?.[0] || "",
+          priceCents: Number(p.price) || 0,                 // cents (preferred by cart)
+          thumbnail: p.thumbnail || firstImg || "",
           variant,
           url: `product.html?id=${p.id}`,
+          stripePriceId: p.stripePriceId || null,           // <-- used by Stripe Checkout
         },
         { open: true }
       );
