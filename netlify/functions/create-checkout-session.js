@@ -1,11 +1,8 @@
 // netlify/functions/create-checkout-session.js
-import Stripe from 'stripe';
+const Stripe = require('stripe');
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, { apiVersion: '2024-06-20' });
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: '2024-06-20',
-});
-
-export const handler = async (event) => {
+exports.handler = async (event) => {
   try {
     if (event.httpMethod !== 'POST') {
       return { statusCode: 405, body: 'Method Not Allowed' };
@@ -16,7 +13,6 @@ export const handler = async (event) => {
       return { statusCode: 400, body: 'No items in cart.' };
     }
 
-    // items[] must be { price: 'price_XXX', quantity: number }
     const line_items = items.map((it) => {
       if (!it.price || !it.quantity) throw new Error('Missing price or quantity');
       return { price: it.price, quantity: it.quantity };
@@ -31,14 +27,14 @@ export const handler = async (event) => {
       line_items,
       success_url: successURL,
       cancel_url: cancelURL,
-      shipping_address_collection: { allowed_countries: ['US', 'CA'] }, // tweak if needed
-      automatic_tax: { enabled: true }, // optional
+      shipping_address_collection: { allowed_countries: ['US', 'CA'] },
+      automatic_tax: { enabled: true }
     });
 
     return {
       statusCode: 200,
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ url: session.url }),
+      body: JSON.stringify({ url: session.url })
     };
   } catch (err) {
     console.error(err);
