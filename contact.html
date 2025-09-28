@@ -150,8 +150,12 @@
     #search-modal{ z-index:2147483647; }
     body.search-open #storm-overlay{ opacity:0 !important; pointer-events:none !important; transition:opacity .15s ease; }
   </style>
-</head>
-<body class="template-page">
+
+  <style>
+  /* Ensure hidden actually hides, even if theme CSS overrides it */
+  [hidden] { display: none !important; }
+</style>
+
   
   <!-- Storm UI (added) -->
   <div class="lightning-flash"></div>
@@ -378,34 +382,39 @@
 
   <!-- Front-end handler: validates like Dawn & fakes success until you wire a backend -->
   <script>
-    (function () {
-      const form = document.getElementById('ContactForm');
-      const ok = document.getElementById('cf-success');
-      const errsWrap = document.getElementById('cf-errors');
-      const email = document.getElementById('ContactForm-email');
-      const emailErr = document.getElementById('ContactForm-email-error');
+  (function () {
+  const form = document.getElementById('ContactForm');
+  const ok = document.getElementById('cf-success');
+  const errsWrap = document.getElementById('cf-errors');
+  const email = document.getElementById('ContactForm-email');
+  const emailErr = document.getElementById('ContactForm-email-error');
 
-      function show(el, on) { if (el) el.hidden = !on; }
+  // make sure they start hidden no matter what
+  if (ok) ok.hidden = true;
+  if (errsWrap) errsWrap.hidden = true;
+  if (emailErr) emailErr.hidden = true;
 
-      form?.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const valid = email.value.trim().length > 3 && email.value.includes('@');
-        if (!valid) {
-          show(ok, false);
-          show(errsWrap, true);
-          email.setAttribute('aria-invalid', 'true');
-          email.setAttribute('aria-describedby', 'ContactForm-email-error');
-          show(emailErr, true);
-          return;
-        }
-        email.removeAttribute('aria-invalid');
-        email.removeAttribute('aria-describedby');
-        show(emailErr, false);
-        show(errsWrap, false);
-        show(ok, true);
-        form.reset();
-      });
-    })();
+  function show(el, on) { if (el) el.hidden = !on; }
+
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const valid = email.value.trim().length > 3 && email.value.includes('@');
+    if (!valid) {
+      show(ok, false);
+      show(errsWrap, true);
+      email.setAttribute('aria-invalid', 'true');
+      email.setAttribute('aria-describedby', 'ContactForm-email-error');
+      show(emailErr, true);
+      return;
+    }
+    email.removeAttribute('aria-invalid');
+    email.removeAttribute('aria-describedby');
+    show(emailErr, false);
+    show(errsWrap, false);
+    show(ok, true);
+    form.reset();
+  });
+})();
   </script>
 </body>
 </html>
