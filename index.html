@@ -22,65 +22,67 @@
   <link rel="stylesheet" href="css/section-footer.css">
   <link rel="stylesheet" href="css/styles.css">
 
- <style id="footer-size-home">
-  /* Base size for footer body text */
-  .footer { font-size: 12px; line-height: 1.5; }
+  <style id="footer-size-home">
+    /* Base size for footer body text */
+    .footer { font-size: 12px; line-height: 1.5; }
 
-  /* Make all common text inside footer inherit that size */
-  .footer p,
-  .footer a,
-  .footer li,
-  .footer small,
-  .footer span,
-  .footer .caption { 
-    font-size: inherit !important;
-  }
+    /* Make all common text inside footer inherit that size */
+    .footer p,
+    .footer a,
+    .footer li,
+    .footer small,
+    .footer span,
+    .footer .caption { 
+      font-size: inherit !important;
+    }
 
-  /* Slightly larger for column headings */
-  .footer .footer-block__heading {
-    font-size: 13px !important;
-    font-weight: 700;
-    letter-spacing: .04em;
-  }
+    /* Slightly larger for column headings */
+    .footer .footer-block__heading {
+      font-size: 13px !important;
+      font-weight: 700;
+      letter-spacing: .04em;
+    }
 
-  /* Tiny text for bottom bar if you want it tighter */
-  .footer .footer__content-bottom .copyright__content,
-  .footer .policies a {
-    font-size: 11px !important;
-  }
+    /* Tiny text for bottom bar if you want it tighter */
+    .footer .footer__content-bottom .copyright__content,
+    .footer .policies a {
+      font-size: 11px !important;
+    }
 
-  /* Optional: nudge down a bit more on phones */
-  @media (max-width: 750px){
-    .footer { font-size: 11px; }
-    .footer .footer-block__heading { font-size: 12px !important; }
-  }
- <style>
-  /* Center the announcement row and hide extras */
-  .utility-bar .page-width { max-width: none; padding: 0; }
-  .utility-bar .utility-bar__grid {
-    display: flex; align-items: center; justify-content: center; gap: 0;
-  }
-  .utility-bar .list-social,
-  .utility-bar .localization-wrapper { display: none !important; }
+    /* Optional: nudge down a bit more on phones */
+    @media (max-width: 750px){
+      .footer { font-size: 11px; }
+      .footer .footer-block__heading { font-size: 12px !important; }
+    }
+  </style> <!-- FIX: closed style tag properly -->
 
-  /* Keep the track centered */
-  .announcement-bar { width: 100%; display: flex; justify-content: center; }
-  .announcement-track {
-    display: flex; align-items: center; justify-content: center; gap: 24px;
-  }
-  .announcement-bar__message { margin: 0; padding: 10px 0; }
+  <style>
+    /* Center the announcement row and hide extras */
+    .utility-bar .page-width { max-width: none; padding: 0; }
+    .utility-bar .utility-bar__grid {
+      display: flex; align-items: center; justify-content: center; gap: 0;
+    }
+    .utility-bar .list-social,
+    .utility-bar .localization-wrapper { display: none !important; }
 
-  /* Typography to match your home vibe */
-  .announcement-bar__message span {
-    font-family: 'Cinzel', serif;           /* same family you load */
-    font-weight: 700;
-    font-size: 13px;                        /* tweak if you want it bigger/smaller */
-    letter-spacing: .18em;
-    text-transform: uppercase;
-    color: #e5e5e5;
-    text-shadow: 0 0 6px rgba(255,255,255,.12);
-  }
-</style>
+    /* Keep the track centered */
+    .announcement-bar { width: 100%; display: flex; justify-content: center; }
+    .announcement-track {
+      display: flex; align-items: center; justify-content: center; gap: 24px;
+    }
+    .announcement-bar__message { margin: 0; padding: 10px 0; }
+
+    /* Typography to match your home vibe */
+    .announcement-bar__message span {
+      font-family: 'Cinzel', serif;
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: #e5e5e5;
+      text-shadow: 0 0 6px rgba(255,255,255,.12);
+    }
+  </style>
 </head>
 <body class="template-page">
 
@@ -200,7 +202,7 @@
     </section>
   </main>
 
- <!-- ===== Footer ===== -->
+  <!-- ===== Footer ===== -->
   <footer class="footer color-scheme-4 gradient section footer--static">
     <div class="footer__content-top page-width">
       <div class="footer__blocks-wrapper grid grid--1-col grid--2-col grid--4-col-tablet">
