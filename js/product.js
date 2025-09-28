@@ -22,8 +22,9 @@
     return [];
   }
 
+  // Force fresh products.json each load
   async function loadProducts() {
-    const res = await fetch("data/products.json", { cache: "no-cache" });
+    const res = await fetch("data/products.json?ts=" + Date.now(), { cache: "no-cache" });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const raw = await res.json();
     return normalizeProducts(raw);
@@ -90,11 +91,14 @@
       </article>
     `;
 
-    // Inject rich HTML description
+    // Inject rich HTML description (keep container visible)
     const descEl = root.querySelector("#pd-desc");
     if (descEl) {
-      if (p.description) descEl.innerHTML = p.description;
-      else descEl.remove();
+      const html =
+        typeof p.description === "string" && p.description.trim().length
+          ? p.description
+          : "<p style='opacity:.8'>No description available.</p>";
+      descEl.innerHTML = html;
     }
 
     // Thumbnail -> main image switcher
@@ -118,11 +122,11 @@
         {
           id: p.id,
           title: p.title,
-          priceCents: Number(p.price) || 0,                 // cents (preferred by cart)
+          priceCents: Number(p.price) || 0, // cents
           thumbnail: p.thumbnail || firstImg || "",
           variant,
           url: `product.html?id=${p.id}`,
-          stripePriceId: p.stripePriceId || null,           // <-- used by Stripe Checkout
+          stripePriceId: p.stripePriceId || null,
         },
         { open: true }
       );
