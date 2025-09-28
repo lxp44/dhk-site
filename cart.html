@@ -15,6 +15,108 @@
 
   <!-- Styles -->
   <link rel="stylesheet" href="css/styles.css"/>
+  <style>
+  /* ===== DHK Cart Polish ===== */
+
+  /* Each cart line: image | info | line total */
+  .cart-items .cart-item{
+    display: grid;
+    grid-template-columns: 96px 1fr auto;
+    gap: 16px;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(255,255,255,.06);
+  }
+
+  /* Smaller, square thumb with soft glow */
+  .cart-items .ci__media img{
+    width: 96px; height: 96px;
+    object-fit: cover;
+    border-radius: 10px;
+    box-shadow: 0 0 14px rgba(255,255,255,.08);
+    background: #0e0e0e;
+  }
+
+  /* Bump up thumb slightly on wider screens */
+  @media (min-width: 768px){
+    .cart-items .cart-item{ grid-template-columns: 120px 1fr auto; }
+    .cart-items .ci__media img{ width: 120px; height: 120px; }
+  }
+
+  /* Title = Cinzel + uppercase + subtle glow */
+  .cart-items .ci__title{
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    font-size: 14px;
+    color: #eaeaea;
+    text-shadow: 0 0 8px rgba(255,255,255,.18);
+    line-height: 1.25;
+  }
+
+  /* Variant note below title */
+  .cart-items .ci__variant{
+    margin-top: 2px;
+    font: 500 12px/1.35 Roboto, system-ui, Arial, sans-serif;
+    color: #c9c9c9;
+    opacity: .85;
+  }
+
+  /* “$XX ea” + line total styling */
+  .cart-items .ci__price-each,
+  .cart-items .ci__line{
+    font: 600 13px/1.2 Roboto, system-ui, Arial, sans-serif;
+    color: #ddd;
+  }
+  .cart-items .ci__line{
+    align-self: center;
+    white-space: nowrap;
+    text-shadow: 0 0 8px rgba(255,255,255,.12);
+  }
+
+  /* Quantity controls */
+  .cart-items .ci__controls{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+  }
+  .cart-items .ci__qty-btn{
+    width: 28px; height: 28px;
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,.18);
+    background: #151515;
+    color: #fff;
+    line-height: 1;
+    cursor: pointer;
+  }
+  .cart-items .ci__qty{
+    min-width: 20px;
+    text-align: center;
+    font: 600 13px/1 Roboto, system-ui, Arial, sans-serif;
+  }
+  .cart-items .ci__remove{
+    background: none; border: 0; padding: 0;
+    color: #bfbfbf; text-decoration: underline;
+    font: 500 12px/1 Roboto, system-ui, Arial, sans-serif;
+    cursor: pointer;
+  }
+  .cart-items .ci__remove:hover{ color: #fff; }
+
+  /* Totals row: Cinzel + glow */
+  .cart-totals{
+    display: flex; justify-content: flex-end; gap: 12px;
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    text-shadow: 0 0 10px rgba(255,255,255,.18);
+  }
+  .cart-totals__label{ color: #d9d9d9; font-size: 12px; }
+  .cart-totals__value{ color: #fff; font-size: 14px; }
+</style>
+
   <!-- Drawer (mobile) typography + glow to match site -->
 <style>
   /* Drawer panel background + layering so it always sits above storm */
