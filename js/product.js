@@ -30,94 +30,119 @@
   }
 
   function render(root, p) {
-  const hasOptions = Array.isArray(p.options) && p.options.length > 0;
+    const hasOptions = Array.isArray(p.options) && p.options.length > 0;
 
-  root.innerHTML = `
-    <article class="product-detail">
-      <div class="pd__gallery">
+    root.innerHTML = `
+      <article class="product-detail">
+        <div class="pd__gallery">
 
-        <!-- MAIN IMAGE WRAPPER -->
-        <div class="product-main">
-          <img class="pd__img is-active"
-               src="${p.images[0]}"
-               alt="${p.title} image 1"
-               loading="eager">
+          <!-- MAIN IMAGE WRAPPER -->
+          <div class="product-main">
+            <img class="pd__img is-active"
+                 src="${p.images[0]}"
+                 alt="${p.title} image 1"
+                 loading="eager">
+          </div>
+
+          <!-- THUMBNAILS -->
+          <div class="pd__thumbs">
+            ${p.images
+              .map(
+                (src, i) => `
+                <button class="pd__thumb" data-idx="${i}" aria-label="View image ${i + 1}">
+                  <img src="${src}" alt="">
+                </button>
+              `
+              )
+              .join("")}
+          </div>
         </div>
 
-        <!-- THUMBNAILS -->
-        <div class="pd__thumbs">
-          ${p.images
-            .map(
-              (src, i) => `
-            <button class="pd__thumb" data-idx="${i}" aria-label="View image ${i + 1}">
-              <img src="${src}" alt="">
-            </button>
-          `
-            )
-            .join("")}
+        <div class="pd__info">
+          <h1 class="pd__title">${p.title}</h1>
+          <div class="pd__price">${PRICE(p.price)}</div>
+
+          ${
+            hasOptions
+              ? `
+          <label class="pd__opt-label">
+            Size
+            <select id="pd-option" class="pd__select" aria-label="Choose size">
+              ${p.options.map((o) => `<option value="${o}">${o}</option>`).join("")}
+            </select>
+          </label>`
+              : ""
+          }
+
+          <button id="add-to-cart" class="button button--secondary" data-id="${p.id}" type="button">
+            Add to cart
+          </button>
+
+          <div id="pd-desc" class="pd__desc"></div>
         </div>
-      </div>
+      </article>
+    `;
 
-      <div class="pd__info">
-        <h1 class="pd__title">${p.title}</h1>
-        <div class="pd__price">${PRICE(p.price)}</div>
+    // Inject rich HTML description
+    const descEl = root.querySelector("#pd-desc");
+    if (descEl) {
+      if (p.description) descEl.innerHTML = p.description;
+      else descEl.remove();
+    }
 
-        ${
-          hasOptions
-            ? `
-        <label class="pd__opt-label">
-          Size
-          <select id="pd-option" class="pd__select" aria-label="Choose size">
-            ${p.options.map((o) => `<option value="${o}">${o}</option>`).join("")}
-          </select>
-        </label>`
-            : ""
+    // Thumbnail -> main image switcher
+    root.querySelectorAll(".pd__thumb").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const idx = +btn.dataset.idx || 0;
+        const mainImg = root.querySelector(".product-main img");
+        if (mainImg) {
+          mainImg.src = p.images[idx];
+          mainImg.alt = `${p.title} image ${idx + 1}`;
         }
+      });
+    });
 
-        <button id="add-to-cart" class="button button--secondary" data-id="${p.id}" type="button">
-          Add to cart
-        </button>
+    // Add to cart
+    root.querySelector("#add-to-cart")?.addEventListener("click", () => {
+      const sizeSel = root.querySelector("#pd-option");
+      const variant = sizeSel ? sizeSel.value : null;
 
-        <div id="pd-desc" class="pd__desc"></div>
-      </div>
-    </article>
-  `;
-
-  // Inject rich HTML description
-  const descEl = root.querySelector("#pd-desc");
-  if (descEl) {
-    if (p.description) descEl.innerHTML = p.description;
-    else descEl.remove();
+      window.Cart?.add(
+        {
+          id: p.id,
+          title: p.title,
+          price: p.price, // cents
+          thumbnail: p.thumbnail || p.images?.[0] || "",
+          variant,
+          url: `product.html?id=${p.id}`,
+        },
+        { open: true }
+      );
+    });
   }
 
-  // Thumbnail -> main image switcher
-  root.querySelectorAll(".pd__thumb").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const idx = +btn.dataset.idx || 0;
-      const mainImg = root.querySelector(".product-main img");
-      if (mainImg) {
-        mainImg.src = p.images[idx];
-        mainImg.alt = `${p.title} image ${idx + 1}`;
+  // ---- Boot
+  document.addEventListener("DOMContentLoaded", async () => {
+    const root = document.getElementById("product-root");
+    if (!root) return;
+
+    const handle = getHandle();
+    if (!handle) {
+      root.innerHTML = '<p style="color:#ccc">Product not found.</p>';
+      return;
+    }
+
+    try {
+      const products = await loadProducts();
+      const p = products.find((x) => x.id === handle || x.handle === handle);
+      if (!p) {
+        root.innerHTML = '<p style="color:#ccc">Product not found.</p>';
+        return;
       }
-    });
+      render(root, p);
+    } catch (e) {
+      console.error("Error loading product:", e);
+      root.innerHTML = '<p style="color:#ccc">Error loading product.</p>';
+    }
   });
-
-  // Add to cart
-  root.querySelector("#add-to-cart")?.addEventListener("click", () => {
-    const sizeSel = root.querySelector("#pd-option");
-    const variant = sizeSel ? sizeSel.value : null;
-
-    window.Cart?.add(
-      {
-        id: p.id,
-        title: p.title,
-        price: p.price, // cents
-        thumbnail: p.thumbnail || p.images?.[0] || "",
-        variant,
-        url: `product.html?id=${p.id}`,
-      },
-      { open: true }
-    );
-  });
-}
-
+})();
