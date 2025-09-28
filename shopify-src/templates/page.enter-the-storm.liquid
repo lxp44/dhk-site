@@ -1,0 +1,47 @@
+<!-- Template: page.enter-the-storm.liquid -->
+{% layout none %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Enter The Storm</title>
+  <link rel="stylesheet" href="https://cdn.shopify.com/s/files/1/0628/9011/5159/files/storm-style.css?v=1746235427">
+</head>
+<body class="storm-page">
+
+  <div class="storm-container">
+    <h1 class="flicker">ENTER THE STORM</h1>
+    <button class="storm-btn" onclick="window.location.href='/collections/all'">Shop the Empire</button>
+  </div>
+
+  <audio id="lightRain" src="https://cdn.shopify.com/s/files/1/0628/9011/5159/files/light_rain.mp3?v=1746233847" autoplay loop></audio>
+  <audio id="lightThunder" src="https://cdn.shopify.com/s/files/1/0628/9011/5159/files/light_thunder.mp3?v=1746233845" autoplay loop></audio>
+
+  <script>
+    function upgradeStorm(rainURL, thunderURL) {
+      document.getElementById('lightRain').src = rainURL;
+      document.getElementById('lightRain').load();
+      document.getElementById('lightRain').play();
+
+      document.getElementById('lightThunder').src = thunderURL;
+      document.getElementById('lightThunder').load();
+      document.getElementById('lightThunder').play();
+    }
+
+    setTimeout(() => {
+      upgradeStorm(
+        'https://cdn.shopify.com/s/files/1/0628/9011/5159/files/med_rain.mp3?v=1746233847',
+        'https://cdn.shopify.com/s/files/1/0628/9011/5159/files/med_Thunder.mp3?v=1746233846'
+      );
+    }, 15000);
+
+    setTimeout(() => {
+      upgradeStorm(
+        'https://cdn.shopify.com/s/files/1/0628/9011/5159/files/heavy_rain.mp3?v=1746233849',
+        'https://cdn.shopify.com/s/files/1/0628/9011/5159/files/Heavy_Thunder_Sounds.mp3?v=1746233848'
+      );
+    }, 30000);
+  </script>
+
+</body>
+</html>
