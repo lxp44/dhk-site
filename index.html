@@ -54,7 +54,7 @@
       .footer { font-size: 11px; }
       .footer .footer-block__heading { font-size: 12px !important; }
     }
-  </style> <!-- FIX: closed style tag properly -->
+  </style>
 
   <style>
     /* Center the announcement row and hide extras */
@@ -281,7 +281,6 @@
       </div>
     </div>
   </footer>
-  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
 
   <!-- ===== Search Modal ===== -->
   <div id="search-modal" class="search-modal" aria-hidden="true">
@@ -305,6 +304,8 @@
   <script src="js/search.js"></script>
   <script src="js/shop.js"></script>
   <script src="js/storm_shopify_style.js"></script>
-  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
