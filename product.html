@@ -24,29 +24,60 @@
     padding: 12px 16px;
   }
 
-  /* Main media – images/videos rendered by product.js */
-  #product-root img,
-  #product-root video,
-  #product-root .product-media img,
-  #product-root .gallery img {
-    max-width: 520px;         /* ← scale DOWN here */
-    max-height: 520px;        /* cap the height too */
-    width: 100%;
-    height: auto;
-    object-fit: contain;
-    display: block;
-    margin: 0 auto 18px;      /* center the media */
-    border-radius: 12px;
-    background: #0f0f0f;
-    box-shadow: 0 0 20px rgba(255,255,255,.08);
-  }
+  /* Only scale the MAIN media, not every img */
+#product-root .product-main img,
+#product-root .product-main video,
+#product-root .gallery-main img,
+#product-root .gallery-main video {
+  max-width: 520px;
+  max-height: 520px;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto 18px;
+  border-radius: 12px;
+  background: #0f0f0f;
+  box-shadow: 0 0 20px rgba(255,255,255,.08);
+}
 
-  /* If product.js injects inline sizes, this keeps our cap in charge */
-  #product-root img[style], 
-  #product-root video[style] {
-    max-width: 520px !important;
-    max-height: 520px !important;
-  }
+/* If inline sizes appear on main media, keep our cap */
+#product-root .product-main img[style],
+#product-root .product-main video[style],
+#product-root .gallery-main img[style],
+#product-root .gallery-main video[style] {
+  max-width: 520px !important;
+  max-height: 520px !important;
+}
+    /* Thumbnails: catch common class names and attributes */
+#product-root .thumbnails img,
+#product-root .thumbs img,
+#product-root .gallery-thumbs img,
+#product-root [class*="thumb"] img,
+#product-root [class*="thumbnail"] img,
+#product-root img[data-thumb],
+#product-root img[aria-role="thumbnail"] {
+  width: 88px;
+  height: 88px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin: 6px;
+  opacity: .9;
+  transition: transform .2s ease, opacity .2s ease, box-shadow .2s ease;
+}
+
+#product-root .thumbnails img:hover,
+#product-root .thumbs img:hover,
+#product-root .gallery-thumbs img:hover,
+#product-root [class*="thumb"] img:hover,
+#product-root [class*="thumbnail"] img:hover,
+#product-root img[data-thumb]:hover,
+#product-root img[aria-role="thumbnail"]:hover {
+  transform: translateY(-2px);
+  opacity: 1;
+  box-shadow: 0 0 10px rgba(255,255,255,.18);
+}
+
 
   /* Optional: thumbnails under the main image (if present) */
   #product-root .thumbs img,
