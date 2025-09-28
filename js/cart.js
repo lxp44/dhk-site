@@ -3,6 +3,15 @@
   if (window.__DHK_CART_LOADED__) return;           // --- Singleton guard ---
   window.__DHK_CART_LOADED__ = true;
 
+  // ===========================
+  //  STRIPE (Optional) - Frontend publishable key
+  //  If you want to use stripe.redirectToCheckout() instead of simple URL redirect,
+  //  paste your publishable key here and load Stripe.js in your HTML:
+  //    <script src="https://js.stripe.com/v3/"></script>
+  //  Then set STRIPE_PUBLISHABLE_KEY below.
+  // ===========================
+  const STRIPE_PUBLISHABLE_KEY = ""; // <<< PASTE YOUR STRIPE PUB KEY (pk_test_...) HERE IF YOU WANT TO USE Stripe.js
+
   const STORAGE_KEY = 'dhk_cart_v1';
 
   // ---------- Price helpers ----------
@@ -59,6 +68,8 @@
       } else {
         out.priceCents = Math.round(Number(out.priceCents)) || 0;
       }
+      // ensure stripePriceId field exists (for older carts)
+      if (!('stripePriceId' in out)) out.stripePriceId = null;
       return out;
     });
   }
@@ -111,6 +122,8 @@
     if (i >= 0) {
       items[i].qty = (Number(items[i].qty) || 1) + 1;
       if (!items[i].priceCents && priceCents) items[i].priceCents = priceCents;
+      // keep existing stripePriceId if present; if missing and item has it, set it
+      if (!items[i].stripePriceId && item.stripePriceId) items[i].stripePriceId = item.stripePriceId;
     } else {
       items.push({
         key,
@@ -121,6 +134,7 @@
         thumbnail: item.thumbnail || null,
         qty: 1,
         url: item.url || null,
+        stripePriceId: item.stripePriceId || null, // <-- keep the Stripe price id
       });
     }
     write(items);
@@ -277,6 +291,72 @@
     }
   }
 
+  // ---------- Stripe Checkout ----------
+  async function startCheckout() {
+    try {
+      const items = read();
+
+      // Build Stripe line items from cart
+      const lineItems = items
+        .filter(it => it.stripePriceId) // only items that have a Stripe price
+        .map(it => ({
+          price: it.stripePriceId,
+          quantity: Math.max(1, Number(it.qty) || 1),
+        }));
+
+      if (lineItems.length === 0) {
+        alert("Your cart items are missing Stripe price IDs.");
+        return;
+      }
+
+      // Call Netlify function to create a Checkout Session
+      const res = await fetch('/.netlify/functions/create-checkout-session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          items: lineItems,
+          success_url: window.location.origin + '/success.html',
+          cancel_url:  window.location.origin + '/cart.html',
+        }),
+      });
+
+      if (!res.ok) throw new Error('Checkout request failed');
+      const data = await res.json();
+
+      // Default: simple redirect using the session URL from server (no publishable key needed)
+      if (data.url) {
+        window.location.href = data.url;
+        return;
+      }
+
+      // OPTIONAL: If you prefer using Stripe.js redirect (requires publishable key + Stripe.js script)
+      if (STRIPE_PUBLISHABLE_KEY && window.Stripe && data.id) {
+        const stripe = window.Stripe(STRIPE_PUBLISHABLE_KEY);
+        const { error } = await stripe.redirectToCheckout({ sessionId: data.id });
+        if (error) throw error;
+      } else {
+        alert('Stripe did not return a checkout URL.');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Checkout failed. Please try again.');
+    }
+  }
+
+  function bindCheckoutButtons() {
+    const drawerBtn = document.getElementById('cart-checkout');
+    const pageBtn   = document.getElementById('cartp-checkout');
+
+    if (drawerBtn && !drawerBtn.__dhkBound) {
+      drawerBtn.addEventListener('click', startCheckout);
+      drawerBtn.__dhkBound = true;
+    }
+    if (pageBtn && !pageBtn.__dhkBound) {
+      pageBtn.addEventListener('click', startCheckout);
+      pageBtn.__dhkBound = true;
+    }
+  }
+
   function bindGlobalEvents() {
     // Drawer open/close
     document.addEventListener('click', (e) => {
@@ -322,6 +402,7 @@
     render();
     updateHeaderCount();
     bindGlobalEvents();
+    bindCheckoutButtons(); // wire checkout buttons
   });
 
   // Expose API
