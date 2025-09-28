@@ -10,7 +10,7 @@
   //    <script src="https://js.stripe.com/v3/"></script>
   //  Then set STRIPE_PUBLISHABLE_KEY below.
   // ===========================
-  const STRIPE_PUBLISHABLE_KEY = ""; // <<< PASTE YOUR STRIPE PUB KEY (pk_test_...) HERE IF YOU WANT TO USE Stripe.js
+  const STRIPE_PUBLISHABLE_KEY = ""; pk_test_51SCC8r0cfsBzY9Cjze0dbxUyl8FC45Xt7Qe6RSc2Y1ny0HddN9h97pej0i9DfTE9RDPAEaVUuYR3X8eblxWDG5kq00EC46FCs3
 
   const STORAGE_KEY = 'dhk_cart_v1';
 
