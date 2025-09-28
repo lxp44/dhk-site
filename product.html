@@ -14,6 +14,85 @@
 
   <!-- Styles -->
   <link rel="stylesheet" href="css/styles.css"/>
+  <style>
+  /* ===== Product detail: scale images + tidy layout ===== */
+
+  /* Constrain the whole product area so nothing gets too wide */
+  #product-root {
+    max-width: 980px;         /* adjust: 800–1100 */
+    margin: 0 auto;
+    padding: 12px 16px;
+  }
+
+  /* Main media – images/videos rendered by product.js */
+  #product-root img,
+  #product-root video,
+  #product-root .product-media img,
+  #product-root .gallery img {
+    max-width: 520px;         /* ← scale DOWN here */
+    max-height: 520px;        /* cap the height too */
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto 18px;      /* center the media */
+    border-radius: 12px;
+    background: #0f0f0f;
+    box-shadow: 0 0 20px rgba(255,255,255,.08);
+  }
+
+  /* If product.js injects inline sizes, this keeps our cap in charge */
+  #product-root img[style], 
+  #product-root video[style] {
+    max-width: 520px !important;
+    max-height: 520px !important;
+  }
+
+  /* Optional: thumbnails under the main image (if present) */
+  #product-root .thumbs img,
+  #product-root .gallery-thumbs img {
+    width: 88px;
+    height: 88px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin: 6px;
+    opacity: .9;
+    transition: transform .2s ease, opacity .2s ease, box-shadow .2s ease;
+  }
+  #product-root .thumbs img:hover,
+  #product-root .gallery-thumbs img:hover {
+    transform: translateY(-2px);
+    opacity: 1;
+    box-shadow: 0 0 10px rgba(255,255,255,.18);
+  }
+
+  /* Theme-match title & price (in case product.js uses these classnames) */
+  #product-root .title {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .16em;
+    font-size: 20px;
+    color: #e6e6e6;
+    text-align: center;
+    margin: 6px 0 10px;
+    text-shadow: 0 0 10px rgba(255,255,255,.18);
+  }
+  #product-root .price {
+    font: 600 16px/1.3 Roboto, system-ui, Arial, sans-serif;
+    color: #ddd;
+    text-align: center;
+    margin-bottom: 18px;
+    text-shadow: 0 0 6px rgba(255,255,255,.12);
+  }
+
+  /* Buttons / actions centered */
+  #product-root .actions, 
+  #product-root .options {
+    text-align: center;
+  }
+</style>
+
 <!-- Drawer (mobile) typography + glow to match site -->
 <style>
   /* Drawer panel background + layering so it always sits above storm */
