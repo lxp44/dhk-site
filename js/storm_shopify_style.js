@@ -92,6 +92,8 @@
   function startVisuals() {
     if (!overlay || !canvas) return;
     overlay.style.display = "block";
+
+    // size canvas
     canvas.width = innerWidth;
     canvas.height = innerHeight;
     if (!ctx) ctx = canvas.getContext("2d");
@@ -105,6 +107,7 @@
     }));
 
     function draw() {
+      if (!ctx || !canvas) return;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.strokeStyle = "rgba(255,255,255,0.22)";
       ctx.lineWidth = 1;
@@ -126,8 +129,9 @@
     draw();
 
     function flashOnce() {
+      if (!overlay) return;
       overlay.style.backgroundColor = "rgba(255,255,255,0.28)";
-      setTimeout(() => (overlay.style.backgroundColor = "transparent"), 100);
+      setTimeout(() => overlay && (overlay.style.backgroundColor = "transparent"), 100);
       setTimeout(() => { if (Math.random() > 0.55) flashOnce(); }, Math.random() * 8000 + 2500);
     }
     setTimeout(flashOnce, 1800);
@@ -159,7 +163,6 @@
     await unlockAudioAll();
     setStage(inferStageFromURL());
 
-    // Remember entry (used by optional bypass)
     localStorage.setItem("stormEntered", "1");
   }
 
@@ -179,6 +182,13 @@
     });
   }
 
+  function hasBypass() {
+    // Only skip if explicitly requested
+    if (window.STORM_BYPASS === true) return true;
+    const p = new URLSearchParams(location.search);
+    return p.has("skipStorm") && p.get("skipStorm") !== "0";
+  }
+
   // ---------- INIT ----------
   document.addEventListener("DOMContentLoaded", () => {
     // Assign (no shadowing)
@@ -189,13 +199,6 @@
 
     const html = document.documentElement;
 
-    const hasBypass = () => {
-  // Only skip if explicitly requested
-  if (window.STORM_BYPASS === true) return true;
-  const p = new URLSearchParams(location.search);
-  return p.has('skipStorm') && p.get('skipStorm') !== '0';
-};
-
     // If prepaint skip class is present, remove storm nodes and bail
     if (html.classList.contains("storm-skipped")) {
       popup?.remove();
@@ -205,14 +208,13 @@
     }
 
     // Dev/param bypass
- if (hasBypass()) {
-  document.documentElement.classList.add('storm-skipped');
-  popup?.remove();
-  overlay?.remove();
-  document.querySelector('.lightning-flash')?.remove();
-  return;
-}
-
+    if (hasBypass()) {
+      html.classList.add("storm-skipped");
+      popup?.remove();
+      overlay?.remove();
+      document.querySelector(".lightning-flash")?.remove();
+      return;
+    }
 
     attachProximityBoosts();
 
@@ -220,7 +222,7 @@
     ["click", "touchstart", "keydown", "scroll"].forEach((evt) =>
       document.addEventListener(evt, onFirstGesture, { once: true, passive: true })
     );
-    popup && popup.addEventListener("click", onFirstGesture, { once: true, passive: true });
+    on(popup, "click", onFirstGesture, { once: true, passive: true });
 
     // Keep canvas sized
     window.addEventListener("resize", () => {
