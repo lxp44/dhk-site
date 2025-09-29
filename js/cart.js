@@ -9,8 +9,9 @@
   //  paste your publishable key here and load Stripe.js in your HTML:
   //    <script src="https://js.stripe.com/v3/"></script>
   //  Then set STRIPE_PUBLISHABLE_KEY below.
+  //  For server-redirect mode (recommended), leave as an empty string.
   // ===========================
-  const STRIPE_PUBLISHABLE_KEY = ""; pk_test_51SCC8r0cfsBzY9Cjze0dbxUyl8FC45Xt7Qe6RSc2Y1ny0HddN9h97pej0i9DfTE9RDPAEaVUuYR3X8eblxWDG5kq00EC46FCs3
+  const STRIPE_PUBLISHABLE_KEY = ""; // e.g. "pk_test_123..." if you choose to use Stripe.js redirect
 
   const STORAGE_KEY = 'dhk_cart_v1';
 
@@ -408,4 +409,3 @@
   // Expose API
   window.Cart = { add, remove, clear, read, open: openDrawer, close: closeDrawer };
 })();
-
