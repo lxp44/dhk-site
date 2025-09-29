@@ -317,7 +317,7 @@
         body: JSON.stringify({
           items: lineItems,
           success_url: window.location.origin + '/success.html',
-          cancel_url:  window.location.origin + '/cart.html',
+          cancel_url:  window.location.origin + '/cancel.html',
         }),
       });
 
