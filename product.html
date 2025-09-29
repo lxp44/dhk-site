@@ -14,214 +14,144 @@
 
   <!-- Styles -->
   <link rel="stylesheet" href="css/styles.css"/>
+
   <style>
-  /* ===== Product detail: scale images + tidy layout ===== */
+    /* ===== Product detail: scale images + tidy layout ===== */
+    #product-root {
+      max-width: 980px;         /* adjust: 800–1100 */
+      margin: 0 auto;
+      padding: 12px 16px;
+    }
 
-  /* Constrain the whole product area so nothing gets too wide */
-  #product-root {
-    max-width: 980px;         /* adjust: 800–1100 */
-    margin: 0 auto;
-    padding: 12px 16px;
-  }
+    /* Only scale the MAIN media, not every img */
+    #product-root .product-main img,
+    #product-root .product-main video,
+    #product-root .gallery-main img,
+    #product-root .gallery-main video {
+      max-width: 520px;
+      max-height: 520px;
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+      display: block;
+      margin: 0 auto 18px;
+      border-radius: 12px;
+      background: #0f0f0f;
+      box-shadow: 0 0 20px rgba(255,255,255,.08);
+    }
+    /* If inline sizes appear on main media, keep our cap */
+    #product-root .product-main img[style],
+    #product-root .product-main video[style],
+    #product-root .gallery-main img[style],
+    #product-root .gallery-main video[style] {
+      max-width: 520px !important;
+      max-height: 520px !important;
+    }
 
-  /* Only scale the MAIN media, not every img */
-#product-root .product-main img,
-#product-root .product-main video,
-#product-root .gallery-main img,
-#product-root .gallery-main video {
-  max-width: 520px;
-  max-height: 520px;
-  width: 100%;
-  height: auto;
-  object-fit: contain;
-  display: block;
-  margin: 0 auto 18px;
-  border-radius: 12px;
-  background: #0f0f0f;
-  box-shadow: 0 0 20px rgba(255,255,255,.08);
-}
+    /* Thumbnails */
+    #product-root .thumbnails img,
+    #product-root .thumbs img,
+    #product-root .gallery-thumbs img,
+    #product-root [class*="thumb"] img,
+    #product-root [class*="thumbnail"] img,
+    #product-root img[data-thumb],
+    #product-root img[aria-role="thumbnail"] {
+      width: 88px;
+      height: 88px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin: 6px;
+      opacity: .9;
+      transition: transform .2s ease, opacity .2s ease, box-shadow .2s ease;
+    }
+    #product-root .thumbnails img:hover,
+    #product-root .thumbs img:hover,
+    #product-root .gallery-thumbs img:hover,
+    #product-root [class*="thumb"] img:hover,
+    #product-root [class*="thumbnail"] img:hover,
+    #product-root img[data-thumb]:hover,
+    #product-root img[aria-role="thumbnail"]:hover {
+      transform: translateY(-2px);
+      opacity: 1;
+      box-shadow: 0 0 10px rgba(255,255,255,.18);
+    }
 
-/* If inline sizes appear on main media, keep our cap */
-#product-root .product-main img[style],
-#product-root .product-main video[style],
-#product-root .gallery-main img[style],
-#product-root .gallery-main video[style] {
-  max-width: 520px !important;
-  max-height: 520px !important;
-}
-    /* Thumbnails: catch common class names and attributes */
-#product-root .thumbnails img,
-#product-root .thumbs img,
-#product-root .gallery-thumbs img,
-#product-root [class*="thumb"] img,
-#product-root [class*="thumbnail"] img,
-#product-root img[data-thumb],
-#product-root img[aria-role="thumbnail"] {
-  width: 88px;
-  height: 88px;
-  object-fit: cover;
-  border-radius: 8px;
-  margin: 6px;
-  opacity: .9;
-  transition: transform .2s ease, opacity .2s ease, box-shadow .2s ease;
-}
+    /* Title / price */
+    #product-root .title {
+      font-family: 'Cinzel', serif;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .16em;
+      font-size: 20px;
+      color: #e6e6e6;
+      text-align: center;
+      margin: 6px 0 10px;
+      text-shadow: 0 0 10px rgba(255,255,255,.18);
+    }
+    #product-root .price {
+      font: 600 16px/1.3 Roboto, system-ui, Arial, sans-serif;
+      color: #ddd;
+      text-align: center;
+      margin-bottom: 18px;
+      text-shadow: 0 0 6px rgba(255,255,255,.12);
+    }
 
-#product-root .thumbnails img:hover,
-#product-root .thumbs img:hover,
-#product-root .gallery-thumbs img:hover,
-#product-root [class*="thumb"] img:hover,
-#product-root [class*="thumbnail"] img:hover,
-#product-root img[data-thumb]:hover,
-#product-root img[aria-role="thumbnail"]:hover {
-  transform: translateY(-2px);
-  opacity: 1;
-  box-shadow: 0 0 10px rgba(255,255,255,.18);
-}
+    /* Buttons / actions centered */
+    #product-root .actions, 
+    #product-root .options {
+      text-align: center;
+    }
 
+    /* Drawer (mobile) typography + glow to match site */
+    #menu-drawer {
+      background: rgba(10, 10, 12, 0.88);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      border-right: 1px solid rgba(255,255,255,.08);
+      box-shadow: 0 10px 40px rgba(0,0,0,.55);
+      z-index: 2147483646; /* sit above storm overlay */
+    }
+    .menu-drawer__menu-item,
+    .menu-drawer__menu .list-menu__item.link {
+      font-family: 'Cinzel', serif;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .18em;
+      font-size: 13px;
+      color: #e6e6e6;
+      text-shadow: 0 0 6px rgba(255,255,255,.12);
+    }
+    .menu-drawer__menu-item:hover,
+    .menu-drawer__menu .list-menu__item.link:hover,
+    .menu-drawer__menu-item:focus-visible {
+      color: #ffffff;
+      text-shadow: 0 0 10px rgba(255,255,255,.28);
+    }
+    .menu-drawer__menu .list-menu__item + .list-menu__item {
+      border-top: 1px solid rgba(255,255,255,.06);
+    }
+    .header__icon--menu svg { filter: drop-shadow(0 0 6px rgba(255,255,255,.28)); }
+    details[open] ~ .menu-drawer,
+    details[open] #menu-drawer { z-index: 2147483646; }
+    details[open] ~ #storm-overlay,
+    details[open] #storm-overlay {
+      opacity: 0 !important; pointer-events: none !important; transition: opacity .15s ease;
+    }
 
-  /* Optional: thumbnails under the main image (if present) */
-  #product-root .thumbs img,
-  #product-root .gallery-thumbs img {
-    width: 88px;
-    height: 88px;
-    object-fit: cover;
-    border-radius: 8px;
-    margin: 6px;
-    opacity: .9;
-    transition: transform .2s ease, opacity .2s ease, box-shadow .2s ease;
-  }
-  #product-root .thumbs img:hover,
-  #product-root .gallery-thumbs img:hover {
-    transform: translateY(-2px);
-    opacity: 1;
-    box-shadow: 0 0 10px rgba(255,255,255,.18);
-  }
-
-  /* Theme-match title & price (in case product.js uses these classnames) */
-  #product-root .title {
-    font-family: 'Cinzel', serif;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: .16em;
-    font-size: 20px;
-    color: #e6e6e6;
-    text-align: center;
-    margin: 6px 0 10px;
-    text-shadow: 0 0 10px rgba(255,255,255,.18);
-  }
-  #product-root .price {
-    font: 600 16px/1.3 Roboto, system-ui, Arial, sans-serif;
-    color: #ddd;
-    text-align: center;
-    margin-bottom: 18px;
-    text-shadow: 0 0 6px rgba(255,255,255,.12);
-  }
-
-  /* Buttons / actions centered */
-  #product-root .actions, 
-  #product-root .options {
-    text-align: center;
-  }
-</style>
-
-<!-- Drawer (mobile) typography + glow to match site -->
-<style>
-  /* Drawer panel background + layering so it always sits above storm */
-  #menu-drawer {
-    background: rgba(10, 10, 12, 0.88);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    border-right: 1px solid rgba(255,255,255,.08);
-    box-shadow: 0 10px 40px rgba(0,0,0,.55);
-    z-index: 2147483646; /* sit above storm overlay */
-  }
-
-  /* Menu list items: Cinzel, uppercase, tight tracking, subtle glow */
-  .menu-drawer__menu-item,
-  .menu-drawer__menu .list-menu__item.link {
-    font-family: 'Cinzel', serif;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: .18em;
-    font-size: 13px;              /* adjust: 12px–14px to taste */
-    color: #e6e6e6;
-    text-shadow: 0 0 6px rgba(255,255,255,.12);
-  }
-
-  /* Hover/active polish */
-  .menu-drawer__menu-item:hover,
-  .menu-drawer__menu .list-menu__item.link:hover,
-  .menu-drawer__menu-item:focus-visible {
-    color: #ffffff;
-    text-shadow: 0 0 10px rgba(255,255,255,.28);
-  }
-
-  /* Make dividers/submenus feel consistent if present */
-  .menu-drawer__menu .list-menu__item + .list-menu__item {
-    border-top: 1px solid rgba(255,255,255,.06);
-  }
-
-  /* Hamburger icon: match glow */
-  .header__icon--menu svg {
-    filter: drop-shadow(0 0 6px rgba(255,255,255,.28));
-  }
-
-  /* When the drawer is open, fade storm overlay so text remains crisp */
-  details[open] ~ .menu-drawer,
-  details[open] #menu-drawer {
-    z-index: 2147483646;
-  }
-  details[open] ~ #storm-overlay,
-  details[open] #storm-overlay {
-    opacity: 0 !important;
-    pointer-events: none !important;
-    transition: opacity .15s ease;
-  }
-</style>
-  
-</head>
-<body class="template-page">
-  <style>
-  /* Center the announcement row and hide extras */
-  .utility-bar .page-width { max-width: none; padding: 0; }
-  .utility-bar .utility-bar__grid {
-    display: flex; align-items: center; justify-content: center; gap: 0;
-  }
-  .utility-bar .list-social,
-  .utility-bar .localization-wrapper { display: none !important; }
-
-  /* Keep the track centered */
-  .announcement-bar { width: 100%; display: flex; justify-content: center; }
-  .announcement-track {
-    display: flex; align-items: center; justify-content: center; gap: 24px;
-  }
-  .announcement-bar__message { margin: 0; padding: 10px 0; }
-
-  /* Typography to match your home vibe */
-  .announcement-bar__message span {
-    font-family: 'Cinzel', serif;           /* same family you load */
-    font-weight: 700;
-    font-size: 13px;                        /* tweak if you want it bigger/smaller */
-    letter-spacing: .18em;
-    text-transform: uppercase;
-    color: #e5e5e5;
-    text-shadow: 0 0 6px rgba(255,255,255,.12);
-  }
-</style>
-   
-  <!-- Keep search above storm and fade storm while search is open -->
-  <style>
+    /* Keep search above storm and fade storm while search is open */
     #search-modal{ z-index:2147483647; }
-    body.search-open #storm-overlay{ opacity:0 !important; pointer-events:none !important; transition:opacity .15s ease; }
+    body.search-open #storm-overlay{
+      opacity:0 !important; pointer-events:none !important; transition:opacity .15s ease;
+    }
   </style>
 </head>
+
 <body class="template-page">
-  
-  <!-- Storm UI (added) -->
+  <!-- Storm UI -->
   <div class="lightning-flash"></div>
   <div id="storm-overlay"><canvas id="rain-canvas"></canvas></div>
 
-   <!-- ===== Announcement / Utility Bar ===== -->
+  <!-- ===== Announcement / Utility Bar ===== -->
   <div class="utility-bar color-scheme-4 gradient utility-bar--bottom-border">
     <div class="page-width utility-bar__grid">
       <div class="announcement-bar" role="region" aria-label="Site announcements">
@@ -233,7 +163,7 @@
       </div>
     </div>
   </div>
-  
+
   <!-- ===== Sticky Header Wrapper ===== -->
   <div class="section-header header-wrapper color-scheme-4 gradient" data-sticky-type="on-scroll-up">
     <header class="site-header header header--middle-left header--mobile-center">
@@ -263,7 +193,14 @@
                     <li><a href="collections.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">Collections</a></li>
                     <li><a href="4bout-us.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">4bout us</a></li>
                     <li><a href="contact.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">Contact</a></li>
-                    <li><a href="cart.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset" data-loud="heavy">Cart</a></li>
+                    <li>
+                      <a href="cart.html"
+                         class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
+                         data-loud="heavy"
+                         data-cart-open>
+                        Cart <span class="cart-count-bubble" data-cart-count></span>
+                      </a>
+                    </li>
                     <li>
                       <button id="search-open-mobile" type="button" class="menu-drawer__menu-item link link--text list-menu__item focus-inset">Search</button>
                     </li>
@@ -298,11 +235,17 @@
           <a href="4bout-us.html" class="nav-link">4bout us</a>
           <a href="contact.html" class="nav-link">Contact</a>
           <button id="search-open" class="nav-link button--ghost" aria-label="Open search">Search</button>
-          <a href="cart.html" class="nav-link button--ghost" data-loud="heavy" aria-label="Cart">
+
+          <!-- Desktop Cart link opens drawer -->
+          <a href="cart.html"
+             class="nav-link button--ghost"
+             data-loud="heavy"
+             aria-label="Cart"
+             data-cart-open>
             <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
               <path d="M7 4h-2l-1 2v2h2l3.6 7.59-1.35 2.41a1.994 1.994 0 0 0 1.75 2.99H19v-2H10.42c-.14 0-.25-.11-.25-.25l.03-.12L11 16h6.31a2 2 0 0 0 1.79-1.11L22 8H7.42l-.94-2Z" fill="currentColor"/>
             </svg>
-            Cart
+            Cart <span class="cart-count-bubble" data-cart-count></span>
           </a>
         </nav>
       </div>
@@ -339,9 +282,8 @@
             <p>Forged in the storm. Streetwear with thunder in its veins.</p>
           </div>
           <ul class="footer__list-social">
-            <li><a aria-label="Instagram" href="#" class="social-link">Instagram</a></li>
-            <li><a aria-label="TikTok" href="#" class="social-link">TikTok</a></li>
-            <li><a aria-label="YouTube" href="#" class="social-link">YouTube</a></li>
+            <li><a aria-label="Instagram" href="https://www.instagram.com/darkharlemknight/" target="_blank" rel="noopener" class="social-link">Instagram</a></li>
+            <li><a aria-label="TikTok" href="https://www.tiktok.com/@darkharlemknight" target="_blank" rel="noopener" class="social-link">TikTok</a></li>
           </ul>
         </div>
 
@@ -426,28 +368,29 @@
   <script src="js/product.js"></script>
   <script src="js/storm_shopify_style.js"></script>
   <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
-<!-- Cart Drawer -->
-<div id="cart-drawer" class="cart-drawer" aria-hidden="true">
-  <div class="cart-drawer__overlay" data-cart-close></div>
-  <aside class="cart-drawer__panel" tabindex="-1">
-    <div class="cart-header">
-      <h2>Your Cart</h2>
-      <button type="button" title="Close" data-cart-close>✕</button>
-    </div>
 
-    <div class="cart-list" id="cart-items"></div>
-    <div id="cart-empty" class="cart-empty" hidden style="padding:16px;color:#9a9a9a">
-      Your cart is empty.
-    </div>
-
-    <div class="cart-footer">
-      <div class="cart-row">
-        <div class="label">Subtotal</div>
-        <div class="value" id="cart-subtotal">$0.00</div>
+  <!-- Cart Drawer -->
+  <div id="cart-drawer" class="cart-drawer" aria-hidden="true">
+    <div class="cart-drawer__overlay" data-cart-close></div>
+    <aside class="cart-drawer__panel" tabindex="-1">
+      <div class="cart-header">
+        <h2>Your Cart</h2>
+        <button type="button" title="Close" data-cart-close>✕</button>
       </div>
-      <button id="cart-checkout" type="button" disabled>Checkout</button>
-    </div>
-  </aside>
-</div>
+
+      <div class="cart-list" id="cart-items"></div>
+      <div id="cart-empty" class="cart-empty" hidden style="padding:16px;color:#9a9a9a">
+        Your cart is empty.
+      </div>
+
+      <div class="cart-footer">
+        <div class="cart-row">
+          <div class="label">Subtotal</div>
+          <div class="value" id="cart-subtotal">$0.00</div>
+        </div>
+        <button id="cart-checkout" type="button" disabled>Checkout</button>
+      </div>
+    </aside>
+  </div>
 </body>
 </html>
