@@ -15,94 +15,92 @@
 
   <!-- Global styles -->
   <link rel="stylesheet" href="css/styles.css"/>
+
   <!-- Drawer (mobile) typography + glow to match site -->
-<style>
-  /* Drawer panel background + layering so it always sits above storm */
-  #menu-drawer {
-    background: rgba(10, 10, 12, 0.88);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    border-right: 1px solid rgba(255,255,255,.08);
-    box-shadow: 0 10px 40px rgba(0,0,0,.55);
-    z-index: 2147483646; /* sit above storm overlay */
-  }
+  <style>
+    /* Drawer panel background + layering so it always sits above storm */
+    #menu-drawer {
+      background: rgba(10, 10, 12, 0.88);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      border-right: 1px solid rgba(255,255,255,.08);
+      box-shadow: 0 10px 40px rgba(0,0,0,.55);
+      z-index: 2147483646; /* sit above storm overlay */
+    }
 
-  /* Menu list items: Cinzel, uppercase, tight tracking, subtle glow */
-  .menu-drawer__menu-item,
-  .menu-drawer__menu .list-menu__item.link {
-    font-family: 'Cinzel', serif;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: .18em;
-    font-size: 13px;              /* adjust: 12px–14px to taste */
-    color: #e6e6e6;
-    text-shadow: 0 0 6px rgba(255,255,255,.12);
-  }
+    /* Menu list items: Cinzel, uppercase, tight tracking, subtle glow */
+    .menu-drawer__menu-item,
+    .menu-drawer__menu .list-menu__item.link {
+      font-family: 'Cinzel', serif;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .18em;
+      font-size: 13px;
+      color: #e6e6e6;
+      text-shadow: 0 0 6px rgba(255,255,255,.12);
+    }
 
-  /* Hover/active polish */
-  .menu-drawer__menu-item:hover,
-  .menu-drawer__menu .list-menu__item.link:hover,
-  .menu-drawer__menu-item:focus-visible {
-    color: #ffffff;
-    text-shadow: 0 0 10px rgba(255,255,255,.28);
-  }
+    /* Hover/active polish */
+    .menu-drawer__menu-item:hover,
+    .menu-drawer__menu .list-menu__item.link:hover,
+    .menu-drawer__menu-item:focus-visible {
+      color: #ffffff;
+      text-shadow: 0 0 10px rgba(255,255,255,.28);
+    }
 
-  /* Make dividers/submenus feel consistent if present */
-  .menu-drawer__menu .list-menu__item + .list-menu__item {
-    border-top: 1px solid rgba(255,255,255,.06);
-  }
+    /* Make dividers/submenus feel consistent if present */
+    .menu-drawer__menu .list-menu__item + .list-menu__item {
+      border-top: 1px solid rgba(255,255,255,.06);
+    }
 
-  /* Hamburger icon: match glow */
-  .header__icon--menu svg {
-    filter: drop-shadow(0 0 6px rgba(255,255,255,.28));
-  }
+    /* Hamburger icon: match glow */
+    .header__icon--menu svg { filter: drop-shadow(0 0 6px rgba(255,255,255,.28)); }
 
-  /* When the drawer is open, fade storm overlay so text remains crisp */
-  details[open] ~ .menu-drawer,
-  details[open] #menu-drawer {
-    z-index: 2147483646;
-  }
-  details[open] ~ #storm-overlay,
-  details[open] #storm-overlay {
-    opacity: 0 !important;
-    pointer-events: none !important;
-    transition: opacity .15s ease;
-  }
-</style>
+    /* When the drawer is open, fade storm overlay so text remains crisp */
+    details[open] ~ .menu-drawer,
+    details[open] #menu-drawer { z-index: 2147483646; }
+    details[open] ~ #storm-overlay,
+    details[open] #storm-overlay {
+      opacity: 0 !important;
+      pointer-events: none !important;
+      transition: opacity .15s ease;
+    }
+  </style>
 
   <style>
-  /* Center the announcement row and hide extras */
-  .utility-bar .page-width { max-width: none; padding: 0; }
-  .utility-bar .utility-bar__grid {
-    display: flex; align-items: center; justify-content: center; gap: 0;
-  }
-  .utility-bar .list-social,
-  .utility-bar .localization-wrapper { display: none !important; }
+    /* Center the announcement row and hide extras */
+    .utility-bar .page-width { max-width: none; padding: 0; }
+    .utility-bar .utility-bar__grid {
+      display: flex; align-items: center; justify-content: center; gap: 0;
+    }
+    .utility-bar .list-social,
+    .utility-bar .localization-wrapper { display: none !important; }
 
-  /* Keep the track centered */
-  .announcement-bar { width: 100%; display: flex; justify-content: center; }
-  .announcement-track {
-    display: flex; align-items: center; justify-content: center; gap: 24px;
-  }
-  .announcement-bar__message { margin: 0; padding: 10px 0; }
+    /* Keep the track centered */
+    .announcement-bar { width: 100%; display: flex; justify-content: center; }
+    .announcement-track {
+      display: flex; align-items: center; justify-content: center; gap: 24px;
+    }
+    .announcement-bar__message { margin: 0; padding: 10px 0; }
 
-  /* Typography to match your home vibe */
-  .announcement-bar__message span {
-    font-family: 'Cinzel', serif;           /* same family you load */
-    font-weight: 700;
-    font-size: 13px;                        /* tweak if you want it bigger/smaller */
-    letter-spacing: .18em;
-    text-transform: uppercase;
-    color: #e5e5e5;
-    text-shadow: 0 0 6px rgba(255,255,255,.12);
-  }
-</style>
+    /* Typography to match your home vibe */
+    .announcement-bar__message span {
+      font-family: 'Cinzel', serif;
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: #e5e5e5;
+      text-shadow: 0 0 6px rgba(255,255,255,.12);
+    }
+  </style>
+
   <!-- Contact section styles to mimic Shopify contact-form.liquid -->
   <style>
     /* Color scheme wrapper like: <div class="color-scheme-4 gradient"> */
     .contact-wrap.color-scheme-4.gradient { background: var(--gradient, transparent); }
 
-    /* section-{{id}}-padding equivalent, using 36px desktop / 27px mobile by default */
+    /* section padding */
     .section-contact-padding { padding-top: 27px; padding-bottom: 27px; }
     @media (min-width: 750px) {
       .section-contact-padding { padding-top: 36px; padding-bottom: 36px; }
@@ -141,27 +139,24 @@
     .alert { margin-top: 14px; padding: 12px 14px; border-radius: 8px; }
     .alert--ok { background: rgba(0,180,80,.12); color: #c8f7da; border: 1px solid rgba(0,180,80,.3); }
     .alert--err { background: rgba(255,40,0,.12); color: #ffd2c8; border: 1px solid rgba(255,40,0,.3); }
+
+    /* Ensure hidden actually hides, even if theme CSS overrides it */
+    [hidden] { display: none !important; }
   </style>
 </head>
 <body class="template-page">
-  
-   <!-- Keep search above storm and fade storm while search is open -->
+
+  <!-- Keep search above storm and fade storm while search is open -->
   <style>
     #search-modal{ z-index:2147483647; }
     body.search-open #storm-overlay{ opacity:0 !important; pointer-events:none !important; transition:opacity .15s ease; }
   </style>
 
-  <style>
-  /* Ensure hidden actually hides, even if theme CSS overrides it */
-  [hidden] { display: none !important; }
-</style>
-
-  
   <!-- Storm UI (added) -->
   <div class="lightning-flash"></div>
   <div id="storm-overlay"><canvas id="rain-canvas"></canvas></div>
 
- <!-- ===== Announcement / Utility Bar ===== -->
+  <!-- ===== Announcement / Utility Bar ===== -->
   <div class="utility-bar color-scheme-4 gradient utility-bar--bottom-border">
     <div class="page-width utility-bar__grid">
       <div class="announcement-bar" role="region" aria-label="Site announcements">
@@ -198,8 +193,16 @@
                     <li><a href="g4llery.html" class="menu-drawer__menu-item">G4LLERY</a></li>
                     <li><a href="collections.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">Collections</a></li>
                     <li><a href="4bout-us.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">4bout us</a></li>
-                    <li><a href="contact.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">Contact</a></li>
-                    <li><a href="cart.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset" data-loud="heavy">Cart<span class="cart-count-bubble" data-cart-count></span></a></li>
+                    <li><a href="contact.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset is-active">Contact</a></li>
+
+                    <!-- MOBILE: open cart drawer -->
+                    <li>
+                      <a href="#" class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
+                         data-loud="heavy" data-cart-open>
+                        Cart <span class="cart-count-bubble" data-cart-count></span>
+                      </a>
+                    </li>
+
                     <li><button id="search-open-mobile" type="button" class="menu-drawer__menu-item link link--text list-menu__item focus-inset">Search</button></li>
                   </ul>
                 </nav>
@@ -232,7 +235,9 @@
           <a href="4bout-us.html" class="nav-link">4bout us</a>
           <a href="contact.html" class="nav-link is-active">Contact</a>
           <button id="search-open" class="nav-link button--ghost" aria-label="Open search">Search</button>
-          <a href="cart.html" class="nav-link button--ghost" data-loud="heavy" aria-label="Cart">
+
+          <!-- DESKTOP: open cart drawer -->
+          <a href="#" class="nav-link button--ghost" data-loud="heavy" aria-label="Cart" data-cart-open>
             <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
               <path d="M7 4h-2l-1 2v2h2l3.6 7.59-1.35 2.41a1.994 1.994 0 0 0 1.75 2.99H19v-2H10.42c-.14 0-.25-.11-.25-.25l.03-.12L11 16h6.31a2 2 0 0 0 1.79-1.11L22 8H7.42l-.94-2Z" fill="currentColor"/>
             </svg>
@@ -256,13 +261,11 @@
         <form id="ContactForm" class="isolate" novalidate>
           <!-- Success & error blocks like Dawn -->
           <div id="cf-success" class="form-status form-status-list form__message alert alert--ok" hidden>
-            <!-- svg icon placeholder -->
             <span>✓</span> Thanks — your message was received.
           </div>
 
           <div id="cf-errors" class="form__message" hidden>
             <h2 class="form-status caption-large text-body" role="alert" tabindex="-1">
-              <!-- svg icon placeholder -->
               <span>⚠</span> There was an error sending your message.
             </h2>
             <ul class="form-status-list caption-large" role="list">
@@ -334,7 +337,7 @@
     </div>
   </main>
 
- <!-- ===== Footer (same as other pages) ===== -->
+  <!-- ===== Footer (same as other pages) ===== -->
   <footer class="footer color-scheme-4 gradient section footer--static">
     <div class="footer__content-bottom-wrapper page-width footer__content-bottom-wrapper--center">
       <div class="footer__copyright caption">
@@ -348,8 +351,8 @@
     </div>
   </footer>
   <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
-  
- <!-- ===== Search Modal ===== -->
+
+  <!-- ===== Search Modal ===== -->
   <div id="search-modal" class="search-modal" aria-hidden="true">
     <div class="search-modal__overlay" data-close-search></div>
     <div class="search-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="search-title">
@@ -363,7 +366,7 @@
       <div id="search-results" class="search-modal__results" aria-live="polite"></div>
     </div>
   </div>
-  
+
   <!-- Hidden storm audio -->
   <audio id="rain-light"   src="assets/audio/light-rain.mp3"   loop preload="auto" hidden></audio>
   <audio id="rain-med"     src="assets/audio/med-rain.mp3"     loop preload="auto" hidden></audio>
@@ -378,66 +381,66 @@
   <script src="js/cart.js"></script>
   <script src="js/search.js"></script>
   <script src="js/storm_shopify_style.js"></script>
-  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
 
   <!-- Front-end handler: validates like Dawn & fakes success until you wire a backend -->
   <script>
-  (function () {
-  const form = document.getElementById('ContactForm');
-  const ok = document.getElementById('cf-success');
-  const errsWrap = document.getElementById('cf-errors');
-  const email = document.getElementById('ContactForm-email');
-  const emailErr = document.getElementById('ContactForm-email-error');
+    (function () {
+      const form = document.getElementById('ContactForm');
+      const ok = document.getElementById('cf-success');
+      const errsWrap = document.getElementById('cf-errors');
+      const email = document.getElementById('ContactForm-email');
+      const emailErr = document.getElementById('ContactForm-email-error');
 
-  // make sure they start hidden no matter what
-  if (ok) ok.hidden = true;
-  if (errsWrap) errsWrap.hidden = true;
-  if (emailErr) emailErr.hidden = true;
+      // make sure they start hidden no matter what
+      if (ok) ok.hidden = true;
+      if (errsWrap) errsWrap.hidden = true;
+      if (emailErr) emailErr.hidden = true;
 
-  function show(el, on) { if (el) el.hidden = !on; }
+      function show(el, on) { if (el) el.hidden = !on; }
 
-  form?.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const valid = email.value.trim().length > 3 && email.value.includes('@');
-    if (!valid) {
-      show(ok, false);
-      show(errsWrap, true);
-      email.setAttribute('aria-invalid', 'true');
-      email.setAttribute('aria-describedby', 'ContactForm-email-error');
-      show(emailErr, true);
-      return;
-    }
-    email.removeAttribute('aria-invalid');
-    email.removeAttribute('aria-describedby');
-    show(emailErr, false);
-    show(errsWrap, false);
-    show(ok, true);
-    form.reset();
-  });
-})();
+      form?.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const valid = email.value.trim().length > 3 && email.value.includes('@');
+        if (!valid) {
+          show(ok, false);
+          show(errsWrap, true);
+          email.setAttribute('aria-invalid', 'true');
+          email.setAttribute('aria-describedby', 'ContactForm-email-error');
+          show(emailErr, true);
+          return;
+        }
+        email.removeAttribute('aria-invalid');
+        email.removeAttribute('aria-describedby');
+        show(emailErr, false);
+        show(errsWrap, false);
+        show(ok, true);
+        form.reset();
+      });
+    })();
   </script>
+
   <!-- Cart Drawer -->
-<div id="cart-drawer" class="cart-drawer" aria-hidden="true">
-  <div class="cart-drawer__overlay" data-cart-close></div>
-  <aside class="cart-drawer__panel" tabindex="-1">
-    <div class="cart-header">
-      <h2>Your Cart</h2>
-      <button type="button" title="Close" data-cart-close>✕</button>
-    </div>
-
-    <div class="cart-list" id="cart-items"></div>
-    <div id="cart-empty" class="cart-empty" hidden style="padding:16px;color:#9a9a9a">
-      Your cart is empty.
-    </div>
-
-    <div class="cart-footer">
-      <div class="cart-row">
-        <div class="label">Subtotal</div>
-        <div class="value" id="cart-subtotal">$0.00</div>
+  <div id="cart-drawer" class="cart-drawer" aria-hidden="true">
+    <div class="cart-drawer__overlay" data-cart-close></div>
+    <aside class="cart-drawer__panel" tabindex="-1">
+      <div class="cart-header">
+        <h2>Your Cart</h2>
+        <button type="button" title="Close" data-cart-close>✕</button>
       </div>
-      <button id="cart-checkout" type="button" disabled>Checkout</button>
-    </div>
-  </aside>
-</div>
+
+      <div class="cart-list" id="cart-items"></div>
+      <div id="cart-empty" class="cart-empty" hidden style="padding:16px;color:#9a9a9a">
+        Your cart is empty.
+      </div>
+
+      <div class="cart-footer">
+        <div class="cart-row">
+          <div class="label">Subtotal</div>
+          <div class="value" id="cart-subtotal">$0.00</div>
+        </div>
+        <button id="cart-checkout" type="button" disabled>Checkout</button>
+      </div>
+    </aside>
+  </div>
 </body>
 </html>
