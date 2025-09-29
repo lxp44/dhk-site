@@ -1,51 +1,155 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <title>Order canceled</title>
-  <link rel="stylesheet" href="css/styles.css" />
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>DHK — Order Canceled</title>
+
+  <!-- Favicon -->
+  <link rel="icon" href="https://darkharlemknight.com/cdn/shop/files/DHK_transparent.gif?v=1756069281&width=190" type="image/gif" sizes="any">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/styles.css"/>
+
+  <!-- Page card styling -->
   <style>
-    .page-card{max-width:720px;margin:40px auto;padding:28px 24px;border:1px solid #222;border-radius:14px;background:#0b0b0b;color:#eee}
-    .page-card h1{font-size:1.6rem;margin:0 0 8px}
-    .muted{color:#9a9a9a}
-    .btn-row{display:flex;gap:12px;margin-top:18px;flex-wrap:wrap}
-    .button--ghost{background:transparent;border:1px solid #444;color:#ddd}
-    .button--ghost:hover{border-color:#666}
+    .page-card {
+      max-width: 720px; margin: 28px auto 40px; padding: 28px 24px;
+      border: 1px solid rgba(255,255,255,.08); border-radius: 14px;
+      background:#0b0b0b; color:#eee; box-shadow: 0 0 24px rgba(255,255,255,.06);
+    }
+    .page-card h1 {
+      margin: 0 0 8px;
+      font-family: 'Cinzel', serif; font-weight: 700;
+      letter-spacing: .18em; text-transform: uppercase;
+      font-size: 20px; color: #eaeaea;
+      text-shadow: 0 0 8px rgba(255,255,255,.18);
+    }
+    .muted { color:#bdbdbd; }
+    .btn-row { display:flex; gap:12px; margin-top:18px; flex-wrap:wrap }
+    .button--ghost { background:transparent; border:1px solid rgba(255,255,255,.18); color:#ddd }
+    .button--ghost:hover { border-color: rgba(255,255,255,.35); }
+    .auto-redirect { margin-top: 10px; font-size: 12px; color: #9a9a9a; }
+    /* Toast */
+    .toast {
+      position: fixed; top: 20px; right: 20px;
+      background: rgba(20,20,20,.95);
+      color: #fff; font: 600 13px/1.4 Roboto, sans-serif;
+      padding: 14px 20px; border-radius: 8px;
+      box-shadow: 0 6px 20px rgba(0,0,0,.6), 0 0 8px rgba(255,255,255,.2);
+      opacity: 0; transform: translateY(-20px);
+      transition: all .35s ease;
+      z-index: 2147483647;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
   </style>
 </head>
 <body class="template-page">
-  <main class="page-width">
-    <div class="page-card">
-      <h1>Order canceled</h1>
-      <p class="muted">No charge was made. Your cart is still saved on this device.</p>
-      <div class="btn-row">
-        <a class="button" href="cart.html">Back to cart</a>
-        <a class="button button--ghost" href="shop.html">Continue shopping</a>
+  <!-- Storm UI -->
+  <div class="lightning-flash"></div>
+  <div id="storm-overlay"><canvas id="rain-canvas"></canvas></div>
+
+  <!-- ===== MAIN ===== -->
+  <main id="MainContent" class="section">
+    <div class="page-width">
+      <div class="page-card">
+        <h1>Order canceled</h1>
+        <p class="muted">No charge was made. Your cart is still saved on this device.</p>
+        <div class="btn-row">
+          <a class="button" href="cart.html">Back to cart</a>
+          <a class="button button--ghost" href="shop.html">Continue shopping</a>
+        </div>
+        <p id="redirNote" class="auto-redirect">Redirecting to your cart in <span id="redirSec">8</span>s… <a href="#" id="cancelRedir">Cancel</a></p>
       </div>
     </div>
   </main>
-  <!-- Cart Drawer -->
-<div id="cart-drawer" class="cart-drawer" aria-hidden="true">
-  <div class="cart-drawer__overlay" data-cart-close></div>
-  <aside class="cart-drawer__panel" tabindex="-1">
-    <div class="cart-header">
-      <h2>Your Cart</h2>
-      <button type="button" title="Close" data-cart-close>✕</button>
-    </div>
 
-    <div class="cart-list" id="cart-items"></div>
-    <div id="cart-empty" class="cart-empty" hidden style="padding:16px;color:#9a9a9a">
-      Your cart is empty.
-    </div>
-
-    <div class="cart-footer">
-      <div class="cart-row">
-        <div class="label">Subtotal</div>
-        <div class="value" id="cart-subtotal">$0.00</div>
+  <!-- Footer (simple version for cancel page) -->
+  <footer class="footer color-scheme-4 gradient section footer--static">
+    <div class="footer__content-bottom-wrapper page-width footer__content-bottom-wrapper--center">
+      <div class="footer__copyright caption">
+        <small class="copyright__content">© <span id="year"></span>, Dark Harlem Knight</small>
+        <small class="copyright__content">Powered by the Storm</small>
       </div>
-      <button id="cart-checkout" type="button" disabled>Checkout</button>
     </div>
-  </aside>
-</div>
+  </footer>
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+
+  <!-- Toast -->
+  <div id="toast" class="toast">We saved your cart — pick up where you left off.</div>
+
+  <!-- Hidden storm audio -->
+  <audio id="rain-light"   src="assets/audio/light-rain.mp3"   loop preload="auto" hidden></audio>
+  <audio id="rain-med"     src="assets/audio/med-rain.mp3"     loop preload="auto" hidden></audio>
+  <audio id="rain-heavy"   src="assets/audio/heavy-rain.mp3"   loop preload="auto" hidden></audio>
+  <audio id="thunder-light" src="assets/audio/light-thunder.mp3" loop preload="auto" hidden></audio>
+  <audio id="thunder-med"   src="assets/audio/med-thunder.mp3"   loop preload="auto" hidden></audio>
+  <audio id="thunder-heavy" src="assets/audio/heavy-thunder.mp3" loop preload="auto" hidden></audio>
+
+  <!-- Scripts -->
+  <script src="js/nav.js"></script>
+  <script src="js/announce.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/search.js"></script>
+  <script src="js/storm_shopify_style.js"></script>
+
+  <!-- Logic -->
+  <script>
+    // Redirect countdown
+    (function () {
+      const secEl = document.getElementById('redirSec');
+      const cancel = document.getElementById('cancelRedir');
+      let secs = 8, timer = null, cancelled = false;
+      function tick(){
+        secs -= 1;
+        if (secEl) secEl.textContent = secs;
+        if (secs <= 0 && !cancelled) window.location.href = 'cart.html';
+      }
+      timer = setInterval(tick, 1000);
+      cancel?.addEventListener('click', function(e){
+        e.preventDefault();
+        cancelled = true;
+        clearInterval(timer);
+        document.getElementById('redirNote').textContent = 'Auto-redirect canceled.';
+      });
+    })();
+
+    // Toast if ?canceled=1
+    (function(){
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('canceled') === '1') {
+        const toast = document.getElementById('toast');
+        if (toast){
+          toast.classList.add('show');
+          setTimeout(()=> toast.classList.remove('show'), 5000);
+        }
+      }
+    })();
+  </script>
+
+  <!-- Cart Drawer -->
+  <div id="cart-drawer" class="cart-drawer" aria-hidden="true">
+    <div class="cart-drawer__overlay" data-cart-close></div>
+    <aside class="cart-drawer__panel" tabindex="-1">
+      <div class="cart-header">
+        <h2>Your Cart</h2>
+        <button type="button" title="Close" data-cart-close>✕</button>
+      </div>
+      <div class="cart-list" id="cart-items"></div>
+      <div id="cart-empty" class="cart-empty" hidden>Your cart is empty.</div>
+      <div class="cart-footer">
+        <div class="cart-row">
+          <div class="label">Subtotal</div>
+          <div class="value" id="cart-subtotal">$0.00</div>
+        </div>
+        <button id="cart-checkout" type="button" disabled>Checkout</button>
+      </div>
+    </aside>
+  </div>
 </body>
 </html>
