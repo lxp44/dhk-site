@@ -301,5 +301,28 @@
   <script src="js/shop.js"></script>
   <script src="js/storm_shopify_style.js"></script>
   <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+  <!-- Cart Drawer -->
+<div id="cart-drawer" class="cart-drawer" aria-hidden="true">
+  <div class="cart-drawer__overlay" data-cart-close></div>
+  <aside class="cart-drawer__panel" tabindex="-1">
+    <div class="cart-header">
+      <h2>Your Cart</h2>
+      <button type="button" title="Close" data-cart-close>✕</button>
+    </div>
+
+    <div class="cart-list" id="cart-items"></div>
+    <div id="cart-empty" class="cart-empty" hidden style="padding:16px;color:#9a9a9a">
+      Your cart is empty.
+    </div>
+
+    <div class="cart-footer">
+      <div class="cart-row">
+        <div class="label">Subtotal</div>
+        <div class="value" id="cart-subtotal">$0.00</div>
+      </div>
+      <button id="cart-checkout" type="button" disabled>Checkout</button>
+    </div>
+  </aside>
+</div>
 </body>
 </html>
