@@ -12,3 +12,6 @@ build/
 
 # Env files (in case you add secrets later)
 .env
+
+# Local Netlify folder
+.netlify

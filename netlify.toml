@@ -1,12 +1,8 @@
 [build]
-  command = ""                     # no build step since it's static
-  publish = "."                    # serve from repo root (where index.html lives)
-  functions = "netlify/functions"  # folder for your serverless functions
+  # Your site is static in this folder (root). Change if you ever move it.
+  publish = "."
 
 [functions]
-  node_bundler = "esbuild"         # bundle functions with esbuild (good for Stripe SDK)
-
-[[redirects]]
-  from = "/api/*"
-  to = "/.netlify/functions/:splat"
-  status = 200
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+  external_node_modules = ["stripe"]
