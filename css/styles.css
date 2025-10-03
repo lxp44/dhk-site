@@ -735,3 +735,15 @@ a:focus-visible, button:focus-visible, input:focus-visible {
 #cart-checkout:hover, #cartp-checkout:hover { background:#fff; }
 #cart-checkout:active, #cartp-checkout:active { transform: translateY(1px); }
 #cart-checkout:disabled, #cartp-checkout:disabled { opacity:.5; cursor:not-allowed; }
+
+/* === DHK Logo Resize Override === */
+.header__heading-logo {
+  max-width: 140px;   /* desktop size */
+  height: auto;
+}
+
+@media (max-width: 768px) {
+  .header__heading-logo {
+    max-width: 160px;  /* keep slightly bigger on mobile */
+  }
+}
