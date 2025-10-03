@@ -327,7 +327,37 @@
   </footer>
   <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
 
-  <!-- Search Modal, storm audio, scripts... (unchanged) -->
+   <!-- ===== Search Modal ===== -->
+  <div id="search-modal" class="search-modal" aria-hidden="true">
+    <div class="search-modal__overlay" data-close-search></div>
+    <div class="search-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="search-title">
+      <header class="search-modal__header">
+        <h2 id="search-title">Search</h2>
+        <button id="search-close" class="search-modal__close" aria-label="Close search">×</button>
+      </header>
+      <div class="search-modal__field">
+        <input id="search-input" type="search" placeholder="Search products…  ( /  or  ⌘/Ctrl+K )" autocomplete="off" />
+      </div>
+      <div id="search-results" class="search-modal__results" aria-live="polite"></div>
+    </div>
+  </div>
+  
+  <!-- Storm audio (kept) -->
+  <audio id="rain-light"   src="assets/audio/light-rain.mp3"   loop preload="auto" hidden></audio>
+  <audio id="rain-med"     src="assets/audio/med-rain.mp3"     loop preload="auto" hidden></audio>
+  <audio id="rain-heavy"   src="assets/audio/heavy-rain.mp3"   loop preload="auto" hidden></audio>
+  <audio id="thunder-light" src="assets/audio/light-thunder.mp3" loop preload="auto" hidden></audio>
+  <audio id="thunder-med"   src="assets/audio/med-thunder.mp3"   loop preload="auto" hidden></audio>
+  <audio id="thunder-heavy" src="assets/audio/heavy-thunder.mp3" loop preload="auto" hidden></audio>
+
+  <!-- Scripts -->
+  <script src="js/nav.js"></script>
+  <script src="js/announce.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/search.js"></script>
+  <script src="js/shop.js"></script>
+  <script src="js/storm_shopify_style.js"></script>
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
 
   <!-- Cart Drawer -->
   <div id="cart-drawer" class="cart-drawer" aria-hidden="true">
@@ -345,5 +375,36 @@
       </div>
     </aside>
   </div>
+  <script>
+document.querySelectorAll('.gif-card').forEach(card => {
+  const img = card.querySelector('.gif-img');
+  const lens = card.querySelector('.lens');
+
+  card.addEventListener('mousemove', (e) => {
+    card.classList.add('is-zooming');
+    const rect = img.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    const zoom = 2; // adjust magnification level
+    const bgX = -((x / rect.width) * (img.naturalWidth * zoom - rect.width));
+    const bgY = -((y / rect.height) * (img.naturalHeight * zoom - rect.height));
+
+    lens.style.left = `${x}px`;
+    lens.style.top = `${y}px`;
+    lens.style.backgroundImage = `url(${img.src})`;
+    lens.style.backgroundSize = `${img.naturalWidth * zoom}px ${img.naturalHeight * zoom}px`;
+    lens.style.backgroundPosition = `${bgX}px ${bgY}px`;
+  });
+
+  card.addEventListener('mouseenter', () => {
+    card.classList.add('is-zooming');
+  });
+
+  card.addEventListener('mouseleave', () => {
+    card.classList.remove('is-zooming');
+  });
+});
+</script>
 </body>
 </html>
