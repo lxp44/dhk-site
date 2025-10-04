@@ -353,70 +353,41 @@ a:hover, button:hover, .hoverable:hover, input[type="submit"]:hover { transform:
   font-family: "Roboto", sans-serif;
   font-size: 13px; color: #ddd; letter-spacing: .02em;
 }
-/* ===== G4LLERY slideshow ===== */
+/* =========================
+   Gallery slideshow (True Size)
+   ========================= */
 .lxp-slideshow {
   position: relative;
   width: 100%;
+  max-width: 100%;
   overflow: hidden;
   border: 1px solid rgba(255,255,255,0.12);
   border-radius: 12px;
   background: rgba(255,255,255,0.02);
 }
+
+/* Let images decide height instead of forcing 16:9 */
+.lxp-slideshow {
+  aspect-ratio: auto;   /* reset aspect ratio */
+  max-height: none;     /* allow full image height */
+}
+
 .lxp-slides {
   display: flex;
-  transition: transform 0.8s ease-in-out;
+  transition: transform 0.6s ease-in-out;
   will-change: transform;
 }
+
 .lxp-slide {
   min-width: 100%;
-  box-sizing: border-box;
 }
+
 .lxp-slide img {
   width: 100%;
-  height: auto;
+  height: auto;          /* keep natural height */
+  object-fit: contain;   /* ensures no cropping */
   display: block;
-  object-fit: cover;
 }
-
-/* Controls */
-.lxp-nav {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  grid-template-columns: 60px 1fr 60px;
-  align-items: center;
-  pointer-events: none;
-}
-.lxp-btn {
-  pointer-events: auto;
-  background: rgba(0,0,0,0.45);
-  color: #fff;
-  border: 0;
-  font-size: 2rem;
-  line-height: 1;
-  padding: .3rem .6rem;
-  border-radius: 10px;
-  margin-inline: 8px;
-  cursor: pointer;
-  transition: background .18s ease;
-}
-.lxp-btn:hover { background: rgba(0,0,0,0.75); }
-
-/* Dots */
-.lxp-dots {
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-}
-.lxp-dot {
-  pointer-events: auto;
-  width: 10px; height: 10px;
-  border-radius: 999px;
-  border: 0;
-  background: rgba(255,255,255,.35);
-  cursor: pointer;
-}
-.lxp-dot.is-active { background: #fff; }
 
 /* ===== Footer (Dawn-like) ===== */
 .footer { margin-top: 0; }
