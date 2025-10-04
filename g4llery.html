@@ -93,12 +93,6 @@
     }
 
     /* Viewport height similar to Shopify's slideshow */
-    :root { --g4-height: 76vh; }
-    @media (max-width: 990px){ :root { --g4-height: 70vh; } }
-    @media (max-width: 750px){ :root { --g4-height: 64vh; } }
-
-    .lxp-slideshow { position: relative; height: var(--g4-height); overflow: hidden; }
-    .lxp-slides { display: flex; height: 100%; transition: transform .8s ease-in-out; will-change: transform; }
     .lxp-slide { min-width: 100%; height: 100%; position: relative; }
     .lxp-slide img {
       display: block; width: 100%; height: 100%; object-fit: cover;
