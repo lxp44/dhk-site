@@ -736,14 +736,46 @@ a:focus-visible, button:focus-visible, input:focus-visible {
 #cart-checkout:active, #cartp-checkout:active { transform: translateY(1px); }
 #cart-checkout:disabled, #cartp-checkout:disabled { opacity:.5; cursor:not-allowed; }
 
-/* === DHK Logo Resize Override === */
-.header__heading-logo {
-  max-width: 140px;   /* desktop size */
-  height: auto;
+/* (Update these values or remove the block entirely) */
+.header__heading-logo { max-width: 120px; height: auto; }
+@media (max-width: 768px) {
+  .header__heading-logo { max-width: 130px; }
 }
 
-@media (max-width: 768px) {
-  .header__heading-logo {
-    max-width: 160px;  /* keep slightly bigger on mobile */
-  }
+/* =========================
+   Slim Header Pack (overrides)
+   ========================= */
+
+/* 1) Shorter header variable */
+:root {
+  --header-height: 56px;   /* was 72px */
 }
+@media (max-width: 900px) {
+  :root { --header-height: 48px; }  /* was 60px */
+}
+
+/* 2) Tighten the header grid and logo image a bit */
+.header-grid { min-height: var(--header-height); }
+
+.header__heading-logo {
+  height: 48px;            /* desktop header logo height (was 64px earlier) */
+}
+
+/* Make it a touch smaller on mobile */
+@media (max-width: 900px) {
+  .header__heading-logo { height: 42px; }
+}
+
+/* Shrink a little more when sticky */
+.shopify-section-header-sticky .header__heading-logo { height: 44px; }
+@media (max-width: 900px) {
+  .shopify-section-header-sticky .header__heading-logo { height: 38px; }
+}
+
+/* 3) Slightly reduce utility/announcement bar height & padding */
+.utility-bar__grid { min-height: 30px; }       /* was 36px */
+.announcement-bar__message { padding: 4px 0; }  /* was 6px 0 */
+
+/* 4) Trim nav/button padding so the row is tighter */
+.nav-link { line-height: 1.2; }                 /* safe tightening */
+.button--ghost { padding: 6px 10px; }           /* was 8px 12px */
