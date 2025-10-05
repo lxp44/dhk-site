@@ -750,3 +750,28 @@ a:focus-visible, button:focus-visible, input:focus-visible {
 /* 4) Trim nav/button padding so the row is tighter */
 .nav-link { line-height: 1.2; }                 /* safe tightening */
 .button--ghost { padding: 6px 10px; }           /* was 8px 12px */
+/* === G4LLERY FULL-SIZE OVERRIDE === */
+.lxp-slideshow {
+  aspect-ratio: auto !important;       /* remove forced 16:9 frame */
+  max-height: none !important;         /* allow full natural height */
+  height: auto !important;
+  border: none !important;             /* optional: remove white border frame */
+  border-radius: 0 !important;         /* optional: remove corner rounding */
+}
+
+.lxp-slides {
+  align-items: stretch !important;     /* ensure full vertical fit */
+}
+
+.lxp-slide img {
+  width: 100% !important;
+  height: auto !important;
+  object-fit: contain !important;      /* no cropping, show full photo */
+  display: block;
+  background: #000;                    /* fallback background for images */
+}
+
+/* Optional: give the whole page more scrollable height if short */
+body.g4llery-page main {
+  min-height: 100vh;
+}
