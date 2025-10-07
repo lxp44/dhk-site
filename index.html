@@ -203,18 +203,22 @@
           </ul>
         </div>
 
-        <!-- Newsletter -->
-        <div class="footer-block footer-block--newsletter grid__item">
-          <h2 class="footer-block__heading inline-richtext">Join the storm</h2>
-          <form class="footer__newsletter newsletter-form" action="#" method="post" onsubmit="return false;">
-            <div class="newsletter-form__field-wrapper">
-              <div class="field">
-                <input class="field__input" type="email" placeholder="Email address" required>
-                <button class="newsletter-form__button field__button" type="submit" aria-label="Subscribe">→</button>
-              </div>
-            </div>
-          </form>
-        </div>
+     <!-- Newsletter -->
+<div class="footer-block footer-block--newsletter grid__item">
+  <h2 class="footer-block__heading inline-richtext">Join the storm</h2>
+  <form class="footer__newsletter newsletter-form" action="#" method="post" onsubmit="return false;">
+    <div class="newsletter-form__field-wrapper">
+      <div class="field">
+        <!-- added id -->
+        <input class="field__input" id="nl-email" type="email" placeholder="Email address" required>
+        <!-- added id (optional but nice) -->
+        <button class="newsletter-form__button field__button" id="nl-submit" type="submit" aria-label="Subscribe">→</button>
+      </div>
+      <!-- inline feedback line -->
+      <p id="nl-msg" class="caption" style="margin-top:8px;"></p>
+    </div>
+  </form>
+</div>
 
         <!-- Brand image -->
         <div class="footer-block footer-block-image grid__item center">
@@ -272,6 +276,7 @@
   <script src="js/cart.js"></script>
   <script src="js/search.js"></script>
   <script src="js/shop.js"></script>
+  <script src="js/newsletter.js"></script>
   <script src="js/storm_shopify_style.js"></script>
   <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
 
