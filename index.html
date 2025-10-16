@@ -53,6 +53,95 @@
   </style>
 </head>
 <body class="template-page">
+    <!-- Drawer (mobile) typography + glow to match site -->
+<style>
+  /* Drawer panel background + layering so it always sits above storm */
+  #menu-drawer {
+    background: rgba(10, 10, 12, 0.88);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border-right: 1px solid rgba(255,255,255,.08);
+    box-shadow: 0 10px 40px rgba(0,0,0,.55);
+    z-index: 2147483646; /* sit above storm overlay */
+  }
+
+  /* Menu list items: Cinzel, uppercase, tight tracking, subtle glow */
+  .menu-drawer__menu-item,
+  .menu-drawer__menu .list-menu__item.link {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .18em;
+    font-size: 13px;              /* adjust: 12px–14px to taste */
+    color: #e6e6e6;
+    text-shadow: 0 0 6px rgba(255,255,255,.12);
+  }
+
+  /* Hover/active polish */
+  .menu-drawer__menu-item:hover,
+  .menu-drawer__menu .list-menu__item.link:hover,
+  .menu-drawer__menu-item:focus-visible {
+    color: #ffffff;
+    text-shadow: 0 0 10px rgba(255,255,255,.28);
+  }
+
+  /* Make dividers/submenus feel consistent if present */
+  .menu-drawer__menu .list-menu__item + .list-menu__item {
+    border-top: 1px solid rgba(255,255,255,.06);
+  }
+
+  /* Hamburger icon: match glow */
+  .header__icon--menu svg {
+    filter: drop-shadow(0 0 6px rgba(255,255,255,.28));
+  }
+
+  /* When the drawer is open, fade storm overlay so text remains crisp */
+  details[open] ~ .menu-drawer,
+  details[open] #menu-drawer {
+    z-index: 2147483646;
+  }
+  details[open] ~ #storm-overlay,
+  details[open] #storm-overlay {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transition: opacity .15s ease;
+  }
+</style>
+  <style>
+  /* Center the announcement row and hide extras */
+  .utility-bar .page-width { max-width: none; padding: 0; }
+  .utility-bar .utility-bar__grid {
+    display: flex; align-items: center; justify-content: center; gap: 0;
+  }
+  .utility-bar .list-social,
+  .utility-bar .localization-wrapper { display: none !important; }
+
+  /* Keep the track centered */
+  .announcement-bar { width: 100%; display: flex; justify-content: center; }
+  .announcement-track {
+    display: flex; align-items: center; justify-content: center; gap: 24px;
+  }
+  .announcement-bar__message { margin: 0; padding: 10px 0; }
+
+  /* Typography to match your home vibe */
+  .announcement-bar__message span {
+    font-family: 'Cinzel', serif;           /* same family you load */
+    font-weight: 700;
+    font-size: 13px;                        /* tweak if you want it bigger/smaller */
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: #e5e5e5;
+    text-shadow: 0 0 6px rgba(255,255,255,.12);
+  }
+</style>
+
+  <!-- Keep search above storm and fade storm while search is open -->
+  <style>
+    #search-modal{ z-index:2147483647; }
+    body.search-open #storm-overlay{ opacity:0 !important; pointer-events:none !important; transition:opacity .15s ease; }
+  </style>
+</head>
+<body class="template-page">
 
   <!-- Storm Welcome -->
   <div id="storm-popup">ENTER THE STORM</div>
