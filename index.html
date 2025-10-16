@@ -22,6 +22,7 @@
   <link rel="stylesheet" href="css/section-footer.css">
   <link rel="stylesheet" href="css/styles.css">
 
+  <!-- Footer font sizing (home) -->
   <style id="footer-size-home">
     .footer { font-size: 12px; line-height: 1.5; }
     .footer p, .footer a, .footer li, .footer small, .footer span, .footer .caption { font-size: inherit !important; }
@@ -34,6 +35,7 @@
     }
   </style>
 
+  <!-- Announcement bar centering -->
   <style>
     .utility-bar .page-width { max-width: none; padding: 0; }
     .utility-bar .utility-bar__grid { display: flex; align-items: center; justify-content: center; gap: 0; }
@@ -51,89 +53,46 @@
       text-shadow: 0 0 6px rgba(255,255,255,.12);
     }
   </style>
-</head>
-<body class="template-page">
-    <!-- Drawer (mobile) typography + glow to match site -->
-<style>
-  /* Drawer panel background + layering so it always sits above storm */
-  #menu-drawer {
-    background: rgba(10, 10, 12, 0.88);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    border-right: 1px solid rgba(255,255,255,.08);
-    box-shadow: 0 10px 40px rgba(0,0,0,.55);
-    z-index: 2147483646; /* sit above storm overlay */
-  }
 
-  /* Menu list items: Cinzel, uppercase, tight tracking, subtle glow */
-  .menu-drawer__menu-item,
-  .menu-drawer__menu .list-menu__item.link {
-    font-family: 'Cinzel', serif;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: .18em;
-    font-size: 13px;              /* adjust: 12px–14px to taste */
-    color: #e6e6e6;
-    text-shadow: 0 0 6px rgba(255,255,255,.12);
-  }
-
-  /* Hover/active polish */
-  .menu-drawer__menu-item:hover,
-  .menu-drawer__menu .list-menu__item.link:hover,
-  .menu-drawer__menu-item:focus-visible {
-    color: #ffffff;
-    text-shadow: 0 0 10px rgba(255,255,255,.28);
-  }
-
-  /* Make dividers/submenus feel consistent if present */
-  .menu-drawer__menu .list-menu__item + .list-menu__item {
-    border-top: 1px solid rgba(255,255,255,.06);
-  }
-
-  /* Hamburger icon: match glow */
-  .header__icon--menu svg {
-    filter: drop-shadow(0 0 6px rgba(255,255,255,.28));
-  }
-
-  /* When the drawer is open, fade storm overlay so text remains crisp */
-  details[open] ~ .menu-drawer,
-  details[open] #menu-drawer {
-    z-index: 2147483646;
-  }
-  details[open] ~ #storm-overlay,
-  details[open] #storm-overlay {
-    opacity: 0 !important;
-    pointer-events: none !important;
-    transition: opacity .15s ease;
-  }
-</style>
+  <!-- Drawer (mobile) typography + glow -->
   <style>
-  /* Center the announcement row and hide extras */
-  .utility-bar .page-width { max-width: none; padding: 0; }
-  .utility-bar .utility-bar__grid {
-    display: flex; align-items: center; justify-content: center; gap: 0;
-  }
-  .utility-bar .list-social,
-  .utility-bar .localization-wrapper { display: none !important; }
-
-  /* Keep the track centered */
-  .announcement-bar { width: 100%; display: flex; justify-content: center; }
-  .announcement-track {
-    display: flex; align-items: center; justify-content: center; gap: 24px;
-  }
-  .announcement-bar__message { margin: 0; padding: 10px 0; }
-
-  /* Typography to match your home vibe */
-  .announcement-bar__message span {
-    font-family: 'Cinzel', serif;           /* same family you load */
-    font-weight: 700;
-    font-size: 13px;                        /* tweak if you want it bigger/smaller */
-    letter-spacing: .18em;
-    text-transform: uppercase;
-    color: #e5e5e5;
-    text-shadow: 0 0 6px rgba(255,255,255,.12);
-  }
-</style>
+    #menu-drawer {
+      background: rgba(10, 10, 12, 0.88);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      border-right: 1px solid rgba(255,255,255,.08);
+      box-shadow: 0 10px 40px rgba(0,0,0,.55);
+      z-index: 2147483646;
+    }
+    .menu-drawer__menu-item,
+    .menu-drawer__menu .list-menu__item.link {
+      font-family: 'Cinzel', serif;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .18em;
+      font-size: 13px;
+      color: #e6e6e6;
+      text-shadow: 0 0 6px rgba(255,255,255,.12);
+    }
+    .menu-drawer__menu-item:hover,
+    .menu-drawer__menu .list-menu__item.link:hover,
+    .menu-drawer__menu-item:focus-visible {
+      color: #fff;
+      text-shadow: 0 0 10px rgba(255,255,255,.28);
+    }
+    .menu-drawer__menu .list-menu__item + .list-menu__item {
+      border-top: 1px solid rgba(255,255,255,.06);
+    }
+    .header__icon--menu svg { filter: drop-shadow(0 0 6px rgba(255,255,255,.28)); }
+    details[open] ~ .menu-drawer,
+    details[open] #menu-drawer { z-index: 2147483646; }
+    details[open] ~ #storm-overlay,
+    details[open] #storm-overlay {
+      opacity: 0 !important;
+      pointer-events: none !important;
+      transition: opacity .15s ease;
+    }
+  </style>
 
   <!-- Keep search above storm and fade storm while search is open -->
   <style>
@@ -174,14 +133,18 @@
   <!-- ===== Sticky Header Wrapper ===== -->
   <div class="section-header header-wrapper color-scheme-4 gradient" data-sticky-type="on-scroll-up">
     <header class="site-header header header--middle-left header--mobile-center">
-     
+
       <!-- Header drawer (mobile) -->
       <header-drawer data-breakpoint="tablet">
         <details id="Details-menu-drawer-container" class="menu-drawer-container">
           <summary class="header__icon header__icon--menu header__icon--summary link focus-inset" aria-label="Menu">
             <span aria-hidden="true">
-              <svg width="22" height="22" viewBox="0 0 24 24"><path d="M3 6h18v2H3zM3 11h18v2H3zM3 16h18v2H3z" fill="currentColor"/></svg>
-              <svg width="22" height="22" viewBox="0 0 24 24"><path d="M18.3 5.7 12 12l6.3 6.3-1.4 1.4L10.6 13.4 4.3 19.7 2.9 18.3 9.2 12 2.9 5.7 4.3 4.3 10.6 10.6 16.9 4.3z" fill="currentColor"/></svg>
+              <svg width="22" height="22" viewBox="0 0 24 24">
+                <path d="M3 6h18v2H3zM3 11h18v2H3zM3 16h18v2H3z" fill="currentColor"/>
+              </svg>
+              <svg width="22" height="22" viewBox="0 0 24 24">
+                <path d="M18.3 5.7 12 12l6.3 6.3-1.4 1.4L10.6 13.4 4.3 19.7 2.9 18.3 9.2 12 2.9 5.7 4.3 4.3 10.6 10.6 16.9 4.3z" fill="currentColor"/>
+              </svg>
             </span>
           </summary>
 
@@ -190,21 +153,21 @@
               <div class="menu-drawer__navigation-container">
                 <nav class="menu-drawer__navigation" aria-label="Mobile">
                   <ul class="menu-drawer__menu has-submenu list-menu" role="list">
-                    <li><a href="index.html" class="menu-drawer__menu-item">Home</a></li>
-                    <li><a href="shop.html" class="menu-drawer__menu-item">Shop All</a></li>
+                    <li><a href="index.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">Home</a></li>
+                    <li><a href="shop.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">Shop All</a></li>
                     <li><a href="g4llery.html" class="menu-drawer__menu-item">G4LLERY</a></li>
-                    <li><a href="collections.html" class="menu-drawer__menu-item">Collections</a></li>
-                    <li><a href="4bout-us.html" class="menu-drawer__menu-item">4bout us</a></li>
-                    <li><a href="contact.html" class="menu-drawer__menu-item">Contact</a></li>
+                    <li><a href="collections.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">Collections</a></li>
+                    <li><a href="4bout-us.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">4bout us</a></li>
+                    <li><a href="contact.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">Contact</a></li>
                     <li>
                       <a href="cart.html"
-                         class="menu-drawer__menu-item"
+                         class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
                          data-loud="heavy"
                          data-cart-open>
                         Cart <span class="cart-count-bubble" data-cart-count></span>
                       </a>
                     </li>
-                    <li><button id="search-open-mobile" type="button" class="menu-drawer__menu-item">Search</button></li>
+                    <li><button id="search-open-mobile" type="button" class="menu-drawer__menu-item link link--text list-menu__item focus-inset">Search</button></li>
                   </ul>
                 </nav>
               </div>
@@ -213,29 +176,37 @@
         </details>
       </header-drawer>
 
-      <!-- Centered logo + centered nav row -->
+      <!-- Header grid (desktop nav + logo + right nav) -->
       <div class="page-width header-grid">
-        <a class="header__logo" href="index.html" aria-label="DarkHarlemKnight">
-          <img src="assets/img/DHK_transparent.gif"
-               alt="DarkHarlemKnight"
-               width="600" height="600"
-               class="header__heading-logo"
-               loading="eager"/>
-        </a>
-
-        <nav class="nav-row" aria-label="Primary">
+        <nav class="nav-left desktop-only" aria-label="Primary">
           <a href="index.html" class="nav-link">Home</a>
           <a href="shop.html" class="nav-link">Shop All</a>
           <a href="g4llery.html" class="nav-link">G4LLERY</a>
           <a href="collections.html" class="nav-link">Collections</a>
+        </nav>
+
+        <a class="header__logo" href="index.html" aria-label="DarkHarlemKnight">
+          <img
+            src="assets/img/DHK_transparent.gif"
+            alt="DarkHarlemKnight"
+            width="190" height="190"
+            class="header__heading-logo"
+            loading="eager"
+          />
+        </a>
+
+        <nav class="nav-right desktop-only">
           <a href="4bout-us.html" class="nav-link">4bout us</a>
           <a href="contact.html" class="nav-link">Contact</a>
-          <button id="search-open" class="nav-link button--ghost">Search</button>
+          <button id="search-open" class="nav-link button--ghost" aria-label="Open search">Search</button>
           <a href="cart.html"
              class="nav-link button--ghost"
              data-loud="heavy"
+             aria-label="Cart"
              data-cart-open>
-            <svg viewBox="0 0 24 24" width="20" height="20"><path d="M7 4h-2l-1 2v2h2l3.6 7.59-1.35 2.41a1.994 1.994 0 0 0 1.75 2.99H19v-2H10.42c-.14 0-.25-.11-.25-.25l.03-.12L11 16h6.31a2 2 0 0 0 1.79-1.11L22 8H7.42l-.94-2Z" fill="currentColor"/></svg>
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+              <path d="M7 4h-2l-1 2v2h2l3.6 7.59-1.35 2.41a1.994 1.994 0 0 0 1.75 2.99H19v-2H10.42c-.14 0-.25-.11-.25-.25l.03-.12L11 16h6.31a2 2 0 0 0 1.79-1.11L22 8H7.42l-.94-2Z" fill="currentColor"/>
+            </svg>
             Cart <span class="cart-count-bubble" data-cart-count></span>
           </a>
         </nav>
@@ -247,8 +218,7 @@
   <main id="MainContent">
     <section id="hero-dhk" class="banner banner--content-align-center banner--content-align-mobile-center banner--large banner--desktop-transparent">
       <div class="banner__media media">
-        <img src="assets/img/volume 1.PNG"
-             alt="" sizes="100vw" fetchpriority="high" class="banner__img"/>
+        <img src="assets/img/volume 1.PNG" alt="" sizes="100vw" fetchpriority="high" class="banner__img"/>
       </div>
       <div class="banner__content banner__content--bottom-center page-width">
         <div class="banner__box content-container content-container--full-width-mobile color-scheme-3 gradient">
@@ -276,43 +246,35 @@
           </ul>
         </div>
 
-        <!-- Brand blurb + social (fixed structure) -->
+        <!-- Brand blurb + social -->
         <div class="footer-block grid__item">
           <h2 class="footer-block__heading inline-richtext">Dark Harlem Knight</h2>
           <div class="footer-block__details-content rte">
             <p>Forged in the storm. Streetwear with thunder in its veins.</p>
           </div>
           <ul class="footer__list-social">
-            <li>
-              <a aria-label="Instagram" class="social-link" href="https://www.instagram.com/darkharlemknight/" target="_blank" rel="noopener">Instagram</a>
-            </li>
-            <li>
-              <a aria-label="TikTok" class="social-link" href="https://www.tiktok.com/@darkharlemknight" target="_blank" rel="noopener">TikTok</a>
-            </li>
+            <li><a aria-label="Instagram" class="social-link" href="https://www.instagram.com/darkharlemknight/" target="_blank" rel="noopener">Instagram</a></li>
+            <li><a aria-label="TikTok" class="social-link" href="https://www.tiktok.com/@darkharlemknight" target="_blank" rel="noopener">TikTok</a></li>
           </ul>
         </div>
 
-     <!-- Newsletter -->
-<div class="footer-block footer-block--newsletter grid__item">
-  <h2 class="footer-block__heading inline-richtext">Join the storm</h2>
-  <form class="footer__newsletter newsletter-form" action="#" method="post" onsubmit="return false;">
-    <div class="newsletter-form__field-wrapper">
-      <div class="field">
-        <!-- added id -->
-        <input class="field__input" id="nl-email" type="email" placeholder="Email address" required>
-        <!-- added id (optional but nice) -->
-        <button class="newsletter-form__button field__button" id="nl-submit" type="submit" aria-label="Subscribe">→</button>
-      </div>
-      <!-- inline feedback line -->
-      <p id="nl-msg" class="caption" style="margin-top:8px;"></p>
-    </div>
-  </form>
-</div>
+        <!-- Newsletter -->
+        <div class="footer-block footer-block--newsletter grid__item">
+          <h2 class="footer-block__heading inline-richtext">Join the storm</h2>
+          <form class="footer__newsletter newsletter-form" action="#" method="post" onsubmit="return false;">
+            <div class="newsletter-form__field-wrapper">
+              <div class="field">
+                <input class="field__input" id="nl-email" type="email" placeholder="Email address" required>
+                <button class="newsletter-form__button field__button" id="nl-submit" type="submit" aria-label="Subscribe">→</button>
+              </div>
+              <p id="nl-msg" class="caption" style="margin-top:8px;"></p>
+            </div>
+          </form>
+        </div>
 
         <!-- Brand image -->
         <div class="footer-block footer-block-image grid__item center">
-          <img src="assets/img/DHK_transparent.gif"
-               alt="DarkHarlemKnight" width="120" height="120" loading="lazy">
+          <img src="assets/img/DHK_transparent.gif" alt="DarkHarlemKnight" width="120" height="120" loading="lazy">
         </div>
       </div>
     </div>
@@ -365,9 +327,6 @@
   <script src="js/cart.js"></script>
   <script src="js/search.js"></script>
   <script src="js/shop.js"></script>
-  <script>
-  console.log('INLINE TEST: footer script slot is running');
-</script>
   <script src="js/newsletter.js"></script>
   <script src="js/storm_shopify_style.js"></script>
   <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
