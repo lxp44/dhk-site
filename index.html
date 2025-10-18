@@ -322,14 +322,30 @@
   </div>
 
   <!-- Scripts -->
-  <script src="js/nav.js"></script>
-  <script src="js/announce.js"></script>
-  <script src="js/cart.js"></script>
-  <script src="js/search.js"></script>
-  <script src="js/shop.js"></script>
-  <script src="js/newsletter.js"></script>
-  <script src="js/storm_shopify_style.js"></script>
-  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+<script>
+  // Load all site scripts only after the DOM is ready
+  document.addEventListener('DOMContentLoaded', function () {
+    const files = [
+      'js/nav.js',
+      'js/announce.js',
+      'js/cart.js',
+      'js/search.js',
+      'js/shop.js',
+      'js/newsletter.js',
+      'js/storm_shopify_style.js'
+    ];
+
+    files.forEach(src => {
+      const s = document.createElement('script');
+      s.src = src;
+      s.defer = true;
+      document.body.appendChild(s);
+    });
+
+    const yearEl = document.getElementById('year');
+    if (yearEl) yearEl.textContent = new Date().getFullYear();
+  });
+</script>
 
   <!-- Cart Drawer -->
   <div id="cart-drawer" class="cart-drawer" aria-hidden="true">
