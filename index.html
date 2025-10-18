@@ -378,5 +378,31 @@
       </div>
     </aside>
   </div>
+    <!-- MOBILE STORM INTRO (Tap to Continue + Fade Out) -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      if (window.matchMedia("(max-width: 900px)").matches) {
+        const popup = document.getElementById("storm-popup");
+        if (!popup) return;
+
+        // Lock scroll while intro is visible
+        document.body.style.overflow = "hidden";
+
+        const fadeOut = () => {
+          popup.classList.add("hidden");
+          document.body.style.overflow = "auto";
+
+          // Kick off storm audio on tap (quietly ignore autoplay blocks)
+          const rain = document.getElementById("rain-med") || document.getElementById("rain-light");
+          const thunder = document.getElementById("thunder-med") || document.getElementById("thunder-light");
+          if (rain) rain.play().catch(() => {});
+          if (thunder) thunder.play().catch(() => {});
+        };
+
+        popup.addEventListener("click", fadeOut, { once: true });
+        popup.addEventListener("touchstart", fadeOut, { once: true, passive: true });
+      }
+    });
+  </script>
 </body>
 </html>
