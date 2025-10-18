@@ -266,7 +266,11 @@
   <main id="MainContent">
     <section id="hero-dhk" class="banner banner--content-align-center banner--content-align-mobile-center banner--large banner--desktop-transparent">
       <div class="banner__media media">
-        <img src="assets/img/volume 1.PNG" alt="" sizes="100vw" fetchpriority="high" class="banner__img"/>
+        <picture>
+    <!-- optional: point this to your mobile asset when ready -->
+    <source media="(max-width: 900px)" srcset="assets/img/volume-1-mobile.jpg">
+    <img src="assets/img/volume 1.PNG" alt="" sizes="100vw" fetchpriority="high" class="banner__img">
+  </picture>
       </div>
       <div class="banner__content banner__content--bottom-center page-width">
         <div class="banner__box content-container content-container--full-width-mobile color-scheme-3 gradient">
