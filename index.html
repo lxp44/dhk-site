@@ -121,6 +121,26 @@
       }
           }
   </style>
+  <!-- MOBILE hero image fit -->
+<style>
+  @media (max-width: 900px){
+    /* keep the media area centered */
+    #hero-dhk .banner__media{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;           /* prevents odd scrollbars */
+    }
+    /* show the whole image instead of an over-zoomed crop */
+    #hero-dhk .banner__media img{
+      width:auto;                /* allow natural width */
+      max-width:100%;            /* don’t overflow horizontally */
+      max-height:88vh;           /* fill the screen nicely */
+      height:auto;
+      object-fit:contain;        /* <-- key: no crop on mobile */
+    }
+  }
+</style>
 
   <!-- Keep search above storm and fade storm while search is open -->
   <style>
