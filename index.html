@@ -99,27 +99,6 @@
     #search-modal{ z-index:2147483647; }
     body.search-open #storm-overlay{ opacity:0 !important; pointer-events:none !important; transition:opacity .15s ease; }
   </style>
-
-  <!-- MOBILE STORM INTRO: keep full-screen until tap; fade out on dismiss -->
-  <style>
-    #storm-popup{
-      position:fixed; inset:0;
-      display:grid; place-items:center;
-      background:#000; color:#fff;
-      font-family:'Cinzel',serif;
-      font-size:3rem; letter-spacing:.12em;
-      z-index:3100; opacity:1; transition:opacity .35s ease;
-      text-align:center;
-      user-select:none;
-    }
-    #storm-popup.is-hidden{ opacity:0; pointer-events:none; }
-    .lightning-flash{ position:fixed; inset:0; background:#fff; opacity:0; z-index:2999; pointer-events:none; }
-    @media (max-width: 900px){
-      html,body { height:100%; }
-      body.storm-lock{ overflow:hidden; touch-action:none; }
-      #storm-popup{ font-size:2.2rem; padding:0 18px; }
-    }
-  </style>
 </head>
 <body class="template-page">
 
@@ -160,8 +139,12 @@
         <details id="Details-menu-drawer-container" class="menu-drawer-container">
           <summary class="header__icon header__icon--menu header__icon--summary link focus-inset" aria-label="Menu">
             <span aria-hidden="true">
-              <svg width="22" height="22" viewBox="0 0 24 24"><path d="M3 6h18v2H3zM3 11h18v2H3zM3 16h18v2H3z" fill="currentColor"/></svg>
-              <svg width="22" height="22" viewBox="0 0 24 24"><path d="M18.3 5.7 12 12l6.3 6.3-1.4 1.4L10.6 13.4 4.3 19.7 2.9 18.3 9.2 12 2.9 5.7 4.3 4.3 10.6 10.6 16.9 4.3z" fill="currentColor"/></svg>
+              <svg width="22" height="22" viewBox="0 0 24 24">
+                <path d="M3 6h18v2H3zM3 11h18v2H3zM3 16h18v2H3z" fill="currentColor"/>
+              </svg>
+              <svg width="22" height="22" viewBox="0 0 24 24">
+                <path d="M18.3 5.7 12 12l6.3 6.3-1.4 1.4L10.6 13.4 4.3 19.7 2.9 18.3 9.2 12 2.9 5.7 4.3 4.3 10.6 10.6 16.9 4.3z" fill="currentColor"/>
+              </svg>
             </span>
           </summary>
 
@@ -339,67 +322,14 @@
   </div>
 
   <!-- Scripts -->
-<script>
-  // Load all site scripts only after the DOM is ready
-  document.addEventListener('DOMContentLoaded', function () {
-    const files = [
-      'js/nav.js',
-      'js/announce.js',
-      'js/cart.js',
-      'js/search.js',
-      'js/shop.js',
-      'js/newsletter.js',
-      'js/storm_shopify_style.js'
-    ];
-
-    files.forEach(src => {
-      const s = document.createElement('script');
-      s.src = src;
-      s.defer = true;
-      document.body.appendChild(s);
-    });
-
-    const yearEl = document.getElementById('year');
-    if (yearEl) yearEl.textContent = new Date().getFullYear();
-  });
-</script>
-
-<!-- MOBILE STORM INTRO: wait for tap, then fade + start audio -->
-<script>
-(function(){
-  const isMobile = window.matchMedia('(max-width: 900px)').matches;
-  const popup = document.getElementById('storm-popup');
-  if (!popup) return;
-
-  if (isMobile) {
-    // lock scroll while intro is up
-    document.body.classList.add('storm-lock');
-
-    const startStorm = () => {
-      // Try to play the same sounds you use on desktop
-      const rain = document.getElementById('rain-med') || document.getElementById('rain-light');
-      const thunder = document.getElementById('thunder-light') || document.getElementById('thunder-med');
-
-      if (rain && rain.play) { rain.volume = 0.7; rain.play().catch(()=>{}); }
-      if (thunder && thunder.play) { thunder.volume = 0.9; thunder.play().catch(()=>{}); }
-
-      // fade the intro out
-      popup.classList.add('is-hidden');
-
-      // unlock scroll after fade
-      setTimeout(() => {
-        document.body.classList.remove('storm-lock');
-        // Remove click listener so it doesn't trap taps
-        popup.replaceWith(popup); // quick detach
-      }, 380);
-    };
-
-    // Tap to enter
-    popup.addEventListener('click', startStorm, { once: true });
-    popup.addEventListener('touchstart', function(e){ e.preventDefault(); startStorm(); }, { passive:false, once:true });
-  }
-})();
-</script>
+  <script src="js/nav.js"></script>
+  <script src="js/announce.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/search.js"></script>
+  <script src="js/shop.js"></script>
+  <script src="js/newsletter.js"></script>
+  <script src="js/storm_shopify_style.js"></script>
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
 
   <!-- Cart Drawer -->
   <div id="cart-drawer" class="cart-drawer" aria-hidden="true">
