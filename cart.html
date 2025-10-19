@@ -131,14 +131,142 @@
     </div>
   </main>
 
-  <!-- Footer (keep same as other pages) -->
-  <!-- ... footer code ... -->
+ <!-- ===== Footer ===== -->
+  <footer class="footer color-scheme-4 gradient section footer--static">
+    <div class="footer__content-top page-width">
+      <div class="footer__blocks-wrapper grid grid--1-col grid--2-col grid--4-col-tablet">
+        <!-- Links -->
+        <div class="footer-block footer-block--menu grid__item">
+          <h2 class="footer-block__heading inline-richtext">Shop</h2>
+          <ul class="footer-block__details-content list-unstyled">
+            <li><a class="link link--text list-menu__item list-menu__item--link" href="collections.html">Collections</a></li>
+            <li><a class="link link--text list-menu__item list-menu__item--link" href="shop.html">All Products</a></li>
+            <li><a class="link link--text list-menu__item list-menu__item--link" href="g4llery.html">G4LLERY</a></li>
+            <li><a class="link link--text list-menu__item list-menu__item--link" href="4bout-us.html">4bout us</a></li>
+            <li><a class="link link--text list-menu__item list-menu__item--link" href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+
+        <!-- Brand blurb + social (fixed structure) -->
+        <div class="footer-block grid__item">
+          <h2 class="footer-block__heading inline-richtext">Dark Harlem Knight</h2>
+          <div class="footer-block__details-content rte">
+            <p>Forged in the storm. Streetwear with thunder in its veins.</p>
+          </div>
+          <ul class="footer__list-social">
+            <li>
+              <a aria-label="Instagram" class="social-link" href="https://www.instagram.com/darkharlemknight/" target="_blank" rel="noopener">Instagram</a>
+            </li>
+            <li>
+              <a aria-label="TikTok" class="social-link" href="https://www.tiktok.com/@darkharlemknight" target="_blank" rel="noopener">TikTok</a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Newsletter -->
+        <div class="footer-block footer-block--newsletter grid__item">
+          <h2 class="footer-block__heading inline-richtext">Join the storm</h2>
+          <form class="footer__newsletter newsletter-form" action="#" method="post" onsubmit="return false;">
+            <div class="newsletter-form__field-wrapper">
+              <div class="field">
+                <input class="field__input" type="email" placeholder="Email address" required>
+                <button class="newsletter-form__button field__button" type="submit" aria-label="Subscribe">→</button>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <!-- Brand image -->
+        <div class="footer-block footer-block-image grid__item center">
+          <img src="assets/img/DHK_transparent.gif"
+               alt="DarkHarlemKnight" width="120" height="120" loading="lazy">
+        </div>
+      </div>
+    </div>
+
+    <div class="footer__content-bottom">
+      <div class="footer__content-bottom-wrapper page-width">
+        <div class="footer__column footer__column--info">
+          <div class="footer__payment">
+            <ul class="list list-payment" role="list">
+              <li class="list-payment__item">Visa</li>
+              <li class="list-payment__item">Mastercard</li>
+              <li class="list-payment__item">Amex</li>
+              <li class="list-payment__item">PayPal</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer__content-bottom-wrapper page-width footer__content-bottom-wrapper--center">
+        <div class="footer__copyright caption">
+          <small class="copyright__content">© <span id="year"></span>, Dark Harlem Knight</small>
+          <small class="copyright__content">Powered by the Storm</small>
+          <ul class="policies list-unstyled">
+            <li><small class="copyright__content"><a href="#">Privacy Policy</a></small></li>
+            <li><small class="copyright__content"><a href="#">Terms of Service</a></small></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+
+  <!-- ===== Search Modal ===== -->
+  <div id="search-modal" class="search-modal" aria-hidden="true">
+    <div class="search-modal__overlay" data-close-search></div>
+    <div class="search-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="search-title">
+      <header class="search-modal__header">
+        <h2 id="search-title">Search</h2>
+        <button id="search-close" class="search-modal__close" aria-label="Close search">×</button>
+      </header>
+      <div class="search-modal__field">
+        <input id="search-input" type="search" placeholder="Search products…  ( /  or  ⌘/Ctrl+K )" autocomplete="off" />
+      </div>
+      <div id="search-results" class="search-modal__results" aria-live="polite"></div>
+    </div>
+  </div>
+  
+  <!-- Storm audio (kept) -->
+  <audio id="rain-light"   src="assets/audio/light-rain.mp3"   loop preload="auto" hidden></audio>
+  <audio id="rain-med"     src="assets/audio/med-rain.mp3"     loop preload="auto" hidden></audio>
+  <audio id="rain-heavy"   src="assets/audio/heavy-rain.mp3"   loop preload="auto" hidden></audio>
+  <audio id="thunder-light" src="assets/audio/light-thunder.mp3" loop preload="auto" hidden></audio>
+  <audio id="thunder-med"   src="assets/audio/med-thunder.mp3"   loop preload="auto" hidden></audio>
+  <audio id="thunder-heavy" src="assets/audio/heavy-thunder.mp3" loop preload="auto" hidden></audio>
 
   <!-- Scripts -->
   <script src="js/nav.js"></script>
   <script src="js/announce.js"></script>
   <script src="js/cart.js"></script>
   <script src="js/search.js"></script>
+  <script src="js/shop.js"></script>
+  <script src="js/newsletter.js"></script>
   <script src="js/storm_shopify_style.js"></script>
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+
+  <!-- Cart Drawer -->
+  <div id="cart-drawer" class="cart-drawer" aria-hidden="true">
+    <div class="cart-drawer__overlay" data-cart-close></div>
+    <aside class="cart-drawer__panel" tabindex="-1">
+      <div class="cart-header">
+        <h2>Your Cart</h2>
+        <button type="button" title="Close" data-cart-close>✕</button>
+      </div>
+
+      <div class="cart-list" id="cart-items"></div>
+      <div id="cart-empty" class="cart-empty" hidden style="padding:16px;color:#9a9a9a">
+        Your cart is empty.
+      </div>
+
+      <div class="cart-footer">
+        <div class="cart-row">
+          <div class="label">Subtotal</div>
+          <div class="value" id="cart-subtotal">$0.00</div>
+        </div>
+        <button id="cart-checkout" type="button" disabled>Checkout</button>
+      </div>
+    </aside>
+  </div>
 </body>
 </html>
