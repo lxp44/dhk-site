@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>DHK — TRY ON</title>
+  <link rel="icon" href="assets/img/DHK_transparent.gif" type="image/gif" sizes="any">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/styles.css">
+
+  <!-- Babylon.js (robust, easy PBR, mirrors, video textures) -->
+  <script src="https://cdn.babylonjs.com/babylon.js" defer></script>
+  <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js" defer></script>
+  <!-- Ready Player Me Avatar loader helper (via iframe postMessage) -->
+  <script src="https://unpkg.com/@readyplayerme/visage@latest/dist/index.umd.js" defer></script>
+  <!-- Netlify Identity for auth -->
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js" defer></script>
+
+  <style>
+    body,html{margin:0;height:100%;background:#0a0a0a;color:#eaeaea;}
+    #tryon-root{position:relative;height:100vh;width:100vw;overflow:hidden;}
+    #renderCanvas{width:100%;height:100%;display:block;outline:none}
+    .hud{position:absolute;inset:0;pointer-events:none}
+    .hud .topbar{pointer-events:auto;position:absolute;top:12px;left:12px;right:12px;display:flex;gap:8px;align-items:center;justify-content:space-between}
+    .chip{background:rgba(255,255,255,.06);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.12);padding:8px 12px;border-radius:999px;font:600 12px/1 'Cinzel', serif;letter-spacing:.1em;text-transform:uppercase}
+    .btn{pointer-events:auto;cursor:pointer}
+    .panel{pointer-events:auto;position:absolute;bottom:16px;left:50%;transform:translateX(-50%);display:flex;gap:8px;align-items:center}
+    .panel .btn{padding:10px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.08)}
+    .legend{position:absolute;bottom:16px;right:16px;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.16);padding:8px 10px;border-radius:10px;font:12px/1.4 Roboto,system-ui}
+    @media (max-width:900px){
+      .legend{display:none}
+      .panel{bottom:10px}
+    }
+  </style>
+</head>
+<body>
+  <div class="section-header header-wrapper color-scheme-4 gradient" data-sticky-type="on-scroll-up">
+    <!-- keep your existing header include if you have one; otherwise minimal back link -->
+    <header class="site-header header header--middle-left header--mobile-center">
+      <div class="page-width header-grid">
+        <nav class="nav-left desktop-only"><a class="nav-link" href="index.html">Home</a></nav>
+        <a class="header__logo" href="index.html" aria-label="DarkHarlemKnight">
+          <img src="assets/img/DHK_transparent.gif" alt="DarkHarlemKnight" width="120" height="120" loading="eager"/>
+        </a>
+        <nav class="nav-right desktop-only"><a href="cart.html" class="nav-link button--ghost" aria-label="Cart">Cart</a></nav>
+      </div>
+    </header>
+  </div>
+
+  <main id="tryon-root">
+    <canvas id="renderCanvas"></canvas>
+    <div class="hud">
+      <div class="topbar">
+        <div class="chip">TRY ON — DHK CLOSET</div>
+        <div>
+          <button id="auth-btn" class="btn chip">Sign In</button>
+          <button id="view-btn" class="btn chip">3rd Person</button>
+          <button id="music-btn" class="btn chip">Play Music</button>
+        </div>
+      </div>
+      <div class="panel" id="outfit-panel">
+        <!-- populated from products.json with “Try On” buttons -->
+      </div>
+      <div class="legend">
+        <b>Controls</b><br/>
+        WASD to move • Mouse to look • V to switch view • E to interact
+      </div>
+    </div>
+  </main>
+
+  <script src="js/try-on-auth.js" defer></script>
+  <script src="js/try-on.js" defer></script>
+</body>
+</html>
