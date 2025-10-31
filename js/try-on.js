@@ -206,35 +206,36 @@
       }
     });
 
-    // Play/pause + first-click tries gated audio if logged in; fall back to public
-    musicBtn?.addEventListener('click', async () => {
-      try {
-        if (!music) {
-          // Try gated first for logged-in users
-          let src = START_MUSIC[currentTrack];
-          try {
-            const { url } = await getSignedMedia(GATED_AUDIO_ID, "audio");
-            src = url; // if succeeds, use gated track
-          } catch {
-            // not logged-in or no access -> keep public track
-          }
-          music = new BABYLON.Sound("jukebox", src, scene, null, { loop: true, autoplay: true, volume: .6 });
-          musicBtn.textContent = "Pause Music";
-          return;
-        }
+  // Add near START_MUSIC: the private (unreleased) R2 key
+const UNRELEASED_KEY = "music/unreleased/your-track-slug.mp3";
 
-        if (music.isPlaying) {
-          music.pause();
-          musicBtn.textContent = "Play Music";
-        } else {
-          music.play();
-          musicBtn.textContent = "Pause Music";
-        }
-      } catch (err) {
-        console.error("Music error:", err);
-        alert(err.message || "Unable to play music.");
+// In bindUI(canvas) where you handle the music button:
+musicBtn?.addEventListener('click', async () => {
+  try {
+    if (!music) {
+      // Try to fetch a signed URL for the unreleased track
+      let src = START_MUSIC[currentTrack]; // fallback (public)
+      try {
+        const { url } = await getSignedMedia(UNRELEASED_KEY, "audio");
+        src = url; // use signed URL if identity + function succeed
+      } catch (e) {
+        console.warn("Falling back to public track:", e?.message || e);
       }
-    });
+
+      music = new BABYLON.Sound("jukebox", src, scene, null, {
+        loop: true, autoplay: true, volume: 0.6
+      });
+      musicBtn.textContent = "Pause Music";
+    } else if (music.isPlaying) {
+      music.pause(); musicBtn.textContent = "Play Music";
+    } else {
+      music.play(); musicBtn.textContent = "Pause Music";
+    }
+  } catch (err) {
+    console.error("Music error:", err);
+    alert("Could not start the jukebox yet.");
+  }
+});
 
     // Optional: cycle public tracks
     nextBtn?.addEventListener('click', () => {
