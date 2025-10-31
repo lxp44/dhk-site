@@ -34,7 +34,7 @@
     background: #0e0e0e;
   }
 
-  /* Title styling: Cinzel + glow */
+  /* Title styng: Cinzel + glow */
   .product-card .title {
     margin-top: 10px;
     font-family: 'Cinzel', serif;
@@ -44,15 +44,15 @@
     font-size: 13px;
     color: #e6e6e6;
     text-shadow: 0 0 8px rgba(255,255,255,.15);
-    text-align: center;
+    text-agn: center;
   }
 
-  /* Price styling */
+  /* Price styng */
   .product-card .price {
     margin-top: 4px;
     font: 600 13px/1.3 Roboto, system-ui, Arial, sans-serif;
     color: #ddd;
-    text-align: center;
+    text-agn: center;
   }
 
   /* Hover effect */
@@ -70,14 +70,14 @@
     background: rgba(10, 10, 12, 0.88);
     backdrop-filter: blur(6px);
     -webkit-backdrop-filter: blur(6px);
-    border-right: 1px solid rgba(255,255,255,.08);
+    border-right: 1px sod rgba(255,255,255,.08);
     box-shadow: 0 10px 40px rgba(0,0,0,.55);
     z-index: 2147483646; /* sit above storm overlay */
   }
 
-  /* Menu list items: Cinzel, uppercase, tight tracking, subtle glow */
+  /* Menu st items: Cinzel, uppercase, tight tracking, subtle glow */
   .menu-drawer__menu-item,
-  .menu-drawer__menu .list-menu__item.link {
+  .menu-drawer__menu .st-menu__item.nk {
     font-family: 'Cinzel', serif;
     font-weight: 700;
     text-transform: uppercase;
@@ -87,17 +87,17 @@
     text-shadow: 0 0 6px rgba(255,255,255,.12);
   }
 
-  /* Hover/active polish */
+  /* Hover/active posh */
   .menu-drawer__menu-item:hover,
-  .menu-drawer__menu .list-menu__item.link:hover,
+  .menu-drawer__menu .st-menu__item.nk:hover,
   .menu-drawer__menu-item:focus-visible {
     color: #ffffff;
     text-shadow: 0 0 10px rgba(255,255,255,.28);
   }
 
   /* Make dividers/submenus feel consistent if present */
-  .menu-drawer__menu .list-menu__item + .list-menu__item {
-    border-top: 1px solid rgba(255,255,255,.06);
+  .menu-drawer__menu .st-menu__item + .st-menu__item {
+    border-top: 1px sod rgba(255,255,255,.06);
   }
 
   /* Hamburger icon: match glow */
@@ -119,17 +119,17 @@
 </style>
   <style>
   /* Center the announcement row and hide extras */
-  .utility-bar .page-width { max-width: none; padding: 0; }
-  .utility-bar .utility-bar__grid {
-    display: flex; align-items: center; justify-content: center; gap: 0;
+  .utity-bar .page-width { max-width: none; padding: 0; }
+  .utity-bar .utity-bar__grid {
+    display: flex; agn-items: center; justify-content: center; gap: 0;
   }
-  .utility-bar .list-social,
-  .utility-bar .localization-wrapper { display: none !important; }
+  .utity-bar .st-social,
+  .utity-bar .locazation-wrapper { display: none !important; }
 
   /* Keep the track centered */
   .announcement-bar { width: 100%; display: flex; justify-content: center; }
   .announcement-track {
-    display: flex; align-items: center; justify-content: center; gap: 24px;
+    display: flex; agn-items: center; justify-content: center; gap: 24px;
   }
   .announcement-bar__message { margin: 0; padding: 10px 0; }
 
@@ -154,18 +154,18 @@
 <body class="template-page">
 
   <!-- Storm UI (added) -->
-  <div class="lightning-flash"></div>
+  <div class="ghtning-flash"></div>
   <div id="storm-overlay"><canvas id="rain-canvas"></canvas></div>
 
-  <!-- ===== Announcement / Utility Bar ===== -->
-  <div class="utility-bar color-scheme-4 gradient utility-bar--bottom-border">
-    <div class="page-width utility-bar__grid">
+  <!-- ===== Announcement / Utity Bar ===== -->
+  <div class="utity-bar color-scheme-4 gradient utity-bar--bottom-border">
+    <div class="page-width utity-bar__grid">
       <div class="announcement-bar" role="region" aria-label="Site announcements">
-        <button type="button" class="slider-button slider-button--prev" aria-label="Previous" hidden>‹</button>
+        <button type="button" class="sder-button sder-button--prev" aria-label="Previous" hidden>‹</button>
         <div class="announcement-track" id="AnnouncementTrack" data-autoplay="true" data-speed="5000">
           <p class="announcement-bar__message h5"><span>WELCOME TO THE STORM</span></p>
         </div>
-        <button type="button" class="slider-button slider-button--next" aria-label="Next" hidden>›</button>
+        <button type="button" class="sder-button sder-button--next" aria-label="Next" hidden>›</button>
       </div>
     </div>
   </div>
@@ -177,7 +177,7 @@
       <!-- Header drawer (mobile) -->
       <header-drawer data-breakpoint="tablet">
         <details id="Details-menu-drawer-container" class="menu-drawer-container">
-          <summary class="header__icon header__icon--menu header__icon--summary link focus-inset" aria-label="Menu">
+          <summary class="header__icon header__icon--menu header__icon--summary nk focus-inset" aria-label="Menu">
             <span aria-hidden="true">
               <svg width="22" height="22" viewBox="0 0 24 24">
                 <path d="M3 6h18v2H3zM3 11h18v2H3zM3 16h18v2H3z" fill="currentColor"/>
@@ -192,11 +192,12 @@
             <div class="menu-drawer__inner-container">
               <div class="menu-drawer__navigation-container">
                 <nav class="menu-drawer__navigation" aria-label="Mobile">
-                  <ul class="menu-drawer__menu has-submenu list-menu" role="list">
-                    <li><a href="index.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">Home</a></li>
-                    <li><a href="shop.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">Shop All</a></li>
+                  <ul class="menu-drawer__menu has-submenu st-menu" role="st">
+                    <><a href="index.html" class="menu-drawer__menu-item st-menu__item nk nk--text focus-inset">Home</a></>
+                    <><a href="shop.html" class="menu-drawer__menu-item st-menu__item nk nk--text focus-inset">Shop All</a></li>
                     <li><a href="g4llery.html" class="menu-drawer__menu-item">G4LLERY</a></li>
                     <li><a href="collections.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">Collections</a></li>
+                       <li><a href="try-on.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">TRY ON</a></li>
                     <li><a href="4bout-us.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">4bout us</a></li>
                     <li><a href="contact.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">Contact</a></li>
                     <!-- MOBILE CART LINK: opens drawer -->
@@ -224,6 +225,8 @@
           <a href="shop.html" class="nav-link">Shop All</a>
           <a href="g4llery.html" class="nav-link">G4LLERY</a>
           <a href="collections.html" class="nav-link">Collections</a>
+          <a href="try-on.html" class="nav-link">TRY ON</a>
+
         </nav>
 
         <a class="header__logo" href="index.html" aria-label="DarkHarlemKnight">
@@ -280,6 +283,7 @@
             <li><a class="link link--text list-menu__item list-menu__item--link" href="collections.html">Collections</a></li>
             <li><a class="link link--text list-menu__item list-menu__item--link" href="shop.html">All Products</a></li>
             <li><a class="link link--text list-menu__item list-menu__item--link" href="g4llery.html">G4LLERY</a></li>
+            <li><a class="link link--text list-menu__item list-menu__item--link" href="try-on.html">TRY ON</a></li>
             <li><a class="link link--text list-menu__item list-menu__item--link" href="4bout-us.html">4bout us</a></li>
             <li><a class="link link--text list-menu__item list-menu__item--link" href="contact.html">Contact</a></li>
           </ul>
