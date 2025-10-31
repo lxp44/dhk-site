@@ -71,7 +71,7 @@
     cam.angularSensibility = 5000;
     cam.attachControl(canvas, true);
 
-    // ---- Movement + collisions (your requested block) ----
+    // ---- Movement + collisions (requested block) ----
     cam.applyGravity = true;
     cam.checkCollisions = true;
     cam.ellipsoid = new BABYLON.Vector3(0.35, 0.9, 0.35); // width, height, depth
@@ -356,6 +356,220 @@
     });
   }
 
+  // ---------- Mobile HUD (safely create if not present) ----------
+  function ensureMobileHud() {
+    if (window.matchMedia('(max-width: 900px)').matches) {
+      if (!document.getElementById('mobile-hud')) {
+        const hud = document.createElement('div');
+        hud.id = 'mobile-hud';
+        hud.innerHTML = `
+          <div id="move-stick"><div id="move-knob"></div></div>
+          <div id="look-zone"></div>
+        `;
+        Object.assign(hud.style, { position:'absolute', inset:'0', pointerEvents:'none' });
+
+        // Basic inline styles so it works even without CSS additions
+        const stick = hud.querySelector('#move-stick');
+        const knob  = hud.querySelector('#move-knob');
+        const look  = hud.querySelector('#look-zone');
+
+        Object.assign(stick.style, {
+          position:'absolute', bottom:'22px', left:'22px',
+          width:'120px', height:'120px', borderRadius:'999px',
+          background:'rgba(255,255,255,.06)',
+          border:'1px solid rgba(255,255,255,.18)',
+          backdropFilter:'blur(8px)',
+          pointerEvents:'auto', touchAction:'none'
+        });
+        Object.assign(knob.style, {
+          position:'absolute', left:'50%', top:'50%',
+          width:'64px', height:'64px', margin:'-32px 0 0 -32px',
+          borderRadius:'999px',
+          background:'rgba(255,255,255,.2)',
+          border:'1px solid rgba(255,255,255,.35)'
+        });
+        Object.assign(look.style, {
+          position:'absolute', right:'0', top:'0', bottom:'0', width:'55%',
+          pointerEvents:'auto', touchAction:'none'
+        });
+
+        document.getElementById('tryon-root')?.appendChild(hud);
+      }
+    }
+  }
+
+  // ---------- Mobile controls (left joystick move, right swipe look) ----------
+  function setupMobileControls(canvas) {
+    ensureMobileHud();
+
+    const stick = document.getElementById('move-stick');
+    const knob  = document.getElementById('move-knob');
+    const look  = document.getElementById('look-zone');
+
+    if (!stick || !knob || !look) return; // no-op on desktop
+
+    const radius = 50; // joystick travel inside 120 circle
+    let moveVec = new BABYLON.Vector2(0, 0);
+    let activeId = null;
+
+    function setKnob(dx, dy) {
+      const len = Math.hypot(dx, dy);
+      const cl = len > radius ? radius / len : 1;
+      const x = dx * cl, y = dy * cl;
+      knob.style.transform = `translate(${x}px, ${y}px)`;
+      moveVec.x = x / radius;
+      moveVec.y = -y / radius; // up is forward
+    }
+    function resetKnob() {
+      knob.style.transform = `translate(0,0)`;
+      moveVec.set(0, 0);
+      activeId = null;
+    }
+
+    // Left stick touch
+    stick.addEventListener('touchstart', (e) => {
+      const t = e.changedTouches[0];
+      activeId = t.identifier;
+      const rect = stick.getBoundingClientRect();
+      const cx = rect.left + rect.width/2;
+      const cy = rect.top  + rect.height/2;
+      setKnob(t.clientX - cx, t.clientY - cy);
+      e.preventDefault();
+    }, { passive: false });
+
+    stick.addEventListener('touchmove', (e) => {
+      const t = [...e.changedTouches].find(tt => tt.identifier === activeId);
+      if (!t) return;
+      const rect = stick.getBoundingClientRect();
+      const cx = rect.left + rect.width/2;
+      const cy = rect.top  + rect.height/2;
+      setKnob(t.clientX - cx, t.clientY - cy);
+      e.preventDefault();
+    }, { passive: false });
+
+    stick.addEventListener('touchend', (e) => {
+      if ([...e.changedTouches].some(tt => tt.identifier === activeId)) resetKnob();
+    });
+    stick.addEventListener('touchcancel', resetKnob);
+
+    // Right side look
+    let lookId = null, lastX = 0, lastY = 0;
+    const lookSensX = 0.0035, lookSensY = 0.0025;
+
+    look.addEventListener('touchstart', (e) => {
+      const t = e.changedTouches[0];
+      lookId = t.identifier; lastX = t.clientX; lastY = t.clientY;
+    }, { passive: true });
+
+    look.addEventListener('touchmove', (e) => {
+      const t = [...e.changedTouches].find(tt => tt.identifier === lookId);
+      if (!t) return;
+      const dx = t.clientX - lastX;
+      const dy = t.clientY - lastY;
+      lastX = t.clientX; lastY = t.clientY;
+
+      const cam = scene.activeCamera;
+      if (cam && cam.name === 'fps') {
+        cam.rotation.y -= dx * lookSensX; // yaw
+        cam.rotation.x -= dy * lookSensY; // pitch
+        cam.rotation.x = BABYLON.Scalar.Clamp(cam.rotation.x, -Math.PI/2 + 0.01, Math.PI/2 - 0.01);
+      }
+    }, { passive: true });
+
+    look.addEventListener('touchend', (e) => {
+      if ([...e.changedTouches].some(tt => tt.identifier === lookId)) lookId = null;
+    });
+
+    // Per-frame movement in FPS
+    const speed = 0.055;
+    scene.onBeforeRenderObservable.add(() => {
+      const cam = scene.activeCamera;
+      if (!cam || cam.name !== 'fps') return;
+      if (moveVec.lengthSquared() < 1e-4) return;
+
+      const fwd = cam.getDirection(new BABYLON.Vector3(0, 0, 1));
+      const right = cam.getDirection(new BABYLON.Vector3(1, 0, 0));
+      fwd.y = 0; right.y = 0;
+      fwd.normalize(); right.normalize();
+
+      const delta = engine.getDeltaTime();
+      const step = speed * (delta * 0.6);
+
+      const move = fwd.scale(moveVec.y * step).add(right.scale(moveVec.x * step));
+      cam.moveWithCollisions(move);
+    });
+  }
+
+  function bindUI(canvas) {
+    const viewBtn  = document.getElementById('view-btn');
+    const musicBtn = document.getElementById('music-btn');
+    const nextBtn  = document.getElementById('music-next');
+
+    viewBtn?.addEventListener('click', () => {
+      isFirstPerson = !isFirstPerson;
+      const active = scene.activeCamera;
+      active?.detachControl(canvas);
+
+      if (isFirstPerson) {
+        scene.activeCamera = makeFPSCam(canvas);
+        viewBtn.textContent = "1st Person";
+      } else {
+        scene.activeCamera = makeArcCam(canvas);
+        viewBtn.textContent = "3rd Person";
+      }
+    });
+
+    // Add near START_MUSIC: the private (unreleased) R2 key
+    const UNRELEASED_KEY = "music/unreleased/your-track-slug.mp3";
+
+    // Play/Pause (tries gated first, falls back to public)
+    musicBtn?.addEventListener('click', async () => {
+      try {
+        if (!music) {
+          let src = START_MUSIC[currentTrack]; // fallback (public)
+          try {
+            const { url } = await getSignedMedia(UNRELEASED_KEY, "audio");
+            src = url;
+          } catch (e) {
+            console.warn("Falling back to public track:", e?.message || e);
+          }
+
+          music = new BABYLON.Sound("jukebox", src, scene, null, {
+            loop: true, autoplay: true, volume: 0.6
+          });
+          musicBtn.textContent = "Pause Music";
+        } else if (music.isPlaying) {
+          music.pause(); musicBtn.textContent = "Play Music";
+        } else {
+          music.play(); musicBtn.textContent = "Pause Music";
+        }
+      } catch (err) {
+        console.error("Music error:", err);
+        alert("Could not start the jukebox yet.");
+      }
+    });
+
+    // Next public track
+    nextBtn?.addEventListener('click', () => {
+      if (!START_MUSIC.length) return;
+      currentTrack = (currentTrack + 1) % START_MUSIC.length;
+      const nextSrc = START_MUSIC[currentTrack];
+      if (!music) {
+        music = new BABYLON.Sound("jukebox", nextSrc, scene, null, { loop: true, autoplay: true, volume: .6 });
+      } else {
+        music.stop();
+        music.dispose();
+        music = new BABYLON.Sound("jukebox", nextSrc, scene, null, { loop: true, autoplay: true, volume: .6 });
+      }
+      musicBtn.textContent = "Pause Music";
+    });
+
+    // Keyboard quick toggle
+    window.addEventListener('keydown', (e) => {
+      if (e.key.toLowerCase() === 'v') viewBtn?.click();
+    });
+  }
+
   async function init() {
     const canvas = document.getElementById("renderCanvas");
     engine = new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true, disableWebGL2Support: false });
@@ -380,6 +594,7 @@
     wireRackPickers(products); // enable clicking racks/hangers in the room
 
     bindUI(canvas);
+    setupMobileControls(canvas); // ← add mobile joystick + swipe look
 
     engine.runRenderLoop(() => scene.render());
     window.addEventListener("resize", () => engine.resize());
