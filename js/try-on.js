@@ -10,7 +10,7 @@
   ];
 
   // IDs your Netlify function recognizes for gated media
-  const GATED_AUDIO_ID = "jukebox-1";     // 🔒 unreleased song id
+  const GATED_AUDIO_ID = "jukebox-1";        // 🔒 unreleased song id
   const GATED_VIDEO_ID = "unreleased-vid-1"; // 🔒 unreleased video id
 
   let engine, scene, camera, avatar, isFirstPerson = false, music, currentTrack = 0;
@@ -18,7 +18,6 @@
 
   // ---------- Auth / Signed Media ----------
   function getIdentity() {
-    // netlify-identity-widget should be loaded in the page head
     return (typeof netlifyIdentity !== "undefined") ? netlifyIdentity : null;
   }
   function currentUser() {
@@ -71,6 +70,15 @@
     cam.inertia = 0.7;
     cam.angularSensibility = 5000;
     cam.attachControl(canvas, true);
+
+    // ---- Movement + collisions (your requested block) ----
+    cam.applyGravity = true;
+    cam.checkCollisions = true;
+    cam.ellipsoid = new BABYLON.Vector3(0.35, 0.9, 0.35); // width, height, depth
+    cam.keysUp = [87, 38];    // W, ↑
+    cam.keysDown = [83, 40];  // S, ↓
+    cam.keysLeft = [65, 37];  // A, ←
+    cam.keysRight = [68, 39]; // D, →
     return cam;
   }
 
@@ -80,6 +88,17 @@
     root.scaling = new BABYLON.Vector3(1,1,1);
 
     scene.createDefaultEnvironment({ createSkybox: false, createGround: false });
+
+    // After meshes load, mark floors/walls/furniture as collidable
+    scene.meshes.forEach(m => {
+      const n = (m.name || "").toLowerCase();
+      if (
+        n.includes("floor") || n.includes("ground") || n.includes("wall") ||
+        n.includes("door")  || n.includes("closet") || n.includes("furniture")
+      ) {
+        m.checkCollisions = true;
+      }
+    });
 
     // Mirror plane support (if your GLB includes a mesh named "Mirror")
     const mirror = scene.getMeshByName("Mirror");
@@ -92,6 +111,16 @@
       mat.reflectionTexture.level = 0.8;
       mat.diffuseColor = new BABYLON.Color3(0.02,0.02,0.02);
       mirror.material = mat;
+
+      // ---- Mirror: click to toggle view (1st/3rd) ----
+      mirror.actionManager = new BABYLON.ActionManager(scene);
+      mirror.actionManager.registerAction(new BABYLON.ExecuteCodeAction(
+        BABYLON.ActionManager.OnPickTrigger,
+        () => {
+          const v = document.getElementById('view-btn');
+          v?.click();
+        }
+      ));
     }
 
     // TV Screen (mesh named "TV") -> start with public loop, allow gated swap on click
@@ -110,28 +139,79 @@
       tvMat.emissiveTexture = tvVideoTex;
       tv.material = tvMat;
 
-      // Click TV to attempt loading gated unreleased video for logged-in users
       tv.actionManager = new BABYLON.ActionManager(scene);
       tv.actionManager.registerAction(new BABYLON.ExecuteCodeAction(
         BABYLON.ActionManager.OnPickTrigger,
         async () => {
           try {
             const { url } = await getSignedMedia(GATED_VIDEO_ID, "video");
-            // swap the source (keep loop/mute)
             const vid = tvVideoTex.video;
             const wasPlaying = !vid.paused;
             vid.src = url;
             vid.loop = true;
-            // preserve muted to avoid autoplay issues; user can unmute in your UI if you add controls
             if (wasPlaying) vid.play().catch(() => {});
           } catch (err) {
             console.warn("TV gated video error:", err);
-            // brief on-screen hint (optional)
-            BABYLON.GUI && alert("Login required to view unreleased video.");
+            alert("Login required to view unreleased video.");
           }
         }
       ));
     }
+
+    // ---- Jukebox: click to toggle music ----
+    const jukebox = scene.getMeshByName("Jukebox");
+    if (jukebox) {
+      jukebox.actionManager = new BABYLON.ActionManager(scene);
+      jukebox.actionManager.registerAction(new BABYLON.ExecuteCodeAction(
+        BABYLON.ActionManager.OnPickTrigger,
+        () => {
+          const btn = document.getElementById('music-btn');
+          if (!btn) return;
+          btn.click(); // reuse existing play/pause logic
+        }
+      ));
+    }
+
+    // ---- Glow highlight + HUD hint for interactables ----
+    const hl = new BABYLON.HighlightLayer("hl", scene);
+    let hoverMesh = null;
+
+    const hint = document.getElementById("interact-hint") || (() => {
+      const el = document.createElement("div");
+      el.id = "interact-hint";
+      el.textContent = "Press E to interact";
+      Object.assign(el.style, {
+        position: "fixed", bottom: "80px", left: "50%", transform: "translateX(-50%)",
+        padding: "8px 12px", background: "rgba(0,0,0,.6)", color: "#fff",
+        fontFamily: "Cinzel, serif", fontSize: "12px", letterSpacing: "0.1em",
+        border: "1px solid rgba(255,255,255,.2)", borderRadius: "6px",
+        display: "none", zIndex: 9999
+      });
+      document.body.appendChild(el);
+      return el;
+    })();
+
+    scene.onPointerObservable.add((pi) => {
+      if (pi.type !== BABYLON.PointerEventTypes.POINTERMOVE) return;
+      const pick = scene.pick(scene.pointerX, scene.pointerY, m => m && m.actionManager);
+      hl.removeAllMeshes();
+      hoverMesh = null;
+      if (pick?.hit && pick.pickedMesh?.actionManager) {
+        hoverMesh = pick.pickedMesh;
+        hl.addMesh(hoverMesh, BABYLON.Color3.FromHexString("#66ccff"));
+        hint.style.display = "block";
+      } else {
+        hint.style.display = "none";
+      }
+    });
+
+    // Keyboard “E” to trigger what you’re looking at
+    window.addEventListener("keydown", (e) => {
+      if (e.key.toLowerCase() !== "e" || !hoverMesh || !hoverMesh.actionManager) return;
+      hoverMesh.actionManager.processTrigger(BABYLON.ActionManager.OnPickTrigger, {
+        meshUnderPointer: hoverMesh
+      });
+    });
   }
 
   // Load avatar (use your pre-made GLB)
@@ -153,13 +233,32 @@
     const gRoot = res.meshes[0];
     gRoot.name = `Garment-${Date.now()}`;
 
-    // If garment is skinned: skeleton should bind correctly.
-    // Otherwise, parent to torso/spine.
     const torso = avatar.getChildren((n) => n.name.toLowerCase().includes("spine"))[0] || avatar;
     gRoot.setParent(torso);
 
     gRoot.position = BABYLON.Vector3.Zero();
     gRoot.scaling = new BABYLON.Vector3(1,1,1);
+  }
+
+  // Rack/hanger mesh pickers -> wear by product id
+  function wireRackPickers(products) {
+    const byId = Object.fromEntries(products.map(p => [p.id, p]));
+    scene.meshes.forEach(m => {
+      const match = /^(rack|hanger)_(.+)$/i.exec(m.name || "");
+      if (!match) return;
+      const productId = match[2];
+      if (!byId[productId]) return;
+
+      m.actionManager = new BABYLON.ActionManager(scene);
+      m.actionManager.registerAction(new BABYLON.ExecuteCodeAction(
+        BABYLON.ActionManager.OnPickTrigger,
+        async () => {
+          const path = `assets/3d/clothes/${productId}.glb`;
+          try { await wearGarment(path); }
+          catch { alert("Garment not available yet."); }
+        }
+      ));
+    });
   }
 
   function buildOutfitBar(products) {
@@ -190,7 +289,7 @@
   function bindUI(canvas) {
     const viewBtn  = document.getElementById('view-btn');
     const musicBtn = document.getElementById('music-btn');
-    const nextBtn  = document.getElementById('music-next'); // optional next-track button if you add one
+    const nextBtn  = document.getElementById('music-next');
 
     viewBtn?.addEventListener('click', () => {
       isFirstPerson = !isFirstPerson;
@@ -206,38 +305,37 @@
       }
     });
 
-  // Add near START_MUSIC: the private (unreleased) R2 key
-const UNRELEASED_KEY = "music/unreleased/your-track-slug.mp3";
+    // Add near START_MUSIC: the private (unreleased) R2 key
+    const UNRELEASED_KEY = "music/unreleased/your-track-slug.mp3";
 
-// In bindUI(canvas) where you handle the music button:
-musicBtn?.addEventListener('click', async () => {
-  try {
-    if (!music) {
-      // Try to fetch a signed URL for the unreleased track
-      let src = START_MUSIC[currentTrack]; // fallback (public)
+    // Play/Pause (tries gated first, falls back to public)
+    musicBtn?.addEventListener('click', async () => {
       try {
-        const { url } = await getSignedMedia(UNRELEASED_KEY, "audio");
-        src = url; // use signed URL if identity + function succeed
-      } catch (e) {
-        console.warn("Falling back to public track:", e?.message || e);
+        if (!music) {
+          let src = START_MUSIC[currentTrack]; // fallback (public)
+          try {
+            const { url } = await getSignedMedia(UNRELEASED_KEY, "audio");
+            src = url; // use signed URL if identity + function succeed
+          } catch (e) {
+            console.warn("Falling back to public track:", e?.message || e);
+          }
+
+          music = new BABYLON.Sound("jukebox", src, scene, null, {
+            loop: true, autoplay: true, volume: 0.6
+          });
+          musicBtn.textContent = "Pause Music";
+        } else if (music.isPlaying) {
+          music.pause(); musicBtn.textContent = "Play Music";
+        } else {
+          music.play(); musicBtn.textContent = "Pause Music";
+        }
+      } catch (err) {
+        console.error("Music error:", err);
+        alert("Could not start the jukebox yet.");
       }
+    });
 
-      music = new BABYLON.Sound("jukebox", src, scene, null, {
-        loop: true, autoplay: true, volume: 0.6
-      });
-      musicBtn.textContent = "Pause Music";
-    } else if (music.isPlaying) {
-      music.pause(); musicBtn.textContent = "Play Music";
-    } else {
-      music.play(); musicBtn.textContent = "Pause Music";
-    }
-  } catch (err) {
-    console.error("Music error:", err);
-    alert("Could not start the jukebox yet.");
-  }
-});
-
-    // Optional: cycle public tracks
+    // Next public track
     nextBtn?.addEventListener('click', () => {
       if (!START_MUSIC.length) return;
       currentTrack = (currentTrack + 1) % START_MUSIC.length;
@@ -249,6 +347,7 @@ musicBtn?.addEventListener('click', async () => {
         music.dispose();
         music = new BABYLON.Sound("jukebox", nextSrc, scene, null, { loop: true, autoplay: true, volume: .6 });
       }
+      musicBtn.textContent = "Pause Music";
     });
 
     // Keyboard quick toggle
@@ -263,6 +362,10 @@ musicBtn?.addEventListener('click', async () => {
     scene = new BABYLON.Scene(engine);
     scene.ambientColor = new BABYLON.Color3(0.1,0.1,0.12);
 
+    // ---- Collisions & Gravity (scene-wide) ----
+    scene.collisionsEnabled = true;
+    scene.gravity = new BABYLON.Vector3(0, -0.5, 0); // gentle gravity
+
     // Camera + light
     scene.activeCamera = makeArcCam(canvas);
     const light = new BABYLON.HemisphericLight("h", new BABYLON.Vector3(0,1,0), scene);
@@ -274,6 +377,7 @@ musicBtn?.addEventListener('click', async () => {
     // Build outfit buttons from your catalog
     const products = await fetchJSON(DATA_URL);
     buildOutfitBar(products);
+    wireRackPickers(products); // enable clicking racks/hangers in the room
 
     bindUI(canvas);
 
