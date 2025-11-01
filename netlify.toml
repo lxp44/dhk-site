@@ -17,6 +17,14 @@
   to   = "/.netlify/functions/:splat"
   status = 200
 
+# 👇 Domain canonical redirect (www → non-www)
+[[redirects]]
+  from = "https://www.darkharlemknight.com/*"
+  to   = "https://darkharlemknight.com/:splat"
+  status = 301
+  force = true
+
+# 👇 Single Page App fallback (must stay last)
 [[redirects]]
   from = "/*"
   to   = "/index.html"
