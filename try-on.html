@@ -7,6 +7,21 @@
   <link rel="icon" href="assets/img/DHK_transparent.gif" type="image/gif" sizes="any">
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/styles.css">
+
+/* Mobile layout */
+@media (max-width: 900px){
+  /* Hide the top bar on phones to avoid clutter/wrapping */
+  .hud .topbar{ display: none; }
+
+  /* Keep the dock visible and a bit tighter */
+  .dock .btn{
+    font-size: 11px;
+    padding: 10px 12px;
+    border-radius: 999px;
+    letter-spacing: .08em;
+  }
+}
+
 /* Prevent the big chip text from breaking into columns */
 .chip{
   white-space: nowrap;
@@ -38,19 +53,6 @@
   cursor: pointer;
 }
 
-/* Mobile layout */
-@media (max-width: 900px){
-  /* Hide the top bar on phones to avoid clutter/wrapping */
-  .hud .topbar{ display: none; }
-
-  /* Keep the dock visible and a bit tighter */
-  .dock .btn{
-    font-size: 11px;
-    padding: 10px 12px;
-    border-radius: 999px;
-    letter-spacing: .08em;
-  }
-}
 
   <!-- Babylon.js (robust, easy PBR, mirrors, video textures) -->
   <script src="https://cdn.babylonjs.com/babylon.js" defer></script>
