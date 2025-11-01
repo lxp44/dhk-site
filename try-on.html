@@ -13,54 +13,39 @@
   <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js" defer></script>
   <!-- Ready Player Me helper -->
   <script src="https://unpkg.com/@readyplayerme/visage@latest/dist/index.umd.js" defer></script>
+  <!-- Netlify Identity (REQUIRED) -->
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js" defer></script>
+
+  <!-- Identity init (force same-site API) -->
   <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    if (!window.netlifyIdentity) return;
-
-    netlifyIdentity.on('error', (e) => {
-      console.warn('Identity error:', e);
-      alert(e?.message || 'Login error — try resending the confirmation email.');
-    });
-
-    // Bonus: if the widget reports unconfirmed, offer to resend
-    netlifyIdentity.on('login', (user) => {
-      if (!user?.confirmed_at && !user?.confirmation_sent_at) {
-        alert('Check your email to confirm your account.');
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.netlifyIdentity) {
+        netlifyIdentity.init({
+          APIUrl: location.origin + '/.netlify/identity'
+        });
       }
     });
-  });
-</script>
-  document.addEventListener("DOMContentLoaded", () => {
-    if (!window.netlifyIdentity) return;
+  </script>
 
-    function bump() {
-      const w = document.getElementById('netlify-identity-widget');
-      if (w) {
-        w.style.position = 'fixed';
-        w.style.inset = '0';
-        w.style.width = '100vw';
-        w.style.height = '100vh';
-        w.style.zIndex = '2147483647';
-        w.style.pointerEvents = 'auto';
-      }
-    }
+  <!-- Identity: error handling + confirmation hint -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (!window.netlifyIdentity) return;
 
-    netlifyIdentity.on('open', () => {
-      document.documentElement.classList.add('netlify-identity-open');
-      document.body.classList.add('netlify-identity-open');
-      bump();
-      setTimeout(bump, 0); // Safari fix
+      netlifyIdentity.on('error', (e) => {
+        console.warn('Identity error:', e);
+        alert(e?.message || 'Login error — try resending the confirmation email.');
+      });
+
+      netlifyIdentity.on('login', (user) => {
+        if (!user?.confirmed_at && !user?.confirmation_sent_at) {
+          alert('Check your email to confirm your account.');
+        }
+      });
     });
+  </script>
 
-    netlifyIdentity.on('close', () => {
-      document.documentElement.classList.remove('netlify-identity-open');
-      document.body.classList.remove('netlify-identity-open');
-    });
-
-    document.getElementById('auth-btn')?.addEventListener('click', () => netlifyIdentity.open('login'));
-    document.getElementById('gate-signin')?.addEventListener('click', () => netlifyIdentity.open('login'));
-  });
-</script>
+  <!-- Make the Identity modal sit above everything -->
   <style>
     body,html{margin:0;height:100%;background:#0a0a0a;color:#eaeaea;}
     #tryon-root{position:relative;height:100vh;width:100vw;overflow:hidden;}
@@ -75,53 +60,35 @@
 
     /* Bottom dock */
     .dock{
-      position: fixed;
-      left: 50%;
-      transform: translateX(-50%);
+      position: fixed; left: 50%; transform: translateX(-50%);
       bottom: max(14px, env(safe-area-inset-bottom));
-      display: flex;
-      gap: 10px;
-      z-index: 9999;
-      pointer-events: auto;
+      display: flex; gap: 10px; z-index: 9999; pointer-events: auto;
     }
     .dock .btn{
-      -webkit-appearance: none; appearance: none;
+      -webkit-appearance:none; appearance:none;
       background: rgba(255,255,255,.08);
-      border: 1px solid rgba(255,255,255,.16);
-      border-radius: 12px;
-      color: #fff;
-      padding: 10px 14px;
-      font: 600 12px/1 'Cinzel', serif;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      cursor: pointer;
+      border:1px solid rgba(255,255,255,.16);
+      border-radius:12px; color:#fff; padding:10px 14px;
+      font:600 12px/1 'Cinzel', serif; letter-spacing:.1em; text-transform:uppercase;
+      cursor:pointer;
     }
-
-    /* Mobile */
     @media (max-width:900px){
       .hud .topbar{display:none}
       .dock .btn{font-size:11px;padding:10px 12px;border-radius:999px;letter-spacing:.08em}
       .legend{display:none}
     }
-    /* Make Netlify Identity modal sit above Babylon HUD/canvas on mobile & desktop */
-#netlify-identity-widget,
-.netlify-identity-widget,
-.netlify-identity-modal,
-.netlify-identity-root {
-  position: fixed !important;
-  inset: 0 !important;          /* top/right/bottom/left: 0 */
-  width: 100vw !important;
-  height: 100vh !important;
-  z-index: 2147483647 !important; /* maximum */
-  pointer-events: auto !important;
-}
 
-/* When the widget is open, prevent background scroll/interaction */
-html.netlify-identity-open,
-body.netlify-identity-open {
-  overflow: hidden !important;
-  touch-action: none !important;
-}
+    /* Identity modal on top */
+    #netlify-identity-widget,
+    .netlify-identity-widget,
+    .netlify-identity-modal,
+    .netlify-identity-root{
+      position:fixed!important; inset:0!important; width:100vw!important; height:100vh!important;
+      z-index:2147483647!important; pointer-events:auto!important;
+    }
+    html.netlify-identity-open, body.netlify-identity-open{
+      overflow:hidden!important; touch-action:none!important;
+    }
   </style>
 </head>
 <body>
@@ -157,8 +124,7 @@ body.netlify-identity-open {
 
       <!-- Controls legend -->
       <div class="legend">
-        <b>Controls</b><br/>
-        WASD to move • Mouse to look • V to switch view • E to interact
+        <b>Controls</b><br/>WASD to move • Mouse to look • V to switch view • E to interact
       </div>
 
       <!-- AUTH GATE -->
@@ -175,13 +141,9 @@ body.netlify-identity-open {
             <button id="avatar-create" class="btn chip">Create new</button>
             <button id="avatar-load"   class="btn chip">Load saved</button>
           </div>
-
-          <!-- Ready Player Me iframe appears here when creating -->
           <div id="rpm-wrap" style="display:none; border:1px solid rgba(255,255,255,.12); border-radius:10px;">
             <iframe id="rpm-iframe" src="" style="width:100%; height:540px; border:0;"></iframe>
           </div>
-
-          <!-- Optional paste-URL fallback -->
           <div id="url-wrap" style="display:none; margin-top:10px;">
             <label style="display:block; font-size:12px; opacity:.8; margin-bottom:6px;">Paste avatar URL</label>
             <input id="avatar-url-input" type="url" placeholder="https://..." style="width:100%; padding:10px; background:#121214; color:#fff; border:1px solid #2a2a2a; border-radius:8px;">
@@ -194,7 +156,7 @@ body.netlify-identity-open {
       </div>
     </div>
 
-    <!-- Single bottom dock (unique IDs) -->
+    <!-- Bottom dock (unique IDs) -->
     <div id="jukebox-controls" class="dock">
       <button id="auth-btn-dock"   class="btn">Sign In</button>
       <button id="view-btn-dock"   class="btn">3rd Person</button>
@@ -202,6 +164,49 @@ body.netlify-identity-open {
       <button id="music-next-dock" class="btn">Next Track</button>
     </div>
   </main>
+
+  <!-- Proxy dock buttons to the main handlers -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // ensure the Identity widget covers the screen when opened
+      if (window.netlifyIdentity) {
+        const bump = () => {
+          const w = document.getElementById('netlify-identity-widget');
+          if (w) {
+            w.style.position = 'fixed';
+            w.style.inset = '0';
+            w.style.width = '100vw';
+            w.style.height = '100vh';
+            w.style.zIndex = '2147483647';
+            w.style.pointerEvents = 'auto';
+          }
+        };
+        netlifyIdentity.on('open', () => {
+          document.documentElement.classList.add('netlify-identity-open');
+          document.body.classList.add('netlify-identity-open');
+          bump(); setTimeout(bump, 0);
+        });
+        netlifyIdentity.on('close', () => {
+          document.documentElement.classList.remove('netlify-identity-open');
+          document.body.classList.remove('netlify-identity-open');
+        });
+
+        // Open login from either topbar or gate
+        document.getElementById('auth-btn')?.addEventListener('click', () => netlifyIdentity.open('login'));
+        document.getElementById('gate-signin')?.addEventListener('click', () => netlifyIdentity.open('login'));
+      }
+
+      // Dock proxies -> click the main controls
+      const proxy = (fromId, toId) =>
+        document.getElementById(fromId)?.addEventListener('click', () =>
+          document.getElementById(toId)?.click()
+        );
+      proxy('auth-btn-dock',  'auth-btn');
+      proxy('view-btn-dock',  'view-btn');
+      proxy('music-btn-dock', 'music-btn');
+      proxy('music-next-dock','music-next');
+    });
+  </script>
 
   <script src="js/try-on-auth.js" defer></script>
   <script src="js/try-on.js" defer></script>
