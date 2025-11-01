@@ -31,6 +31,50 @@
       .legend{display:none}
       .panel{bottom:10px}
     }
+    /* Prevent the big chip text from breaking into columns */
+.chip{
+  white-space: nowrap;
+  line-height: 1;
+}
+
+/* Bottom dock styling */
+.dock{
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: max(14px, env(safe-area-inset-bottom));
+  display: flex;
+  gap: 10px;
+  z-index: 9999;
+  pointer-events: auto;
+}
+
+.dock .btn{
+  -webkit-appearance: none; appearance: none;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.16);
+  border-radius: 12px;
+  color: #fff;
+  padding: 10px 14px;
+  font: 600 12px/1 'Cinzel', serif;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+/* Mobile layout */
+@media (max-width: 900px){
+  /* Hide the top bar on phones to avoid clutter/wrapping */
+  .hud .topbar{ display: none; }
+
+  /* Keep the dock visible and a bit tighter */
+  .dock .btn{
+    font-size: 11px;
+    padding: 10px 12px;
+    border-radius: 999px;
+    letter-spacing: .08em;
+  }
+}
   </style>
 </head>
 <body>
