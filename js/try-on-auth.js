@@ -81,7 +81,13 @@
       rpmFrame.contentWindow.postMessage({ target: 'readyplayerme', type: 'subscribe', eventName: 'v1.avatar.exported' }, '*');
     };
   }
-
+  
+document.addEventListener('DOMContentLoaded', () => {
+  const chip = document.querySelector('.chip'); // the TRY ON chip in topbar
+  chip?.addEventListener('click', () => {
+    if (window.netlifyIdentity) netlifyIdentity.open('login');
+  });
+});
   // ---- Load existing (URL prompt fallback) ----
   async function saveManualUrl() {
     const val = (urlInput.value || '').trim();
