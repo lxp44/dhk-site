@@ -15,7 +15,38 @@
   <script src="https://unpkg.com/@readyplayerme/visage@latest/dist/index.umd.js" defer></script>
   <!-- Netlify Identity -->
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js" defer></script>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    if (!window.netlifyIdentity) return;
 
+    function bump() {
+      const w = document.getElementById('netlify-identity-widget');
+      if (w) {
+        w.style.position = 'fixed';
+        w.style.inset = '0';
+        w.style.width = '100vw';
+        w.style.height = '100vh';
+        w.style.zIndex = '2147483647';
+        w.style.pointerEvents = 'auto';
+      }
+    }
+
+    netlifyIdentity.on('open', () => {
+      document.documentElement.classList.add('netlify-identity-open');
+      document.body.classList.add('netlify-identity-open');
+      bump();
+      setTimeout(bump, 0); // Safari fix
+    });
+
+    netlifyIdentity.on('close', () => {
+      document.documentElement.classList.remove('netlify-identity-open');
+      document.body.classList.remove('netlify-identity-open');
+    });
+
+    document.getElementById('auth-btn')?.addEventListener('click', () => netlifyIdentity.open('login'));
+    document.getElementById('gate-signin')?.addEventListener('click', () => netlifyIdentity.open('login'));
+  });
+</script>
   <style>
     body,html{margin:0;height:100%;background:#0a0a0a;color:#eaeaea;}
     #tryon-root{position:relative;height:100vh;width:100vw;overflow:hidden;}
@@ -58,6 +89,25 @@
       .dock .btn{font-size:11px;padding:10px 12px;border-radius:999px;letter-spacing:.08em}
       .legend{display:none}
     }
+    /* Make Netlify Identity modal sit above Babylon HUD/canvas on mobile & desktop */
+#netlify-identity-widget,
+.netlify-identity-widget,
+.netlify-identity-modal,
+.netlify-identity-root {
+  position: fixed !important;
+  inset: 0 !important;          /* top/right/bottom/left: 0 */
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 2147483647 !important; /* maximum */
+  pointer-events: auto !important;
+}
+
+/* When the widget is open, prevent background scroll/interaction */
+html.netlify-identity-open,
+body.netlify-identity-open {
+  overflow: hidden !important;
+  touch-action: none !important;
+}
   </style>
 </head>
 <body>
