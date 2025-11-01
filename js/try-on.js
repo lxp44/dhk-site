@@ -214,16 +214,18 @@
     });
   }
 
-  // Load avatar (use your pre-made GLB)
-  async function loadAvatar() {
-    const res = await BABYLON.SceneLoader.ImportMeshAsync("", "", "assets/3d/avatars/dhk_base.glb", scene);
-    const root = res.meshes[0];
-    root.name = "AvatarRoot";
-    root.position = new BABYLON.Vector3(0, 0, 0);
-    avatar = root;
-    const idle = res.animationGroups?.find(a => /idle/i.test(a.name));
-    idle?.start(true);
-  }
+ // Replace your loadAvatar() with this:
+async function loadAvatarFromUrl(avatarUrl) {
+  // RPM exports GLB/VRM; Babylon can load GLB directly
+  const res = await BABYLON.SceneLoader.ImportMeshAsync("", "", avatarUrl, scene);
+  const root = res.meshes[0];
+  root.name = "AvatarRoot";
+  root.position = new BABYLON.Vector3(0, 0, 0);
+  avatar = root;
+
+  const idle = res.animationGroups?.find(a => /idle/i.test(a.name));
+  idle?.start?.(true);
+}
 
   // Attach clothing: load garment GLB and parent to avatar bone
   async function wearGarment(garmentPath) {
@@ -571,22 +573,27 @@
   }
 
   async function init() {
-    const canvas = document.getElementById("renderCanvas");
-    engine = new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true, disableWebGL2Support: false });
-    scene = new BABYLON.Scene(engine);
-    scene.ambientColor = new BABYLON.Color3(0.1,0.1,0.12);
+  // 🔒 Gate: require login + avatar before the world loads
+  const avatarUrl = await window.DHKAuth.requireAuthAndAvatar();
 
-    // ---- Collisions & Gravity (scene-wide) ----
-    scene.collisionsEnabled = true;
-    scene.gravity = new BABYLON.Vector3(0, -0.5, 0); // gentle gravity
+  const canvas = document.getElementById("renderCanvas");
+  engine = new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true, disableWebGL2Support: false });
+  scene = new BABYLON.Scene(engine);
+  scene.ambientColor = new BABYLON.Color3(0.1,0.1,0.12);
 
-    // Camera + light
-    scene.activeCamera = makeArcCam(canvas);
-    const light = new BABYLON.HemisphericLight("h", new BABYLON.Vector3(0,1,0), scene);
-    light.intensity = 0.9;
+  // collisions + gravity (you already have this)
+  scene.collisionsEnabled = true;
+  scene.gravity = new BABYLON.Vector3(0, -0.5, 0);
 
-    await loadCloset();
-    await loadAvatar();
+  // Camera + light
+  scene.activeCamera = makeArcCam(canvas);
+  const light = new BABYLON.HemisphericLight("h", new BABYLON.Vector3(0,1,0), scene);
+  light.intensity = 0.9;
+
+  await loadCloset();
+  await loadAvatarFromUrl(avatarUrl);   // 👈 use chosen/saved avatar
+
+  // …(rest of your init stays the same)…
 
     // Build outfit buttons from your catalog
     const products = await fetchJSON(DATA_URL);
