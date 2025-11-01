@@ -1,19 +1,19 @@
 // js/try-on.js
 (() => {
   const DATA_URL   = "data/products.json";
-  const CLOSET_URL = "assets/3d/closet.glb";     // mansion closet scene (exported GLB)
+  const CLOSET_URL = "assets/3d/closet.glb";
 
-  // Public fallback tracks (play for guests / if gate fails)
+  // Public fallback tracks (used for guests / if gate fails)
   const START_MUSIC = [
     "assets/media/music/track1.mp3",
     "assets/media/music/track2.mp3"
   ];
 
-  // IDs your Netlify function recognizes for gated media
-  const GATED_AUDIO_ID = "jukebox-1";        // 🔒 unreleased song id
-  const GATED_VIDEO_ID = "unreleased-vid-1"; // 🔒 unreleased video id
+  // IDs/keys your Netlify function recognizes for gated media
+  const GATED_VIDEO_ID = "unreleased-vid-1";
+  const UNRELEASED_KEY = "music/unreleased/your-track-slug.mp3";
 
-  let engine, scene, camera, avatar, isFirstPerson = false, music, currentTrack = 0;
+  let engine, scene, avatar, isFirstPerson = false, music, currentTrack = 0;
   let tvVideoTex = null;
 
   // ---------- Auth / Signed Media ----------
@@ -24,12 +24,10 @@
     const id = getIdentity();
     return id ? id.currentUser() : null;
   }
-
   async function getSignedMedia(id, type) {
     const user = currentUser();
     if (!user) throw new Error("Login required");
-    const token = await user.jwt(); // Netlify Identity JWT
-
+    const token = await user.jwt();
     const res = await fetch(
       "/.netlify/functions/get-signed-media?id=" + encodeURIComponent(id) +
       "&type=" + encodeURIComponent(type || ""),
@@ -41,23 +39,22 @@
 
   // ---------- Utils ----------
   async function fetchJSON(url) {
-    const r = await fetch(url, { cache: 'no-store' });
+    const r = await fetch(url, { cache: "no-store" });
     if (!r.ok) throw new Error(`HTTP ${r.status} on ${url}`);
     return r.json();
   }
 
+  // ---------- Cameras ----------
   function makeArcCam(canvas) {
     const cam = new BABYLON.ArcRotateCamera(
-      "cam",
-      Math.PI * 1.2,
-      1.0,
-      6.5,
+      "arc",
+      Math.PI * 1.2, 1.0, 6.5,
       new BABYLON.Vector3(0, 1.6, 0),
       scene
     );
     cam.lowerRadiusLimit = 2.2;
     cam.upperRadiusLimit = 10;
-    cam.wheelPrecision = 50;
+    cam.wheelPrecision   = 50;
     cam.panningSensibility = 0;
     cam.attachControl(canvas, true);
     return cam;
@@ -71,67 +68,60 @@
     cam.angularSensibility = 5000;
     cam.attachControl(canvas, true);
 
-    // ---- Movement + collisions (requested block) ----
+    // Movement + collisions
     cam.applyGravity = true;
     cam.checkCollisions = true;
-    cam.ellipsoid = new BABYLON.Vector3(0.35, 0.9, 0.35); // width, height, depth
-    cam.keysUp = [87, 38];    // W, ↑
-    cam.keysDown = [83, 40];  // S, ↓
-    cam.keysLeft = [65, 37];  // A, ←
+    cam.ellipsoid = new BABYLON.Vector3(0.35, 0.9, 0.35);
+    cam.keysUp    = [87, 38]; // W, ↑
+    cam.keysDown  = [83, 40]; // S, ↓
+    cam.keysLeft  = [65, 37]; // A, ←
     cam.keysRight = [68, 39]; // D, →
     return cam;
   }
 
+  // ---------- Closet + Interactables ----------
   async function loadCloset() {
     const result = await BABYLON.SceneLoader.ImportMeshAsync("", "", CLOSET_URL, scene);
     const root = result.meshes[0];
-    root.scaling = new BABYLON.Vector3(1,1,1);
+    root.scaling = new BABYLON.Vector3(1, 1, 1);
 
     scene.createDefaultEnvironment({ createSkybox: false, createGround: false });
 
-    // After meshes load, mark floors/walls/furniture as collidable
+    // Collidable surfaces based on mesh names
     scene.meshes.forEach(m => {
       const n = (m.name || "").toLowerCase();
-      if (
-        n.includes("floor") || n.includes("ground") || n.includes("wall") ||
-        n.includes("door")  || n.includes("closet") || n.includes("furniture")
-      ) {
+      if (n.includes("floor") || n.includes("ground") || n.includes("wall") ||
+          n.includes("door")  || n.includes("closet") || n.includes("furniture")) {
         m.checkCollisions = true;
       }
     });
 
-    // Mirror plane support (if your GLB includes a mesh named "Mirror")
+    // Mirror (named "Mirror")
     const mirror = scene.getMeshByName("Mirror");
     if (mirror) {
       const mat = new BABYLON.StandardMaterial("mirrorMat", scene);
-      const rt = new BABYLON.MirrorTexture("mirrorTex", 1024, scene, true);
+      const rt  = new BABYLON.MirrorTexture("mirrorTex", 1024, scene, true);
       rt.mirrorPlane = new BABYLON.Plane(0, 0, -1, -mirror.position.z);
-      rt.renderList = scene.meshes; // include avatar when loaded
+      rt.renderList = scene.meshes;
       mat.reflectionTexture = rt;
       mat.reflectionTexture.level = 0.8;
-      mat.diffuseColor = new BABYLON.Color3(0.02,0.02,0.02);
+      mat.diffuseColor = new BABYLON.Color3(0.02, 0.02, 0.02);
       mirror.material = mat;
 
-      // ---- Mirror: click to toggle view (1st/3rd) ----
       mirror.actionManager = new BABYLON.ActionManager(scene);
       mirror.actionManager.registerAction(new BABYLON.ExecuteCodeAction(
         BABYLON.ActionManager.OnPickTrigger,
-        () => {
-          const v = document.getElementById('view-btn');
-          v?.click();
-        }
+        () => document.getElementById("view-btn")?.click()
       ));
     }
 
-    // TV Screen (mesh named "TV") -> start with public loop, allow gated swap on click
+    // TV (named "TV") → fallback loop; click to try gated
     const tv = scene.getMeshByName("TV");
     if (tv) {
       tvVideoTex = new BABYLON.VideoTexture(
         "tvtex",
-        "assets/media/sample-video.mp4", // public fallback
-        scene,
-        true,
-        true,
+        "assets/media/sample-video.mp4",
+        scene, true, true,
         BABYLON.VideoTexture.TRILINEAR_SAMPLINGMODE,
         { autoPlay: true, loop: true, muted: true }
       );
@@ -158,21 +148,17 @@
       ));
     }
 
-    // ---- Jukebox: click to toggle music ----
+    // Jukebox (named "Jukebox")
     const jukebox = scene.getMeshByName("Jukebox");
     if (jukebox) {
       jukebox.actionManager = new BABYLON.ActionManager(scene);
       jukebox.actionManager.registerAction(new BABYLON.ExecuteCodeAction(
         BABYLON.ActionManager.OnPickTrigger,
-        () => {
-          const btn = document.getElementById('music-btn');
-          if (!btn) return;
-          btn.click(); // reuse existing play/pause logic
-        }
+        () => document.getElementById("music-btn")?.click()
       ));
     }
 
-    // ---- Glow highlight + HUD hint for interactables ----
+    // Hover highlight + "E to interact"
     const hl = new BABYLON.HighlightLayer("hl", scene);
     let hoverMesh = null;
 
@@ -205,44 +191,37 @@
       }
     });
 
-    // Keyboard “E” to trigger what you’re looking at
     window.addEventListener("keydown", (e) => {
       if (e.key.toLowerCase() !== "e" || !hoverMesh || !hoverMesh.actionManager) return;
-      hoverMesh.actionManager.processTrigger(BABYLON.ActionManager.OnPickTrigger, {
-        meshUnderPointer: hoverMesh
-      });
+      hoverMesh.actionManager.processTrigger(BABYLON.ActionManager.OnPickTrigger, { meshUnderPointer: hoverMesh });
     });
+
+    scene.onDisposeObservable.add(() => hl.dispose());
   }
 
- // Replace your loadAvatar() with this:
-async function loadAvatarFromUrl(avatarUrl) {
-  // RPM exports GLB/VRM; Babylon can load GLB directly
-  const res = await BABYLON.SceneLoader.ImportMeshAsync("", "", avatarUrl, scene);
-  const root = res.meshes[0];
-  root.name = "AvatarRoot";
-  root.position = new BABYLON.Vector3(0, 0, 0);
-  avatar = root;
+  // ---------- Avatar ----------
+  async function loadAvatarFromUrl(avatarUrl) {
+    const res = await BABYLON.SceneLoader.ImportMeshAsync("", "", avatarUrl, scene);
+    const root = res.meshes[0];
+    root.name = "AvatarRoot";
+    root.position = new BABYLON.Vector3(0, 0, 0);
+    avatar = root;
+    const idle = res.animationGroups?.find(a => /idle/i.test(a.name));
+    idle?.start?.(true);
+  }
 
-  const idle = res.animationGroups?.find(a => /idle/i.test(a.name));
-  idle?.start?.(true);
-}
-
-  // Attach clothing: load garment GLB and parent to avatar bone
+  // ---------- Wearables ----------
   async function wearGarment(garmentPath) {
     if (!avatar) return;
-
     const res = await BABYLON.SceneLoader.ImportMeshAsync("", "", garmentPath, scene);
     const gRoot = res.meshes[0];
     gRoot.name = `Garment-${Date.now()}`;
-
-    const torso = avatar.getChildren((n) => n.name.toLowerCase().includes("spine"))[0] || avatar;
+    const torso = avatar.getChildren(n => (n.name || "").toLowerCase().includes("spine"))[0] || avatar;
     gRoot.setParent(torso);
-
     gRoot.position = BABYLON.Vector3.Zero();
-    gRoot.scaling = new BABYLON.Vector3(1,1,1);
+    gRoot.scaling  = new BABYLON.Vector3(1, 1, 1);
   }
 
-  // Rack/hanger mesh pickers -> wear by product id
   function wireRackPickers(products) {
     const byId = Object.fromEntries(products.map(p => [p.id, p]));
     scene.meshes.forEach(m => {
@@ -255,8 +234,7 @@ async function loadAvatarFromUrl(avatarUrl) {
       m.actionManager.registerAction(new BABYLON.ExecuteCodeAction(
         BABYLON.ActionManager.OnPickTrigger,
         async () => {
-          const path = `assets/3d/clothes/${productId}.glb`;
-          try { await wearGarment(path); }
+          try { await wearGarment(`assets/3d/clothes/${productId}.glb`); }
           catch { alert("Garment not available yet."); }
         }
       ));
@@ -264,7 +242,7 @@ async function loadAvatarFromUrl(avatarUrl) {
   }
 
   function buildOutfitBar(products) {
-    const panel = document.getElementById('outfit-panel');
+    const panel = document.getElementById("outfit-panel");
     if (!panel) return;
     const wearable = products.filter(p => p.images && p.images.length);
 
@@ -274,162 +252,84 @@ async function loadAvatarFromUrl(avatarUrl) {
       </button>
     `).join("");
 
-    panel.addEventListener('click', async (e) => {
-      const btn = e.target.closest('button[data-id]');
+    panel.addEventListener("click", async (e) => {
+      const btn = e.target.closest("button[data-id]");
       if (!btn) return;
-      const id = btn.getAttribute('data-id');
-      const path = `assets/3d/clothes/${id}.glb`; // convention: product id => GLB path
-      try {
-        await wearGarment(path);
-      } catch (err) {
-        console.error('Wear failed:', err);
-        alert('Garment not available yet.');
+      const id = btn.getAttribute("data-id");
+      try { await wearGarment(`assets/3d/clothes/${id}.glb`); }
+      catch (err) {
+        console.error("Wear failed:", err);
+        alert("Garment not available yet.");
       }
     });
   }
 
-  function bindUI(canvas) {
-    const viewBtn  = document.getElementById('view-btn');
-    const musicBtn = document.getElementById('music-btn');
-    const nextBtn  = document.getElementById('music-next');
-
-    viewBtn?.addEventListener('click', () => {
-      isFirstPerson = !isFirstPerson;
-      const active = scene.activeCamera;
-      active?.detachControl(canvas);
-
-      if (isFirstPerson) {
-        scene.activeCamera = makeFPSCam(canvas);
-        viewBtn.textContent = "1st Person";
-      } else {
-        scene.activeCamera = makeArcCam(canvas);
-        viewBtn.textContent = "3rd Person";
-      }
-    });
-
-    // Add near START_MUSIC: the private (unreleased) R2 key
-    const UNRELEASED_KEY = "music/unreleased/your-track-slug.mp3";
-
-    // Play/Pause (tries gated first, falls back to public)
-    musicBtn?.addEventListener('click', async () => {
-      try {
-        if (!music) {
-          let src = START_MUSIC[currentTrack]; // fallback (public)
-          try {
-            const { url } = await getSignedMedia(UNRELEASED_KEY, "audio");
-            src = url; // use signed URL if identity + function succeed
-          } catch (e) {
-            console.warn("Falling back to public track:", e?.message || e);
-          }
-
-          music = new BABYLON.Sound("jukebox", src, scene, null, {
-            loop: true, autoplay: true, volume: 0.6
-          });
-          musicBtn.textContent = "Pause Music";
-        } else if (music.isPlaying) {
-          music.pause(); musicBtn.textContent = "Play Music";
-        } else {
-          music.play(); musicBtn.textContent = "Pause Music";
-        }
-      } catch (err) {
-        console.error("Music error:", err);
-        alert("Could not start the jukebox yet.");
-      }
-    });
-
-    // Next public track
-    nextBtn?.addEventListener('click', () => {
-      if (!START_MUSIC.length) return;
-      currentTrack = (currentTrack + 1) % START_MUSIC.length;
-      const nextSrc = START_MUSIC[currentTrack];
-      if (!music) {
-        music = new BABYLON.Sound("jukebox", nextSrc, scene, null, { loop: true, autoplay: true, volume: .6 });
-      } else {
-        music.stop();
-        music.dispose();
-        music = new BABYLON.Sound("jukebox", nextSrc, scene, null, { loop: true, autoplay: true, volume: .6 });
-      }
-      musicBtn.textContent = "Pause Music";
-    });
-
-    // Keyboard quick toggle
-    window.addEventListener('keydown', (e) => {
-      if (e.key.toLowerCase() === 'v') viewBtn?.click();
-    });
-  }
-
-  // ---------- Mobile HUD (safely create if not present) ----------
+  // ---------- Mobile HUD ----------
   function ensureMobileHud() {
-    if (window.matchMedia('(max-width: 900px)').matches) {
-      if (!document.getElementById('mobile-hud')) {
-        const hud = document.createElement('div');
-        hud.id = 'mobile-hud';
-        hud.innerHTML = `
-          <div id="move-stick"><div id="move-knob"></div></div>
-          <div id="look-zone"></div>
-        `;
-        Object.assign(hud.style, { position:'absolute', inset:'0', pointerEvents:'none' });
+    if (!window.matchMedia("(max-width: 900px)").matches) return;
+    if (document.getElementById("mobile-hud")) return;
 
-        // Basic inline styles so it works even without CSS additions
-        const stick = hud.querySelector('#move-stick');
-        const knob  = hud.querySelector('#move-knob');
-        const look  = hud.querySelector('#look-zone');
+    const hud = document.createElement("div");
+    hud.id = "mobile-hud";
+    hud.innerHTML = `
+      <div id="move-stick"><div id="move-knob"></div></div>
+      <div id="look-zone"></div>
+    `;
+    Object.assign(hud.style, { position: "absolute", inset: "0", pointerEvents: "none" });
 
-        Object.assign(stick.style, {
-          position:'absolute', bottom:'22px', left:'22px',
-          width:'120px', height:'120px', borderRadius:'999px',
-          background:'rgba(255,255,255,.06)',
-          border:'1px solid rgba(255,255,255,.18)',
-          backdropFilter:'blur(8px)',
-          pointerEvents:'auto', touchAction:'none'
-        });
-        Object.assign(knob.style, {
-          position:'absolute', left:'50%', top:'50%',
-          width:'64px', height:'64px', margin:'-32px 0 0 -32px',
-          borderRadius:'999px',
-          background:'rgba(255,255,255,.2)',
-          border:'1px solid rgba(255,255,255,.35)'
-        });
-        Object.assign(look.style, {
-          position:'absolute', right:'0', top:'0', bottom:'0', width:'55%',
-          pointerEvents:'auto', touchAction:'none'
-        });
+    const stick = hud.querySelector("#move-stick");
+    const knob  = hud.querySelector("#move-knob");
+    const look  = hud.querySelector("#look-zone");
 
-        document.getElementById('tryon-root')?.appendChild(hud);
-      }
-    }
+    Object.assign(stick.style, {
+      position:"absolute", bottom:"22px", left:"22px",
+      width:"120px", height:"120px", borderRadius:"999px",
+      background:"rgba(255,255,255,.06)",
+      border:"1px solid rgba(255,255,255,.18)",
+      backdropFilter:"blur(8px)", pointerEvents:"auto", touchAction:"none"
+    });
+    Object.assign(knob.style, {
+      position:"absolute", left:"50%", top:"50%",
+      width:"64px", height:"64px", margin:"-32px 0 0 -32px",
+      borderRadius:"999px",
+      background:"rgba(255,255,255,.2)",
+      border:"1px solid rgba(255,255,255,.35)"
+    });
+    Object.assign(look.style, {
+      position:"absolute", right:"0", top:"0", bottom:"0", width:"55%",
+      pointerEvents:"auto", touchAction:"none"
+    });
+
+    document.getElementById("tryon-root")?.appendChild(hud);
   }
 
-  // ---------- Mobile controls (left joystick move, right swipe look) ----------
-  function setupMobileControls(canvas) {
+  function setupMobileControls() {
     ensureMobileHud();
 
-    const stick = document.getElementById('move-stick');
-    const knob  = document.getElementById('move-knob');
-    const look  = document.getElementById('look-zone');
+    const stick = document.getElementById("move-stick");
+    const knob  = document.getElementById("move-knob");
+    const look  = document.getElementById("look-zone");
+    if (!stick || !knob || !look) return;
 
-    if (!stick || !knob || !look) return; // no-op on desktop
-
-    const radius = 50; // joystick travel inside 120 circle
+    const radius = 50;
     let moveVec = new BABYLON.Vector2(0, 0);
     let activeId = null;
 
     function setKnob(dx, dy) {
       const len = Math.hypot(dx, dy);
-      const cl = len > radius ? radius / len : 1;
+      const cl  = len > radius ? radius / len : 1;
       const x = dx * cl, y = dy * cl;
       knob.style.transform = `translate(${x}px, ${y}px)`;
       moveVec.x = x / radius;
-      moveVec.y = -y / radius; // up is forward
+      moveVec.y = -y / radius; // up = forward
     }
     function resetKnob() {
-      knob.style.transform = `translate(0,0)`;
-      moveVec.set(0, 0);
+      knob.style.transform = "translate(0,0)";
+      moveVec.set(0,0);
       activeId = null;
     }
 
-    // Left stick touch
-    stick.addEventListener('touchstart', (e) => {
+    stick.addEventListener("touchstart", (e) => {
       const t = e.changedTouches[0];
       activeId = t.identifier;
       const rect = stick.getBoundingClientRect();
@@ -437,9 +337,9 @@ async function loadAvatarFromUrl(avatarUrl) {
       const cy = rect.top  + rect.height/2;
       setKnob(t.clientX - cx, t.clientY - cy);
       e.preventDefault();
-    }, { passive: false });
+    }, { passive:false });
 
-    stick.addEventListener('touchmove', (e) => {
+    stick.addEventListener("touchmove", (e) => {
       const t = [...e.changedTouches].find(tt => tt.identifier === activeId);
       if (!t) return;
       const rect = stick.getBoundingClientRect();
@@ -447,23 +347,23 @@ async function loadAvatarFromUrl(avatarUrl) {
       const cy = rect.top  + rect.height/2;
       setKnob(t.clientX - cx, t.clientY - cy);
       e.preventDefault();
-    }, { passive: false });
+    }, { passive:false });
 
-    stick.addEventListener('touchend', (e) => {
+    stick.addEventListener("touchend", (e) => {
       if ([...e.changedTouches].some(tt => tt.identifier === activeId)) resetKnob();
     });
-    stick.addEventListener('touchcancel', resetKnob);
+    stick.addEventListener("touchcancel", resetKnob);
 
-    // Right side look
+    // Look
     let lookId = null, lastX = 0, lastY = 0;
     const lookSensX = 0.0035, lookSensY = 0.0025;
 
-    look.addEventListener('touchstart', (e) => {
+    look.addEventListener("touchstart", (e) => {
       const t = e.changedTouches[0];
       lookId = t.identifier; lastX = t.clientX; lastY = t.clientY;
-    }, { passive: true });
+    }, { passive:true });
 
-    look.addEventListener('touchmove', (e) => {
+    look.addEventListener("touchmove", (e) => {
       const t = [...e.changedTouches].find(tt => tt.identifier === lookId);
       if (!t) return;
       const dx = t.clientX - lastX;
@@ -471,43 +371,49 @@ async function loadAvatarFromUrl(avatarUrl) {
       lastX = t.clientX; lastY = t.clientY;
 
       const cam = scene.activeCamera;
-      if (cam && cam.name === 'fps') {
+      if (cam && cam.name === "fps") {
         cam.rotation.y -= dx * lookSensX; // yaw
         cam.rotation.x -= dy * lookSensY; // pitch
         cam.rotation.x = BABYLON.Scalar.Clamp(cam.rotation.x, -Math.PI/2 + 0.01, Math.PI/2 - 0.01);
       }
-    }, { passive: true });
+    }, { passive:true });
 
-    look.addEventListener('touchend', (e) => {
+    look.addEventListener("touchend", (e) => {
       if ([...e.changedTouches].some(tt => tt.identifier === lookId)) lookId = null;
     });
 
-    // Per-frame movement in FPS
+    // Per-frame movement
     const speed = 0.055;
     scene.onBeforeRenderObservable.add(() => {
       const cam = scene.activeCamera;
-      if (!cam || cam.name !== 'fps') return;
+      if (!cam || cam.name !== "fps") return;
       if (moveVec.lengthSquared() < 1e-4) return;
 
-      const fwd = cam.getDirection(new BABYLON.Vector3(0, 0, 1));
-      const right = cam.getDirection(new BABYLON.Vector3(1, 0, 0));
-      fwd.y = 0; right.y = 0;
-      fwd.normalize(); right.normalize();
+      const fwd   = cam.getDirection(new BABYLON.Vector3(0,0,1));
+      const right = cam.getDirection(new BABYLON.Vector3(1,0,0));
+      fwd.y = 0; right.y = 0; fwd.normalize(); right.normalize();
 
       const delta = engine.getDeltaTime();
-      const step = speed * (delta * 0.6);
-
-      const move = fwd.scale(moveVec.y * step).add(right.scale(moveVec.x * step));
+      const step  = speed * (delta * 0.6);
+      const move  = fwd.scale(moveVec.y * step).add(right.scale(moveVec.x * step));
       cam.moveWithCollisions(move);
     });
   }
 
+  // ---------- UI wiring ----------
   function bindUI(canvas) {
-    const viewBtn  = document.getElementById('view-btn');
-    const musicBtn = document.getElementById('music-btn');
-    const nextBtn  = document.getElementById('music-next');
+    const viewBtn   = document.getElementById("view-btn");
+    const musicBtn  = document.getElementById("music-btn");
+    const nextBtn   = document.getElementById("music-next");
 
-    viewBtn?.addEventListener('click', () => {
+    // Mirror the bottom dock buttons to these
+    document.getElementById("auth-btn-dock")  ?.addEventListener("click", () => document.getElementById("auth-btn") ?.click());
+    document.getElementById("view-btn-dock")  ?.addEventListener("click", () => document.getElementById("view-btn") ?.click());
+    document.getElementById("music-btn-dock") ?.addEventListener("click", () => document.getElementById("music-btn")?.click());
+    document.getElementById("music-next-dock")?.addEventListener("click", () => document.getElementById("music-next")?.click());
+    document.getElementById("gate-signin")    ?.addEventListener("click", () => { if (window.netlifyIdentity) netlifyIdentity.open("login"); });
+
+    viewBtn?.addEventListener("click", () => {
       isFirstPerson = !isFirstPerson;
       const active = scene.activeCamera;
       active?.detachControl(canvas);
@@ -515,35 +421,32 @@ async function loadAvatarFromUrl(avatarUrl) {
       if (isFirstPerson) {
         scene.activeCamera = makeFPSCam(canvas);
         viewBtn.textContent = "1st Person";
+        // optional pointer-lock on desktop
+        if (!/Mobi|Android/i.test(navigator.userAgent)) canvas.requestPointerLock?.();
       } else {
+        document.exitPointerLock?.();
         scene.activeCamera = makeArcCam(canvas);
         viewBtn.textContent = "3rd Person";
       }
     });
 
-    // Add near START_MUSIC: the private (unreleased) R2 key
-    const UNRELEASED_KEY = "music/unreleased/your-track-slug.mp3";
-
     // Play/Pause (tries gated first, falls back to public)
-    musicBtn?.addEventListener('click', async () => {
+    musicBtn?.addEventListener("click", async () => {
       try {
         if (!music) {
-          let src = START_MUSIC[currentTrack]; // fallback (public)
+          let src = START_MUSIC[currentTrack];
           try {
             const { url } = await getSignedMedia(UNRELEASED_KEY, "audio");
             src = url;
           } catch (e) {
             console.warn("Falling back to public track:", e?.message || e);
           }
-
-          music = new BABYLON.Sound("jukebox", src, scene, null, {
-            loop: true, autoplay: true, volume: 0.6
-          });
+          music = new BABYLON.Sound("jukebox", src, scene, null, { loop: true, autoplay: true, volume: 0.6 });
           musicBtn.textContent = "Pause Music";
         } else if (music.isPlaying) {
           music.pause(); musicBtn.textContent = "Play Music";
         } else {
-          music.play(); musicBtn.textContent = "Pause Music";
+          music.play();  musicBtn.textContent = "Pause Music";
         }
       } catch (err) {
         console.error("Music error:", err);
@@ -552,60 +455,59 @@ async function loadAvatarFromUrl(avatarUrl) {
     });
 
     // Next public track
-    nextBtn?.addEventListener('click', () => {
+    nextBtn?.addEventListener("click", () => {
       if (!START_MUSIC.length) return;
       currentTrack = (currentTrack + 1) % START_MUSIC.length;
       const nextSrc = START_MUSIC[currentTrack];
       if (!music) {
-        music = new BABYLON.Sound("jukebox", nextSrc, scene, null, { loop: true, autoplay: true, volume: .6 });
+        music = new BABYLON.Sound("jukebox", nextSrc, scene, null, { loop: true, autoplay: true, volume: 0.6 });
       } else {
-        music.stop();
-        music.dispose();
-        music = new BABYLON.Sound("jukebox", nextSrc, scene, null, { loop: true, autoplay: true, volume: .6 });
+        music.stop(); music.dispose();
+        music = new BABYLON.Sound("jukebox", nextSrc, scene, null, { loop: true, autoplay: true, volume: 0.6 });
       }
       musicBtn.textContent = "Pause Music";
     });
 
-    // Keyboard quick toggle
-    window.addEventListener('keydown', (e) => {
-      if (e.key.toLowerCase() === 'v') viewBtn?.click();
+    // V key toggles view
+    window.addEventListener("keydown", (e) => {
+      if (e.key.toLowerCase() === "v") viewBtn?.click();
     });
   }
 
+  // ---------- Boot ----------
   async function init() {
-  // 🔒 Gate: require login + avatar before the world loads
-  const avatarUrl = await window.DHKAuth.requireAuthAndAvatar();
+    // 🔒 Gate: require login + avatar before the world loads
+    const avatarUrl = await window.DHKAuth.requireAuthAndAvatar();
 
-  const canvas = document.getElementById("renderCanvas");
-  engine = new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true, disableWebGL2Support: false });
-  scene = new BABYLON.Scene(engine);
-  scene.ambientColor = new BABYLON.Color3(0.1,0.1,0.12);
+    const canvas = document.getElementById("renderCanvas");
+    engine = new BABYLON.Engine(canvas, true, {
+      preserveDrawingBuffer: true, stencil: true, disableWebGL2Support: false
+    });
+    scene = new BABYLON.Scene(engine);
+    scene.ambientColor = new BABYLON.Color3(0.1, 0.1, 0.12);
 
-  // collisions + gravity (you already have this)
-  scene.collisionsEnabled = true;
-  scene.gravity = new BABYLON.Vector3(0, -0.5, 0);
+    // Collisions & gravity
+    scene.collisionsEnabled = true;
+    scene.gravity = new BABYLON.Vector3(0, -0.5, 0);
 
-  // Camera + light
-  scene.activeCamera = makeArcCam(canvas);
-  const light = new BABYLON.HemisphericLight("h", new BABYLON.Vector3(0,1,0), scene);
-  light.intensity = 0.9;
+    // Camera + light
+    scene.activeCamera = makeArcCam(canvas);
+    const light = new BABYLON.HemisphericLight("h", new BABYLON.Vector3(0,1,0), scene);
+    light.intensity = 0.9;
 
-  await loadCloset();
-  await loadAvatarFromUrl(avatarUrl);   // 👈 use chosen/saved avatar
+    await loadCloset();
+    await loadAvatarFromUrl(avatarUrl);
 
-  // …(rest of your init stays the same)…
-
-    // Build outfit buttons from your catalog
     const products = await fetchJSON(DATA_URL);
     buildOutfitBar(products);
-    wireRackPickers(products); // enable clicking racks/hangers in the room
+    wireRackPickers(products);
 
     bindUI(canvas);
-    setupMobileControls(canvas); // ← add mobile joystick + swipe look
+    setupMobileControls();
 
     engine.runRenderLoop(() => scene.render());
     window.addEventListener("resize", () => engine.resize());
   }
 
-  document.addEventListener('DOMContentLoaded', init);
+  document.addEventListener("DOMContentLoaded", init);
 })();
