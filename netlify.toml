@@ -1,5 +1,5 @@
 [build]
-  # Your site is static in this folder (root). Change if you ever move it.
+  # Your site is served from the root folder.
   publish = "."
 
 [functions]
@@ -7,24 +7,39 @@
   node_bundler = "esbuild"
   external_node_modules = ["stripe"]
 
+# --- Netlify Identity API (must come before SPA rewrite)
 [[redirects]]
   from = "/.netlify/identity/*"
   to   = "/.netlify/identity/:splat"
   status = 200
 
+# --- Netlify Functions
 [[redirects]]
   from = "/.netlify/functions/*"
   to   = "/.netlify/functions/:splat"
   status = 200
 
-# 👇 Domain canonical redirect (www → non-www)
+# --- Enforce HTTPS (redirect all http:// to https://)
+[[redirects]]
+  from = "http://darkharlemknight.com/*"
+  to   = "https://darkharlemknight.com/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "http://www.darkharlemknight.com/*"
+  to   = "https://darkharlemknight.com/:splat"
+  status = 301
+  force = true
+
+# --- Canonical domain redirect (www → non-www)
 [[redirects]]
   from = "https://www.darkharlemknight.com/*"
   to   = "https://darkharlemknight.com/:splat"
   status = 301
   force = true
 
-# 👇 Single Page App fallback (must stay last)
+# --- SPA fallback (must remain last)
 [[redirects]]
   from = "/*"
   to   = "/index.html"
