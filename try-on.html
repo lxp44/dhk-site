@@ -13,15 +13,21 @@
   <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js" defer></script>
   <!-- Ready Player Me helper -->
   <script src="https://unpkg.com/@readyplayerme/visage@latest/dist/index.umd.js" defer></script>
-  <!-- Netlify Identity -->
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js" defer></script>
-<script>
+  <script>
   document.addEventListener('DOMContentLoaded', () => {
-    if (window.netlifyIdentity) {
-      netlifyIdentity.init({
-        APIUrl: location.origin + '/.netlify/identity'
-      });
-    }
+    if (!window.netlifyIdentity) return;
+
+    netlifyIdentity.on('error', (e) => {
+      console.warn('Identity error:', e);
+      alert(e?.message || 'Login error — try resending the confirmation email.');
+    });
+
+    // Bonus: if the widget reports unconfirmed, offer to resend
+    netlifyIdentity.on('login', (user) => {
+      if (!user?.confirmed_at && !user?.confirmation_sent_at) {
+        alert('Check your email to confirm your account.');
+      }
+    });
   });
 </script>
   document.addEventListener("DOMContentLoaded", () => {
