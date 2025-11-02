@@ -781,3 +781,18 @@ body.g4llery-page main {
 .netlify-identity-modal * {
   z-index: 2147483647 !important; /* max practical */
 }
+/* When Identity is open, freeze/disable site chrome so it can't block taps */
+body.identity-open .fixed,
+body.identity-open .sticky,
+body.identity-open .header,
+body.identity-open .floating-logo,
+body.identity-open #enter-the-storm,
+body.identity-open .dhk-overlay {
+  pointer-events: none !important;
+  filter: blur(1px);           /* optional: visual cue */
+}
+
+/* If you explicitly set huge z-indexes on any brand/logo overlays, reduce them */
+.floating-logo, #enter-the-storm, .dhk-overlay {
+  z-index: 1000; /* keep below the Identity modal */
+}
