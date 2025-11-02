@@ -796,3 +796,41 @@ body.identity-open .dhk-overlay {
 .floating-logo, #enter-the-storm, .dhk-overlay {
   z-index: 1000; /* keep below the Identity modal */
 }
+/* Always put modals/iframes on top */
+.netlify-identity-widget,
+.netlify-identity-modal,
+iframe[src*="readyplayer.me"],
+.rpm__modal,
+.rpm__modal * {
+  z-index: 2147483647 !important;
+  position: relative;
+}
+
+/* While any modal is open, make our chrome click-through */
+body.identity-open .fixed,
+body.identity-open .sticky,
+body.identity-open .header,
+body.identity-open .floating-logo,
+body.identity-open #enter-the-storm,
+body.identity-open .dhk-overlay,
+body.rpm-open .fixed,
+body.rpm-open .sticky,
+body.rpm-open .header,
+body.rpm-open .floating-logo,
+body.rpm-open #enter-the-storm,
+body.rpm-open .dhk-overlay,
+body.modal-open #bottom-dock,
+body.modal-open #mobile-hud,
+body.modal-open canvas {
+  pointer-events: none !important;
+  filter: blur(1px); /* optional */
+}
+
+/* Keep our docks below modals even when active */
+#bottom-dock,
+#mobile-hud,
+.floating-logo,
+#enter-the-storm,
+.dhk-overlay {
+  z-index: 1000 !important;
+}
