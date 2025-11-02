@@ -837,3 +837,34 @@ body.modal-open canvas {
 * { /* DEBUG ONLY */
   /* outline: 1px solid rgba(255,0,0,.15); */
 }
+/* Keep the RPM / Identity modals on top */
+iframe[src*="readyplayer.me"],
+.netlify-identity-widget,
+.netlify-identity-modal { 
+  z-index: 2147483647 !important; 
+  position: relative;
+}
+
+/* When any modal is open, make our chrome click-through */
+body.modal-open #bottom-dock,
+body.modal-open #mobile-hud,
+body.modal-open canvas,
+body.modal-open .header,
+body.modal-open .floating-logo,
+body.modal-open #storm-overlay,
+body.modal-open #storm-popup,
+body.modal-open .dhk-overlay {
+  pointer-events: none !important;
+  filter: blur(1px); /* optional */
+}
+
+/* Safety: keep our UI below modals even when active */
+#bottom-dock,
+#mobile-hud,
+.header,
+.floating-logo,
+#storm-overlay,
+#storm-popup,
+.dhk-overlay {
+  z-index: 1000 !important;
+}
