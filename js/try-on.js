@@ -37,6 +37,24 @@
     return res.json(); // { url, expiresAt, id, type }
   }
 
+  // 🔗 NEW: make sure body gets a class while the Identity modal is open
+  function hookIdentity() {
+    const id = getIdentity();
+    if (!id) return; // widget not loaded yet
+
+    id.on("open",  () => document.body.classList.add("identity-open"));
+    id.on("close", () => document.body.classList.remove("identity-open"));
+  }
+
+  // If the widget script loads slightly after our JS, wait briefly then hook
+  (function waitForIdentity() {
+    if (getIdentity()) return hookIdentity();
+    const t = setInterval(() => {
+      if (getIdentity()) { clearInterval(t); hookIdentity(); }
+    }, 200);
+    setTimeout(() => clearInterval(t), 5000); // stop polling after 5s
+  })();
+
   // ---------- Utils ----------
   async function fetchJSON(url) {
     const r = await fetch(url, { cache: "no-store" });
@@ -421,7 +439,6 @@
       if (isFirstPerson) {
         scene.activeCamera = makeFPSCam(canvas);
         viewBtn.textContent = "1st Person";
-        // optional pointer-lock on desktop
         if (!/Mobi|Android/i.test(navigator.userAgent)) canvas.requestPointerLock?.();
       } else {
         document.exitPointerLock?.();
