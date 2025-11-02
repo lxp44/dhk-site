@@ -1,5 +1,35 @@
 <!doctype html>
 <html lang="en">
+  <!-- Netlify Identity widget -->
+<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // 1️⃣ Redirect invite or confirmation tokens to the identity widget
+    if (window.location.hash.startsWith('#invite_token=') || window.location.hash.startsWith('#confirmation_token=')) {
+      // Open Netlify Identity modal automatically to finish setup
+      if (window.netlifyIdentity) {
+        window.netlifyIdentity.open('signup');
+      } else {
+        // fallback: reload after widget loads
+        window.addEventListener('netlifyIdentityLoad', () => {
+          window.netlifyIdentity.open('signup');
+        });
+      }
+    }
+
+    // 2️⃣ After login, redirect to the /try-on.html page
+    if (window.netlifyIdentity) {
+      window.netlifyIdentity.on('init', user => {
+        if (!user) {
+          window.netlifyIdentity.on('login', () => {
+            window.location.href = '/try-on.html';
+          });
+        }
+      });
+    }
+  });
+</script>
 <head>
   <link rel="icon" href="assets/img/DHK_transparent.gif" type="image/gif" sizes="any">
   <meta charset="utf-8"/>
