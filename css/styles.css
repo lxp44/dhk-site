@@ -868,3 +868,35 @@ body.modal-open .dhk-overlay {
 .dhk-overlay {
   z-index: 1000 !important;
 }
+/* =========================
+   TRY-ON fixes (append)
+   ========================= */
+
+/* 1) Make the avatar modal + RPM iframe clickable (they live under .hud { pointer-events:none }) */
+#avatar-modal,
+#avatar-modal * ,
+#rpm-wrap,
+#rpm-wrap iframe {
+  pointer-events: auto !important;
+}
+
+/* Keep the modal above site chrome */
+#avatar-modal {
+  z-index: 10001 !important;
+}
+
+/* 2) When any modal is open, freeze the actual dock used on this page */
+body.modal-open .dock,
+body.modal-open #jukebox-controls {
+  pointer-events: none !important;
+  filter: blur(1px); /* optional visual cue */
+}
+
+/* 3) Belt-and-suspenders: ensure general site chrome stays below modals */
+body.modal-open .header,
+body.modal-open .floating-logo,
+body.modal-open #storm-overlay,
+body.modal-open #storm-popup,
+body.modal-open .dhk-overlay {
+  z-index: 1000 !important; /* safely below Identity/RPM (2.1e9) */
+}
