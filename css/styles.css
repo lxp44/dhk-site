@@ -775,3 +775,9 @@ a:focus-visible, button:focus-visible, input:focus-visible {
 body.g4llery-page main {
   min-height: 100vh;
 }
+/* Make Netlify Identity sit on the absolute top layer */
+.netlify-identity-widget,
+.netlify-identity-modal,
+.netlify-identity-modal * {
+  z-index: 2147483647 !important; /* max practical */
+}
