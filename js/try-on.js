@@ -528,33 +528,31 @@
 
   document.addEventListener("DOMContentLoaded", init);
 })();
-// Lift modal layers and freeze site chrome while they’re open
-if (window.netlifyIdentity) {
-  netlifyIdentity.on("open",  () => document.body.classList.add("identity-open","modal-open"));
-  netlifyIdentity.on("close", () => document.body.classList.remove("identity-open","modal-open"));
-}
+// Make body reflect when Identity or RPM modal is open (so CSS can freeze chrome)
+(function () {
+  // Identity => add/remove .modal-open
+  if (window.netlifyIdentity) {
+    netlifyIdentity.on("open",  () => document.body.classList.add("identity-open","modal-open"));
+    netlifyIdentity.on("close", () => document.body.classList.remove("identity-open","modal-open"));
+  }
 
-// Observe DOM for the Ready Player Me iframe appearing/disappearing
-const __modalObs = new MutationObserver(() => {
-  const hasRPM = document.querySelector('iframe[src*="readyplayer.me"]');
-  const hasId  = document.querySelector('.netlify-identity-modal, .netlify-identity-widget');
-  document.body.classList.toggle('rpm-open', !!hasRPM);
-  document.body.classList.toggle('modal-open', !!(hasRPM || hasId));
-});
-__modalObs.observe(document.body, { childList: true, subtree: true });
+  // Detect the RPM iframe in the DOM and toggle .modal-open
+  const obs = new MutationObserver(() => {
+    const rpm = document.querySelector('iframe[src*="readyplayer.me"]');
+    const idm = document.querySelector('.netlify-identity-modal, .netlify-identity-widget');
+    document.body.classList.toggle('rpm-open', !!rpm);
+    document.body.classList.toggle('modal-open', !!(rpm || idm));
+  });
+  obs.observe(document.body, { childList: true, subtree: true });
 
-// Also listen for RPM postMessages to be precise
-window.addEventListener("message", (e) => {
-  try {
-    const data = typeof e.data === "string" ? JSON.parse(e.data) : e.data;
-    if (!data) return;
-    if (data.source === "readyplayer.me") {
-      if (data.eventName === "v1.frame.opened") {
-        document.body.classList.add("rpm-open","modal-open");
-      }
-      if (["v1.frame.closed","v1.avatar.exported"].includes(data.eventName)) {
+  // Listen for RPM postMessages too (more reliable)
+  window.addEventListener("message", (e) => {
+    let data = e.data;
+    if (typeof data === "string") { try { data = JSON.parse(data); } catch {} }
+    if (data && data.source === "readyplayer.me") {
+      if (data.eventName === "v1.frame.opened")  document.body.classList.add("rpm-open","modal-open");
+      if (data.eventName === "v1.frame.closed" || data.eventName === "v1.avatar.exported")
         document.body.classList.remove("rpm-open","modal-open");
-      }
     }
-  } catch {}
-});
+  });
+})();
