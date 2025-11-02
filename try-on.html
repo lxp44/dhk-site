@@ -24,17 +24,23 @@
   <script src="https://unpkg.com/@readyplayerme/visage@latest/dist/index.umd.js" defer></script>
   <!-- Netlify Identity (REQUIRED) -->
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js" defer></script>
+<script defer src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 
-  <!-- Identity init (force same-site API) -->
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      if (window.netlifyIdentity) {
-        netlifyIdentity.init({
-          APIUrl: location.origin + '/.netlify/identity'
-        });
-      }
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    if (!window.netlifyIdentity) return;
+    // Make the widget talk to THIS site's Identity API (same origin)
+    netlifyIdentity.init({
+      APIUrl: window.location.origin + "/.netlify/identity"
     });
-  </script>
+
+    // Optional: useful error surface
+    netlifyIdentity.on("error", (e) => {
+      console.warn("Identity error:", e);
+      alert(e?.message || "Login error — try resending the confirmation email.");
+    });
+  });
+</script>
 
   <!-- Identity: error handling + confirmation hint -->
   <script>
