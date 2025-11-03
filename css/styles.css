@@ -900,3 +900,70 @@ body.modal-open #storm-popup,
 body.modal-open .dhk-overlay {
   z-index: 1000 !important; /* safely below Identity/RPM (2.1e9) */
 }
+/* =========================
+   DHK try-on final polish (conflict-free)
+   ========================= */
+
+/* 1) Scope uppercase to headings/nav/UI instead of the whole body */
+body.template-page { text-transform: none; }
+h1,h2,h3,
+.nav-link,
+.chip,
+.dock .btn,
+.button,
+.button--secondary,
+.fc__title { text-transform: uppercase; }
+
+/* 2) Gallery: create explicit modes so rules stop fighting */
+/* Default: contain (true size) */
+.lxp-slideshow { aspect-ratio: auto; max-height: none; }
+.lxp-slide img { width: 100%; height: auto; object-fit: contain; }
+/* Opt-in cover mode (letterboxed hero style) */
+.lxp-slideshow.lxp--cover      { aspect-ratio: 16 / 9; max-height: 70vh; }
+.lxp-slideshow.lxp--cover .lxp-slide img { height: 100%; object-fit: cover; }
+/* Opt-in strict contain mode (explicit if you need it on a page) */
+.lxp-slideshow.lxp--contain .lxp-slide img { height: auto; object-fit: contain; }
+
+/* 3) Cursors only on precise pointers (avoid weirdness on touch) */
+@media (pointer: fine) {
+  html, body { cursor: url('../assets/img/cursor-bat-16.png') 8 8, auto; }
+  a, button, .hoverable, input[type="submit"] {
+    cursor: url('../assets/img/cursor-bat-32.png') 16 16, auto;
+    transition: transform 0.1s ease;
+  }
+}
+@media (pointer: coarse) {
+  html, body, a, button, .hoverable, input[type="submit"] { cursor: auto !important; }
+}
+
+/* 4) Respect reduced motion – kill flashes/flickers for sensitive users */
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+  .lightning-flash { animation: none !important; }
+}
+
+/* 5) Header variable sanity (keep ONE place winning).
+      If you want the slim header everywhere, keep this; else delete it. */
+:root { --header-height: 56px; }
+@media (max-width: 900px) { :root { --header-height: 48px; } }
+.header-grid { min-height: var(--header-height); }
+.header__heading-logo { height: 48px; }
+@media (max-width: 900px) { .header__heading-logo { height: 42px; } }
+.shopify-section-header-sticky .header__heading-logo { height: 44px; }
+@media (max-width: 900px) { .shopify-section-header-sticky .header__heading-logo { height: 38px; } }
+
+/* 6) Focus ring pop a bit more on dark BG (optional, accessible) */
+a:focus-visible, button:focus-visible, input:focus-visible {
+  outline: 2px dashed #fff; outline-offset: 3px;
+}
+
+/* 7) Keep RPM/Identity/Avatar modal clickability + freeze dock (you added this; keeping it here to ensure last-win) */
+#avatar-modal, #avatar-modal *, #rpm-wrap, #rpm-wrap iframe { pointer-events: auto !important; }
+#avatar-modal { z-index: 10001 !important; }
+body.modal-open .dock,
+body.modal-open #jukebox-controls { pointer-events: none !important; filter: blur(1px); }
+body.modal-open .header,
+body.modal-open .floating-logo,
+body.modal-open #storm-overlay,
+body.modal-open #storm-popup,
+body.modal-open .dhk-overlay { z-index: 1000 !important; }
