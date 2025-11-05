@@ -1,4 +1,3 @@
-// js/try-on.js
 (() => {
   const DATA_URL   = "data/products.json";
   const CLOSET_URL = "assets/3d/closet.glb";
@@ -37,10 +36,10 @@
     return res.json(); // { url, expiresAt, id, type }
   }
 
-  // 🔗 Make sure body gets a class while the Identity modal is open
+  // Identity overlay class
   function hookIdentity() {
     const id = getIdentity();
-    if (!id) return; // widget not loaded yet
+    if (!id) return;
     id.on("open",  () => document.body.classList.add("identity-open"));
     id.on("close", () => document.body.classList.remove("identity-open"));
   }
@@ -83,13 +82,14 @@
     cam.angularSensibility = 5000;
     cam.attachControl(canvas, true);
 
+    // Movement + collisions
     cam.applyGravity = true;
     cam.checkCollisions = true;
     cam.ellipsoid = new BABYLON.Vector3(0.35, 0.9, 0.35);
-    cam.keysUp    = [87, 38]; // W, ↑
-    cam.keysDown  = [83, 40]; // S, ↓
-    cam.keysLeft  = [65, 37]; // A, ←
-    cam.keysRight = [68, 39]; // D, →
+    cam.keysUp    = [87, 38];
+    cam.keysDown  = [83, 40];
+    cam.keysLeft  = [65, 37];
+    cam.keysRight = [68, 39];
     return cam;
   }
 
@@ -213,72 +213,44 @@
     scene.onDisposeObservable.add(() => hl.dispose());
   }
 
-  // ---------- Avatar ----------
-  async function loadAvatarFromUrl(avatarUrl) {
-    const res = await BABYLON.SceneLoader.ImportMeshAsync("", "", avatarUrl, scene);
-    const root = res.meshes[0];
-    root.name = "AvatarRoot";
-    root.position = new BABYLON.Vector3(0, 0, 0);
-    avatar = root;
-    const idle = res.animationGroups?.find(a => /idle/i.test(a.name));
-    idle?.start?.(true);
-  }
+  // ---------- Avatar (replace pipeline) ----------
+  let pendingGarments = []; // if user picks clothes before avatar loads
 
-  // ---- Avatar spawn/replace (with auto-scale + feet on ground) ----
-let pendingGarments = []; // if a user picks clothes before avatar loads
-
-async function replaceAvatar(avatarUrl) {
-  // dispose any previous avatar
-  if (avatar) {
-    try { avatar.getChildMeshes?.().forEach(m => m.dispose()); } catch {}
-    try { avatar.dispose?.(); } catch {}
-    avatar = null;
-  }
-
-  const res  = await BABYLON.SceneLoader.ImportMeshAsync("", "", avatarUrl, scene);
-  const root = res.meshes[0];
-  root.name  = "AvatarRoot";
-  root.position = new BABYLON.Vector3(0, 0, 0);
-  root.metadata = { isAvatar: true };
-  avatar = root;
-
-  // Auto-scale to ~1.75m and drop feet to ground
-  const bounds = root.getHierarchyBoundingVectors?.();
-  if (bounds) {
-    const height = bounds.max.y - bounds.min.y;
-    const target = 1.75; // meters
-    const s = target / Math.max(0.01, height);
-    root.scaling.set(s, s, s);
-    root.position.y -= bounds.min.y * s; // feet on ground
-  }
-
-  // Play an idle if present
-  const idle = res.animationGroups?.find(a => /idle/i.test(a.name));
-  idle?.start(true);
-
-  // Re-apply any garments queued before the avatar existed
-  if (pendingGarments.length) {
-    for (const g of pendingGarments) {
-      try { await wearGarment(g); } catch {}
+  async function replaceAvatar(avatarUrl) {
+    if (avatar) {
+      try { avatar.getChildMeshes?.().forEach(m => m.dispose()); } catch {}
+      try { avatar.dispose?.(); } catch {}
+      avatar = null;
     }
-    pendingGarments = [];
+
+    const res  = await BABYLON.SceneLoader.ImportMeshAsync("", "", avatarUrl, scene);
+    const root = res.meshes[0];
+    root.name  = "AvatarRoot";
+    root.position = new BABYLON.Vector3(0, 0, 0);
+    root.metadata = { isAvatar: true };
+    avatar = root;
+
+    // Auto-scale to ~1.75m and put feet on ground
+    const bounds = root.getHierarchyBoundingVectors?.();
+    if (bounds) {
+      const height = bounds.max.y - bounds.min.y;
+      const s = 1.75 / Math.max(0.01, height);
+      root.scaling.set(s, s, s);
+      root.position.y -= bounds.min.y * s;
+    }
+
+    // Idle anim if present
+    const idle = res.animationGroups?.find(a => /idle/i.test(a.name));
+    idle?.start(true);
+
+    // Re-apply queued garments
+    if (pendingGarments.length) {
+      for (const g of pendingGarments) { try { await wearGarment(g); } catch {} }
+      pendingGarments = [];
+    }
   }
-}
 
-// If a user clicks a rack before avatar exists, queue it
-const _wearGarment = wearGarment; // keep your original
-wearGarment = async function(garmentPath) {
-  if (!avatar) { pendingGarments.push(garmentPath); return; }
-  return _wearGarment(garmentPath);
-};
-
-// --- Bridge: when avatar is chosen anywhere, load it into scene ---
-window.addEventListener("dhk:avatar-selected", (e) => {
-  const url = e.detail?.url;
-  if (url) replaceAvatar(url);
-});
-
-  // ---------- Wearables ----------
+  // Wearables
   async function wearGarment(garmentPath) {
     if (!avatar) { pendingGarments.push(garmentPath); return; }
     const res = await BABYLON.SceneLoader.ImportMeshAsync("", "", garmentPath, scene);
@@ -289,6 +261,19 @@ window.addEventListener("dhk:avatar-selected", (e) => {
     gRoot.position = BABYLON.Vector3.Zero();
     gRoot.scaling  = new BABYLON.Vector3(1, 1, 1);
   }
+
+  // If a rack/hanger is tapped before avatar exists, queue it
+  const _wearGarment = wearGarment;
+  wearGarment = async function(garmentPath) {
+    if (!avatar) { pendingGarments.push(garmentPath); return; }
+    return _wearGarment(garmentPath);
+  };
+
+  // Global bridge: any chooser/auth flow dispatches this
+  window.addEventListener("dhk:avatar-selected", (e) => {
+    const url = e.detail?.url;
+    if (url) replaceAvatar(url);
+  });
 
   function wireRackPickers(products) {
     const byId = Object.fromEntries(products.map(p => [p.id, p]));
@@ -331,12 +316,6 @@ window.addEventListener("dhk:avatar-selected", (e) => {
       }
     });
   }
-
-  // Listen for global event fired by the picker/auth flow
-  window.addEventListener("dhk:avatar:selected", (e) => {
-    const url = e.detail?.url;
-    if (url) replaceAvatar(url);
-  });
 
   // ---------- Mobile HUD ----------
   function ensureMobileHud() {
@@ -480,7 +459,7 @@ window.addEventListener("dhk:avatar-selected", (e) => {
     const musicBtn  = document.getElementById("music-btn");
     const nextBtn   = document.getElementById("music-next");
 
-    // Mirror the bottom dock buttons
+    // Dock mirrors
     document.getElementById("auth-btn-dock")  ?.addEventListener("click", () => document.getElementById("auth-btn") ?.click());
     document.getElementById("view-btn-dock")  ?.addEventListener("click", () => document.getElementById("view-btn") ?.click());
     document.getElementById("music-btn-dock") ?.addEventListener("click", () => document.getElementById("music-btn")?.click());
@@ -503,7 +482,7 @@ window.addEventListener("dhk:avatar-selected", (e) => {
       }
     });
 
-    // Play/Pause (tries gated first, falls back to public)
+    // Music
     musicBtn?.addEventListener("click", async () => {
       try {
         if (!music) {
@@ -546,42 +525,42 @@ window.addEventListener("dhk:avatar-selected", (e) => {
     });
   }
 
- // ---------- Boot ----------
-async function init() {
-  // 🔒 Gate: require login + avatar before the world loads
-  const avatarUrl = await window.DHKAuth.requireAuthAndAvatar();
+  // ---------- Boot ----------
+  async function init() {
+    // 🔒 Gate: require login + avatar before the world loads
+    const avatarUrl = await window.DHKAuth.requireAuthAndAvatar();
 
-  const canvas = document.getElementById("renderCanvas");
-  engine = new BABYLON.Engine(canvas, true, {
-    preserveDrawingBuffer: true, stencil: true, disableWebGL2Support: false
-  });
-  scene = new BABYLON.Scene(engine);
-  scene.ambientColor = new BABYLON.Color3(0.1, 0.1, 0.12);
+    const canvas = document.getElementById("renderCanvas");
+    engine = new BABYLON.Engine(canvas, true, {
+      preserveDrawingBuffer: true, stencil: true, disableWebGL2Support: false
+    });
+    scene = new BABYLON.Scene(engine);
+    scene.ambientColor = new BABYLON.Color3(0.1, 0.1, 0.12);
 
-  // Collisions & gravity
-  scene.collisionsEnabled = true;
-  scene.gravity = new BABYLON.Vector3(0, -0.5, 0);
+    // Collisions & gravity
+    scene.collisionsEnabled = true;
+    scene.gravity = new BABYLON.Vector3(0, -0.5, 0);
 
-  // Camera + light
-  scene.activeCamera = makeArcCam(canvas);
-  const light = new BABYLON.HemisphericLight("h", new BABYLON.Vector3(0,1,0), scene);
-  light.intensity = 0.9;
+    // Camera + light
+    scene.activeCamera = makeArcCam(canvas);
+    const light = new BABYLON.HemisphericLight("h", new BABYLON.Vector3(0,1,0), scene);
+    light.intensity = 0.9;
 
-  await loadCloset();
+    await loadCloset();
 
-  // ✅ NEW: still gate, but use the same replace pipeline
-  if (avatarUrl) await replaceAvatar(avatarUrl);
+    // Use the same replace pipeline
+    if (avatarUrl) await replaceAvatar(avatarUrl);
 
-  const products = await fetchJSON(DATA_URL);
-  buildOutfitBar(products);
-  wireRackPickers(products);
+    const products = await fetchJSON(DATA_URL);
+    buildOutfitBar(products);
+    wireRackPickers(products);
 
-  bindUI(canvas);
-  setupMobileControls();
+    bindUI(canvas);
+    setupMobileControls();
 
-  engine.runRenderLoop(() => scene.render());
-  window.addEventListener("resize", () => engine.resize());
-}
+    engine.runRenderLoop(() => scene.render());
+    window.addEventListener("resize", () => engine.resize());
+  }
 
   document.addEventListener("DOMContentLoaded", init);
 })();
