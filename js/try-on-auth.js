@@ -13,13 +13,8 @@
   const urlCancel = document.getElementById('avatar-cancel');
 
   // ---- Helpers ----
-  function idWidget() {
-    return (typeof netlifyIdentity !== 'undefined') ? netlifyIdentity : null;
-  }
-  function currentUser() {
-    const w = idWidget();
-    return w ? w.currentUser() : null;
-  }
+  function idWidget() { return (typeof netlifyIdentity !== 'undefined') ? netlifyIdentity : null; }
+  function currentUser() { const w = idWidget(); return w ? w.currentUser() : null; }
 
   async function saveAvatarUrlToIdentity(url) {
     const w = idWidget();
@@ -33,77 +28,98 @@
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({
-        user_metadata: { avatarUrl: url }
-      })
+      body: JSON.stringify({ user_metadata: { avatarUrl: url } })
     });
     if (!res.ok) throw new Error('Failed to save avatar');
     const updated = await res.json();
-    // Update the local identity instance with new user data
-    w.setUser(updated);
+    w.setUser(updated); // update local identity instance
     return updated;
   }
 
   function showGate()  { if (g) g.style.display = 'flex'; }
   function hideGate()  { if (g) g.style.display = 'none'; }
   function showModal() { if (modal) modal.style.display = 'flex'; }
-  function hideModal() { if (modal) modal.style.display = 'none'; rpmWrap.style.display='none'; urlWrap.style.display='none'; }
+  function hideModal() { if (modal) modal.style.display = 'none'; if (rpmWrap) rpmWrap.style.display='none'; if (urlWrap) urlWrap.style.display='none'; }
+
+  // Centralize the “finalize avatar” flow
+  async function finalizeAvatar(finalUrl) {
+    if (!finalUrl) return;
+    try {
+      // persist to identity + localStorage
+      try {
+        await saveAvatarUrlToIdentity(finalUrl);
+      } catch (e) {
+        // if identity save fails (rare), at least cache locally
+        console.warn("Identity save failed, caching locally:", e);
+      }
+      localStorage.setItem('dhk_avatar_url', finalUrl);
+    } finally {
+      // Fire both events for compatibility
+      document.dispatchEvent(new CustomEvent('dhk:avatar-ready',   { detail: { avatarUrl: finalUrl } }));
+      window.dispatchEvent(new CustomEvent('dhk:avatar:selected', { detail: { url: finalUrl } }));
+      // Optional: hide the modal (fade then remove)
+      document.getElementById("avatar-modal")?.classList.add("fade-out");
+      setTimeout(() => document.getElementById("avatar-modal")?.remove(), 500);
+      document.body.classList.remove("rpm-open","modal-open");
+    }
+  }
 
   // ---- Ready Player Me flow (create) ----
   function openRPM() {
-    // Use the hosted RPM Studio; request GLB export
     const url = 'https://demo.readyplayer.me/avatar?frameApi';
     rpmFrame.src = url;
     rpmWrap.style.display = 'block';
     urlWrap.style.display = 'none';
 
-    // Listen for avatar exported message
-    window.addEventListener('message', async function onMsg(e) {
-      const data = e.data;
-      if (!data) return;
-      // RPM posts messages with "v1.avatar.exported"
-      if (typeof data === 'object' && data.source === 'readyplayerme' && data.eventName === 'v1.avatar.exported') {
-        window.removeEventListener('message', onMsg);
-        const glbUrl = data.data?.url; // exported GLB
-        if (!glbUrl) return alert('No avatar URL returned.');
-        try {
-          await saveAvatarUrlToIdentity(glbUrl);
-          hideModal();
-          document.dispatchEvent(new CustomEvent('dhk:avatar-ready', { detail: { avatarUrl: glbUrl } }));
-        } catch (err) {
-          console.error(err);
-          alert('Could not save avatar.');
-        }
-      }
-    });
     // Tell iframe we’re ready (per RPM frame API)
     rpmFrame.onload = () => {
-      rpmFrame.contentWindow.postMessage({ target: 'readyplayerme', type: 'subscribe', eventName: 'v1.avatar.exported' }, '*');
+      rpmFrame.contentWindow.postMessage({
+        target: 'readyplayerme',
+        type: 'subscribe',
+        eventName: 'v1.avatar.exported'
+      }, '*');
     };
   }
-  
-document.addEventListener('DOMContentLoaded', () => {
-  const chip = document.querySelector('.chip'); // the TRY ON chip in topbar
-  chip?.addEventListener('click', () => {
-    if (window.netlifyIdentity) netlifyIdentity.open('login');
+
+  // Global RPM message bridge (works even if openRPM wasn't used)
+  window.addEventListener("message", async (e) => {
+    let data = e.data;
+    if (typeof data === "string") { try { data = JSON.parse(data); } catch {} }
+    if (!data || (data.source !== "readyplayer.me" && data.source !== "readyplayerme")) return;
+
+    if (data.eventName === "v1.avatar.exported" && data.data?.url) {
+      const finalUrl = data.data.url; // GLB/VRM hosted by RPM
+      await finalizeAvatar(finalUrl);
+    }
   });
-});
-  // ---- Load existing (URL prompt fallback) ----
+
+  // TRY ON topbar chip → prompt login
+  document.addEventListener('DOMContentLoaded', () => {
+    const chip = document.querySelector('.chip');
+    chip?.addEventListener('click', () => { if (window.netlifyIdentity) netlifyIdentity.open('login'); });
+  });
+
+  // ---- Manual URL fallback ----
   async function saveManualUrl() {
     const val = (urlInput.value || '').trim();
     if (!val) return alert('Paste a valid URL.');
-    await saveAvatarUrlToIdentity(val);
+    await finalizeAvatar(val);
     hideModal();
-    document.dispatchEvent(new CustomEvent('dhk:avatar-ready', { detail: { avatarUrl: val } }));
   }
+
+  // Also wire minimal saver as you requested
+  document.getElementById("avatar-url-save")?.addEventListener("click", async () => {
+    const val = document.getElementById("avatar-url-input")?.value?.trim();
+    if (!val) return;
+    await finalizeAvatar(val);
+  });
 
   // ---- Public gate: wait for sign-in + avatar ----
   async function requireAuthAndAvatar() {
-    // 1) Ensure identity is ready
     const w = idWidget();
     if (!w) throw new Error('Netlify Identity not loaded');
 
-    // Open gate if needed
+    // Ensure login
     let user = currentUser();
     if (!user) {
       showGate();
@@ -117,31 +133,31 @@ document.addEventListener('DOMContentLoaded', () => {
       hideGate();
     }
 
-    // 2) Ensure avatar
-    // Prefer identity user_metadata, fallback to localStorage
+    // Prefer identity metadata, fallback to localStorage
     const stored = user?.user_metadata?.avatarUrl || localStorage.getItem('dhk_avatar_url') || '';
     if (stored) {
-      // keep local mirror up to date
       localStorage.setItem('dhk_avatar_url', stored);
       return stored;
     }
 
-    // no avatar -> show chooser
+    // No avatar yet → show chooser
     showModal();
 
-    // wire buttons
+    // Wire chooser buttons
     btnCreate?.addEventListener('click', openRPM);
     btnLoad?.addEventListener('click', () => { urlWrap.style.display = 'block'; rpmWrap.style.display = 'none'; });
     urlSave?.addEventListener('click', saveManualUrl);
     urlCancel?.addEventListener('click', hideModal);
 
-    // resolve when avatar is ready
+    // Resolve when avatar is ready
     const avatarUrl = await new Promise((resolve) => {
       const onReady = (e) => {
-        document.removeEventListener('dhk:avatar-ready', onReady);
         const url = e.detail?.avatarUrl;
-        if (url) localStorage.setItem('dhk_avatar_url', url);
-        resolve(url);
+        if (url) {
+          localStorage.setItem('dhk_avatar_url', url);
+          document.removeEventListener('dhk:avatar-ready', onReady);
+          resolve(url);
+        }
       };
       document.addEventListener('dhk:avatar-ready', onReady);
     });
@@ -151,4 +167,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Expose to window
   window.DHKAuth = { requireAuthAndAvatar };
+
+  // --- Bridge: when avatar ready, tell the world scene to load it (redundant safety) ---
+  document.addEventListener("dhk:avatar-ready", (e) => {
+    const url = e.detail?.avatarUrl;
+    if (url) {
+      window.dispatchEvent(new CustomEvent("dhk:avatar:selected", { detail: { url } }));
+    }
+  });
+
 })();
