@@ -16,6 +16,18 @@
   function idWidget() { return (typeof netlifyIdentity !== 'undefined') ? netlifyIdentity : null; }
   function currentUser() { const w = idWidget(); return w ? w.currentUser() : null; }
 
+  // NEW: wait until the Identity widget has fully initialized
+  function waitForIdentityReady() {
+    return new Promise((resolve, reject) => {
+      const w = idWidget();
+      if (!w) return reject(new Error('Netlify Identity not loaded'));
+      // 'init' fires once per page load with the (possibly null) user
+      w.on('init', () => resolve());
+      // If the widget already initialized before we attached, resolve next tick
+      setTimeout(resolve, 250);
+    });
+  }
+
   async function saveAvatarUrlToIdentity(url) {
     const w = idWidget();
     const user = currentUser();
@@ -32,7 +44,7 @@
     });
     if (!res.ok) throw new Error('Failed to save avatar');
     const updated = await res.json();
-    w.setUser(updated); // update local identity instance
+    w.setUser(updated);
     return updated;
   }
 
@@ -41,23 +53,15 @@
   function showModal() { if (modal) modal.style.display = 'flex'; }
   function hideModal() { if (modal) modal.style.display = 'none'; if (rpmWrap) rpmWrap.style.display='none'; if (urlWrap) urlWrap.style.display='none'; }
 
-  // Centralize the “finalize avatar” flow
+  // Centralize finalize flow (dispatch both events + hide modal)
   async function finalizeAvatar(finalUrl) {
     if (!finalUrl) return;
     try {
-      // persist to identity + localStorage
-      try {
-        await saveAvatarUrlToIdentity(finalUrl);
-      } catch (e) {
-        // if identity save fails (rare), at least cache locally
-        console.warn("Identity save failed, caching locally:", e);
-      }
+      try { await saveAvatarUrlToIdentity(finalUrl); } catch (e) { console.warn("Identity save failed, caching locally:", e); }
       localStorage.setItem('dhk_avatar_url', finalUrl);
     } finally {
-      // Fire both events for compatibility
       document.dispatchEvent(new CustomEvent('dhk:avatar-ready',   { detail: { avatarUrl: finalUrl } }));
-      window.dispatchEvent(new CustomEvent('dhk:avatar:selected', { detail: { url: finalUrl } }));
-      // Optional: hide the modal (fade then remove)
+      window.dispatchEvent(new CustomEvent('dhk:avatar-selected', { detail: { url: finalUrl } }));
       document.getElementById("avatar-modal")?.classList.add("fade-out");
       setTimeout(() => document.getElementById("avatar-modal")?.remove(), 500);
       document.body.classList.remove("rpm-open","modal-open");
@@ -70,8 +74,6 @@
     rpmFrame.src = url;
     rpmWrap.style.display = 'block';
     urlWrap.style.display = 'none';
-
-    // Tell iframe we’re ready (per RPM frame API)
     rpmFrame.onload = () => {
       rpmFrame.contentWindow.postMessage({
         target: 'readyplayerme',
@@ -81,43 +83,82 @@
     };
   }
 
-  // Global RPM message bridge (works even if openRPM wasn't used)
+  // Global RPM message bridge (mobile/desktop)
   window.addEventListener("message", async (e) => {
     let data = e.data;
     if (typeof data === "string") { try { data = JSON.parse(data); } catch {} }
     if (!data || (data.source !== "readyplayer.me" && data.source !== "readyplayerme")) return;
-
     if (data.eventName === "v1.avatar.exported" && data.data?.url) {
-      const finalUrl = data.data.url; // GLB/VRM hosted by RPM
+      const finalUrl = data.data.url;
       await finalizeAvatar(finalUrl);
     }
   });
 
-  // TRY ON topbar chip → prompt login
-  document.addEventListener('DOMContentLoaded', () => {
-    const chip = document.querySelector('.chip');
-    chip?.addEventListener('click', () => { if (window.netlifyIdentity) netlifyIdentity.open('login'); });
-  });
-
-  // ---- Manual URL fallback ----
+  // Manual URL fallback
   async function saveManualUrl() {
     const val = (urlInput.value || '').trim();
     if (!val) return alert('Paste a valid URL.');
     await finalizeAvatar(val);
     hideModal();
   }
+  document.getElementById("avatar-url-save")?.addEventListener("click", saveManualUrl);
+  urlCancel?.addEventListener('click', hideModal);
 
-  // Also wire minimal saver as you requested
-  document.getElementById("avatar-url-save")?.addEventListener("click", async () => {
-    const val = document.getElementById("avatar-url-input")?.value?.trim();
-    if (!val) return;
-    await finalizeAvatar(val);
-  });
+  // NEW: Hydrate any saved avatar on load/visibility (mobile-friendly)
+  async function rehydrateAvatarFromStoreOrIdentity() {
+    await waitForIdentityReady().catch(() => {});
+    const w = idWidget();
+    const user = currentUser();
+    const fromIdentity = user?.user_metadata?.avatarUrl;
+    const fromLocal    = localStorage.getItem('dhk_avatar_url') || '';
+    const finalUrl     = fromIdentity || fromLocal || '';
+    if (finalUrl) {
+      // mirror cache & fire events so Babylon loads it instantly
+      localStorage.setItem('dhk_avatar_url', finalUrl);
+      window.dispatchEvent(new CustomEvent('dhk:avatar-selected', { detail: { url: finalUrl } }));
+      document.dispatchEvent(new CustomEvent('dhk:avatar-ready', { detail: { avatarUrl: finalUrl } }));
+      return finalUrl;
+    }
+    return '';
+  }
 
-  // ---- Public gate: wait for sign-in + avatar ----
+  // Try-on chip/tab should work the same on mobile & desktop
+  function wireTryOnTriggers() {
+    const triggers = [
+      document.querySelector('.chip'),                // existing
+      document.getElementById('tryon-tab-mobile'),   // NEW (give your mobile tab this id)
+      document.getElementById('tryon-tab-desktop')   // optional desktop id
+    ].filter(Boolean);
+
+    triggers.forEach(el => {
+      el.addEventListener('click', async () => {
+        const w = idWidget();
+        await waitForIdentityReady().catch(() => {});
+        const user = currentUser();
+        if (!user) {
+          // open login (mobile often redirects → we rehydrate on return)
+          if (w) w.open('login');
+          return;
+        }
+        // user is logged in; if we already have an avatar, just dispatch
+        const existing = await rehydrateAvatarFromStoreOrIdentity();
+        if (!existing) {
+          // no avatar yet → open creator/URL modal
+          showModal();
+        }
+      });
+    });
+  }
+
+  // ---- Public API ----
   async function requireAuthAndAvatar() {
     const w = idWidget();
     if (!w) throw new Error('Netlify Identity not loaded');
+    await waitForIdentityReady();
+
+    // Rehydrate immediately if possible (mobile return case)
+    const pre = await rehydrateAvatarFromStoreOrIdentity();
+    if (pre) return pre;
 
     // Ensure login
     let user = currentUser();
@@ -133,23 +174,20 @@
       hideGate();
     }
 
-    // Prefer identity metadata, fallback to localStorage
+    // Identity may now have metadata; try again
     const stored = user?.user_metadata?.avatarUrl || localStorage.getItem('dhk_avatar_url') || '';
     if (stored) {
       localStorage.setItem('dhk_avatar_url', stored);
+      // fire selection so world picks it up instantly
+      window.dispatchEvent(new CustomEvent('dhk:avatar-selected', { detail: { url: stored } }));
       return stored;
     }
 
-    // No avatar yet → show chooser
+    // No avatar yet → show chooser and resolve when ready
     showModal();
-
-    // Wire chooser buttons
     btnCreate?.addEventListener('click', openRPM);
-    btnLoad?.addEventListener('click', () => { urlWrap.style.display = 'block'; rpmWrap.style.display = 'none'; });
-    urlSave?.addEventListener('click', saveManualUrl);
-    urlCancel?.addEventListener('click', hideModal);
+    btnLoad  ?.addEventListener('click', () => { urlWrap.style.display = 'block'; rpmWrap.style.display = 'none'; });
 
-    // Resolve when avatar is ready
     const avatarUrl = await new Promise((resolve) => {
       const onReady = (e) => {
         const url = e.detail?.avatarUrl;
@@ -168,12 +206,20 @@
   // Expose to window
   window.DHKAuth = { requireAuthAndAvatar };
 
-  // --- Bridge: when avatar ready, tell the world scene to load it (redundant safety) ---
+  // Global “ready” → also inform the world (belt & suspenders)
   document.addEventListener("dhk:avatar-ready", (e) => {
     const url = e.detail?.avatarUrl;
-    if (url) {
-      window.dispatchEvent(new CustomEvent("dhk:avatar:selected", { detail: { url } }));
-    }
+    if (url) window.dispatchEvent(new CustomEvent("dhk:avatar-selected", { detail: { url } }));
   });
 
+  // --- Boot: mobile-friendly hydration hooks ---
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') rehydrateAvatarFromStoreOrIdentity();
+  });
+  window.addEventListener('focus', () => rehydrateAvatarFromStoreOrIdentity());
+  document.addEventListener('DOMContentLoaded', () => {
+    wireTryOnTriggers();
+    // If the user is already logged in and has an avatar, load it instantly
+    rehydrateAvatarFromStoreOrIdentity();
+  });
 })();
