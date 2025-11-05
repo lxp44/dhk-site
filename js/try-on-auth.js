@@ -29,6 +29,11 @@
       let settled = false;
       const done = (user) => { if (!settled) { settled = true; resolve(user || w.currentUser()); } };
 
+// ---- Saved avatar helpers ----
+function getSavedAvatarUrl() {
+  const user = currentUser();
+  return user?.user_metadata?.avatarUrl || localStorage.getItem('dhk_avatar_url') || '';
+}
       // Ensure init is called (safe to repeat)
       try { w.init(); } catch {}
 
@@ -117,6 +122,147 @@
       };
     }
   }
+// Mount a "Use my saved avatar" pill inside the modal header area
+function mountUseSavedButton() {
+  if (!modal || document.getElementById('avatar-use-saved')) return;
+
+  const headerHost =
+    document.querySelector('#avatar-modal .chooser-tabs') ||
+    document.querySelector('#avatar-modal .modal-header') ||
+    modal;
+
+  const btn = document.createElement('button');
+  btn.id = 'avatar-use-saved';
+  btn.type = 'button';
+  btn.textContent = 'Use my saved avatar';
+  btn.className = 'chip-saved-avatar';
+
+  // Visible only if a saved URL exists
+  btn.style.display = getSavedAvatarUrl() ? 'inline-flex' : 'none';
+
+  btn.addEventListener('click', () => {
+    const url = getSavedAvatarUrl();
+    if (!url) { alert('No saved avatar yet.'); return; }
+    // Tell the world scene to load it
+    window.dispatchEvent(new CustomEvent('dhk:avatar-selected', { detail: { url } }));
+    hideModal();
+  });
+
+  headerHost.appendChild(btn);
+
+  // Keep visibility in sync if saved URL changes (e.g., after RPM export)
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'dhk_avatar_url') {
+      btn.style.display = e.newValue ? 'inline-flex' : 'none';
+    }
+  });
+}
+// Global RPM message → dispatch dhk:avatar-selected and close modal
+window.addEventListener("message", (e) => {
+  let data = e.data;
+  if (typeof data === "string") { try { data = JSON.parse(data); } catch {} }
+  if (!data || data.source !== "readyplayer.me") return;
+
+  if (data.eventName === "v1.avatar.exported" && data.data?.url) {
+    const finalUrl = data.data.url; // GLB/VRM hosted by RPM
+    // mirror to identity/localStorage if you want, but at minimum:
+    window.dispatchEvent(new CustomEvent("dhk:avatar-selected", { detail: { url: finalUrl } }));
+    document.body.classList.remove("rpm-open","modal-open");
+    document.getElementById("avatar-modal")?.style && 
+      (document.getElementById("avatar-modal").style.display = "none");
+    try { localStorage.setItem('dhk_avatar_url', finalUrl); } catch {}
+  }
+});
+document.getElementById("avatar-url-save")?.addEventListener("click", async () => {
+  const val = document.getElementById("avatar-url-input")?.value?.trim();
+  if (!val) return alert('Paste a valid URL.');
+  try {
+    await saveAvatarUrlToIdentity(val);
+    localStorage.setItem('dhk_avatar_url', val);
+  } catch {}
+  window.dispatchEvent(new CustomEvent("dhk:avatar-selected", { detail: { url: val } }));
+  document.getElementById("avatar-modal").style.display = "none";
+});
+
+// ---- Public gate: wait for sign-in + avatar ----
+async function requireAuthAndAvatar() {
+  const w = idWidget();
+  if (!w) throw new Error('Netlify Identity not loaded');
+
+  // Ensure sign-in
+  let user = currentUser();
+  if (!user) {
+    showGate();
+    await new Promise((resolve) => {
+      const done = () => { hideGate(); resolve(); };
+      w.on('login', done);
+      btnSignin?.addEventListener('click', () => w.open(), { once: true });
+    });
+    user = currentUser();
+  } else {
+    hideGate();
+  }
+
+  // Try saved first (Identity or local mirror)
+  const saved = getSavedAvatarUrl();
+  if (saved) {
+    localStorage.setItem('dhk_avatar_url', saved);
+    return saved; // short-circuit: go straight into the world
+  }
+
+  // No saved → show chooser
+  showModal();
+  mountUseSavedButton(); // shows only if a URL appears later
+
+  // Wire buttons
+  btnCreate?.addEventListener('click', openRPM);
+
+  // LOAD SAVED acts instantly if user gets a URL after signing in on another device
+  btnLoad?.addEventListener('click', () => {
+    const url = getSavedAvatarUrl();
+    if (url) {
+      window.dispatchEvent(new CustomEvent('dhk:avatar-selected', { detail: { url } }));
+      hideModal();
+    } else {
+      urlWrap.style.display = 'block';
+      rpmWrap.style.display = 'none';
+    }
+  }, { once: true });
+
+  urlSave?.addEventListener('click', async () => {
+    const val = (urlInput.value || '').trim();
+    if (!val) return alert('Paste a valid URL.');
+    await saveAvatarUrlToIdentity(val);
+    localStorage.setItem('dhk_avatar_url', val);
+    hideModal();
+    window.dispatchEvent(new CustomEvent('dhk:avatar-selected', { detail: { url: val } }));
+  });
+  urlCancel?.addEventListener('click', hideModal);
+
+  // Resolve when avatar is ready
+  const avatarUrl = await new Promise((resolve) => {
+    const onReady = (e) => {
+      document.removeEventListener('dhk:avatar-ready', onReady);
+      const url = e.detail?.avatarUrl;
+      if (url) localStorage.setItem('dhk_avatar_url', url);
+      resolve(url);
+    };
+    document.addEventListener('dhk:avatar-ready', onReady);
+  });
+
+  return avatarUrl;
+}
+document.addEventListener('DOMContentLoaded', () => {
+  const chip = document.querySelector('.chip'); // the TRY ON chip in topbar
+  chip?.addEventListener('click', () => {
+    if (window.netlifyIdentity) netlifyIdentity.open('login');
+  });
+
+  // If the modal is already in the DOM, mount the pill early (desktop + mobile)
+  if (document.getElementById('avatar-modal')) {
+    setTimeout(mountUseSavedButton, 0);
+  }
+});
 
   // Chip shortcut in topbar
   document.addEventListener('DOMContentLoaded', () => {
