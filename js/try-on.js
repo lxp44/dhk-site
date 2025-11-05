@@ -37,22 +37,19 @@
     return res.json(); // { url, expiresAt, id, type }
   }
 
-  // 🔗 NEW: make sure body gets a class while the Identity modal is open
+  // 🔗 Ensure body reflects Identity modal state
   function hookIdentity() {
     const id = getIdentity();
-    if (!id) return; // widget not loaded yet
-
+    if (!id) return;
     id.on("open",  () => document.body.classList.add("identity-open"));
     id.on("close", () => document.body.classList.remove("identity-open"));
   }
-
-  // If the widget script loads slightly after our JS, wait briefly then hook
   (function waitForIdentity() {
     if (getIdentity()) return hookIdentity();
     const t = setInterval(() => {
       if (getIdentity()) { clearInterval(t); hookIdentity(); }
     }, 200);
-    setTimeout(() => clearInterval(t), 5000); // stop polling after 5s
+    setTimeout(() => clearInterval(t), 5000);
   })();
 
   // ---------- Utils ----------
@@ -217,7 +214,7 @@
     scene.onDisposeObservable.add(() => hl.dispose());
   }
 
-  // ---------- Avatar ----------
+  // ---------- Avatar (legacy kept for reference; no longer used in init) ----------
   async function loadAvatarFromUrl(avatarUrl) {
     const res = await BABYLON.SceneLoader.ImportMeshAsync("", "", avatarUrl, scene);
     const root = res.meshes[0];
@@ -281,6 +278,63 @@
       }
     });
   }
+
+  // ---- Avatar spawn/replace ----
+  let pendingGarments = []; // if a user picks clothes before avatar loads
+
+  async function replaceAvatar(avatarUrl) {
+    if (!avatarUrl) return;
+
+    // dispose any previous avatar
+    if (avatar) {
+      try { avatar.getChildMeshes?.().forEach(m => m.dispose()); } catch {}
+      try { avatar.dispose?.(); } catch {}
+      avatar = null;
+    }
+
+    const res  = await BABYLON.SceneLoader.ImportMeshAsync("", "", avatarUrl, scene);
+    const root = res.meshes[0];
+    root.name  = "AvatarRoot";
+    root.position = new BABYLON.Vector3(0, 0, 0);
+    root.metadata = { isAvatar: true };
+    avatar = root;
+
+    // --- Normalize scale & place feet on ground ---
+    const bounds = root.getHierarchyBoundingVectors?.();
+    if (bounds) {
+      const height = bounds.max.y - bounds.min.y;
+      const target = 1.75; // meters
+      const s = target / Math.max(0.01, height);
+      root.scaling.set(s, s, s);
+      // put feet on ground
+      root.position.y -= bounds.min.y * s;
+    }
+
+    // Play an idle if present
+    const idle = res.animationGroups?.find(a => /idle/i.test(a.name));
+    idle?.start(true);
+
+    // Re-apply any garments queued before the avatar existed
+    if (pendingGarments.length) {
+      for (const g of pendingGarments) {
+        try { await wearGarment(g); } catch {}
+      }
+      pendingGarments = [];
+    }
+  }
+
+  // If a user clicks a rack before avatar exists, queue it
+  const _wearGarment = wearGarment; // keep original
+  wearGarment = async function(garmentPath) {
+    if (!avatar) { pendingGarments.push(garmentPath); return; }
+    return _wearGarment(garmentPath);
+  };
+
+  // Listen for global event fired by the picker/auth flow
+  window.addEventListener("dhk:avatar:selected", (e) => {
+    const url = e.detail?.url;
+    if (url) replaceAvatar(url);
+  });
 
   // ---------- Mobile HUD ----------
   function ensureMobileHud() {
@@ -493,7 +547,11 @@
 
   // ---------- Boot ----------
   async function init() {
-    // 🔒 Gate: require login + avatar before the world loads
+    // OLD
+    // const avatarUrl = await window.DHKAuth.requireAuthAndAvatar();
+    // await loadAvatarFromUrl(avatarUrl);
+
+    // NEW: still gate, but use the same replace pipeline
     const avatarUrl = await window.DHKAuth.requireAuthAndAvatar();
 
     const canvas = document.getElementById("renderCanvas");
@@ -513,7 +571,9 @@
     light.intensity = 0.9;
 
     await loadCloset();
-    await loadAvatarFromUrl(avatarUrl);
+
+    // 🔒 Gate result → spawn avatar via replace pipeline
+    if (avatarUrl) await replaceAvatar(avatarUrl);
 
     const products = await fetchJSON(DATA_URL);
     buildOutfitBar(products);
@@ -522,12 +582,17 @@
     bindUI(canvas);
     setupMobileControls();
 
+    // Optional: hide the modal (fade then remove)
+    document.getElementById("avatar-modal")?.classList.add("fade-out");
+    setTimeout(() => document.getElementById("avatar-modal")?.remove(), 500);
+
     engine.runRenderLoop(() => scene.render());
     window.addEventListener("resize", () => engine.resize());
   }
 
   document.addEventListener("DOMContentLoaded", init);
 })();
+
 // Make body reflect when Identity or RPM modal is open (so CSS can freeze chrome)
 (function () {
   // Identity => add/remove .modal-open
