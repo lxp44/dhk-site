@@ -3,21 +3,27 @@
   const DATA_URL   = "data/products.json";
   const CLOSET_URL = "assets/3d/closet.glb";
 
+  // Public fallback tracks (used for guests / if gate fails)
   const START_MUSIC = [
     "assets/media/music/track1.mp3",
     "assets/media/music/track2.mp3"
   ];
 
+  // IDs/keys your Netlify function recognizes for gated media
   const GATED_VIDEO_ID = "unreleased-vid-1";
   const UNRELEASED_KEY = "music/unreleased/your-track-slug.mp3";
 
   let engine, scene, avatar, isFirstPerson = false, music, currentTrack = 0;
   let tvVideoTex = null;
 
-  // ---------- Identity helpers ----------
-  function getIdentity() { return (typeof netlifyIdentity !== "undefined") ? netlifyIdentity : null; }
-  function currentUser() { const id = getIdentity(); return id ? id.currentUser() : null; }
-
+  // ---------- Auth / Signed Media ----------
+  function getIdentity() {
+    return (typeof netlifyIdentity !== "undefined") ? netlifyIdentity : null;
+  }
+  function currentUser() {
+    const id = getIdentity();
+    return id ? id.currentUser() : null;
+  }
   async function getSignedMedia(id, type) {
     const user = currentUser();
     if (!user) throw new Error("Login required");
@@ -28,20 +34,21 @@
       { headers: { Authorization: `Bearer ${token}` } }
     );
     if (!res.ok) throw new Error(await res.text());
-    return res.json();
+    return res.json(); // { url, expiresAt, id, type }
   }
 
-  // Body class toggle while identity modal is open
+  // 🔗 Make sure body gets a class while the Identity modal is open
   function hookIdentity() {
     const id = getIdentity();
-    if (!id) return;
-    id.on("open",  () => document.body.classList.add("identity-open","modal-open"));
-    id.on("close", () => document.body.classList.remove("identity-open","modal-open"));
-    try { id.init(); } catch {}
+    if (!id) return; // widget not loaded yet
+    id.on("open",  () => document.body.classList.add("identity-open"));
+    id.on("close", () => document.body.classList.remove("identity-open"));
   }
   (function waitForIdentity() {
     if (getIdentity()) return hookIdentity();
-    const t = setInterval(() => { if (getIdentity()) { clearInterval(t); hookIdentity(); } }, 200);
+    const t = setInterval(() => {
+      if (getIdentity()) { clearInterval(t); hookIdentity(); }
+    }, 200);
     setTimeout(() => clearInterval(t), 5000);
   })();
 
@@ -75,13 +82,14 @@
     cam.inertia = 0.7;
     cam.angularSensibility = 5000;
     cam.attachControl(canvas, true);
+
     cam.applyGravity = true;
     cam.checkCollisions = true;
     cam.ellipsoid = new BABYLON.Vector3(0.35, 0.9, 0.35);
-    cam.keysUp    = [87, 38];
-    cam.keysDown  = [83, 40];
-    cam.keysLeft  = [65, 37];
-    cam.keysRight = [68, 39];
+    cam.keysUp    = [87, 38]; // W, ↑
+    cam.keysDown  = [83, 40]; // S, ↓
+    cam.keysLeft  = [65, 37]; // A, ←
+    cam.keysRight = [68, 39]; // D, →
     return cam;
   }
 
@@ -93,7 +101,7 @@
 
     scene.createDefaultEnvironment({ createSkybox: false, createGround: false });
 
-    // collisions
+    // Collidable surfaces
     scene.meshes.forEach(m => {
       const n = (m.name || "").toLowerCase();
       if (n.includes("floor") || n.includes("ground") || n.includes("wall") ||
@@ -102,6 +110,7 @@
       }
     });
 
+    // Mirror
     const mirror = scene.getMeshByName("Mirror");
     if (mirror) {
       const mat = new BABYLON.StandardMaterial("mirrorMat", scene);
@@ -120,6 +129,7 @@
       ));
     }
 
+    // TV (fallback loop; click to try gated)
     const tv = scene.getMeshByName("TV");
     if (tv) {
       tvVideoTex = new BABYLON.VideoTexture(
@@ -141,7 +151,8 @@
             const { url } = await getSignedMedia(GATED_VIDEO_ID, "video");
             const vid = tvVideoTex.video;
             const wasPlaying = !vid.paused;
-            vid.src = url; vid.loop = true;
+            vid.src = url;
+            vid.loop = true;
             if (wasPlaying) vid.play().catch(() => {});
           } catch (err) {
             console.warn("TV gated video error:", err);
@@ -151,6 +162,7 @@
       ));
     }
 
+    // Jukebox
     const jukebox = scene.getMeshByName("Jukebox");
     if (jukebox) {
       jukebox.actionManager = new BABYLON.ActionManager(scene);
@@ -160,9 +172,10 @@
       ));
     }
 
-    // Hover hint
+    // Hover highlight + "E to interact"
     const hl = new BABYLON.HighlightLayer("hl", scene);
     let hoverMesh = null;
+
     const hint = document.getElementById("interact-hint") || (() => {
       const el = document.createElement("div");
       el.id = "interact-hint";
@@ -181,12 +194,15 @@
     scene.onPointerObservable.add((pi) => {
       if (pi.type !== BABYLON.PointerEventTypes.POINTERMOVE) return;
       const pick = scene.pick(scene.pointerX, scene.pointerY, m => m && m.actionManager);
-      hl.removeAllMeshes(); hoverMesh = null;
+      hl.removeAllMeshes();
+      hoverMesh = null;
       if (pick?.hit && pick.pickedMesh?.actionManager) {
         hoverMesh = pick.pickedMesh;
         hl.addMesh(hoverMesh, BABYLON.Color3.FromHexString("#66ccff"));
         hint.style.display = "block";
-      } else hint.style.display = "none";
+      } else {
+        hint.style.display = "none";
+      }
     });
 
     window.addEventListener("keydown", (e) => {
@@ -197,7 +213,7 @@
     scene.onDisposeObservable.add(() => hl.dispose());
   }
 
-  // ---------- Avatar load/replace ----------
+  // ---------- Avatar ----------
   async function loadAvatarFromUrl(avatarUrl) {
     const res = await BABYLON.SceneLoader.ImportMeshAsync("", "", avatarUrl, scene);
     const root = res.meshes[0];
@@ -208,9 +224,13 @@
     idle?.start?.(true);
   }
 
-  let pendingGarments = [];
+  // ---- Avatar spawn/replace ----
+  let pendingGarments = []; // if a user picks clothes before avatar loads
 
   async function replaceAvatar(avatarUrl) {
+    if (!avatarUrl) return;
+
+    // dispose any previous avatar
     if (avatar) {
       try { avatar.getChildMeshes?.().forEach(m => m.dispose()); } catch {}
       try { avatar.dispose?.(); } catch {}
@@ -222,18 +242,17 @@
     root.name  = "AvatarRoot";
     root.position = new BABYLON.Vector3(0, 0, 0);
     root.metadata = { isAvatar: true };
+    avatar = root;
 
-    // autoscale to ~1.75m and place on ground
+    // Normalize scale & plant feet
     const bounds = root.getHierarchyBoundingVectors?.();
     if (bounds) {
       const height = bounds.max.y - bounds.min.y;
-      const target = 1.75;
+      const target = 1.75; // meters
       const s = target / Math.max(0.01, height);
       root.scaling.set(s, s, s);
       root.position.y -= bounds.min.y * s;
     }
-
-    avatar = root;
 
     const idle = res.animationGroups?.find(a => /idle/i.test(a.name));
     idle?.start(true);
@@ -291,11 +310,14 @@
       if (!btn) return;
       const id = btn.getAttribute("data-id");
       try { await wearGarment(`assets/3d/clothes/${id}.glb`); }
-      catch (err) { console.error("Wear failed:", err); alert("Garment not available yet."); }
+      catch (err) {
+        console.error("Wear failed:", err);
+        alert("Garment not available yet.");
+      }
     });
   }
 
-  // Bridge: picker/auth → world
+  // Listen for global event fired by the picker/auth flow
   window.addEventListener("dhk:avatar:selected", (e) => {
     const url = e.detail?.url;
     if (url) replaceAvatar(url);
@@ -358,7 +380,7 @@
       const x = dx * cl, y = dy * cl;
       knob.style.transform = `translate(${x}px, ${y}px)`;
       moveVec.x = x / radius;
-      moveVec.y = -y / radius;
+      moveVec.y = -y / radius; // up = forward
     }
     function resetKnob() {
       knob.style.transform = "translate(0,0)";
@@ -409,8 +431,8 @@
 
       const cam = scene.activeCamera;
       if (cam && cam.name === "fps") {
-        cam.rotation.y -= dx * lookSensX;
-        cam.rotation.x -= dy * lookSensY;
+        cam.rotation.y -= dx * lookSensX; // yaw
+        cam.rotation.x -= dy * lookSensY; // pitch
         cam.rotation.x = BABYLON.Scalar.Clamp(cam.rotation.x, -Math.PI/2 + 0.01, Math.PI/2 - 0.01);
       }
     }, { passive:true });
@@ -443,7 +465,7 @@
     const musicBtn  = document.getElementById("music-btn");
     const nextBtn   = document.getElementById("music-next");
 
-    // Mirror to dock
+    // Mirror the bottom dock buttons
     document.getElementById("auth-btn-dock")  ?.addEventListener("click", () => document.getElementById("auth-btn") ?.click());
     document.getElementById("view-btn-dock")  ?.addEventListener("click", () => document.getElementById("view-btn") ?.click());
     document.getElementById("music-btn-dock") ?.addEventListener("click", () => document.getElementById("music-btn")?.click());
@@ -466,7 +488,7 @@
       }
     });
 
-    // Jukebox
+    // Play/Pause (tries gated first, falls back to public)
     musicBtn?.addEventListener("click", async () => {
       try {
         if (!music) {
@@ -474,7 +496,9 @@
           try {
             const { url } = await getSignedMedia(UNRELEASED_KEY, "audio");
             src = url;
-          } catch (e) { console.warn("Falling back to public track:", e?.message || e); }
+          } catch (e) {
+            console.warn("Falling back to public track:", e?.message || e);
+          }
           music = new BABYLON.Sound("jukebox", src, scene, null, { loop: true, autoplay: true, volume: 0.6 });
           musicBtn.textContent = "Pause Music";
         } else if (music.isPlaying) {
@@ -501,34 +525,37 @@
       musicBtn.textContent = "Pause Music";
     });
 
-    window.addEventListener("keydown", (e) => { if (e.key.toLowerCase() === "v") viewBtn?.click(); });
+    // V key toggles view
+    window.addEventListener("keydown", (e) => {
+      if (e.key.toLowerCase() === "v") viewBtn?.click();
+    });
   }
 
   // ---------- Boot ----------
   async function init() {
-    // NEW: still gate, but use the same replace pipeline
+    // 🔒 Gate: require login + avatar before the world loads
     const avatarUrl = await window.DHKAuth.requireAuthAndAvatar();
 
     const canvas = document.getElementById("renderCanvas");
-    engine = new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true, disableWebGL2Support: false });
+    engine = new BABYLON.Engine(canvas, true, {
+      preserveDrawingBuffer: true, stencil: true, disableWebGL2Support: false
+    });
     scene = new BABYLON.Scene(engine);
     scene.ambientColor = new BABYLON.Color3(0.1, 0.1, 0.12);
 
+    // Collisions & gravity
     scene.collisionsEnabled = true;
     scene.gravity = new BABYLON.Vector3(0, -0.5, 0);
 
+    // Camera + light
     scene.activeCamera = makeArcCam(canvas);
     const light = new BABYLON.HemisphericLight("h", new BABYLON.Vector3(0,1,0), scene);
     light.intensity = 0.9;
 
     await loadCloset();
 
-    // Replace avatar (scaled & grounded) and hide modal if present
-    if (avatarUrl) {
-      await replaceAvatar(avatarUrl);
-      const am = document.getElementById("avatar-modal");
-      if (am) { am.classList.add("fade-out"); setTimeout(() => (am.style.display = "none"), 500); }
-    }
+    // NEW: still gate, but use the same replace pipeline
+    await replaceAvatar(avatarUrl);
 
     const products = await fetchJSON(DATA_URL);
     buildOutfitBar(products);
@@ -542,19 +569,30 @@
   }
 
   document.addEventListener("DOMContentLoaded", init);
+})();
 
-  // Keep body state in sync with RPM/Identity modals
-  (function () {
-    if (window.netlifyIdentity) {
-      netlifyIdentity.on("open",  () => document.body.classList.add("identity-open","modal-open"));
-      netlifyIdentity.on("close", () => document.body.classList.remove("identity-open","modal-open"));
+// Make body reflect when Identity or RPM modal is open (so CSS can freeze chrome)
+(function () {
+  if (window.netlifyIdentity) {
+    netlifyIdentity.on("open",  () => document.body.classList.add("identity-open","modal-open"));
+    netlifyIdentity.on("close", () => document.body.classList.remove("identity-open","modal-open"));
+  }
+
+  const obs = new MutationObserver(() => {
+    const rpm = document.querySelector('iframe[src*="readyplayer.me"]');
+    const idm = document.querySelector('.netlify-identity-modal, .netlify-identity-widget');
+    document.body.classList.toggle('rpm-open', !!rpm);
+    document.body.classList.toggle('modal-open', !!(rpm || idm));
+  });
+  obs.observe(document.body, { childList: true, subtree: true });
+
+  window.addEventListener("message", (e) => {
+    let data = e.data;
+    if (typeof data === "string") { try { data = JSON.parse(data); } catch {} }
+    if (data && data.source === "readyplayer.me") {
+      if (data.eventName === "v1.frame.opened")  document.body.classList.add("rpm-open","modal-open");
+      if (data.eventName === "v1.frame.closed" || data.eventName === "v1.avatar.exported")
+        document.body.classList.remove("rpm-open","modal-open");
     }
-    const obs = new MutationObserver(() => {
-      const rpm = document.querySelector('iframe[src*="readyplayer.me"]');
-      const idm = document.querySelector('.netlify-identity-modal, .netlify-identity-widget');
-      document.body.classList.toggle('rpm-open', !!rpm);
-      document.body.classList.toggle('modal-open', !!(rpm || idm));
-    });
-    obs.observe(document.body, { childList: true, subtree: true });
-  })();
+  });
 })();
