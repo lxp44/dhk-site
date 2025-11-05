@@ -1,8 +1,8 @@
-// js/try-on-auth.js
 (() => {
-  const g = document.getElementById('auth-gate');
+  // ------- DOM -------
+  const g         = document.getElementById('auth-gate');
   const btnSignin = document.getElementById('gate-signin');
-  const modal = document.getElementById('avatar-modal');
+  const modal     = document.getElementById('avatar-modal');
   const btnCreate = document.getElementById('avatar-create');
   const btnLoad   = document.getElementById('avatar-load');
   const rpmWrap   = document.getElementById('rpm-wrap');
@@ -12,7 +12,7 @@
   const urlSave   = document.getElementById('avatar-url-save');
   const urlCancel = document.getElementById('avatar-cancel');
 
-  // ---- Identity helpers (robust on mobile) ----
+  // ------- Identity helpers (robust on mobile) -------
   function idWidget() {
     return (typeof netlifyIdentity !== 'undefined') ? netlifyIdentity : null;
   }
@@ -20,31 +20,24 @@
     const w = idWidget();
     return w ? w.currentUser() : null;
   }
-
+  function getSavedAvatarUrl() {
+    const user = currentUser();
+    return user?.user_metadata?.avatarUrl || localStorage.getItem('dhk_avatar_url') || '';
+  }
   function identityReady(timeoutMs = 7000) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       const w = idWidget();
-      if (!w) return reject(new Error('Netlify Identity not loaded'));
-
+      if (!w) return resolve(null);
       let settled = false;
-      const done = (user) => { if (!settled) { settled = true; resolve(user || w.currentUser()); } };
+      const done = () => { if (!settled) { settled = true; resolve(w.currentUser()); } };
 
-// ---- Saved avatar helpers ----
-function getSavedAvatarUrl() {
-  const user = currentUser();
-  return user?.user_metadata?.avatarUrl || localStorage.getItem('dhk_avatar_url') || '';
-}
-      // Ensure init is called (safe to repeat)
       try { w.init(); } catch {}
-
-      // Fires once when identity bootstraps (incl. mobile Safari)
       w.on('init', done);
 
-      // Safety: if init never fires (rare), poll for a bit
       const started = Date.now();
       const poll = setInterval(() => {
-        if (w.currentUser()) { clearInterval(poll); done(w.currentUser()); }
-        else if (Date.now() - started > timeoutMs) { clearInterval(poll); done(null); }
+        if (w.currentUser()) { clearInterval(poll); done(); }
+        else if (Date.now() - started > timeoutMs) { clearInterval(poll); done(); }
       }, 250);
     });
   }
@@ -66,8 +59,7 @@ function getSavedAvatarUrl() {
     if (!res.ok) throw new Error('Failed to save avatar');
     const updated = await res.json();
     w.setUser(updated);
-    // local mirror (cross-device fallback)
-    localStorage.setItem('dhk_avatar_url', updated.user_metadata?.avatarUrl || url);
+    try { localStorage.setItem('dhk_avatar_url', updated.user_metadata?.avatarUrl || url); } catch {}
     return updated;
   }
 
@@ -75,12 +67,12 @@ function getSavedAvatarUrl() {
   function hideGate()  { if (g) g.style.display = 'none'; }
   function showModal() { if (modal) modal.style.display = 'flex'; }
   function hideModal() {
-    if (modal) modal.style.display = 'none';
+    if (modal)   modal.style.display = 'none';
     if (rpmWrap) rpmWrap.style.display = 'none';
     if (urlWrap) urlWrap.style.display = 'none';
   }
 
-  // ---- Ready Player Me flow (create) ----
+  // ------- Ready Player Me flow -------
   function subscribeRPMExportOnce(frameWin) {
     try {
       frameWin.postMessage({ target: 'readyplayerme', type: 'subscribe', eventName: 'v1.avatar.exported' }, '*');
@@ -93,10 +85,9 @@ function getSavedAvatarUrl() {
     if (rpmWrap) rpmWrap.style.display = 'block';
     if (urlWrap) urlWrap.style.display = 'none';
 
-    // One-time listener per open
     const onMsg = async (e) => {
       let data = e.data;
-      if (typeof data === "string") { try { data = JSON.parse(data); } catch {} }
+      if (typeof data === 'string') { try { data = JSON.parse(data); } catch {} }
       if (!data || data.source !== 'readyplayer.me') return;
 
       if (data.eventName === 'v1.avatar.exported' && data.data?.url) {
@@ -104,9 +95,8 @@ function getSavedAvatarUrl() {
         const finalUrl = data.data.url;
         try {
           await saveAvatarUrlToIdentity(finalUrl);
-          // Tell world scene to load it
-          window.dispatchEvent(new CustomEvent("dhk:avatar:selected", { detail: { url: finalUrl } }));
-          document.body.classList.remove("rpm-open","modal-open");
+          window.dispatchEvent(new CustomEvent('dhk:avatar-selected', { detail: { url: finalUrl } }));
+          document.body.classList.remove('rpm-open','modal-open');
           hideModal();
         } catch (err) {
           console.error(err);
@@ -117,204 +107,79 @@ function getSavedAvatarUrl() {
     window.addEventListener('message', onMsg);
 
     if (rpmFrame) {
-      rpmFrame.onload = () => {
-        subscribeRPMExportOnce(rpmFrame.contentWindow);
-      };
+      rpmFrame.onload = () => subscribeRPMExportOnce(rpmFrame.contentWindow);
     }
   }
-// Mount a "Use my saved avatar" pill inside the modal header area
-function mountUseSavedButton() {
-  if (!modal || document.getElementById('avatar-use-saved')) return;
 
-  const headerHost =
-    document.querySelector('#avatar-modal .chooser-tabs') ||
-    document.querySelector('#avatar-modal .modal-header') ||
-    modal;
+  // ------- “Use my saved avatar” pill -------
+  function mountUseSavedButton() {
+    if (!modal || document.getElementById('avatar-use-saved')) return;
 
-  const btn = document.createElement('button');
-  btn.id = 'avatar-use-saved';
-  btn.type = 'button';
-  btn.textContent = 'Use my saved avatar';
-  btn.className = 'chip-saved-avatar';
+    const headerHost =
+      document.querySelector('#avatar-modal .chooser-tabs') ||
+      document.querySelector('#avatar-modal .modal-header') ||
+      modal;
 
-  // Visible only if a saved URL exists
-  btn.style.display = getSavedAvatarUrl() ? 'inline-flex' : 'none';
+    const btn = document.createElement('button');
+    btn.id = 'avatar-use-saved';
+    btn.type = 'button';
+    btn.textContent = 'Use my saved avatar';
+    btn.className = 'chip-saved-avatar';
+    btn.style.display = getSavedAvatarUrl() ? 'inline-flex' : 'none';
 
-  btn.addEventListener('click', () => {
-    const url = getSavedAvatarUrl();
-    if (!url) { alert('No saved avatar yet.'); return; }
-    // Tell the world scene to load it
-    window.dispatchEvent(new CustomEvent('dhk:avatar-selected', { detail: { url } }));
-    hideModal();
-  });
-
-  headerHost.appendChild(btn);
-
-  // Keep visibility in sync if saved URL changes (e.g., after RPM export)
-  window.addEventListener('storage', (e) => {
-    if (e.key === 'dhk_avatar_url') {
-      btn.style.display = e.newValue ? 'inline-flex' : 'none';
-    }
-  });
-}
-// Global RPM message → dispatch dhk:avatar-selected and close modal
-window.addEventListener("message", (e) => {
-  let data = e.data;
-  if (typeof data === "string") { try { data = JSON.parse(data); } catch {} }
-  if (!data || data.source !== "readyplayer.me") return;
-
-  if (data.eventName === "v1.avatar.exported" && data.data?.url) {
-    const finalUrl = data.data.url; // GLB/VRM hosted by RPM
-    // mirror to identity/localStorage if you want, but at minimum:
-    window.dispatchEvent(new CustomEvent("dhk:avatar-selected", { detail: { url: finalUrl } }));
-    document.body.classList.remove("rpm-open","modal-open");
-    document.getElementById("avatar-modal")?.style && 
-      (document.getElementById("avatar-modal").style.display = "none");
-    try { localStorage.setItem('dhk_avatar_url', finalUrl); } catch {}
-  }
-});
-document.getElementById("avatar-url-save")?.addEventListener("click", async () => {
-  const val = document.getElementById("avatar-url-input")?.value?.trim();
-  if (!val) return alert('Paste a valid URL.');
-  try {
-    await saveAvatarUrlToIdentity(val);
-    localStorage.setItem('dhk_avatar_url', val);
-  } catch {}
-  window.dispatchEvent(new CustomEvent("dhk:avatar-selected", { detail: { url: val } }));
-  document.getElementById("avatar-modal").style.display = "none";
-});
-
-// ---- Public gate: wait for sign-in + avatar ----
-async function requireAuthAndAvatar() {
-  const w = idWidget();
-  if (!w) throw new Error('Netlify Identity not loaded');
-
-  // Ensure sign-in
-  let user = currentUser();
-  if (!user) {
-    showGate();
-    await new Promise((resolve) => {
-      const done = () => { hideGate(); resolve(); };
-      w.on('login', done);
-      btnSignin?.addEventListener('click', () => w.open(), { once: true });
-    });
-    user = currentUser();
-  } else {
-    hideGate();
-  }
-
-  // Try saved first (Identity or local mirror)
-  const saved = getSavedAvatarUrl();
-  if (saved) {
-    localStorage.setItem('dhk_avatar_url', saved);
-    return saved; // short-circuit: go straight into the world
-  }
-
-  // No saved → show chooser
-  showModal();
-  mountUseSavedButton(); // shows only if a URL appears later
-
-  // Wire buttons
-  btnCreate?.addEventListener('click', openRPM);
-
-  // LOAD SAVED acts instantly if user gets a URL after signing in on another device
-  btnLoad?.addEventListener('click', () => {
-    const url = getSavedAvatarUrl();
-    if (url) {
+    btn.addEventListener('click', () => {
+      const url = getSavedAvatarUrl();
+      if (!url) { alert('No saved avatar yet.'); return; }
       window.dispatchEvent(new CustomEvent('dhk:avatar-selected', { detail: { url } }));
       hideModal();
-    } else {
-      urlWrap.style.display = 'block';
-      rpmWrap.style.display = 'none';
-    }
-  }, { once: true });
-
-  urlSave?.addEventListener('click', async () => {
-    const val = (urlInput.value || '').trim();
-    if (!val) return alert('Paste a valid URL.');
-    await saveAvatarUrlToIdentity(val);
-    localStorage.setItem('dhk_avatar_url', val);
-    hideModal();
-    window.dispatchEvent(new CustomEvent('dhk:avatar-selected', { detail: { url: val } }));
-  });
-  urlCancel?.addEventListener('click', hideModal);
-
-  // Resolve when avatar is ready
-  const avatarUrl = await new Promise((resolve) => {
-    const onReady = (e) => {
-      document.removeEventListener('dhk:avatar-ready', onReady);
-      const url = e.detail?.avatarUrl;
-      if (url) localStorage.setItem('dhk_avatar_url', url);
-      resolve(url);
-    };
-    document.addEventListener('dhk:avatar-ready', onReady);
-  });
-
-  return avatarUrl;
-}
-document.addEventListener('DOMContentLoaded', () => {
-  const chip = document.querySelector('.chip'); // the TRY ON chip in topbar
-  chip?.addEventListener('click', () => {
-    if (window.netlifyIdentity) netlifyIdentity.open('login');
-  });
-
-  // If the modal is already in the DOM, mount the pill early (desktop + mobile)
-  if (document.getElementById('avatar-modal')) {
-    setTimeout(mountUseSavedButton, 0);
-  }
-});
-
-  // Chip shortcut in topbar
-  document.addEventListener('DOMContentLoaded', () => {
-    const chip = document.querySelector('.chip');
-    chip?.addEventListener('click', () => {
-      if (window.netlifyIdentity) netlifyIdentity.open('login');
     });
-  });
 
-  // ---- Manual URL fallback ----
+    headerHost.appendChild(btn);
+
+    // reflect future changes (e.g., export finishes)
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'dhk_avatar_url') {
+        btn.style.display = e.newValue ? 'inline-flex' : 'none';
+      }
+    });
+  }
+
+  // ------- Manual URL path -------
   async function saveManualUrl() {
     const val = (urlInput?.value || '').trim();
     if (!val) return alert('Paste a valid URL.');
-    await saveAvatarUrlToIdentity(val);
-    window.dispatchEvent(new CustomEvent("dhk:avatar:selected", { detail: { url: val } }));
+    try {
+      await saveAvatarUrlToIdentity(val);
+      localStorage.setItem('dhk_avatar_url', val);
+    } catch {}
+    window.dispatchEvent(new CustomEvent('dhk:avatar-selected', { detail: { url: val } }));
     hideModal();
   }
 
-  // ---- Load Saved button behavior ----
-  async function tryLoadSaved() {
-    const w = idWidget();
-    const user = currentUser();
-    const stored = user?.user_metadata?.avatarUrl || localStorage.getItem('dhk_avatar_url') || '';
-
+  // ------- Load Saved button -------
+  function tryLoadSaved() {
+    const stored = getSavedAvatarUrl();
     if (stored) {
-      // Immediately use saved
-      window.dispatchEvent(new CustomEvent("dhk:avatar:selected", { detail: { url: stored } }));
+      window.dispatchEvent(new CustomEvent('dhk:avatar-selected', { detail: { url: stored } }));
       hideModal();
-      return;
+    } else {
+      if (urlWrap) urlWrap.style.display = 'block';
+      if (rpmWrap) rpmWrap.style.display = 'none';
     }
-    // No saved — show URL input as fallback
-    if (urlWrap) urlWrap.style.display = 'block';
-    if (rpmWrap) rpmWrap.style.display = 'none';
   }
 
-  // ---- Public gate: wait for sign-in + avatar ----
+  // ------- Public gate: ensure sign-in + avatar, return URL -------
   async function requireAuthAndAvatar() {
     const w = idWidget();
     if (!w) throw new Error('Netlify Identity not loaded');
 
-    // Wait until Identity is initialized (mobile-safe)
     await identityReady();
 
     // 1) Ensure login
     let user = currentUser();
     if (!user) {
       showGate();
-
-      // Clicking "Sign In" opens the widget
       btnSignin?.addEventListener('click', () => w.open('login'), { once: true });
-
-      // Resolve on login
       await new Promise((resolve) => {
         const done = () => { w.off('login', done); hideGate(); resolve(); };
         w.on('login', done);
@@ -323,28 +188,27 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     hideGate();
 
-    // 2) Ensure avatar (prefer Identity metadata, then localStorage)
-    const stored = user?.user_metadata?.avatarUrl || localStorage.getItem('dhk_avatar_url') || '';
+    // 2) Prefer saved (Identity metadata, then local mirror)
+    const stored = getSavedAvatarUrl();
     if (stored) {
-      localStorage.setItem('dhk_avatar_url', stored);
+      try { localStorage.setItem('dhk_avatar_url', stored); } catch {}
       return stored;
     }
 
-    // No avatar → show chooser
+    // 3) No avatar yet — show chooser
     showModal();
-
-    // Wire once
+    mountUseSavedButton();
     btnCreate?.addEventListener('click', openRPM, { once: true });
-    btnLoad  ?.addEventListener('click', () => { tryLoadSaved(); }, { once: true });
+    btnLoad  ?.addEventListener('click', tryLoadSaved, { once: true });
     urlSave  ?.addEventListener('click', saveManualUrl);
     urlCancel?.addEventListener('click', hideModal);
 
-    // Resolve when avatar is ready (created or manual)
+    // Resolve when the app broadcasts a selection
     const finalUrl = await new Promise((resolve) => {
       const onSelected = (e) => {
         const url = e.detail?.url;
         if (url) {
-          localStorage.setItem('dhk_avatar_url', url);
+          try { localStorage.setItem('dhk_avatar_url', url); } catch {}
           window.removeEventListener('dhk:avatar-selected', onSelected);
           resolve(url);
         }
@@ -355,13 +219,20 @@ document.addEventListener('DOMContentLoaded', () => {
     return finalUrl;
   }
 
-  // Cross-tab sync (e.g., if avatar saved elsewhere)
+  // Cross-tab sync (if avatar saved elsewhere)
   window.addEventListener('storage', (e) => {
     if (e.key === 'dhk_avatar_url' && e.newValue) {
       window.dispatchEvent(new CustomEvent('dhk:avatar-selected', { detail: { url: e.newValue } }));
     }
   });
 
-  // Expose to window
+  // Topbar chip shortcut (optional)
+  document.addEventListener('DOMContentLoaded', () => {
+    const chip = document.querySelector('.chip');
+    chip?.addEventListener('click', () => { if (window.netlifyIdentity) netlifyIdentity.open('login'); });
+    if (document.getElementById('avatar-modal')) setTimeout(mountUseSavedButton, 0);
+  });
+
+  // Expose API
   window.DHKAuth = { requireAuthAndAvatar };
 })();
