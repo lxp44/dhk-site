@@ -967,3 +967,42 @@ body.modal-open .floating-logo,
 body.modal-open #storm-overlay,
 body.modal-open #storm-popup,
 body.modal-open .dhk-overlay { z-index: 1000 !important; }
+/* Saved avatar pill */
+#avatar-use-saved,
+.chip-saved-avatar {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.22);
+  background: rgba(255,255,255,.06);
+  color: #fff;
+  font-family: "Roboto", sans-serif;
+  font-size: 12px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background .15s ease, transform .06s ease, border-color .15s ease;
+}
+
+/* Where it sits in the modal */
+#avatar-modal .chip-saved-avatar {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 5;
+}
+
+#avatar-use-saved:hover,
+.chip-saved-avatar:hover { background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.30); }
+#avatar-use-saved:active,
+.chip-saved-avatar:active { transform: translateY(1px); }
+
+@media (max-width: 900px) {
+  #avatar-modal .chip-saved-avatar {
+    top: auto;
+    bottom: 12px;
+    right: 12px;
+  }
+}
