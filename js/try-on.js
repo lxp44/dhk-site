@@ -280,18 +280,15 @@
   }
 
   // ---- Avatar spawn/replace ----
-  let pendingGarments = []; // if a user picks clothes before avatar loads
+  let pendingGarments = [];
 
   async function replaceAvatar(avatarUrl) {
     if (!avatarUrl) return;
-
-    // dispose any previous avatar
     if (avatar) {
       try { avatar.getChildMeshes?.().forEach(m => m.dispose()); } catch {}
       try { avatar.dispose?.(); } catch {}
       avatar = null;
     }
-
     const res  = await BABYLON.SceneLoader.ImportMeshAsync("", "", avatarUrl, scene);
     const root = res.meshes[0];
     root.name  = "AvatarRoot";
@@ -299,16 +296,25 @@
     root.metadata = { isAvatar: true };
     avatar = root;
 
-    // --- Normalize scale & place feet on ground ---
+    // Normalize height & place on ground
     const bounds = root.getHierarchyBoundingVectors?.();
     if (bounds) {
       const height = bounds.max.y - bounds.min.y;
-      const target = 1.75; // meters
+      const target = 1.75;
       const s = target / Math.max(0.01, height);
       root.scaling.set(s, s, s);
-      // put feet on ground
       root.position.y -= bounds.min.y * s;
     }
+
+    const idle = res.animationGroups?.find(a => /idle/i.test(a.name));
+    idle?.start(true);
+
+    if (pendingGarments.length) {
+      for (const g of pendingGarments) { try { await wearGarment(g); } catch {} }
+      pendingGarments = [];
+    }
+  }
+
 
     // Play an idle if present
     const idle = res.animationGroups?.find(a => /idle/i.test(a.name));
@@ -546,31 +552,36 @@
   }
 
   // ---------- Boot ----------
-  async function init() {
-    // OLD
-    // const avatarUrl = await window.DHKAuth.requireAuthAndAvatar();
-    // await loadAvatarFromUrl(avatarUrl);
-
-    // NEW: still gate, but use the same replace pipeline
-    const avatarUrl = await window.DHKAuth.requireAuthAndAvatar();
-
+    async function init() {
+    // Build scene first (so we can show something while we gate)
     const canvas = document.getElementById("renderCanvas");
     engine = new BABYLON.Engine(canvas, true, {
       preserveDrawingBuffer: true, stencil: true, disableWebGL2Support: false
     });
     scene = new BABYLON.Scene(engine);
     scene.ambientColor = new BABYLON.Color3(0.1, 0.1, 0.12);
-
-    // Collisions & gravity
     scene.collisionsEnabled = true;
     scene.gravity = new BABYLON.Vector3(0, -0.5, 0);
-
-    // Camera + light
     scene.activeCamera = makeArcCam(canvas);
     const light = new BABYLON.HemisphericLight("h", new BABYLON.Vector3(0,1,0), scene);
     light.intensity = 0.9;
 
     await loadCloset();
+
+    // NEW: If we already have a cached avatar (common on mobile return), load it immediately
+    const cached = localStorage.getItem('dhk_avatar_url');
+    if (cached) { replaceAvatar(cached); }
+
+    // 🔒 Then run the gate → also uses replace pipeline
+    const avatarUrl = await window.DHKAuth.requireAuthAndAvatar();
+    if (avatarUrl) await replaceAvatar(avatarUrl);
+
+    const products = await fetchJSON("data/products.json");
+    buildOutfitBar(products);
+    wireRackPickers(products);
+
+    bindUI(canvas);
+    setupMobileControls();
 
     // 🔒 Gate result → spawn avatar via replace pipeline
     if (avatarUrl) await replaceAvatar(avatarUrl);
@@ -582,7 +593,7 @@
     bindUI(canvas);
     setupMobileControls();
 
-    // Optional: hide the modal (fade then remove)
+     // Optional: hide the modal (fade then remove)
     document.getElementById("avatar-modal")?.classList.add("fade-out");
     setTimeout(() => document.getElementById("avatar-modal")?.remove(), 500);
 
