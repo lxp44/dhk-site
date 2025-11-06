@@ -11,10 +11,23 @@
   const urlInput  = document.getElementById('avatar-url-input');
   const urlSave   = document.getElementById('avatar-url-save');
   const urlCancel = document.getElementById('avatar-cancel');
+  const worldBtn  = document.getElementById('world-load'); // NEW
 
-  // ---------- Identity helpers ----------
+  // ---------- Helpers ----------
   const idw = () => (typeof netlifyIdentity !== 'undefined' ? netlifyIdentity : null);
   const currentUser = () => (idw() ? idw().currentUser() : null);
+
+  function enableWorldLoadButton() {
+    if (!worldBtn) return;
+    worldBtn.removeAttribute('disabled');
+    worldBtn.classList.add('ready');
+    if (!worldBtn.textContent || /loading/i.test(worldBtn.textContent)) {
+      worldBtn.textContent = 'Load World';
+    }
+  }
+
+  const show = (el, mode = 'flex') => { if (el) el.style.display = mode; };
+  const hide = (el) => { if (el) el.style.display = 'none'; };
 
   function identityReady(timeoutMs = 7000) {
     return new Promise((resolve) => {
@@ -33,11 +46,12 @@
     });
   }
 
-  // ---------- Saved avatar helpers ----------
+  // ---------- Saved avatar ----------
   function getSavedAvatarUrl() {
     const u = currentUser();
     return u?.user_metadata?.avatarUrl || localStorage.getItem('dhk_avatar_url') || '';
   }
+
   async function saveAvatarUrlToIdentity(url) {
     const w = idw(); const u = currentUser();
     if (!w || !u) throw new Error('No identity session');
@@ -53,10 +67,6 @@
     return updated.user_metadata?.avatarUrl || url;
   }
 
-  // ---------- UI helpers ----------
-  const show = (el) => { if (el) el.style.display = 'flex'; };
-  const hide = (el) => { if (el) el.style.display = 'none'; };
-
   function mountUseSavedButton() {
     if (!modalEl || document.getElementById('avatar-use-saved')) return;
     const host = document.querySelector('#avatar-modal .chooser-tabs') ||
@@ -67,12 +77,15 @@
     btn.textContent = 'Use my saved avatar';
     btn.className = 'chip-saved-avatar';
     btn.style.display = getSavedAvatarUrl() ? 'inline-flex' : 'none';
+
     btn.addEventListener('click', () => {
       const url = getSavedAvatarUrl();
       if (!url) return alert('No saved avatar yet.');
+      // Announce selection but DO NOT close the modal; enable world button
       window.dispatchEvent(new CustomEvent('dhk:avatar-selected', { detail: { url } }));
-      hide(modalEl);
+      enableWorldLoadButton();
     });
+
     host.appendChild(btn);
     window.addEventListener('storage', (e) => {
       if (e.key === 'dhk_avatar_url') btn.style.display = e.newValue ? 'inline-flex' : 'none';
@@ -85,15 +98,17 @@
     if (rpmWrap) { rpmWrap.style.display = 'block'; }
     if (urlWrap) { urlWrap.style.display = 'none'; }
 
-    // Subscribe once the iframe is ready
     rpmFrame.onload = () => {
       try {
-        rpmFrame.contentWindow.postMessage({ target: 'readyplayer.me', type: 'subscribe', eventName: 'v1.avatar.exported' }, '*');
+        rpmFrame.contentWindow.postMessage(
+          { target: 'readyplayer.me', type: 'subscribe', eventName: 'v1.avatar.exported' },
+          '*'
+        );
       } catch {}
     };
   }
 
-  // Global RPM listener → dispatch selected & close
+  // Global RPM listener → dispatch selected (keep modal open; enable world)
   window.addEventListener('message', async (e) => {
     let data = e.data;
     if (typeof data === 'string') { try { data = JSON.parse(data); } catch {} }
@@ -104,19 +119,20 @@
       try { await saveAvatarUrlToIdentity(url); } catch {}
       try { localStorage.setItem('dhk_avatar_url', url); } catch {}
       window.dispatchEvent(new CustomEvent('dhk:avatar-selected', { detail: { url } }));
-      document.body.classList.remove('rpm-open','modal-open');
-      hide(modalEl);
+
+      // DO NOT close modal – user must press "Load World"
+      enableWorldLoadButton();
     }
   });
 
-  // Manual URL save
+  // Manual URL save (keep modal open)
   async function saveManualUrl() {
     const val = (urlInput?.value || '').trim();
     if (!val) return alert('Paste a valid URL.');
     const final = await saveAvatarUrlToIdentity(val);
     try { localStorage.setItem('dhk_avatar_url', final); } catch {}
     window.dispatchEvent(new CustomEvent('dhk:avatar-selected', { detail: { url: final } }));
-    hide(modalEl);
+    enableWorldLoadButton();
   }
 
   // ---------- Public gate ----------
@@ -138,35 +154,45 @@
       hide(gateEl);
     }
 
-    // Prefer saved URL (identity or local mirror)
+    // Prefer saved URL
     const saved = getSavedAvatarUrl();
     if (saved) {
-      try { localStorage.setItem('dhk_avatar_url', saved); } catch {}
+      // Always open the modal so the user can press "Load World"
+      show(modalEl);
+      mountUseSavedButton();
+      enableWorldLoadButton();
+      // Announce immediately (so scene knows the chosen avatar), but keep modal open
+      window.dispatchEvent(new CustomEvent('dhk:avatar-selected', { detail: { url: saved } }));
       return saved;
     }
 
     // No saved → show chooser
     show(modalEl);
     mountUseSavedButton();
+
     btnCreate?.addEventListener('click', openRPM, { once: true });
-    btnLoad  ?.addEventListener('click', () => {
+
+    btnLoad?.addEventListener('click', () => {
       const url = getSavedAvatarUrl();
       if (url) {
         window.dispatchEvent(new CustomEvent('dhk:avatar-selected', { detail: { url } }));
-        hide(modalEl);
+        enableWorldLoadButton();
       } else {
         if (urlWrap) urlWrap.style.display = 'block';
         if (rpmWrap) rpmWrap.style.display = 'none';
       }
     }, { once: true });
-    urlSave  ?.addEventListener('click', saveManualUrl);
-    urlCancel?.addEventListener('click', () => hide(modalEl));
 
-    // Resolve when avatar is chosen anywhere
+    urlSave  ?.addEventListener('click', saveManualUrl);
+    urlCancel?.addEventListener('click', () => hide(urlWrap));
+
+    // Resolve when avatar is chosen, but keep the modal open so user can click "Load World"
     return await new Promise((resolve) => {
       const onSel = (e) => {
         const url = e.detail?.url;
         if (url) {
+          enableWorldLoadButton();
+          // Do NOT hide the modal here.
           window.removeEventListener('dhk:avatar-selected', onSel);
           resolve(url);
         }
