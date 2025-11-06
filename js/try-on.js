@@ -138,6 +138,7 @@
     console.log("✅ Bedroom world loaded");
   }
 
+  // ---------- Load World Once ----------
   async function loadWorldOnce() {
     if (worldLoaded) return true;
     await loadWorld();
@@ -146,6 +147,9 @@
     if (chosenAvatarUrl) await replaceAvatar(chosenAvatarUrl);
     return true;
   }
+
+  // make available to auth.js
+  window.DHKWorld = { loadWorldOnce };
 
   // ---------- Avatar replace ----------
   let pendingGarments = [];
@@ -160,12 +164,16 @@
 
   async function replaceAvatar(avatarUrl) {
     if (!worldLoaded) {
-      // if world isn't ready yet, just remember the choice; Load World will spawn it
       chosenAvatarUrl = avatarUrl || chosenAvatarUrl;
       return;
     }
 
-    if (avatar) { try { avatar.getChildMeshes?.().forEach(m => m.dispose()); } catch {} try { avatar.dispose?.(); } catch {} avatar = null; }
+    if (avatar) {
+      try { avatar.getChildMeshes?.().forEach(m => m.dispose()); } catch {}
+      try { avatar.dispose?.(); } catch {}
+      avatar = null;
+    }
+
     const res  = await BABYLON.SceneLoader.ImportMeshAsync("", "", avatarUrl, scene);
     const root = res.meshes[0]; root.name = "AvatarRoot"; root.metadata = { isAvatar: true }; avatar = root;
 
@@ -179,7 +187,6 @@
       footLift = -bounds.min.y * s;
     }
 
-    // place at spawn
     const pos = spawnPoint || BABYLON.Vector3.Zero();
     root.position.set(pos.x, (pos.y || 0) + footLift, pos.z);
     root.rotation = root.rotation || new BABYLON.Vector3(0,0,0);
@@ -194,14 +201,12 @@
     }
   }
 
-  // listen for selection from auth/picker (but do not load world here)
+  // listen for avatar chosen from auth
   window.addEventListener("dhk:avatar-selected", (e) => {
     const url = e.detail?.url;
     if (!url) return;
     chosenAvatarUrl = url;
-    // enable the Load World button if auth script hasn’t already
     document.getElementById('world-load')?.removeAttribute('disabled');
-    // if the world is already loaded (user pressed button first), spawn now
     if (worldLoaded) replaceAvatar(url);
   });
 
@@ -218,7 +223,6 @@
     document.getElementById("music-next-dock")?.addEventListener("click", () => document.getElementById("music-next")?.click());
     document.getElementById("gate-signin")    ?.addEventListener("click", () => { if (window.netlifyIdentity) netlifyIdentity.open("login"); });
 
-    // Load World button: only loads the room; avatar spawns after if chosen
     loadWorldBtn?.addEventListener("click", async () => {
       if (worldLoaded) return;
       loadWorldBtn.disabled = true;
@@ -226,7 +230,6 @@
       try {
         await loadWorldOnce();
         loadWorldBtn.textContent = "World Loaded";
-        // Optionally close the modal now that world is ready
         document.getElementById("avatar-modal")?.style && (document.getElementById("avatar-modal").style.display = "none");
         document.body.classList.remove("modal-open","rpm-open");
       } catch (e) {
@@ -256,12 +259,11 @@
 
   // ---------- Boot ----------
   async function init() {
-    // Show auth + avatar chooser; resolve only after avatar picked
     const avatarUrl = await window.DHKAuth.requireAuthAndAvatar();
     chosenAvatarUrl = avatarUrl || "";
 
     const canvas = document.getElementById("renderCanvas");
-    engine = new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true, disableWebGL2Support: false });
+    engine = new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true });
     scene  = new BABYLON.Scene(engine);
     scene.ambientColor = new BABYLON.Color3(0.1, 0.1, 0.12);
     scene.collisionsEnabled = true;
@@ -269,9 +271,6 @@
 
     scene.activeCamera = makeArcCam(canvas);
     new BABYLON.HemisphericLight("h", new BABYLON.Vector3(0,1,0), scene).intensity = 0.9;
-
-    // Do NOT load the world here. The user will press "Load World".
-    // When they do, we'll spawn chosenAvatarUrl automatically after load.
 
     try {
       const products = await fetchJSON(DATA_URL);
@@ -312,7 +311,4 @@
   }
 
   document.addEventListener("DOMContentLoaded", init);
-
-  // expose if you ever need it elsewhere
-  window.DHKWorld = { loadWorldOnce: async () => { await loadWorldOnce(); } };
 })();
