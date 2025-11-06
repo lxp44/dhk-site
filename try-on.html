@@ -223,7 +223,16 @@
     });
   </script>
 
-  <script src="js/try-on-auth.js" defer></script>
-  <script src="js/try-on.js" defer></script>
+<!-- 1) Babylon first -->
+<script src="https://cdn.babylonjs.com/babylon.js" defer></script>
+
+<!-- 2) Netlify Identity widget -->
+<script src="https://identity.netlify.com/v1/netlify-identity-widget.js" defer></script>
+
+<!-- 3) Your auth/picker glue (defines window.DHKAuth) -->
+<script src="/js/try-on-auth.js" defer></script>
+
+<!-- 4) Your scene/bedroom loader (uses DHKAuth) -->
+<script src="/js/try-on.js" defer></script>
 </body>
 </html>
