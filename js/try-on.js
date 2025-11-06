@@ -4,6 +4,17 @@
 
   let engine, scene, avatar, isFirstPerson = false, music, currentTrack = 0;
   let tvVideoTex = null;
+  let worldLoaded = false;
+
+async function loadWorldOnce() {
+  if (worldLoaded) return true;
+  await loadWorld();     // calls your existing loader that imports WORLD_URL
+  worldLoaded = true;
+  return true;
+}
+
+// expose for other scripts if needed
+window.DHKWorld = { loadWorldOnce };
 
   // Spawn (filled if a Spawn/PlayerStart node exists in the GLB)
   let spawnPoint = new BABYLON.Vector3(0, 0, 0);
