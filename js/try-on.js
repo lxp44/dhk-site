@@ -5,16 +5,7 @@
   let engine, scene, avatar, isFirstPerson = false, music, currentTrack = 0;
   let tvVideoTex = null;
   let worldLoaded = false;
-
-async function loadWorldOnce() {
-  if (worldLoaded) return true;
-  await loadWorld();     // calls your existing loader that imports WORLD_URL
-  worldLoaded = true;
-  return true;
-}
-
-// expose for other scripts if needed
-window.DHKWorld = { loadWorldOnce };
+  let chosenAvatarUrl = ""; // set when user picks an avatar
 
   // Spawn (filled if a Spawn/PlayerStart node exists in the GLB)
   let spawnPoint = new BABYLON.Vector3(0, 0, 0);
@@ -147,6 +138,15 @@ window.DHKWorld = { loadWorldOnce };
     console.log("✅ Bedroom world loaded");
   }
 
+  async function loadWorldOnce() {
+    if (worldLoaded) return true;
+    await loadWorld();
+    worldLoaded = true;
+    // if user already chose an avatar, spawn it now
+    if (chosenAvatarUrl) await replaceAvatar(chosenAvatarUrl);
+    return true;
+  }
+
   // ---------- Avatar replace ----------
   let pendingGarments = [];
   async function wearGarment(garmentPath) {
@@ -159,6 +159,12 @@ window.DHKWorld = { loadWorldOnce };
   }
 
   async function replaceAvatar(avatarUrl) {
+    if (!worldLoaded) {
+      // if world isn't ready yet, just remember the choice; Load World will spawn it
+      chosenAvatarUrl = avatarUrl || chosenAvatarUrl;
+      return;
+    }
+
     if (avatar) { try { avatar.getChildMeshes?.().forEach(m => m.dispose()); } catch {} try { avatar.dispose?.(); } catch {} avatar = null; }
     const res  = await BABYLON.SceneLoader.ImportMeshAsync("", "", avatarUrl, scene);
     const root = res.meshes[0]; root.name = "AvatarRoot"; root.metadata = { isAvatar: true }; avatar = root;
@@ -188,10 +194,15 @@ window.DHKWorld = { loadWorldOnce };
     }
   }
 
-  // listen for selection from auth/picker
+  // listen for selection from auth/picker (but do not load world here)
   window.addEventListener("dhk:avatar-selected", (e) => {
     const url = e.detail?.url;
-    if (url) replaceAvatar(url);
+    if (!url) return;
+    chosenAvatarUrl = url;
+    // enable the Load World button if auth script hasn’t already
+    document.getElementById('world-load')?.removeAttribute('disabled');
+    // if the world is already loaded (user pressed button first), spawn now
+    if (worldLoaded) replaceAvatar(url);
   });
 
   // ---------- UI wiring ----------
@@ -199,12 +210,32 @@ window.DHKWorld = { loadWorldOnce };
     const viewBtn  = document.getElementById("view-btn");
     const musicBtn = document.getElementById("music-btn");
     const nextBtn  = document.getElementById("music-next");
+    const loadWorldBtn = document.getElementById("world-load");
 
     document.getElementById("auth-btn-dock")  ?.addEventListener("click", () => document.getElementById("auth-btn") ?.click());
     document.getElementById("view-btn-dock")  ?.addEventListener("click", () => document.getElementById("view-btn") ?.click());
     document.getElementById("music-btn-dock") ?.addEventListener("click", () => document.getElementById("music-btn")?.click());
     document.getElementById("music-next-dock")?.addEventListener("click", () => document.getElementById("music-next")?.click());
     document.getElementById("gate-signin")    ?.addEventListener("click", () => { if (window.netlifyIdentity) netlifyIdentity.open("login"); });
+
+    // Load World button: only loads the room; avatar spawns after if chosen
+    loadWorldBtn?.addEventListener("click", async () => {
+      if (worldLoaded) return;
+      loadWorldBtn.disabled = true;
+      loadWorldBtn.textContent = "Loading…";
+      try {
+        await loadWorldOnce();
+        loadWorldBtn.textContent = "World Loaded";
+        // Optionally close the modal now that world is ready
+        document.getElementById("avatar-modal")?.style && (document.getElementById("avatar-modal").style.display = "none");
+        document.body.classList.remove("modal-open","rpm-open");
+      } catch (e) {
+        console.error(e);
+        alert("Could not load the world yet.");
+        loadWorldBtn.disabled = false;
+        loadWorldBtn.textContent = "Load World";
+      }
+    });
 
     viewBtn?.addEventListener("click", () => {
       isFirstPerson = !isFirstPerson;
@@ -225,8 +256,9 @@ window.DHKWorld = { loadWorldOnce };
 
   // ---------- Boot ----------
   async function init() {
-    // require login + avatar first
+    // Show auth + avatar chooser; resolve only after avatar picked
     const avatarUrl = await window.DHKAuth.requireAuthAndAvatar();
+    chosenAvatarUrl = avatarUrl || "";
 
     const canvas = document.getElementById("renderCanvas");
     engine = new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true, disableWebGL2Support: false });
@@ -238,8 +270,8 @@ window.DHKWorld = { loadWorldOnce };
     scene.activeCamera = makeArcCam(canvas);
     new BABYLON.HemisphericLight("h", new BABYLON.Vector3(0,1,0), scene).intensity = 0.9;
 
-    await loadWorld();                 // ← IMPORTANT: load the bedroom
-    if (avatarUrl) await replaceAvatar(avatarUrl);
+    // Do NOT load the world here. The user will press "Load World".
+    // When they do, we'll spawn chosenAvatarUrl automatically after load.
 
     try {
       const products = await fetchJSON(DATA_URL);
@@ -280,27 +312,7 @@ window.DHKWorld = { loadWorldOnce };
   }
 
   document.addEventListener("DOMContentLoaded", init);
+
+  // expose if you ever need it elsewhere
+  window.DHKWorld = { loadWorldOnce: async () => { await loadWorldOnce(); } };
 })();
-document.addEventListener("DOMContentLoaded", () => {
-  const btn = document.getElementById("world-load");
-  if (!btn) return;
-
-  const setLabel = (t) => (btn.textContent = t);
-
-  if (worldLoaded) { setLabel("World Loaded"); btn.disabled = true; }
-
-  btn.addEventListener("click", async () => {
-    if (worldLoaded) return;
-    btn.disabled = true;
-    setLabel("Loading…");
-    try {
-      await loadWorldOnce();
-      setLabel("World Loaded");
-    } catch (e) {
-      console.error(e);
-      alert("Could not load the world yet.");
-      btn.disabled = false;
-      setLabel("Load World");
-    }
-  });
-});
