@@ -1,6 +1,6 @@
 (() => {
-  const DATA_URL   = "data/products.json";
-  const CLOSET_URL = "assets/3d/closet.glb";
+  const DATA_URL  = "data/products.json";
+  const WORLD_URL = "assets/3d/bedroom.glb"; // ← your room
 
   // Public fallback tracks (used for guests / if gate fails)
   const START_MUSIC = [
@@ -14,6 +14,10 @@
 
   let engine, scene, avatar, isFirstPerson = false, music, currentTrack = 0;
   let tvVideoTex = null;
+
+  // Spawn info (filled after world loads if a Spawn/PlayerStart exists)
+  let spawnPoint = new BABYLON.Vector3(0, 0, 0);
+  let spawnYaw = 0;
 
   // ---------- Auth / Signed Media ----------
   function getIdentity() {
@@ -36,7 +40,7 @@
     return res.json(); // { url, expiresAt, id, type }
   }
 
-  // Identity overlay class
+  // Identity overlay class (lets CSS freeze UI when widget is open)
   function hookIdentity() {
     const id = getIdentity();
     if (!id) return;
@@ -86,22 +90,24 @@
     cam.applyGravity = true;
     cam.checkCollisions = true;
     cam.ellipsoid = new BABYLON.Vector3(0.35, 0.9, 0.35);
-    cam.keysUp    = [87, 38];
-    cam.keysDown  = [83, 40];
-    cam.keysLeft  = [65, 37];
-    cam.keysRight = [68, 39];
+    cam.keysUp    = [87, 38]; // W, ↑
+    cam.keysDown  = [83, 40]; // S, ↓
+    cam.keysLeft  = [65, 37]; // A, ←
+    cam.keysRight = [68, 39]; // D, →
     return cam;
   }
 
-  // ---------- Closet + Interactables ----------
-  async function loadCloset() {
-    const result = await BABYLON.SceneLoader.ImportMeshAsync("", "", CLOSET_URL, scene);
+  // ---------- World (Bedroom) ----------
+  async function loadWorld() {
+    const result = await BABYLON.SceneLoader.ImportMeshAsync("", "", WORLD_URL, scene);
     const root = result.meshes[0];
+    root.name = "WorldRoot";
     root.scaling = new BABYLON.Vector3(1, 1, 1);
 
+    // Basic environment (no skybox/ground – the GLB provides it)
     scene.createDefaultEnvironment({ createSkybox: false, createGround: false });
 
-    // Collidable surfaces
+    // Collidable surfaces based on mesh names
     scene.meshes.forEach(m => {
       const n = (m.name || "").toLowerCase();
       if (n.includes("floor") || n.includes("ground") || n.includes("wall") ||
@@ -110,7 +116,23 @@
       }
     });
 
-    // Mirror
+    // Optional: Spawn/PlayerStart empty to place the avatar
+    const spawnNode =
+      scene.getTransformNodeByName("Spawn") ||
+      scene.getTransformNodeByName("spawn") ||
+      scene.getTransformNodeByName("PlayerStart") ||
+      scene.getTransformNodeByName("player_start");
+
+    if (spawnNode) {
+      spawnPoint = spawnNode.getAbsolutePosition?.() || spawnNode.position.clone();
+      // derive yaw from node rotation (Y axis)
+      const r = spawnNode.rotationQuaternion
+        ? spawnNode.rotationQuaternion.toEulerAngles()
+        : spawnNode.rotation || new BABYLON.Vector3(0,0,0);
+      spawnYaw = r.y || 0;
+    }
+
+    // Mirror (named "Mirror")
     const mirror = scene.getMeshByName("Mirror");
     if (mirror) {
       const mat = new BABYLON.StandardMaterial("mirrorMat", scene);
@@ -129,7 +151,7 @@
       ));
     }
 
-    // TV (fallback loop; click to try gated)
+    // TV (named "TV") → fallback loop; click to try gated
     const tv = scene.getMeshByName("TV");
     if (tv) {
       tvVideoTex = new BABYLON.VideoTexture(
@@ -162,7 +184,7 @@
       ));
     }
 
-    // Jukebox
+    // Jukebox (named "Jukebox")
     const jukebox = scene.getMeshByName("Jukebox");
     if (jukebox) {
       jukebox.actionManager = new BABYLON.ActionManager(scene);
@@ -226,24 +248,33 @@
     const res  = await BABYLON.SceneLoader.ImportMeshAsync("", "", avatarUrl, scene);
     const root = res.meshes[0];
     root.name  = "AvatarRoot";
-    root.position = new BABYLON.Vector3(0, 0, 0);
     root.metadata = { isAvatar: true };
     avatar = root;
 
-    // Auto-scale to ~1.75m and put feet on ground
+    // Auto-scale (~1.75m height) + feet on ground
     const bounds = root.getHierarchyBoundingVectors?.();
+    let footLift = 0;
     if (bounds) {
       const height = bounds.max.y - bounds.min.y;
-      const s = 1.75 / Math.max(0.01, height);
+      const target = 1.75;
+      const s = target / Math.max(0.01, height);
       root.scaling.set(s, s, s);
-      root.position.y -= bounds.min.y * s;
+      footLift = -bounds.min.y * s; // bring feet to y=0
     }
 
-    // Idle anim if present
+    // Place at world spawn (if any), else origin
+    const pos = spawnPoint || BABYLON.Vector3.Zero();
+    root.position.set(pos.x, (pos.y || 0) + footLift, pos.z);
+
+    // Face the same yaw as spawn (if any)
+    root.rotation = root.rotation || new BABYLON.Vector3(0, 0, 0);
+    root.rotation.y = spawnYaw || 0;
+
+    // Idle animation if present
     const idle = res.animationGroups?.find(a => /idle/i.test(a.name));
     idle?.start(true);
 
-    // Re-apply queued garments
+    // Re-apply any garments queued before the avatar existed
     if (pendingGarments.length) {
       for (const g of pendingGarments) { try { await wearGarment(g); } catch {} }
       pendingGarments = [];
@@ -269,8 +300,12 @@
     return _wearGarment(garmentPath);
   };
 
-  // Global bridge: any chooser/auth flow dispatches this
+  // Global bridge: accept both event spellings
   window.addEventListener("dhk:avatar-selected", (e) => {
+    const url = e.detail?.url;
+    if (url) replaceAvatar(url);
+  });
+  window.addEventListener("dhk:avatar:selected", (e) => {
     const url = e.detail?.url;
     if (url) replaceAvatar(url);
   });
@@ -482,7 +517,7 @@
       }
     });
 
-    // Music
+    // Play/Pause (tries gated first, falls back to public)
     musicBtn?.addEventListener("click", async () => {
       try {
         if (!music) {
@@ -506,6 +541,7 @@
       }
     });
 
+    // Next public track
     nextBtn?.addEventListener("click", () => {
       if (!START_MUSIC.length) return;
       currentTrack = (currentTrack + 1) % START_MUSIC.length;
@@ -531,6 +567,8 @@
     const avatarUrl = await window.DHKAuth.requireAuthAndAvatar();
 
     const canvas = document.getElementById("renderCanvas");
+    if (!canvas) { console.error("No #renderCanvas element."); return; }
+
     engine = new BABYLON.Engine(canvas, true, {
       preserveDrawingBuffer: true, stencil: true, disableWebGL2Support: false
     });
@@ -546,9 +584,10 @@
     const light = new BABYLON.HemisphericLight("h", new BABYLON.Vector3(0,1,0), scene);
     light.intensity = 0.9;
 
-    await loadCloset();
+    // ✅ Load your world (bedroom)
+    await loadWorld();
 
-    // Use the same replace pipeline
+    // ✅ Use the same replace pipeline
     if (avatarUrl) await replaceAvatar(avatarUrl);
 
     const products = await fetchJSON(DATA_URL);
@@ -580,6 +619,7 @@
   });
   obs.observe(document.body, { childList: true, subtree: true });
 
+  // Also react to RPM postMessages
   window.addEventListener("message", (e) => {
     let data = e.data;
     if (typeof data === "string") { try { data = JSON.parse(data); } catch {} }
