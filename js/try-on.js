@@ -5,9 +5,13 @@
   let engine, scene, avatar, isFirstPerson = false, music, currentTrack = 0;
   let tvVideoTex = null;
   let worldLoaded = false;
-  let chosenAvatarUrl = ""; // set when user picks an avatar
+  let chosenAvatarUrl = "";
 
-  // Spawn (filled if a Spawn/PlayerStart node exists in the GLB)
+  // ---- scene readiness gate (fixes Load World race) ----
+  let sceneReadyResolve;
+  const sceneReady = new Promise((resolve) => { sceneReadyResolve = resolve; });
+
+  // Spawn defaults (overridden by Spawn/PlayerStart in GLB)
   let spawnPoint = new BABYLON.Vector3(0, 0, 0);
   let spawnYaw = 0;
 
@@ -24,7 +28,7 @@
       { headers: { Authorization: `Bearer ${token}` } }
     );
     if (!res.ok) throw new Error(await res.text());
-    return res.json(); // { url, expiresAt, id, type }
+    return res.json();
   }
 
   // ---------- Utils ----------
@@ -53,102 +57,111 @@
 
   // ---------- World loader (BEDROOM) ----------
   async function loadWorld() {
-    console.log("Loading world:", WORLD_URL);
-    const result = await BABYLON.SceneLoader.ImportMeshAsync("", "", WORLD_URL, scene);
-    const root = result.meshes[0];
-    root.name = "WorldRoot";
-    root.scaling = new BABYLON.Vector3(1, 1, 1);
+    try {
+      console.log("Loading world:", WORLD_URL);
+      const result = await BABYLON.SceneLoader.ImportMeshAsync("", "", WORLD_URL, scene);
+      const root = result.meshes[0];
+      root.name = "WorldRoot";
+      root.scaling = new BABYLON.Vector3(1, 1, 1);
 
-    // environment off; GLB provides it
-    scene.createDefaultEnvironment({ createSkybox: false, createGround: false });
+      // environment off; GLB provides it
+      scene.createDefaultEnvironment({ createSkybox: false, createGround: false });
 
-    // collisions by name
-    scene.meshes.forEach(m => {
-      const n = (m.name || "").toLowerCase();
-      if (n.includes("floor") || n.includes("ground") || n.includes("wall") || n.includes("door") || n.includes("closet") || n.includes("furniture")) {
-        m.checkCollisions = true;
-      }
-    });
-
-    // spawn node
-    const spawnNode =
-      scene.getTransformNodeByName("Spawn") ||
-      scene.getTransformNodeByName("spawn") ||
-      scene.getTransformNodeByName("PlayerStart") ||
-      scene.getTransformNodeByName("player_start");
-
-    if (spawnNode) {
-      spawnPoint = spawnNode.getAbsolutePosition?.() || spawnNode.position.clone();
-      const r = spawnNode.rotationQuaternion ? spawnNode.rotationQuaternion.toEulerAngles() : (spawnNode.rotation || new BABYLON.Vector3(0,0,0));
-      spawnYaw = r.y || 0;
-    }
-
-    // TV (optional)
-    const tv = scene.getMeshByName("TV");
-    if (tv) {
-      tvVideoTex = new BABYLON.VideoTexture(
-        "tvtex", "assets/media/sample-video.mp4", scene, true, true,
-        BABYLON.VideoTexture.TRILINEAR_SAMPLINGMODE,
-        { autoPlay: true, loop: true, muted: true }
-      );
-      const tvMat = new BABYLON.StandardMaterial("tvmat", scene);
-      tvMat.emissiveTexture = tvVideoTex;
-      tv.material = tvMat;
-      tv.actionManager = new BABYLON.ActionManager(scene);
-      tv.actionManager.registerAction(new BABYLON.ExecuteCodeAction(
-        BABYLON.ActionManager.OnPickTrigger,
-        async () => {
-          try {
-            const { url } = await getSignedMedia("unreleased-vid-1", "video");
-            const vid = tvVideoTex.video; const wasPlaying = !vid.paused;
-            vid.src = url; vid.loop = true; if (wasPlaying) vid.play().catch(()=>{});
-          } catch (err) { alert("Login required to view unreleased video."); }
+      // collisions by name
+      scene.meshes.forEach(m => {
+        const n = (m.name || "").toLowerCase();
+        if (n.includes("floor") || n.includes("ground") || n.includes("wall") || n.includes("door") || n.includes("closet") || n.includes("furniture")) {
+          m.checkCollisions = true;
         }
-      ));
+      });
+
+      // spawn node
+      const spawnNode =
+        scene.getTransformNodeByName("Spawn") ||
+        scene.getTransformNodeByName("spawn") ||
+        scene.getTransformNodeByName("PlayerStart") ||
+        scene.getTransformNodeByName("player_start");
+
+      if (spawnNode) {
+        spawnPoint = spawnNode.getAbsolutePosition?.() || spawnNode.position.clone();
+        const r = spawnNode.rotationQuaternion ? spawnNode.rotationQuaternion.toEulerAngles() : (spawnNode.rotation || new BABYLON.Vector3(0,0,0));
+        spawnYaw = r.y || 0;
+      }
+
+      // TV (optional)
+      const tv = scene.getMeshByName("TV");
+      if (tv) {
+        tvVideoTex = new BABYLON.VideoTexture(
+          "tvtex", "assets/media/sample-video.mp4", scene, true, true,
+          BABYLON.VideoTexture.TRILINEAR_SAMPLINGMODE,
+          { autoPlay: true, loop: true, muted: true }
+        );
+        const tvMat = new BABYLON.StandardMaterial("tvmat", scene);
+        tvMat.emissiveTexture = tvVideoTex;
+        tv.material = tvMat;
+        tv.actionManager = new BABYLON.ActionManager(scene);
+        tv.actionManager.registerAction(new BABYLON.ExecuteCodeAction(
+          BABYLON.ActionManager.OnPickTrigger,
+          async () => {
+            try {
+              const { url } = await getSignedMedia("unreleased-vid-1", "video");
+              const vid = tvVideoTex.video; const wasPlaying = !vid.paused;
+              vid.src = url; vid.loop = true; if (wasPlaying) vid.play().catch(()=>{});
+            } catch (err) { alert("Login required to view unreleased video."); }
+          }
+        ));
+      }
+
+      // hover highlight + E-to-interact
+      const hl = new BABYLON.HighlightLayer("hl", scene);
+      let hoverMesh = null;
+      const hint = document.getElementById("interact-hint") || (() => {
+        const el = document.createElement("div");
+        el.id = "interact-hint"; el.textContent = "Press E to interact";
+        Object.assign(el.style, { position: "fixed", bottom: "80px", left: "50%", transform: "translateX(-50%)",
+          padding: "8px 12px", background: "rgba(0,0,0,.6)", color: "#fff",
+          fontFamily: "Cinzel, serif", fontSize: "12px", letterSpacing: "0.1em",
+          border: "1px solid rgba(255,255,255,.2)", borderRadius: "6px", display: "none", zIndex: 9999 });
+        document.body.appendChild(el); return el;
+      })();
+
+      scene.onPointerObservable.add((pi) => {
+        if (pi.type !== BABYLON.PointerEventTypes.POINTERMOVE) return;
+        const pick = scene.pick(scene.pointerX, scene.pointerY, m => m && m.actionManager);
+        hl.removeAllMeshes(); hoverMesh = null;
+        if (pick?.hit && pick.pickedMesh?.actionManager) {
+          hoverMesh = pick.pickedMesh; hl.addMesh(hoverMesh, BABYLON.Color3.FromHexString("#66ccff")); hint.style.display = "block";
+        } else { hint.style.display = "none"; }
+      });
+
+      window.addEventListener("keydown", (e) => {
+        if (e.key.toLowerCase() !== "e" || !hoverMesh || !hoverMesh.actionManager) return;
+        hoverMesh.actionManager.processTrigger(BABYLON.ActionManager.OnPickTrigger, { meshUnderPointer: hoverMesh });
+      });
+
+      scene.onDisposeObservable.add(() => hl.dispose());
+      console.log("✅ Bedroom world loaded");
+    } catch (err) {
+      console.error("❌ Failed to load world:", err);
+      // Helpful hint if it's a 404:
+      fetch(WORLD_URL, { method: "HEAD" }).then(h => {
+        if (!h.ok) console.error(`→ ${WORLD_URL} returned HTTP ${h.status}. Check path / file name on the server.`);
+      }).catch(()=>{});
+      throw err;
     }
-
-    // hover highlight + E-to-interact
-    const hl = new BABYLON.HighlightLayer("hl", scene);
-    let hoverMesh = null;
-    const hint = document.getElementById("interact-hint") || (() => {
-      const el = document.createElement("div");
-      el.id = "interact-hint"; el.textContent = "Press E to interact";
-      Object.assign(el.style, { position: "fixed", bottom: "80px", left: "50%", transform: "translateX(-50%)",
-        padding: "8px 12px", background: "rgba(0,0,0,.6)", color: "#fff",
-        fontFamily: "Cinzel, serif", fontSize: "12px", letterSpacing: "0.1em",
-        border: "1px solid rgba(255,255,255,.2)", borderRadius: "6px", display: "none", zIndex: 9999 });
-      document.body.appendChild(el); return el;
-    })();
-
-    scene.onPointerObservable.add((pi) => {
-      if (pi.type !== BABYLON.PointerEventTypes.POINTERMOVE) return;
-      const pick = scene.pick(scene.pointerX, scene.pointerY, m => m && m.actionManager);
-      hl.removeAllMeshes(); hoverMesh = null;
-      if (pick?.hit && pick.pickedMesh?.actionManager) {
-        hoverMesh = pick.pickedMesh; hl.addMesh(hoverMesh, BABYLON.Color3.FromHexString("#66ccff")); hint.style.display = "block";
-      } else { hint.style.display = "none"; }
-    });
-
-    window.addEventListener("keydown", (e) => {
-      if (e.key.toLowerCase() !== "e" || !hoverMesh || !hoverMesh.actionManager) return;
-      hoverMesh.actionManager.processTrigger(BABYLON.ActionManager.OnPickTrigger, { meshUnderPointer: hoverMesh });
-    });
-
-    scene.onDisposeObservable.add(() => hl.dispose());
-    console.log("✅ Bedroom world loaded");
   }
 
-  // ---------- Load World Once ----------
+  // ---------- Load World Once (waits for scene) ----------
   async function loadWorldOnce() {
     if (worldLoaded) return true;
+    await sceneReady;                 // ← wait for init() to create scene
     await loadWorld();
     worldLoaded = true;
-    // if user already chose an avatar, spawn it now
     if (chosenAvatarUrl) await replaceAvatar(chosenAvatarUrl);
     return true;
   }
 
-  // make available to auth.js
+  // export helper for auth script
   window.DHKWorld = { loadWorldOnce };
 
   // ---------- Avatar replace ----------
@@ -163,10 +176,7 @@
   }
 
   async function replaceAvatar(avatarUrl) {
-    if (!worldLoaded) {
-      chosenAvatarUrl = avatarUrl || chosenAvatarUrl;
-      return;
-    }
+    if (!worldLoaded) { chosenAvatarUrl = avatarUrl || chosenAvatarUrl; return; }
 
     if (avatar) {
       try { avatar.getChildMeshes?.().forEach(m => m.dispose()); } catch {}
@@ -201,7 +211,7 @@
     }
   }
 
-  // listen for avatar chosen from auth
+  // avatar chosen → remember it; spawn immediately if world already up
   window.addEventListener("dhk:avatar-selected", (e) => {
     const url = e.detail?.url;
     if (!url) return;
@@ -259,12 +269,16 @@
 
   // ---------- Boot ----------
   async function init() {
+    // 1) require auth + avatar (modal stays open so user can press Load World)
     const avatarUrl = await window.DHKAuth.requireAuthAndAvatar();
     chosenAvatarUrl = avatarUrl || "";
 
+    // 2) set up Babylon
     const canvas = document.getElementById("renderCanvas");
     engine = new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true });
     scene  = new BABYLON.Scene(engine);
+    sceneReadyResolve(true);                    // <- signal scene is ready
+
     scene.ambientColor = new BABYLON.Color3(0.1, 0.1, 0.12);
     scene.collisionsEnabled = true;
     scene.gravity = new BABYLON.Vector3(0, -0.5, 0);
@@ -272,6 +286,7 @@
     scene.activeCamera = makeArcCam(canvas);
     new BABYLON.HemisphericLight("h", new BABYLON.Vector3(0,1,0), scene).intensity = 0.9;
 
+    // products UI
     try {
       const products = await fetchJSON(DATA_URL);
       buildOutfitBar(products);
