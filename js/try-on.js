@@ -563,43 +563,53 @@
 
   // ---------- Boot ----------
   async function init() {
-    // 🔒 Gate: require login + avatar before the world loads
-    const avatarUrl = await window.DHKAuth.requireAuthAndAvatar();
+  // 🔒 Gate: require login + avatar before the world loads
+  const avatarUrl = await window.DHKAuth.requireAuthAndAvatar();
 
-    const canvas = document.getElementById("renderCanvas");
-    if (!canvas) { console.error("No #renderCanvas element."); return; }
+  const canvas = document.getElementById("renderCanvas");
+  if (!canvas) { console.error("No #renderCanvas element found."); return; }
 
-    engine = new BABYLON.Engine(canvas, true, {
-      preserveDrawingBuffer: true, stencil: true, disableWebGL2Support: false
-    });
-    scene = new BABYLON.Scene(engine);
-    scene.ambientColor = new BABYLON.Color3(0.1, 0.1, 0.12);
+  engine = new BABYLON.Engine(canvas, true, {
+    preserveDrawingBuffer: true,
+    stencil: true,
+    disableWebGL2Support: false
+  });
 
-    // Collisions & gravity
-    scene.collisionsEnabled = true;
-    scene.gravity = new BABYLON.Vector3(0, -0.5, 0);
+  scene = new BABYLON.Scene(engine);
+  scene.ambientColor = new BABYLON.Color3(0.1, 0.1, 0.12);
+  scene.collisionsEnabled = true;
+  scene.gravity = new BABYLON.Vector3(0, -0.5, 0);
 
-    // Camera + light
-    scene.activeCamera = makeArcCam(canvas);
-    const light = new BABYLON.HemisphericLight("h", new BABYLON.Vector3(0,1,0), scene);
-    light.intensity = 0.9;
+  scene.activeCamera = makeArcCam(canvas);
+  const light = new BABYLON.HemisphericLight("h", new BABYLON.Vector3(0, 1, 0), scene);
+  light.intensity = 0.9;
 
-    // ✅ Load your world (bedroom)
+  // ✅ Load the 3D bedroom environment instead of the closet
+  try {
+    console.log("Loading world:", WORLD_URL);
     await loadWorld();
-
-    // ✅ Use the same replace pipeline
-    if (avatarUrl) await replaceAvatar(avatarUrl);
-
-    const products = await fetchJSON(DATA_URL);
-    buildOutfitBar(products);
-    wireRackPickers(products);
-
-    bindUI(canvas);
-    setupMobileControls();
-
-    engine.runRenderLoop(() => scene.render());
-    window.addEventListener("resize", () => engine.resize());
+    console.log("✅ Bedroom world loaded successfully");
+  } catch (err) {
+    console.error("❌ Failed to load bedroom.glb:", err);
+    alert("Could not load bedroom.glb. Check file path or Netlify LFS setup.");
+    return;
   }
+
+  // ✅ Once world loads, spawn your avatar inside it
+  if (avatarUrl) await replaceAvatar(avatarUrl);
+
+  // ✅ Load product data & setup clothing racks
+  const products = await fetchJSON(DATA_URL);
+  buildOutfitBar(products);
+  wireRackPickers(products);
+
+  bindUI(canvas);
+  setupMobileControls();
+
+  // ✅ Start rendering
+  engine.runRenderLoop(() => scene.render());
+  window.addEventListener("resize", () => engine.resize());
+}
 
   document.addEventListener("DOMContentLoaded", init);
 })();
