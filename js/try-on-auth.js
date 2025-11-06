@@ -147,29 +147,52 @@ function normalizeRPMUrl(raw) {
     return raw; // if it's not a valid URL, let upstream validation handle it
   }
 }
+// Turn RPM share links into a direct .glb URL
+function normalizeAvatarUrl(input) {
+  try {
+    const u = new URL(input);
 
+    // Case 1: social/share link => https://models.readyplayer.me/<id>[.glb]
+    if (u.hostname.endsWith("readyplayer.me")) {
+      // if it's already a .glb, keep it
+      if (u.pathname.endsWith(".glb")) return u.toString();
+
+      // pathname like "/690d10...": append .glb before any query
+      if (/^\/[a-z0-9_-]+$/i.test(u.pathname)) {
+        u.pathname = u.pathname + ".glb";
+        // optional: ensure CORS-friendly query stays minimal
+        u.search = ""; 
+        return u.toString();
+      }
+    }
+
+    // Case 2: already a .glb somewhere else
+    if (u.pathname.endsWith(".glb")) return u.toString();
+  } catch {}
+  // Fallback: return original (might still be fine)
+  return input;
+}
 // ====== RPM message listener (export) ======
+// Receive avatar from RPM → keep modal open; enable Load World
 window.addEventListener("message", async (e) => {
   let data = e.data;
   if (typeof data === "string") { try { data = JSON.parse(data); } catch {} }
   if (!data || data.source !== "readyplayer.me") return;
 
   if (data.eventName === "v1.avatar.exported" && data.data?.url) {
-    // Convert social/share link to a direct .glb (prevents the 404 you saw)
     const raw = data.data.url;
-    const url = normalizeRPMUrl(raw);
-
-    try { await saveAvatarUrlToIdentity(url); } catch {}
-    announceAvatar(url);     // this sets lastAvatarUrl, stores to localStorage, enables "Load World"
+    const glbUrl = normalizeAvatarUrl(raw);          // <- convert share link → .glb
+    try { await saveAvatarUrlToIdentity(glbUrl); } catch {}
+    announceAvatar(glbUrl);                           // <- enables "Load World" button
   }
 });
 
-// ====== Manual paste flow (also normalize) ======
+// Manual paste flow
 async function saveManualUrl() {
   const val = (urlInput?.value || "").trim();
   if (!val) return alert("Paste a valid URL.");
-  const final = normalizeRPMUrl(val);
-  try { await saveAvatarUrlToIdentity(final); } catch {}
+  const glbUrl = normalizeAvatarUrl(val);            // <- normalize here too
+  const final  = await saveAvatarUrlToIdentity(glbUrl);
   announceAvatar(final);
 }
   // ---------- Bind Load World click here too (safety net) ----------
