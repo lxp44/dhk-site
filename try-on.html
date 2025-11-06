@@ -223,16 +223,17 @@
     });
   </script>
 
-<!-- 1) Babylon first -->
+<!-- 1) Babylon core + loaders -->
 <script src="https://cdn.babylonjs.com/babylon.js" defer></script>
+<script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js" defer></script>
 
-<!-- 2) Netlify Identity widget -->
+<!-- 2) Netlify Identity -->
 <script src="https://identity.netlify.com/v1/netlify-identity-widget.js" defer></script>
 
-<!-- 3) Your auth/picker glue (defines window.DHKAuth) -->
+<!-- 3) DHK Auth / Avatar selection -->
 <script src="/js/try-on-auth.js" defer></script>
 
-<!-- 4) Your scene/bedroom loader (uses DHKAuth) -->
+<!-- 4) DHK Try-On Scene (loads bedroom.glb) -->
 <script src="/js/try-on.js" defer></script>
 </body>
 </html>
