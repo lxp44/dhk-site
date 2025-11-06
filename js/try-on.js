@@ -281,3 +281,26 @@ window.DHKWorld = { loadWorldOnce };
 
   document.addEventListener("DOMContentLoaded", init);
 })();
+document.addEventListener("DOMContentLoaded", () => {
+  const btn = document.getElementById("world-load");
+  if (!btn) return;
+
+  const setLabel = (t) => (btn.textContent = t);
+
+  if (worldLoaded) { setLabel("World Loaded"); btn.disabled = true; }
+
+  btn.addEventListener("click", async () => {
+    if (worldLoaded) return;
+    btn.disabled = true;
+    setLabel("Loading…");
+    try {
+      await loadWorldOnce();
+      setLabel("World Loaded");
+    } catch (e) {
+      console.error(e);
+      alert("Could not load the world yet.");
+      btn.disabled = false;
+      setLabel("Load World");
+    }
+  });
+});
