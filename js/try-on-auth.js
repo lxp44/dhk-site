@@ -105,43 +105,73 @@
     });
   }
 
-  // ---------- RPM flow ----------
-  function openRPM() {
-    if (rpmFrame) rpmFrame.src = "https://demo.readyplayer.me/avatar?frameApi";
-    if (rpmWrap) rpmWrap.style.display = "block";
-    if (urlWrap) urlWrap.style.display = "none";
-
-    rpmFrame.onload = () => {
-      try {
-        rpmFrame.contentWindow.postMessage(
-          { target: "readyplayer.me", type: "subscribe", eventName: "v1.avatar.exported" },
-          "*"
-        );
-      } catch {}
-    };
+// ---------- RPM flow ----------
+function openRPM() {
+  if (rpmFrame && !rpmFrame.src) {
+    rpmFrame.src = "https://demo.readyplayer.me/avatar?frameApi";
   }
+  if (rpmWrap) rpmWrap.style.display = "block";
+  if (urlWrap) urlWrap.style.display = "none";
 
-  // Receive avatar from RPM → keep modal open; enable Load World
-  window.addEventListener("message", async (e) => {
-    let data = e.data;
-    if (typeof data === "string") { try { data = JSON.parse(data); } catch {} }
-    if (!data || data.source !== "readyplayer.me") return;
+  // Some browsers fire onload before RPM is fully ready.
+  const subscribe = () => {
+    try {
+      rpmFrame.contentWindow.postMessage(
+        { target: "readyplayer.me", type: "subscribe", eventName: "v1.avatar.exported" },
+        "*"
+      );
+    } catch {}
+  };
 
-    if (data.eventName === "v1.avatar.exported" && data.data?.url) {
-      const url = data.data.url;
-      try { await saveAvatarUrlToIdentity(url); } catch {}
-      announceAvatar(url);
+  // Try both: onload and a small delay as a fallback.
+  rpmFrame.onload = () => { subscribe(); setTimeout(subscribe, 100); };
+}
+
+  // Helper: turn RPM share URLs into real model URLs
+function normalizeRPMUrl(raw) {
+  if (!raw) return "";
+  try {
+    const u = new URL(raw);
+    // Only normalize RPM domains
+    if (/\.readyplayer\.me$/i.test(u.hostname)) {
+      // If there's no file extension, assume .glb
+      if (!/\.(glb|gltf|vrm)$/i.test(u.pathname)) {
+        u.pathname = u.pathname.replace(/\/?$/, ".glb"); // append .glb once
+      }
+      // Handy params (safe no-ops if already present)
+      u.searchParams.set("textureAtlas", "none");
+      u.searchParams.set("pose", "t");
     }
-  });
-
-  // Manual paste flow
-  async function saveManualUrl() {
-    const val = (urlInput?.value || "").trim();
-    if (!val) return alert("Paste a valid URL.");
-    const final = await saveAvatarUrlToIdentity(val);
-    announceAvatar(final);
+    return u.toString();
+  } catch {
+    return raw; // if it's not a valid URL, let upstream validation handle it
   }
+}
 
+// ====== RPM message listener (export) ======
+window.addEventListener("message", async (e) => {
+  let data = e.data;
+  if (typeof data === "string") { try { data = JSON.parse(data); } catch {} }
+  if (!data || data.source !== "readyplayer.me") return;
+
+  if (data.eventName === "v1.avatar.exported" && data.data?.url) {
+    // Convert social/share link to a direct .glb (prevents the 404 you saw)
+    const raw = data.data.url;
+    const url = normalizeRPMUrl(raw);
+
+    try { await saveAvatarUrlToIdentity(url); } catch {}
+    announceAvatar(url);     // this sets lastAvatarUrl, stores to localStorage, enables "Load World"
+  }
+});
+
+// ====== Manual paste flow (also normalize) ======
+async function saveManualUrl() {
+  const val = (urlInput?.value || "").trim();
+  if (!val) return alert("Paste a valid URL.");
+  const final = normalizeRPMUrl(val);
+  try { await saveAvatarUrlToIdentity(final); } catch {}
+  announceAvatar(final);
+}
   // ---------- Bind Load World click here too (safety net) ----------
   if (worldBtn) {
     worldBtn.addEventListener("click", async () => {
