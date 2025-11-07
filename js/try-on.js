@@ -1,3 +1,5 @@
+<!-- /js/try-on.js -->
+<script>
 (() => {
   const DATA_URL  = "data/products.json";
   const WORLD_URL = "assets/3d/bedroom.glb";
@@ -9,6 +11,7 @@
   let tvVideoTex = null;
   let spawnPoint = new BABYLON.Vector3(0, 0, 0);
   let spawnYaw = 0;
+
 
   // ---------- Identity ----------
   function getIdentity() {
@@ -225,13 +228,13 @@
   // ---------- Init ----------
   async function init() {
     try {
-      console.log("🚀 Initializing...");
+      console.log("🚀 Initializing try-on scene…");
       const avatarUrl = await window.DHKAuth.requireAuthAndAvatar();
       chosenAvatarUrl = avatarUrl || "";
 
       const canvas = document.getElementById("renderCanvas");
       engine = new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true });
-      scene = new BABYLON.Scene(engine);
+      scene  = new BABYLON.Scene(engine);
       scene.ambientColor = new BABYLON.Color3(0.1, 0.1, 0.12);
       scene.collisionsEnabled = true;
       scene.gravity = new BABYLON.Vector3(0, -0.5, 0);
@@ -253,6 +256,9 @@
       console.error("❌ init() failed:", err);
     }
   }
+
+  document.addEventListener("DOMContentLoaded", init);
+
 
   // ---------- Outfit ----------
   function buildOutfitBar(products) {
