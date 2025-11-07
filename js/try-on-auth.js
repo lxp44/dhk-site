@@ -12,6 +12,36 @@
   const urlSave   = document.getElementById('avatar-url-save');
   const urlCancel = document.getElementById('avatar-cancel');
   const worldBtn  = document.getElementById('world-load');
+const DEFAULT_AVATAR = "assets/3d/guest.glb"; // put any .glb you want here
+
+function getSavedAvatarUrl() {
+  const u = currentUser();
+  const idMeta = u?.user_metadata?.avatarUrl;
+  const local = (() => { try { return localStorage.getItem("dhk_avatar_url"); } catch { return ""; } })();
+  return idMeta || local || "";
+}
+
+async function saveAvatarUrlToIdentity(url) {
+  const w = idw(); const u = currentUser();
+  let final = url;
+  if (w && u) {
+    try {
+      const token = await u.jwt();
+      const res = await fetch("/.netlify/identity/user", {
+        method: "PUT",
+        headers: { "Authorization": `Bearer ${token}`, "Content-Type": "application/json" },
+        body: JSON.stringify({ user_metadata: { avatarUrl: url } })
+      });
+      if (res.ok) {
+        const updated = await res.json();
+        w.setUser(updated);
+        final = updated.user_metadata?.avatarUrl || url;
+      }
+    } catch { /* ignore, we’ll still use local */ }
+  }
+  try { localStorage.setItem("dhk_avatar_url", final); } catch {}
+  return final;
+}
 
   let lastAvatarUrl = "";
   window.DHKAuth = window.DHKAuth || {};
