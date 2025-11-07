@@ -1,5 +1,4 @@
-<!-- /js/try-on.js -->
-<script>
+// js/try-on.js
 (() => {
   const DATA_URL  = "data/products.json";
   const WORLD_URL = "assets/3d/bedroom.glb";
@@ -12,9 +11,7 @@
   let spawnPoint = new BABYLON.Vector3(0, 0, 0);
   let spawnYaw = 0;
 
-
-  // ---------- Identity ----------
-   function getIdentity(){ return typeof netlifyIdentity !== "undefined" ? netlifyIdentity : null; }
+  function getIdentity(){ return typeof netlifyIdentity !== "undefined" ? netlifyIdentity : null; }
   function currentUser(){ const id = getIdentity(); return id ? id.currentUser() : null; }
 
   async function getSignedMedia(id, type){
@@ -28,41 +25,24 @@
 
   async function fetchJSON(url){ const r = await fetch(url, { cache: "no-store" }); if(!r.ok) throw new Error(`HTTP ${r.status} on ${url}`); return r.json(); }
 
-
-
-  // ---------- Cameras ----------
   function makeArcCam(canvas) {
     const cam = new BABYLON.ArcRotateCamera("arc", Math.PI * 1.2, 1.0, 6.5, new BABYLON.Vector3(0, 1.6, 0), scene);
-    cam.lowerRadiusLimit = 2.2;
-    cam.upperRadiusLimit = 10;
-    cam.wheelPrecision = 50;
-    cam.panningSensibility = 0;
-    cam.attachControl(canvas, true);
+    cam.lowerRadiusLimit = 2.2; cam.upperRadiusLimit = 10; cam.wheelPrecision = 50; cam.panningSensibility = 0; cam.attachControl(canvas, true);
     return cam;
   }
-
   function makeFPSCam(canvas) {
     const cam = new BABYLON.UniversalCamera("fps", new BABYLON.Vector3(0, 1.7, -2), scene);
-    cam.minZ = 0.05;
-    cam.speed = 0.35;
-    cam.inertia = 0.7;
-    cam.angularSensibility = 5000;
-    cam.attachControl(canvas, true);
-    cam.applyGravity = true;
-    cam.checkCollisions = true;
-    cam.ellipsoid = new BABYLON.Vector3(0.35, 0.9, 0.35);
-    cam.keysUp = [87, 38];
-    cam.keysDown = [83, 40];
-    cam.keysLeft = [65, 37];
-    cam.keysRight = [68, 39];
+    cam.minZ = 0.05; cam.speed = 0.35; cam.inertia = 0.7; cam.angularSensibility = 5000; cam.attachControl(canvas, true);
+    cam.applyGravity = true; cam.checkCollisions = true; cam.ellipsoid = new BABYLON.Vector3(0.35, 0.9, 0.35);
+    cam.keysUp = [87, 38]; cam.keysDown = [83, 40]; cam.keysLeft = [65, 37]; cam.keysRight = [68, 39];
     return cam;
   }
 
-   // World loader (same as yours, trimmed logs)
   async function loadWorld(){
     console.log("🌎 Loading world:", WORLD_URL);
     const result = await BABYLON.SceneLoader.ImportMeshAsync("", "", WORLD_URL, scene);
     const root = result.meshes[0]; root.name = "WorldRoot"; root.scaling = new BABYLON.Vector3(1,1,1);
+
     scene.createDefaultEnvironment({ createSkybox:false, createGround:false });
 
     scene.meshes.forEach(m=>{
@@ -102,8 +82,6 @@
     if (chosenAvatarUrl) await replaceAvatar(chosenAvatarUrl);
   }
 
-
-  // ---------- Replace Avatar ----------
   async function replaceAvatar(avatarUrl){
     if (!avatarUrl){ console.warn("No avatar URL to load."); return; }
     console.log("🧍 Loading avatar:", avatarUrl);
@@ -132,12 +110,9 @@
     }
   }
 
-  // ---------- World Once ----------
   async function loadWorldOnce(){ if (worldLoaded) return true; await loadWorld(); return true; }
   window.DHKWorld = { loadWorldOnce };
 
-
-  // ---------- Avatar Event ----------
   window.addEventListener("dhk:avatar-selected", (e) => {
     const url = e.detail?.url;
     if (!url) return;
@@ -146,8 +121,6 @@
     document.getElementById("world-load")?.removeAttribute("disabled");
     if (worldLoaded) replaceAvatar(url);
   });
-
-  // ---------- UI ----------
 
   function bindUI(canvas){
     const viewBtn = document.getElementById("view-btn");
@@ -176,11 +149,10 @@
     });
   }
 
-  // ---------- Init ----------
   async function init(){
     try{
       console.log("🚀 Initializing...");
-      const avatarUrl = await window.DHKAuth.requireAuthAndAvatar();
+      const avatarUrl = await window.DHKAuth.requireAuthAndAvatar(); // waits for login + choose avatar
       chosenAvatarUrl = avatarUrl || "";
 
       const canvas = document.getElementById("renderCanvas");
@@ -207,7 +179,6 @@
     }
   }
 
-  // ---------- Outfit ----------
   function buildOutfitBar(products){
     const panel = document.getElementById("outfit-panel"); if (!panel) return;
     const wearable = products.filter(p => p.images && p.images.length);
@@ -220,8 +191,7 @@
     });
   }
 
-  // simple placeholder; real garment attaching kept from your previous version if needed
-  async function wearGarment(){ /* hook up when garments are ready */ }
+  async function wearGarment(){ /* hook garments here */ }
 
   function wireRackPickers(products){
     const byId = Object.fromEntries(products.map(p => [p.id, p]));
