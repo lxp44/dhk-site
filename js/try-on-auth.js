@@ -162,6 +162,11 @@ async function saveAvatarUrlToIdentity(url) {
     announceAvatar(final);
   }
 
+const btnGuest = document.getElementById("avatar-guest");
+btnGuest?.addEventListener("click", () => {
+  announceAvatar(DEFAULT_AVATAR);
+});
+
   // Public API used by try-on.js
   async function requireAuthAndAvatar() {
     await identityReady();
