@@ -1,179 +1,177 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>DHK — TRY ON</title>
-  <link rel="icon" href="assets/img/DHK_transparent.gif" type="image/gif" sizes="any">
-  <link rel="stylesheet" href="css/base.css">
-  <link rel="stylesheet" href="css/styles.css">
+// js/try-on-auth.js
+(() => {
+  const gateEl    = document.getElementById('auth-gate');
+  const gateBtn   = document.getElementById('gate-signin');
+  const modalEl   = document.getElementById('avatar-modal');
+  const btnCreate = document.getElementById('avatar-create');
+  const btnLoad   = document.getElementById('avatar-load');
+  const rpmWrap   = document.getElementById('rpm-wrap');
+  const rpmFrame  = document.getElementById('rpm-iframe');
+  const urlWrap   = document.getElementById('url-wrap');
+  const urlInput  = document.getElementById('avatar-url-input');
+  const urlSave   = document.getElementById('avatar-url-save');
+  const urlCancel = document.getElementById('avatar-cancel');
+  const worldBtn  = document.getElementById('world-load');
 
-  <!-- Hard redirect apex -> www BEFORE anything else -->
-  <script>
-    (function () {
-      var host = location.hostname;
-      if (host === "darkharlemknight.com") {
-        location.replace("https://www.darkharlemknight.com" + location.pathname + location.search + location.hash);
-      }
-    })();
-  </script>
+  let lastAvatarUrl = "";
+  window.DHKAuth = window.DHKAuth || {};
+  Object.defineProperty(window.DHKAuth, "selectedAvatarUrl", { get: () => lastAvatarUrl });
 
-  <!-- Ready Player Me helper -->
-  <script src="https://unpkg.com/@readyplayerme/visage@latest/dist/index.umd.js" defer></script>
+  const idw = () => (typeof netlifyIdentity !== "undefined" ? netlifyIdentity : null);
+  const currentUser = () => (idw() ? idw().currentUser() : null);
 
-  <!-- Netlify Identity widget (single include) -->
-  <script defer src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-
-  <!-- Identity init: point to THIS origin and broadcast ready -->
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      if (!window.netlifyIdentity) return;
-
-      // Always point to the www origin so cookies/session line up
-      const ID_URL = "https://www.darkharlemknight.com/.netlify/identity";
-      netlifyIdentity.init({ APIUrl: ID_URL });
-
-      // When Identity knows the current user, tell our app
-      netlifyIdentity.on("init", (user) => {
-        if (user) document.dispatchEvent(new Event("dhk:identity-ready"));
-      });
-
-      // When a login happens right now, also tell our app and close the widget
-      netlifyIdentity.on("login", () => {
-        document.dispatchEvent(new Event("dhk:identity-ready"));
-        netlifyIdentity.close();
-      });
-
-      // Optional UX: surface errors
-      netlifyIdentity.on("error", (e) => {
-        console.warn("Identity error:", e);
-        alert(e?.message || "Login error — try resending the confirmation email.");
-      });
+  function identityReady(timeoutMs = 7000) {
+    return new Promise((resolve) => {
+      const w = idw();
+      if (!w) return resolve(null);
+      try { w.init({ APIUrl: window.location.origin + "/.netlify/identity" }); } catch {}
+      let done = false;
+      const finish = () => { if (!done) { done = true; resolve(w.currentUser()); } };
+      w.on("init", finish);
+      const start = Date.now();
+      const t = setInterval(() => {
+        if (w.currentUser() || Date.now() - start > timeoutMs) {
+          clearInterval(t); finish();
+        }
+      }, 200);
     });
-  </script>
+  }
 
-  <!-- Keep widget above everything if it opens -->
-  <style>
-    body,html{margin:0;height:100%;background:#0a0a0a;color:#eaeaea;}
-    #tryon-root{position:relative;height:100vh;width:100vw;overflow:hidden;}
-    #renderCanvas{width:100%;height:100%;display:block;outline:none}
-    .hud{position:absolute;inset:0;pointer-events:none}
-    .hud .topbar{pointer-events:auto;position:absolute;top:12px;left:12px;right:12px;display:flex;gap:8px;align-items:center;justify-content:space-between}
-    .chip{background:rgba(255,255,255,.06);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.12);padding:8px 12px;border-radius:999px;font:600 12px/1 'Cinzel', serif;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap}
-    .btn{pointer-events:auto;cursor:pointer}
-    .panel{pointer-events:auto;position:absolute;bottom:16px;left:50%;transform:translateX(-50%);display:flex;gap:8px;align-items:center}
-    .panel .btn{padding:10px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.08)}
-    .legend{position:absolute;bottom:16px;right:16px;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.16);padding:8px 10px;border-radius:10px;font:12px/1.4 Roboto,system-ui}
+  const show = (el, mode = "flex") => { if (el) el.style.display = mode; };
+  const hide = (el) => { if (el) el.style.display = "none"; };
 
-    /* Identity modal on top */
-    #netlify-identity-widget,.netlify-identity-widget,.netlify-identity-modal,.netlify-identity-root{
-      position:fixed!important; inset:0!important; width:100vw!important; height:100vh!important;
-      z-index:2147483647!important; pointer-events:auto!important;
+  function getSavedAvatarUrl() {
+    const u = currentUser();
+    return u?.user_metadata?.avatarUrl || localStorage.getItem("dhk_avatar_url") || "";
+  }
+
+  async function saveAvatarUrlToIdentity(url) {
+    const w = idw(); const u = currentUser();
+    if (!w || !u) throw new Error("No identity session");
+    const token = await u.jwt();
+    const res = await fetch("/.netlify/identity/user", {
+      method: "PUT",
+      headers: { "Authorization": `Bearer ${token}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ user_metadata: { avatarUrl: url } })
+    });
+    const updated = await res.json();
+    w.setUser(updated);
+    try { localStorage.setItem("dhk_avatar_url", updated.user_metadata?.avatarUrl || url); } catch {}
+    return updated.user_metadata?.avatarUrl || url;
+  }
+
+  function enableWorldBtn() {
+    if (!worldBtn) return;
+    worldBtn.disabled = false;
+    if (!worldBtn.textContent || /loading/i.test(worldBtn.textContent)) worldBtn.textContent = "Load World";
+  }
+
+  function announceAvatar(url) {
+    lastAvatarUrl = url;
+    try { localStorage.setItem("dhk_avatar_url", url); } catch {}
+    window.dispatchEvent(new CustomEvent("dhk:avatar-selected", { detail: { url } }));
+    enableWorldBtn();
+  }
+
+  function openRPM() {
+    if (!rpmFrame) return;
+
+    if (!rpmFrame.src) {
+      rpmFrame.src = "https://demo.readyplayer.me/avatar?frameApi";
+      rpmFrame.setAttribute("allow", "camera; microphone; autoplay; clipboard-write");
+      rpmFrame.setAttribute("allowfullscreen", "true");
     }
-    html.netlify-identity-open, body.netlify-identity-open{ overflow:hidden!important; touch-action:none!important; }
+    if (rpmWrap) rpmWrap.style.display = "block";
+    if (urlWrap) urlWrap.style.display = "none";
 
-    /* Mobile tweaks */
-    .dock{position:fixed;left:50%;transform:translateX(-50%);bottom:max(14px, env(safe-area-inset-bottom));display:flex;gap:10px;z-index:9999;pointer-events:auto}
-    .dock .btn{-webkit-appearance:none;appearance:none;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);border-radius:12px;color:#fff;padding:10px 14px;font:600 12px/1 'Cinzel',serif;letter-spacing:.1em;text-transform:uppercase;cursor:pointer}
-    @media (max-width:900px){.hud .topbar{display:none}.dock .btn{font-size:11px;padding:10px 12px;border-radius:999px;letter-spacing:.08em}.legend{display:none}}
-  </style>
-</head>
-<body>
-  <div class="section-header header-wrapper color-scheme-4 gradient" data-sticky-type="on-scroll-up">
-    <header class="site-header header header--middle-left header--mobile-center">
-      <div class="page-width header-grid">
-        <nav class="nav-left desktop-only"><a class="nav-link" href="index.html">Home</a></nav>
-        <a class="header__logo" href="index.html" aria-label="DarkHarlemKnight">
-          <img src="assets/img/DHK_transparent.gif" alt="DarkHarlemKnight" width="120" height="120" loading="eager"/>
-        </a>
-        <nav class="nav-right desktop-only"><a href="cart.html" class="nav-link button--ghost" aria-label="Cart">Cart</a></nav>
-      </div>
-    </header>
-  </div>
-
-  <main id="tryon-root">
-    <canvas id="renderCanvas"></canvas>
-
-    <div class="hud">
-      <div class="topbar">
-        <div class="chip">TRY ON — DHK CLOSET</div>
-        <div>
-          <button id="auth-btn" class="btn chip">Sign In</button>
-          <button id="view-btn" class="btn chip">3rd Person</button>
-          <button id="music-btn" class="btn chip">Play Music</button>
-          <button id="music-next" class="btn chip">Next Track</button>
-        </div>
-      </div>
-
-      <div class="panel" id="outfit-panel"></div>
-
-      <div class="legend"><b>Controls</b><br/>WASD to move • Mouse to look • V to switch view • E to interact</div>
-
-      <!-- AUTH GATE -->
-      <div id="auth-gate" style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; background:#000; color:#fff; z-index:10000; flex-direction:column; gap:14px;">
-        <div style="font-family:'Cinzel',serif; letter-spacing:.12em; text-transform:uppercase;">Sign in to enter the DHK Closet</div>
-        <button id="gate-signin" class="btn chip" style="pointer-events:auto;">Sign In</button>
-      </div>
-
-      <!-- AVATAR MODAL -->
-      <div id="avatar-modal" style="position:absolute; inset:0; background:rgba(0,0,0,.78); z-index:10001; display:none; align-items:center; justify-content:center;">
-        <div style="background:#0f0f10; border:1px solid rgba(255,255,255,.15); border-radius:14px; padding:18px; width:min(92vw,720px); max-height:90vh; overflow:auto;">
-          <h3 style="margin:0 0 10px; font-family:'Cinzel',serif; letter-spacing:.12em; text-transform:uppercase;">Choose your avatar</h3>
-
-          <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:12px;">
-            <button id="avatar-create" class="btn chip">Create new</button>
-            <button id="avatar-load"   class="btn chip">Load saved</button>
-            <button id="world-load"    class="btn chip" disabled>Load World</button>
-          </div>
-
-          <div id="rpm-wrap" style="display:none; border:1px solid rgba(255,255,255,.12); border-radius:10px;">
-            <iframe id="rpm-iframe" src="" style="width:100%; height:540px; border:0;" allow="camera; microphone; autoplay; clipboard-write" allowfullscreen></iframe>
-          </div>
-
-          <div id="url-wrap" style="display:none; margin-top:10px;">
-            <label style="display:block; font-size:12px; opacity:.8; margin-bottom:6px;">Paste avatar URL</label>
-            <input id="avatar-url-input" type="url" placeholder="https://..." style="width:100%; padding:10px; background:#121214; color:#fff; border:1px solid #2a2a2a; border-radius:8px;">
-            <div style="margin-top:8px; display:flex; gap:8px;">
-              <button id="avatar-url-save" class="btn chip">Save</button>
-              <button id="avatar-cancel"    class="btn chip">Cancel</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Bottom dock -->
-    <div id="jukebox-controls" class="dock">
-      <button id="auth-btn-dock"   class="btn">Sign In</button>
-      <button id="view-btn-dock"   class="btn">3rd Person</button>
-      <button id="music-btn-dock"  class="btn">Play Music</button>
-      <button id="music-next-dock" class="btn">Next Track</button>
-    </div>
-  </main>
-
-  <!-- Dock proxies + open Identity -->
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const proxy = (fromId, toId) =>
-        document.getElementById(fromId)?.addEventListener('click', () =>
-          document.getElementById(toId)?.click()
+    const subscribe = () => {
+      try {
+        rpmFrame.contentWindow.postMessage(
+          { target: "readyplayer.me", type: "subscribe", eventName: "v1.avatar.exported" },
+          "*"  // first subscribe before the iframe asserts origin
         );
-      proxy('auth-btn-dock',  'auth-btn');
-      proxy('view-btn-dock',  'view-btn');
-      proxy('music-btn-dock', 'music-btn');
-      proxy('music-next-dock','music-next');
+      } catch {}
+    };
+    rpmFrame.onload = () => { subscribe(); setTimeout(subscribe, 200); setTimeout(subscribe, 600); };
+  }
 
-      document.getElementById('auth-btn')   ?.addEventListener('click', () => window.netlifyIdentity?.open('login'));
-      document.getElementById('gate-signin')?.addEventListener('click', () => window.netlifyIdentity?.open('login'));
+  function normalizeAvatarUrl(input) {
+    try {
+      const u = new URL(input);
+      if (u.hostname.endsWith("readyplayer.me")) {
+        if (!/\.(glb|gltf|vrm)$/i.test(u.pathname)) {
+          if (/^\/[a-z0-9_-]+$/i.test(u.pathname)) u.pathname += ".glb";
+        }
+        u.search = "";
+        return u.toString();
+      }
+      if (u.pathname.endsWith(".glb")) return u.toString();
+    } catch {}
+    return input;
+  }
+
+  // Only accept messages from readyplayer.me after it’s loaded
+  window.addEventListener("message", async (e) => {
+    let data = e.data;
+    if (typeof data === "string") { try { data = JSON.parse(data); } catch {} }
+    const ok = typeof e.origin === "string" && /(^|\.)readyplayer\.me$/i.test(new URL(e.origin).hostname);
+    if (!ok || !data || data.source !== "readyplayer.me") return;
+
+    if (data.eventName === "v1.avatar.exported" && data.data?.url) {
+      const glb = normalizeAvatarUrl(data.data.url);
+      try { await saveAvatarUrlToIdentity(glb); } catch {}
+      announceAvatar(glb);
+    }
+  });
+
+  async function saveManualUrl() {
+    const val = (urlInput?.value || "").trim();
+    if (!val) return alert("Paste a valid URL.");
+    const glb = normalizeAvatarUrl(val);
+    const final = await saveAvatarUrlToIdentity(glb);
+    announceAvatar(final);
+  }
+
+  // Public API used by try-on.js
+  async function requireAuthAndAvatar() {
+    await identityReady();
+
+    // login gate
+    let user = currentUser();
+    if (!user) {
+      show(gateEl);
+      gateBtn?.addEventListener("click", () => idw()?.open("login"), { once: true });
+      await new Promise((resolve) => {
+        const done = () => { idw().off("login", done); hide(gateEl); resolve(); };
+        idw().on("login", done);
+      });
+      user = currentUser();
+      hide(gateEl);
+    } else {
+      hide(gateEl);
+    }
+
+    show(modalEl);
+
+    const saved = getSavedAvatarUrl();
+    if (saved) announceAvatar(saved);
+    else {
+      btnCreate?.addEventListener("click", openRPM, { once: true });
+      btnLoad?.addEventListener("click", () => {
+        const s = getSavedAvatarUrl();
+        if (s) announceAvatar(s);
+        else { if (urlWrap) urlWrap.style.display = "block"; if (rpmWrap) rpmWrap.style.display = "none"; }
+      }, { once: true });
+      urlSave?.addEventListener("click", saveManualUrl);
+      urlCancel?.addEventListener("click", () => hide(urlWrap));
+    }
+
+    if (lastAvatarUrl) return lastAvatarUrl;
+    return await new Promise((resolve) => {
+      const onSel = (e) => { const url = e.detail?.url; if (url) { window.removeEventListener("dhk:avatar-selected", onSel); resolve(url); } };
+      window.addEventListener("dhk:avatar-selected", onSel);
     });
-  </script>
+  }
 
-  <!-- Babylon -->
-  <script src="https://cdn.babylonjs.com/babylon.js" defer></script>
-  <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js" defer></script>
-
-  <!-- DHK scripts -->
-  <script src="/js/try-on-auth.js" defer></script>
-  <script src="/js/try-on.js" defer></script>
-</body>
-</html>
+  window.DHKAuth.requireAuthAndAvatar = requireAuthAndAvatar;
+})();
