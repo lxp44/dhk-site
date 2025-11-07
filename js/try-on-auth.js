@@ -1,5 +1,4 @@
-<!-- /js/try-on-auth.js -->
-<script>
+// js/try-on-auth.js
 (() => {
   const gateEl    = document.getElementById('auth-gate');
   const gateBtn   = document.getElementById('gate-signin');
@@ -14,12 +13,11 @@
   const urlCancel = document.getElementById('avatar-cancel');
   const worldBtn  = document.getElementById('world-load');
 
-  // Public surface
   let lastAvatarUrl = "";
   window.DHKAuth = window.DHKAuth || {};
   Object.defineProperty(window.DHKAuth, "selectedAvatarUrl", { get: () => lastAvatarUrl });
 
-  // Netlify Identity helpers
+  // ---------- Identity helpers ----------
   const idw = () => (typeof netlifyIdentity !== "undefined" ? netlifyIdentity : null);
   const currentUser = () => (idw() ? idw().currentUser() : null);
 
@@ -27,18 +25,47 @@
     return new Promise((resolve) => {
       const w = idw();
       if (!w) return resolve(null);
-      try { w.init({ APIUrl: location.origin + "/.netlify/identity" }); } catch {}
-      let done = false;
-      const finish = () => { if (!done) { done = true; resolve(w.currentUser()); } };
-      w.on("init", finish);
-      const start = Date.now();
-      const t = setInterval(() => {
-        if (w.currentUser() || Date.now() - start > timeoutMs) { clearInterval(t); finish(); }
-      }, 200);
+      try { w.init(); } catch {}
+      let settled = false;
+      const finish = () => { if (!settled) { settled = true; resolve(w.currentUser()); } };
+
+      // event path
+      w.on("init", () => finish());
+
+      // poll path (covers iOS/Safari timing + “Logged in” screen)
+      const t0 = Date.now();
+      const iv = setInterval(() => {
+        const u = w.currentUser();
+        if (u || (Date.now() - t0) > timeoutMs) {
+          clearInterval(iv); finish();
+        }
+      }, 250);
     });
   }
 
-  // Saved avatar helpers
+  // also used later when the widget already shows "Logged in"
+  function waitForUser({ maxMs = 15000 } = {}) {
+    return new Promise((resolve) => {
+      const w = idw();
+      if (!w) return resolve(null);
+
+      let done = false;
+      const finish = () => { if (!done) { done = true; cleanup(); resolve(w.currentUser()); } };
+      const cleanup = () => {
+        try { w.off("login", finish); w.off("init", finish); } catch {}
+        clearInterval(iv);
+        clearTimeout(to);
+      };
+
+      // events + polling + timeout
+      w.on("login", finish);
+      w.on("init", finish);
+      const iv = setInterval(() => { if (w.currentUser()) finish(); }, 300);
+      const to = setTimeout(finish, maxMs);
+    });
+  }
+
+  // ---------- Saved avatar helpers ----------
   function getSavedAvatarUrl() {
     const u = currentUser();
     return u?.user_metadata?.avatarUrl || localStorage.getItem("dhk_avatar_url") || "";
@@ -59,7 +86,7 @@
     return updated.user_metadata?.avatarUrl || url;
   }
 
-  // UI helpers
+  // ---------- UI helpers ----------
   const show = (el, mode = "flex") => { if (el) el.style.display = mode; };
   const hide = (el) => { if (el) el.style.display = "none"; };
 
@@ -67,7 +94,7 @@
     if (!worldBtn) return;
     worldBtn.disabled = false;
     worldBtn.classList.add("ready");
-    if (!worldBtn.textContent || /loading/i.test(worldBtn.textContent)) worldBtn.textContent = "Load World";
+    worldBtn.textContent = "Load World";
   }
 
   function announceAvatar(url) {
@@ -100,38 +127,32 @@
     });
   }
 
-  // ---- Ready Player Me iframe: robust handshake ----
-  let RPM_ORIGIN = null;      // set from v1.frame.ready
-  const RPM_SRC   = "https://demo.readyplayer.me/avatar?frameApi&clearCache=1";
-
+  // ---------- RPM open + subscribe ----------
   function openRPM() {
     if (!rpmFrame) return;
 
     if (!rpmFrame.src) {
-      rpmFrame.src = RPM_SRC;
+      rpmFrame.src = "https://demo.readyplayer.me/avatar?frameApi";
       rpmFrame.setAttribute("allow", "camera; microphone; autoplay; clipboard-write");
       rpmFrame.setAttribute("allowfullscreen", "true");
     }
-    show(rpmWrap, "block");
-    hide(urlWrap);
+    if (rpmWrap) rpmWrap.style.display = "block";
+    if (urlWrap) urlWrap.style.display = "none";
 
-    // If the frame is already ready, subscribe right away.
-    trySubscribeToExport();
+    const subscribe = () => {
+      try {
+        // use "*" to avoid the early about:blank mismatch; we still filter on receive
+        rpmFrame.contentWindow.postMessage(
+          { target: "readyplayer.me", type: "subscribe", eventName: "v1.avatar.exported" },
+          "*"
+        );
+      } catch {}
+    };
+    rpmFrame.onload = () => { subscribe(); setTimeout(subscribe, 150); setTimeout(subscribe, 600); };
+    setTimeout(subscribe, 1200);
   }
 
-  function trySubscribeToExport() {
-    if (!rpmFrame?.contentWindow) return;
-    // If we already know the origin, target it. Otherwise, use "*" until we hear v1.frame.ready.
-    const target = RPM_ORIGIN || "*";
-    try {
-      rpmFrame.contentWindow.postMessage(
-        { target: "readyplayer.me", type: "subscribe", eventName: "v1.avatar.exported" },
-        target
-      );
-    } catch {}
-  }
-
-  // Normalize share links -> direct .glb
+  // ---------- Normalize RPM links to .glb ----------
   function normalizeAvatarUrl(input) {
     try {
       const u = new URL(input);
@@ -139,7 +160,7 @@
         if (!/\.(glb|gltf|vrm)$/i.test(u.pathname)) {
           if (/^\/[a-z0-9_-]+$/i.test(u.pathname)) u.pathname += ".glb";
         }
-        u.search = ""; // simplest/cors-friendliest
+        u.search = ""; // keep it lean for CORS
         return u.toString();
       }
       if (u.pathname.endsWith(".glb")) return u.toString();
@@ -147,23 +168,17 @@
     return input;
   }
 
-  // Listen for RPM events
-  window.addEventListener("message", async (event) => {
-    // Only process messages from readyplayer.me *
-    const host = (() => { try { return new URL(event.origin).hostname; } catch { return ""; }})();
-    if (!/(^|\.)readyplayer\.me$/i.test(host)) return;
+  // ---------- Receive RPM export ----------
+  window.addEventListener("message", async (e) => {
+    // only accept messages from *.readyplayer.me
+    let okOrigin = false;
+    try { okOrigin = /(^|\.)readyplayer\.me$/i.test(new URL(e.origin).hostname); } catch {}
+    if (!okOrigin) return;
 
-    const data = typeof event.data === "string" ? (() => { try { return JSON.parse(event.data); } catch { return null; } })() : event.data;
+    let data = e.data;
+    if (typeof data === "string") { try { data = JSON.parse(data); } catch {} }
     if (!data || data.source !== "readyplayer.me") return;
 
-    // 1) Frame ready -> capture true origin and subscribe (again) using that origin
-    if (data.eventName === "v1.frame.ready") {
-      RPM_ORIGIN = event.origin;         // <-- use this for all future postMessage calls
-      trySubscribeToExport();            // re-subscribe with the exact origin
-      return;
-    }
-
-    // 2) Avatar exported
     if (data.eventName === "v1.avatar.exported" && data.data?.url) {
       const glb = normalizeAvatarUrl(data.data.url);
       try { await saveAvatarUrlToIdentity(glb); } catch {}
@@ -171,7 +186,7 @@
     }
   });
 
-  // Manual paste
+  // ---------- Manual paste ----------
   async function saveManualUrl() {
     const val = (urlInput?.value || "").trim();
     if (!val) return alert("Paste a valid URL.");
@@ -180,7 +195,7 @@
     announceAvatar(final);
   }
 
-  // Safety net: Load World button
+  // ---------- Bind Load World (safety) ----------
   worldBtn?.addEventListener("click", async () => {
     if (worldBtn.disabled) return;
     try {
@@ -197,38 +212,38 @@
     }
   });
 
-  // Public API
+  // ---------- Public API ----------
   async function requireAuthAndAvatar() {
     await identityReady();
 
-    // Gate login if needed
+    // 1) login gate
     let user = currentUser();
     if (!user) {
       show(gateEl);
-      gateBtn?.addEventListener("click", () => idw()?.open("login"), { once: true });
-      await new Promise((resolve) => {
-        const done = () => { idw().off("login", done); hide(gateEl); resolve(); };
-        idw().on("login", done);
-      });
-      user = currentUser();
+      gateBtn?.addEventListener("click", () => idw()?.open("login"));
+      // resolve on login OR when currentUser becomes non-null (covers “Logged in” screen)
+      await waitForUser({ maxMs: 20000 });
       hide(gateEl);
+      user = currentUser();
     } else {
       hide(gateEl);
     }
 
-    // Modal
+    // 2) open avatar modal
     show(modalEl);
     mountUseSavedButton();
 
     const saved = getSavedAvatarUrl();
-    if (saved) {
-      announceAvatar(saved);
-    } else {
+    if (saved) announceAvatar(saved);
+    else {
       btnCreate?.addEventListener("click", openRPM, { once: true });
       btnLoad?.addEventListener("click", () => {
         const s = getSavedAvatarUrl();
         if (s) announceAvatar(s);
-        else { show(urlWrap, "block"); hide(rpmWrap); }
+        else {
+          if (urlWrap) urlWrap.style.display = "block";
+          if (rpmWrap) rpmWrap.style.display = "none";
+        }
       }, { once: true });
       urlSave?.addEventListener("click", saveManualUrl);
       urlCancel?.addEventListener("click", () => hide(urlWrap));
@@ -246,4 +261,3 @@
 
   window.DHKAuth.requireAuthAndAvatar = requireAuthAndAvatar;
 })();
-</script>
