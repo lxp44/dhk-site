@@ -164,7 +164,8 @@
 
       scene.activeCamera = makeArcCam(canvas);
       new BABYLON.HemisphericLight("h", new BABYLON.Vector3(0,1,0), scene).intensity = 0.9;
-
+// 👉 show the avatar immediately (before the world), then we'll re-place it after world loads
+if (chosenAvatarUrl) { await replaceAvatar(chosenAvatarUrl); }
       try{
         const products = await fetchJSON(DATA_URL);
         buildOutfitBar(products);
