@@ -7,55 +7,46 @@
   <link rel="icon" href="assets/img/DHK_transparent.gif" type="image/gif" sizes="any">
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/styles.css">
-    
-        <script>
-  (function () {
-    var host = location.hostname;
-    if (host === "darkharlemknight.com") {
-      location.replace("https://www.darkharlemknight.com" + location.pathname + location.search + location.hash);
-    }
-  })();
-</script>
 
- <!-- Ready Player Me helper -->
-  <script src="https://unpkg.com/@readyplayerme/visage@latest/dist/index.umd.js" defer></script>
-  <!-- Netlify Identity (REQUIRED) -->
-  
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    if (!window.netlifyIdentity) return;
-    // Make the widget talk to THIS site's Identity API (same origin)
-    netlifyIdentity.init({
-      APIUrl: window.location.origin + "/.netlify/identity"
-    });
-
-    // Optional: useful error surface
-    netlifyIdentity.on("error", (e) => {
-      console.warn("Identity error:", e);
-      alert(e?.message || "Login error — try resending the confirmation email.");
-    });
-  });
-</script>
-
-  <!-- Identity: error handling + confirmation hint -->
+  <!-- Hard redirect apex -> www BEFORE anything else -->
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
+    (function () {
+      var host = location.hostname;
+      if (host === "darkharlemknight.com") {
+        location.replace("https://www.darkharlemknight.com" + location.pathname + location.search + location.hash);
+      }
+    })();
+  </script>
+
+  <!-- Ready Player Me helper -->
+  <script src="https://unpkg.com/@readyplayerme/visage@latest/dist/index.umd.js" defer></script>
+
+  <!-- Netlify Identity widget (load ONCE) -->
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js" defer></script>
+
+  <!-- Identity init: point to THIS origin; close the modal on login -->
+  <script defer>
+    document.addEventListener("DOMContentLoaded", () => {
       if (!window.netlifyIdentity) return;
-
-      netlifyIdentity.on('error', (e) => {
-        console.warn('Identity error:', e);
-        alert(e?.message || 'Login error — try resending the confirmation email.');
+      netlifyIdentity.init({ APIUrl: window.location.origin + "/.netlify/identity" });
+      netlifyIdentity.on("open", () => {
+        document.documentElement.classList.add("netlify-identity-open");
+        document.body.classList.add("netlify-identity-open");
       });
-
-      netlifyIdentity.on('login', (user) => {
-        if (!user?.confirmed_at && !user?.confirmation_sent_at) {
-          alert('Check your email to confirm your account.');
-        }
+      netlifyIdentity.on("close", () => {
+        document.documentElement.classList.remove("netlify-identity-open");
+        document.body.classList.remove("netlify-identity-open");
       });
+      netlifyIdentity.on("login", (u) => {
+        console.log("[ID] login:", u?.email);
+        netlifyIdentity.close();                 // <-- IMPORTANT: close widget
+        document.getElementById("auth-gate")?.remove(); // remove the gate
+        document.dispatchEvent(new Event("dhk:identity-ready"));
+      });
+      netlifyIdentity.on("error", (e) => console.warn("[ID] error:", e));
     });
   </script>
 
-  <!-- Make the Identity modal sit above everything -->
   <style>
     body,html{margin:0;height:100%;background:#0a0a0a;color:#eaeaea;}
     #tryon-root{position:relative;height:100vh;width:100vw;overflow:hidden;}
@@ -67,38 +58,14 @@
     .panel{pointer-events:auto;position:absolute;bottom:16px;left:50%;transform:translateX(-50%);display:flex;gap:8px;align-items:center}
     .panel .btn{padding:10px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.08)}
     .legend{position:absolute;bottom:16px;right:16px;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.16);padding:8px 10px;border-radius:10px;font:12px/1.4 Roboto,system-ui}
-
-    /* Bottom dock */
-    .dock{
-      position: fixed; left: 50%; transform: translateX(-50%);
-      bottom: max(14px, env(safe-area-inset-bottom));
-      display: flex; gap: 10px; z-index: 9999; pointer-events: auto;
+    .dock{position:fixed;left:50%;transform:translateX(-50%);bottom:max(14px, env(safe-area-inset-bottom));display:flex;gap:10px;z-index:9999;pointer-events:auto}
+    .dock .btn{-webkit-appearance:none;appearance:none;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);border-radius:12px;color:#fff;padding:10px 14px;font:600 12px/1 'Cinzel',serif;letter-spacing:.1em;text-transform:uppercase;cursor:pointer}
+    @media (max-width:900px){.hud .topbar{display:none}.dock .btn{font-size:11px;padding:10px 12px;border-radius:999px;letter-spacing:.08em}.legend{display:none}}
+    /* Keep identity modal above everything */
+    #netlify-identity-widget,.netlify-identity-widget,.netlify-identity-modal,.netlify-identity-root{
+      position:fixed!important; inset:0!important; width:100vw!important; height:100vh!important; z-index:2147483647!important; pointer-events:auto!important;
     }
-    .dock .btn{
-      -webkit-appearance:none; appearance:none;
-      background: rgba(255,255,255,.08);
-      border:1px solid rgba(255,255,255,.16);
-      border-radius:12px; color:#fff; padding:10px 14px;
-      font:600 12px/1 'Cinzel', serif; letter-spacing:.1em; text-transform:uppercase;
-      cursor:pointer;
-    }
-    @media (max-width:900px){
-      .hud .topbar{display:none}
-      .dock .btn{font-size:11px;padding:10px 12px;border-radius:999px;letter-spacing:.08em}
-      .legend{display:none}
-    }
-
-    /* Identity modal on top */
-    #netlify-identity-widget,
-    .netlify-identity-widget,
-    .netlify-identity-modal,
-    .netlify-identity-root{
-      position:fixed!important; inset:0!important; width:100vw!important; height:100vh!important;
-      z-index:2147483647!important; pointer-events:auto!important;
-    }
-    html.netlify-identity-open, body.netlify-identity-open{
-      overflow:hidden!important; touch-action:none!important;
-    }
+    html.netlify-identity-open, body.netlify-identity-open{ overflow:hidden!important; touch-action:none!important; }
   </style>
 </head>
 <body>
@@ -118,7 +85,6 @@
     <canvas id="renderCanvas"></canvas>
 
     <div class="hud">
-      <!-- Desktop top bar -->
       <div class="topbar">
         <div class="chip">TRY ON — DHK CLOSET</div>
         <div>
@@ -129,13 +95,8 @@
         </div>
       </div>
 
-      <!-- Outfit buttons (populated by JS) -->
       <div class="panel" id="outfit-panel"></div>
-
-      <!-- Controls legend -->
-      <div class="legend">
-        <b>Controls</b><br/>WASD to move • Mouse to look • V to switch view • E to interact
-      </div>
+      <div class="legend"><b>Controls</b><br/>WASD to move • Mouse to look • V to switch view • E to interact</div>
 
       <!-- AUTH GATE -->
       <div id="auth-gate" style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; background:#000; color:#fff; z-index:10000; flex-direction:column; gap:14px;">
@@ -147,14 +108,13 @@
       <div id="avatar-modal" style="position:absolute; inset:0; background:rgba(0,0,0,.78); z-index:10001; display:none; align-items:center; justify-content:center;">
         <div style="background:#0f0f10; border:1px solid rgba(255,255,255,.15); border-radius:14px; padding:18px; width:min(92vw,720px); max-height:90vh; overflow:auto;">
           <h3 style="margin:0 0 10px; font-family:'Cinzel',serif; letter-spacing:.12em; text-transform:uppercase;">Choose your avatar</h3>
-       <!-- inside #avatar-modal, keep the rest of the modal as-is -->
-<div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:12px;">
-  <button id="avatar-create" class="btn chip">Create new</button>
-  <button id="avatar-load"   class="btn chip">Load saved</button>
-  <button id="world-load"    class="btn chip" disabled>Load World</button> <!-- NEW -->
-</div>
+          <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:12px;">
+            <button id="avatar-create" class="btn chip">Create new</button>
+            <button id="avatar-load"   class="btn chip">Load saved</button>
+            <button id="world-load"    class="btn chip" disabled>Load World</button>
+          </div>
           <div id="rpm-wrap" style="display:none; border:1px solid rgba(255,255,255,.12); border-radius:10px;">
-            <iframe id="rpm-iframe" src="" style="width:100%; height:540px; border:0;"></iframe>
+            <iframe id="rpm-iframe" src="" style="width:100%; height:540px; border:0;" allow="camera; microphone; autoplay; clipboard-write" allowfullscreen></iframe>
           </div>
           <div id="url-wrap" style="display:none; margin-top:10px;">
             <label style="display:block; font-size:12px; opacity:.8; margin-bottom:6px;">Paste avatar URL</label>
@@ -168,7 +128,7 @@
       </div>
     </div>
 
-    <!-- Bottom dock (unique IDs) -->
+    <!-- Bottom dock -->
     <div id="jukebox-controls" class="dock">
       <button id="auth-btn-dock"   class="btn">Sign In</button>
       <button id="view-btn-dock"   class="btn">3rd Person</button>
@@ -177,38 +137,9 @@
     </div>
   </main>
 
-  <!-- Proxy dock buttons to the main handlers -->
   <script>
+    // Dock proxies + open Identity
     document.addEventListener('DOMContentLoaded', () => {
-      // ensure the Identity widget covers the screen when opened
-      if (window.netlifyIdentity) {
-        const bump = () => {
-          const w = document.getElementById('netlify-identity-widget');
-          if (w) {
-            w.style.position = 'fixed';
-            w.style.inset = '0';
-            w.style.width = '100vw';
-            w.style.height = '100vh';
-            w.style.zIndex = '2147483647';
-            w.style.pointerEvents = 'auto';
-          }
-        };
-        netlifyIdentity.on('open', () => {
-          document.documentElement.classList.add('netlify-identity-open');
-          document.body.classList.add('netlify-identity-open');
-          bump(); setTimeout(bump, 0);
-        });
-        netlifyIdentity.on('close', () => {
-          document.documentElement.classList.remove('netlify-identity-open');
-          document.body.classList.remove('netlify-identity-open');
-        });
-
-        // Open login from either topbar or gate
-        document.getElementById('auth-btn')?.addEventListener('click', () => netlifyIdentity.open('login'));
-        document.getElementById('gate-signin')?.addEventListener('click', () => netlifyIdentity.open('login'));
-      }
-
-      // Dock proxies -> click the main controls
       const proxy = (fromId, toId) =>
         document.getElementById(fromId)?.addEventListener('click', () =>
           document.getElementById(toId)?.click()
@@ -217,33 +148,18 @@
       proxy('view-btn-dock',  'view-btn');
       proxy('music-btn-dock', 'music-btn');
       proxy('music-next-dock','music-next');
+
+      document.getElementById('auth-btn')   ?.addEventListener('click', () => window.netlifyIdentity?.open('login'));
+      document.getElementById('gate-signin')?.addEventListener('click', () => window.netlifyIdentity?.open('login'));
     });
   </script>
 
-<!-- 1) Babylon core + loaders -->
-<script src="https://cdn.babylonjs.com/babylon.js" defer></script>
-<script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js" defer></script>
+  <!-- Babylon -->
+  <script src="https://cdn.babylonjs.com/babylon.js" defer></script>
+  <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js" defer></script>
 
-<!-- 2) Netlify Identity widget (load exactly once) -->
-<script src="https://identity.netlify.com/v1/netlify-identity-widget.js" defer></script>
-
-<!-- 3) Init Identity with first-party API URL (must run after the widget tag above is queued) -->
-<script defer>
-  document.addEventListener("DOMContentLoaded", () => {
-    if (!window.netlifyIdentity) return;
-    netlifyIdentity.init({ APIUrl: window.location.origin + "/.netlify/identity" });
-    // small log surface
-    netlifyIdentity.on("init", (u) => console.log("[ID] init:", !!u, u?.email));
-    netlifyIdentity.on("login", (u) => console.log("[ID] login:", u?.email));
-    netlifyIdentity.on("logout", () => console.log("[ID] logout"));
-    netlifyIdentity.on("error", (e) => console.warn("[ID] error:", e));
-  });
-</script>
-
-<!-- 4) DHK Auth / Avatar selection -->
-<script src="js/try-on-auth.js?v=20251106a" defer></script>
-
-<!-- 5) DHK Try-On scene -->
-<script src="js/try-on.js?v=20251106a" defer></script>
+  <!-- DHK scripts (RELATIVE paths + cache-buster) -->
+  <script src="js/try-on-auth.js?v=20251106b" defer></script>
+  <script src="js/try-on.js?v=20251106b" defer></script>
 </body>
 </html>
