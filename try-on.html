@@ -224,13 +224,26 @@
 <script src="https://cdn.babylonjs.com/babylon.js" defer></script>
 <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js" defer></script>
 
-<!-- 2) Netlify Identity -->
+<!-- 2) Netlify Identity widget (load exactly once) -->
 <script src="https://identity.netlify.com/v1/netlify-identity-widget.js" defer></script>
 
-<!-- 3) DHK Auth / Avatar selection -->
+<!-- 3) Init Identity with first-party API URL (must run after the widget tag above is queued) -->
+<script defer>
+  document.addEventListener("DOMContentLoaded", () => {
+    if (!window.netlifyIdentity) return;
+    netlifyIdentity.init({ APIUrl: window.location.origin + "/.netlify/identity" });
+    // small log surface
+    netlifyIdentity.on("init", (u) => console.log("[ID] init:", !!u, u?.email));
+    netlifyIdentity.on("login", (u) => console.log("[ID] login:", u?.email));
+    netlifyIdentity.on("logout", () => console.log("[ID] logout"));
+    netlifyIdentity.on("error", (e) => console.warn("[ID] error:", e));
+  });
+</script>
+
+<!-- 4) DHK Auth / Avatar selection -->
 <script src="/js/try-on-auth.js" defer></script>
 
-<!-- 4) DHK Try-On Scene (loads bedroom.glb) -->
+<!-- 5) DHK Try-On scene -->
 <script src="/js/try-on.js" defer></script>
 </body>
 </html>
