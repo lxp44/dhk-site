@@ -38,31 +38,15 @@
     return cam;
   }
 
-  async function loadWorld(){
+    // Load world only when the user taps "Load World"
+  async function loadWorld() {
+    if (worldLoaded) return;
     console.log("🌎 Loading world:", WORLD_URL);
     const result = await BABYLON.SceneLoader.ImportMeshAsync("", "", WORLD_URL, scene);
-    const root = result.meshes[0]; root.name = "WorldRoot"; root.scaling = new BABYLON.Vector3(1,1,1);
-
-    scene.createDefaultEnvironment({ createSkybox:false, createGround:false });
-
-    scene.meshes.forEach(m=>{
-      const n=(m.name||"").toLowerCase();
-      if(["floor","ground","wall","door","closet","furniture"].some(k=>n.includes(k))) m.checkCollisions=true;
-    });
-
-    const spawnNode =
-      scene.getTransformNodeByName("Spawn") ||
-      scene.getTransformNodeByName("spawn") ||
-      scene.getTransformNodeByName("PlayerStart") ||
-      scene.getTransformNodeByName("player_start");
-
-    if (spawnNode){
-      spawnPoint = spawnNode.getAbsolutePosition?.() || spawnNode.position.clone();
-      const r = spawnNode.rotationQuaternion ? spawnNode.rotationQuaternion.toEulerAngles() : (spawnNode.rotation || new BABYLON.Vector3(0,0,0));
-      spawnYaw = r.y || 0;
-    }
-
-    const tv = scene.getMeshByName("TV");
+    const root = result.meshes[0];
+    root.name = "WorldRoot";
+  
+  const tv = scene.getMeshByName("TV");
     if (tv){
       tvVideoTex = new BABYLON.VideoTexture("tvtex","assets/media/sample-video.mp4",scene,true,true,BABYLON.VideoTexture.TRILINEAR_SAMPLINGMODE,{autoPlay:true,loop:true,muted:true});
       const tvMat = new BABYLON.StandardMaterial("tvmat",scene); tvMat.emissiveTexture=tvVideoTex; tv.material=tvMat;
@@ -75,10 +59,24 @@
         } catch { alert("Login required to view unreleased video."); }
       }));
     }
+    
+    // capture spawn if present
+    const spawnNode =
+      scene.getTransformNodeByName("Spawn") ||
+      scene.getTransformNodeByName("spawn") ||
+      scene.getTransformNodeByName("PlayerStart") ||
+      scene.getTransformNodeByName("player_start");
+
+    if (spawnNode) {
+      spawnPoint = spawnNode.getAbsolutePosition?.() || spawnNode.position.clone();
+      const r = spawnNode.rotationQuaternion
+        ? spawnNode.rotationQuaternion.toEulerAngles()
+        : (spawnNode.rotation || new BABYLON.Vector3(0,0,0));
+      spawnYaw = r.y || 0;
+    }
 
     worldLoaded = true;
     console.log("✅ Bedroom world loaded");
-
     if (chosenAvatarUrl) await replaceAvatar(chosenAvatarUrl);
   }
 
@@ -113,40 +111,39 @@
   async function loadWorldOnce(){ if (worldLoaded) return true; await loadWorld(); return true; }
   window.DHKWorld = { loadWorldOnce };
 
+ …
+
+  // On avatar selected, remember it and enable "Load World"
   window.addEventListener("dhk:avatar-selected", (e) => {
     const url = e.detail?.url;
     if (!url) return;
     chosenAvatarUrl = url;
-    console.log("🎯 Avatar chosen:", url);
     document.getElementById("world-load")?.removeAttribute("disabled");
+    // If the world is already up (user picked late), load it now:
     if (worldLoaded) replaceAvatar(url);
   });
 
-  function bindUI(canvas){
-    const viewBtn = document.getElementById("view-btn");
-    const loadWorldBtn = document.getElementById("world-load");
+  async function init() {
+    try {
+      console.log("🚀 Initializing...");
+      const avatarUrl = await window.DHKAuth.requireAuthAndAvatar(); // waits for user choice
+      chosenAvatarUrl = avatarUrl || "";
 
-    loadWorldBtn?.addEventListener("click", async () => {
-      if (worldLoaded) return;
-      loadWorldBtn.disabled = true; loadWorldBtn.textContent = "Loading…";
-      try{
-        await loadWorldOnce();
-        loadWorldBtn.textContent = "World Loaded";
-        const modal = document.getElementById("avatar-modal");
-        if (modal && modal.style) modal.style.display = "none";
-      } catch(err){
-        console.error(err);
-        alert("Could not load world.");
-        loadWorldBtn.disabled = false; loadWorldBtn.textContent = "Load World";
-      }
-    });
+      const canvas = document.getElementById("renderCanvas");
+      engine = new BABYLON.Engine(canvas, true, { preserveDrawingBuffer:true, stencil:true });
+      scene  = new BABYLON.Scene(engine);
+      scene.activeCamera = makeArcCam(canvas);
+      new BABYLON.HemisphericLight("h", new BABYLON.Vector3(0,1,0), scene).intensity = 0.9;
 
-    viewBtn?.addEventListener("click", () => {
-      isFirstPerson = !isFirstPerson;
-      const active = scene.activeCamera; active?.detachControl(canvas);
-      if (isFirstPerson){ scene.activeCamera = makeFPSCam(canvas); viewBtn.textContent = "1st Person"; if (!/Mobi|Android/i.test(navigator.userAgent)) canvas.requestPointerLock?.(); }
-      else { document.exitPointerLock?.(); scene.activeCamera = makeArcCam(canvas); viewBtn.textContent = "3rd Person"; }
-    });
+      // show avatar immediately if already selected; it will be re-placed after the world loads
+      if (chosenAvatarUrl) { await replaceAvatar(chosenAvatarUrl); }
+
+      bindUI(canvas);
+      engine.runRenderLoop(() => scene.render());
+      window.addEventListener("resize", () => engine.resize());
+    } catch (err) {
+      console.error("❌ init() failed:", err);
+    }
   }
 
   async function init(){
@@ -172,38 +169,23 @@ if (chosenAvatarUrl) { await replaceAvatar(chosenAvatarUrl); }
         wireRackPickers(products);
       } catch (err){ console.warn("Products failed to load:", err); }
 
-      bindUI(canvas);
-      engine.runRenderLoop(() => scene.render());
-      window.addEventListener("resize", () => engine.resize());
-    } catch(err){
-      console.error("❌ init() failed:", err);
-    }
-  }
-
-  function buildOutfitBar(products){
-    const panel = document.getElementById("outfit-panel"); if (!panel) return;
-    const wearable = products.filter(p => p.images && p.images.length);
-    panel.innerHTML = wearable.map(p => `<button class="btn" data-id="${p.id}" title="${p.title}">${p.title.replace("The Dark Harlem ","")}</button>`).join("");
-    panel.addEventListener("click", async (e) => {
-      const btn = e.target.closest("button[data-id]"); if (!btn) return;
-      const id = btn.getAttribute("data-id");
-      try { await wearGarment(`assets/3d/clothes/${id}.glb`); }
-      catch { alert("Garment not available yet."); }
-    });
-  }
-
-  async function wearGarment(){ /* hook garments here */ }
-
-  function wireRackPickers(products){
-    const byId = Object.fromEntries(products.map(p => [p.id, p]));
-    scene.meshes.forEach(m => {
-      const match = /^(rack|hanger)_(.+)$/i.exec(m.name || ""); if (!match) return;
-      const productId = match[2]; if (!byId[productId]) return;
-      m.actionManager = new BABYLON.ActionManager(scene);
-      m.actionManager.registerAction(new BABYLON.ExecuteCodeAction(
-        BABYLON.ActionManager.OnPickTrigger,
-        async () => { try { await wearGarment(`assets/3d/clothes/${productId}.glb`); } catch { alert("Garment not available yet."); } }
-      ));
+      function bindUI(canvas){
+    const loadWorldBtn = document.getElementById("world-load");
+    loadWorldBtn?.addEventListener("click", async () => {
+      if (worldLoaded) return;
+      loadWorldBtn.disabled = true;
+      loadWorldBtn.textContent = "Loading…";
+      try {
+        await loadWorld();
+        loadWorldBtn.textContent = "World Loaded";
+        const modal = document.getElementById("avatar-modal");
+        if (modal) modal.style.display = "none";
+      } catch (e) {
+        console.error(e);
+        alert("Could not load world.");
+        loadWorldBtn.disabled = false;
+        loadWorldBtn.textContent = "Load World";
+      }
     });
   }
 
