@@ -1,4 +1,5 @@
-// js/try-on-auth.js
+<!-- /js/try-on-auth.js -->
+<script>
 (() => {
   const gateEl    = document.getElementById('auth-gate');
   const gateBtn   = document.getElementById('gate-signin');
@@ -13,33 +14,31 @@
   const urlCancel = document.getElementById('avatar-cancel');
   const worldBtn  = document.getElementById('world-load');
 
-  // public surface
+  // Public surface
   let lastAvatarUrl = "";
   window.DHKAuth = window.DHKAuth || {};
   Object.defineProperty(window.DHKAuth, "selectedAvatarUrl", { get: () => lastAvatarUrl });
 
-  // ---------- Identity ----------
+  // Netlify Identity helpers
   const idw = () => (typeof netlifyIdentity !== "undefined" ? netlifyIdentity : null);
   const currentUser = () => (idw() ? idw().currentUser() : null);
 
-  function identityReady(timeoutMs = 7000) {
+  function identityReady(timeoutMs = 8000) {
     return new Promise((resolve) => {
       const w = idw();
       if (!w) return resolve(null);
-      try { w.init(); } catch {}
+      try { w.init({ APIUrl: location.origin + "/.netlify/identity" }); } catch {}
       let done = false;
       const finish = () => { if (!done) { done = true; resolve(w.currentUser()); } };
       w.on("init", finish);
       const start = Date.now();
       const t = setInterval(() => {
-        if (w.currentUser() || Date.now() - start > timeoutMs) {
-          clearInterval(t); finish();
-        }
+        if (w.currentUser() || Date.now() - start > timeoutMs) { clearInterval(t); finish(); }
       }, 200);
     });
   }
 
-  // ---------- Saved avatar ----------
+  // Saved avatar helpers
   function getSavedAvatarUrl() {
     const u = currentUser();
     return u?.user_metadata?.avatarUrl || localStorage.getItem("dhk_avatar_url") || "";
@@ -60,7 +59,7 @@
     return updated.user_metadata?.avatarUrl || url;
   }
 
-  // ---------- UI helpers ----------
+  // UI helpers
   const show = (el, mode = "flex") => { if (el) el.style.display = mode; };
   const hide = (el) => { if (el) el.style.display = "none"; };
 
@@ -68,9 +67,7 @@
     if (!worldBtn) return;
     worldBtn.disabled = false;
     worldBtn.classList.add("ready");
-    if (!worldBtn.textContent || /loading/i.test(worldBtn.textContent)) {
-      worldBtn.textContent = "Load World";
-    }
+    if (!worldBtn.textContent || /loading/i.test(worldBtn.textContent)) worldBtn.textContent = "Load World";
   }
 
   function announceAvatar(url) {
@@ -82,11 +79,9 @@
 
   function mountUseSavedButton() {
     if (!modalEl || document.getElementById("avatar-use-saved")) return;
-    const host =
-      document.querySelector("#avatar-modal .chooser-tabs") ||
-      document.querySelector("#avatar-modal .modal-header") ||
-      modalEl;
-
+    const host = document.querySelector("#avatar-modal .chooser-tabs")
+             || document.querySelector("#avatar-modal .modal-header")
+             || modalEl;
     const btn = document.createElement("button");
     btn.id = "avatar-use-saved";
     btn.type = "button";
@@ -105,53 +100,46 @@
     });
   }
 
-  // ---------- RPM open + subscribe ----------
+  // ---- Ready Player Me iframe: robust handshake ----
+  let RPM_ORIGIN = null;      // set from v1.frame.ready
+  const RPM_SRC   = "https://demo.readyplayer.me/avatar?frameApi&clearCache=1";
+
   function openRPM() {
     if (!rpmFrame) return;
 
-    // set src only once; some browsers choke if we keep reassigning
     if (!rpmFrame.src) {
-      rpmFrame.src = "https://demo.readyplayer.me/avatar?frameApi";
-      // permissions that help on mobile
+      rpmFrame.src = RPM_SRC;
       rpmFrame.setAttribute("allow", "camera; microphone; autoplay; clipboard-write");
       rpmFrame.setAttribute("allowfullscreen", "true");
     }
+    show(rpmWrap, "block");
+    hide(urlWrap);
 
-    if (rpmWrap) rpmWrap.style.display = "block";
-    if (urlWrap) urlWrap.style.display = "none";
-
-    // subscribe with retries to avoid early postMessage origin mismatch
-    const subscribe = () => {
-      try {
-        rpmFrame.contentWindow.postMessage(
-          { target: "readyplayer.me", type: "subscribe", eventName: "v1.avatar.exported" },
-          "*" // <- IMPORTANT: avoid mismatch while the iframe is still about:blank
-        );
-      } catch {}
-    };
-
-    rpmFrame.onload = () => {
-      subscribe();
-      // a couple extra attempts for Safari/iOS timing quirks
-      setTimeout(subscribe, 100);
-      setTimeout(subscribe, 300);
-      setTimeout(subscribe, 800);
-    };
-    // also try once more after user taps “Create New”
-    setTimeout(subscribe, 1500);
+    // If the frame is already ready, subscribe right away.
+    trySubscribeToExport();
   }
 
-  // ---------- Normalize RPM links to .glb ----------
+  function trySubscribeToExport() {
+    if (!rpmFrame?.contentWindow) return;
+    // If we already know the origin, target it. Otherwise, use "*" until we hear v1.frame.ready.
+    const target = RPM_ORIGIN || "*";
+    try {
+      rpmFrame.contentWindow.postMessage(
+        { target: "readyplayer.me", type: "subscribe", eventName: "v1.avatar.exported" },
+        target
+      );
+    } catch {}
+  }
+
+  // Normalize share links -> direct .glb
   function normalizeAvatarUrl(input) {
     try {
       const u = new URL(input);
       if (u.hostname.endsWith("readyplayer.me")) {
         if (!/\.(glb|gltf|vrm)$/i.test(u.pathname)) {
-          // convert share link -> direct .glb
           if (/^\/[a-z0-9_-]+$/i.test(u.pathname)) u.pathname += ".glb";
         }
-        // keep it simple (CORS friendlier)
-        u.search = "";
+        u.search = ""; // simplest/cors-friendliest
         return u.toString();
       }
       if (u.pathname.endsWith(".glb")) return u.toString();
@@ -159,14 +147,23 @@
     return input;
   }
 
-  // ---------- Receive RPM export ----------
-  window.addEventListener("message", async (e) => {
-    // accept only messages actually coming from readyplayer.me
-    const fromRPM = typeof e.origin === "string" && /(^|\.)readyplayer\.me$/i.test(new URL(e.origin).hostname);
-    let data = e.data;
-    if (typeof data === "string") { try { data = JSON.parse(data); } catch {} }
-    if (!fromRPM || !data || data.source !== "readyplayer.me") return;
+  // Listen for RPM events
+  window.addEventListener("message", async (event) => {
+    // Only process messages from readyplayer.me *
+    const host = (() => { try { return new URL(event.origin).hostname; } catch { return ""; }})();
+    if (!/(^|\.)readyplayer\.me$/i.test(host)) return;
 
+    const data = typeof event.data === "string" ? (() => { try { return JSON.parse(event.data); } catch { return null; } })() : event.data;
+    if (!data || data.source !== "readyplayer.me") return;
+
+    // 1) Frame ready -> capture true origin and subscribe (again) using that origin
+    if (data.eventName === "v1.frame.ready") {
+      RPM_ORIGIN = event.origin;         // <-- use this for all future postMessage calls
+      trySubscribeToExport();            // re-subscribe with the exact origin
+      return;
+    }
+
+    // 2) Avatar exported
     if (data.eventName === "v1.avatar.exported" && data.data?.url) {
       const glb = normalizeAvatarUrl(data.data.url);
       try { await saveAvatarUrlToIdentity(glb); } catch {}
@@ -174,7 +171,7 @@
     }
   });
 
-  // ---------- Manual paste ----------
+  // Manual paste
   async function saveManualUrl() {
     const val = (urlInput?.value || "").trim();
     if (!val) return alert("Paste a valid URL.");
@@ -183,32 +180,28 @@
     announceAvatar(final);
   }
 
-  // ---------- Bind Load World (safety net) ----------
-  if (worldBtn) {
-    worldBtn.addEventListener("click", async () => {
-      if (worldBtn.disabled) return;
-      try {
-        worldBtn.textContent = "Loading…";
-        worldBtn.disabled = true;
+  // Safety net: Load World button
+  worldBtn?.addEventListener("click", async () => {
+    if (worldBtn.disabled) return;
+    try {
+      worldBtn.textContent = "Loading…";
+      worldBtn.disabled = true;
+      if (window.DHKWorld?.loadWorldOnce) await window.DHKWorld.loadWorldOnce();
+      hide(modalEl);
+      worldBtn.textContent = "Load World";
+    } catch (err) {
+      console.error("Load World failed:", err);
+      alert("Could not load the world yet.");
+      worldBtn.disabled = false;
+      worldBtn.textContent = "Load World";
+    }
+  });
 
-        if (window.DHKWorld?.loadWorldOnce) await window.DHKWorld.loadWorldOnce();
-
-        hide(modalEl);
-        worldBtn.textContent = "Load World";
-      } catch (err) {
-        console.error("Load World failed:", err);
-        alert("Could not load the world yet.");
-        worldBtn.disabled = false;
-        worldBtn.textContent = "Load World";
-      }
-    });
-  }
-
-  // ---------- Public API ----------
+  // Public API
   async function requireAuthAndAvatar() {
     await identityReady();
 
-    // login gate
+    // Gate login if needed
     let user = currentUser();
     if (!user) {
       show(gateEl);
@@ -223,21 +216,19 @@
       hide(gateEl);
     }
 
-    // modal
+    // Modal
     show(modalEl);
     mountUseSavedButton();
 
     const saved = getSavedAvatarUrl();
-    if (saved) announceAvatar(saved);
-    else {
+    if (saved) {
+      announceAvatar(saved);
+    } else {
       btnCreate?.addEventListener("click", openRPM, { once: true });
       btnLoad?.addEventListener("click", () => {
         const s = getSavedAvatarUrl();
         if (s) announceAvatar(s);
-        else {
-          if (urlWrap) urlWrap.style.display = "block";
-          if (rpmWrap) rpmWrap.style.display = "none";
-        }
+        else { show(urlWrap, "block"); hide(rpmWrap); }
       }, { once: true });
       urlSave?.addEventListener("click", saveManualUrl);
       urlCancel?.addEventListener("click", () => hide(urlWrap));
@@ -247,10 +238,7 @@
     return await new Promise((resolve) => {
       const onSel = (e) => {
         const url = e.detail?.url;
-        if (url) {
-          window.removeEventListener("dhk:avatar-selected", onSel);
-          resolve(url);
-        }
+        if (url) { window.removeEventListener("dhk:avatar-selected", onSel); resolve(url); }
       };
       window.addEventListener("dhk:avatar-selected", onSel);
     });
@@ -258,3 +246,4 @@
 
   window.DHKAuth.requireAuthAndAvatar = requireAuthAndAvatar;
 })();
+</script>
