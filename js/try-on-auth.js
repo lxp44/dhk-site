@@ -148,10 +148,11 @@ async function saveAvatarUrlToIdentity(url) {
     if (!ok || !data || data.source !== "readyplayer.me") return;
 
     if (data.eventName === "v1.avatar.exported" && data.data?.url) {
-      const glb = normalizeAvatarUrl(data.data.url);
-      try { await saveAvatarUrlToIdentity(glb); } catch {}
-      announceAvatar(glb);
-    }
+  const glb = normalizeAvatarUrl(data.data.url);
+  let saved = glb;
+  try { saved = await saveAvatarUrlToIdentity(glb); } catch {}
+  announceAvatar(saved); // <- always announce
+}
   });
 
   async function saveManualUrl() {
