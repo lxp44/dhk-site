@@ -1,5 +1,6 @@
 // js/try-on-auth.js
 (() => {
+  // Modal + controls
   const gateEl    = document.getElementById('auth-gate');
   const gateBtn   = document.getElementById('gate-signin');
   const modalEl   = document.getElementById('avatar-modal');
@@ -11,16 +12,14 @@
   const urlInput  = document.getElementById('avatar-url-input');
   const urlSave   = document.getElementById('avatar-url-save');
   const urlCancel = document.getElementById('avatar-cancel');
-  const worldBtn  = document.getElementById('world-load'); // ← the new button in your modal
+  const worldBtn  = document.getElementById('world-load'); // new button
 
-  // expose last avatar URL (handy if other scripts want it)
+  // Expose selected avatar URL for other scripts
   let lastAvatarUrl = "";
   window.DHKAuth = window.DHKAuth || {};
-  Object.defineProperty(window.DHKAuth, "selectedAvatarUrl", {
-    get: () => lastAvatarUrl
-  });
+  Object.defineProperty(window.DHKAuth, "selectedAvatarUrl", { get: () => lastAvatarUrl });
 
-  // ---------- Identity helpers ----------
+  // --------------- Identity helpers ---------------
   const idw = () => (typeof netlifyIdentity !== "undefined" ? netlifyIdentity : null);
   const currentUser = () => (idw() ? idw().currentUser() : null);
 
@@ -28,20 +27,18 @@
     return new Promise((resolve) => {
       const w = idw();
       if (!w) return resolve(null);
-      try { w.init(); } catch {}
+      try { w.init({ APIUrl: window.location.origin + "/.netlify/identity" }); } catch {}
       let done = false;
       const finish = () => { if (!done) { done = true; resolve(w.currentUser()); } };
       w.on("init", finish);
       const start = Date.now();
       const t = setInterval(() => {
-        if (w.currentUser() || Date.now() - start > timeoutMs) {
-          clearInterval(t); finish();
-        }
+        if (w.currentUser() || Date.now() - start > timeoutMs) { clearInterval(t); finish(); }
       }, 200);
     });
   }
 
-  // ---------- Saved avatar helpers ----------
+  // --------------- Saved avatar helpers ---------------
   function getSavedAvatarUrl() {
     const u = currentUser();
     return u?.user_metadata?.avatarUrl || localStorage.getItem("dhk_avatar_url") || "";
@@ -62,7 +59,7 @@
     return updated.user_metadata?.avatarUrl || url;
   }
 
-  // ---------- UI helpers ----------
+  // --------------- UI helpers ---------------
   const show = (el, mode = "flex") => { if (el) el.style.display = mode; };
   const hide = (el) => { if (el) el.style.display = "none"; };
 
@@ -70,9 +67,7 @@
     if (!worldBtn) return;
     worldBtn.disabled = false;
     worldBtn.classList.add("ready");
-    if (!worldBtn.textContent || /loading/i.test(worldBtn.textContent)) {
-      worldBtn.textContent = "Load World";
-    }
+    if (!worldBtn.textContent || /loading/i.test(worldBtn.textContent)) worldBtn.textContent = "Load World";
   }
 
   function announceAvatar(url) {
@@ -105,97 +100,75 @@
     });
   }
 
-// ---------- RPM flow ----------
-function openRPM() {
-  if (rpmFrame && !rpmFrame.src) {
-    rpmFrame.src = "https://demo.readyplayer.me/avatar?frameApi";
-  }
-  if (rpmWrap) rpmWrap.style.display = "block";
-  if (urlWrap) urlWrap.style.display = "none";
+  // --------------- RPM open + subscribe ---------------
+  function openRPM() {
+    // only set src once (avoid reload loops on iOS)
+    if (rpmFrame && !rpmFrame.src) rpmFrame.src = "https://demo.readyplayer.me/avatar?frameApi";
+    if (rpmWrap) rpmWrap.style.display = "block";
+    if (urlWrap) urlWrap.style.display = "none";
 
-  // Some browsers fire onload before RPM is fully ready.
-  const subscribe = () => {
+    const subscribe = () => {
+      try {
+        // subscribe to export event
+        rpmFrame.contentWindow.postMessage(
+          { target: "readyplayer.me", type: "subscribe", eventName: "v1.avatar.exported" },
+          "https://demo.readyplayer.me"
+        );
+      } catch {}
+    };
+
+    rpmFrame.onload = () => { subscribe(); setTimeout(subscribe, 120); };
+    // Fallback: subscribe again after a small delay (helps Safari)
+    setTimeout(subscribe, 400);
+  }
+
+  // --------------- URL normalization ---------------
+  function normalizeAvatarUrl(input) {
     try {
-      rpmFrame.contentWindow.postMessage(
-        { target: "readyplayer.me", type: "subscribe", eventName: "v1.avatar.exported" },
-        "*"
-      );
-    } catch {}
-  };
-
-  // Try both: onload and a small delay as a fallback.
-  rpmFrame.onload = () => { subscribe(); setTimeout(subscribe, 100); };
-}
-
-  // Helper: turn RPM share URLs into real model URLs
-function normalizeRPMUrl(raw) {
-  if (!raw) return "";
-  try {
-    const u = new URL(raw);
-    // Only normalize RPM domains
-    if (/\.readyplayer\.me$/i.test(u.hostname)) {
-      // If there's no file extension, assume .glb
-      if (!/\.(glb|gltf|vrm)$/i.test(u.pathname)) {
-        u.pathname = u.pathname.replace(/\/?$/, ".glb"); // append .glb once
-      }
-      // Handy params (safe no-ops if already present)
-      u.searchParams.set("textureAtlas", "none");
-      u.searchParams.set("pose", "t");
-    }
-    return u.toString();
-  } catch {
-    return raw; // if it's not a valid URL, let upstream validation handle it
-  }
-}
-// Turn RPM share links into a direct .glb URL
-function normalizeAvatarUrl(input) {
-  try {
-    const u = new URL(input);
-
-    // Case 1: social/share link => https://models.readyplayer.me/<id>[.glb]
-    if (u.hostname.endsWith("readyplayer.me")) {
-      // if it's already a .glb, keep it
-      if (u.pathname.endsWith(".glb")) return u.toString();
-
-      // pathname like "/690d10...": append .glb before any query
-      if (/^\/[a-z0-9_-]+$/i.test(u.pathname)) {
-        u.pathname = u.pathname + ".glb";
-        // optional: ensure CORS-friendly query stays minimal
-        u.search = ""; 
+      const u = new URL(input);
+      // Only normalize Ready Player Me links
+      if (u.hostname.endsWith("readyplayer.me")) {
+        // If it's not already a model file, append .glb
+        if (!/\.(glb|gltf|vrm)$/i.test(u.pathname)) {
+          u.pathname = u.pathname.replace(/\/?$/, ".glb");
+        }
+        // Trim noisy query for fewer CORS/caching surprises
+        u.search = "";
         return u.toString();
       }
-    }
-
-    // Case 2: already a .glb somewhere else
-    if (u.pathname.endsWith(".glb")) return u.toString();
-  } catch {}
-  // Fallback: return original (might still be fine)
-  return input;
-}
-// ====== RPM message listener (export) ======
-// Receive avatar from RPM → keep modal open; enable Load World
-window.addEventListener("message", async (e) => {
-  let data = e.data;
-  if (typeof data === "string") { try { data = JSON.parse(data); } catch {} }
-  if (!data || data.source !== "readyplayer.me") return;
-
-  if (data.eventName === "v1.avatar.exported" && data.data?.url) {
-    const raw = data.data.url;
-    const glbUrl = normalizeAvatarUrl(raw);          // <- convert share link → .glb
-    try { await saveAvatarUrlToIdentity(glbUrl); } catch {}
-    announceAvatar(glbUrl);                           // <- enables "Load World" button
+      // If it already points to a .glb anywhere else, keep it
+      if (u.pathname.endsWith(".glb")) return u.toString();
+    } catch {}
+    return input;
   }
-});
 
-// Manual paste flow
-async function saveManualUrl() {
-  const val = (urlInput?.value || "").trim();
-  if (!val) return alert("Paste a valid URL.");
-  const glbUrl = normalizeAvatarUrl(val);            // <- normalize here too
-  const final  = await saveAvatarUrlToIdentity(glbUrl);
-  announceAvatar(final);
-}
-  // ---------- Bind Load World click here too (safety net) ----------
+  // --------------- RPM message listener ---------------
+  window.addEventListener("message", async (e) => {
+    // ensure message originates from RPM
+    const okOrigin = typeof e.origin === "string" && /(^|\.)readyplayer\.me$/i.test(new URL(e.origin).hostname);
+    if (!okOrigin) return;
+
+    let data = e.data;
+    if (typeof data === "string") { try { data = JSON.parse(data); } catch {} }
+    if (!data || data.source !== "readyplayer.me") return;
+
+    if (data.eventName === "v1.avatar.exported" && data.data?.url) {
+      const glbUrl = normalizeAvatarUrl(data.data.url);
+      try { await saveAvatarUrlToIdentity(glbUrl); } catch {}
+      announceAvatar(glbUrl);
+    }
+  });
+
+  // --------------- Manual paste flow ---------------
+  async function saveManualUrl() {
+    const val = (urlInput?.value || "").trim();
+    if (!val) return alert("Paste a valid URL.");
+    const glbUrl = normalizeAvatarUrl(val);
+    const final  = await saveAvatarUrlToIdentity(glbUrl);
+    announceAvatar(final);
+  }
+
+  // --------------- Load World button (safety net) ---------------
   if (worldBtn) {
     worldBtn.addEventListener("click", async () => {
       if (worldBtn.disabled) return;
@@ -203,15 +176,14 @@ async function saveManualUrl() {
         worldBtn.textContent = "Loading…";
         worldBtn.disabled = true;
 
-        // Try use the exported helper from try-on.js
         if (window.DHKWorld?.loadWorldOnce) {
-          await window.DHKWorld.loadWorldOnce();
+          await window.DHKWorld.loadWorldOnce(); // provided by try-on.js
+        } else {
+          // broadcast a fallback event other scripts could listen to
+          window.dispatchEvent(new Event("dhk:load-world"));
         }
 
-        // Close the modal so the scene is visible
         hide(modalEl);
-
-        // Re-enable the button label for future opens
         worldBtn.textContent = "Load World";
       } catch (err) {
         console.error("Load World failed:", err);
@@ -222,7 +194,7 @@ async function saveManualUrl() {
     });
   }
 
-  // ---------- Public: require login and get avatar URL ----------
+  // --------------- Public API: require login & get avatar ---------------
   async function requireAuthAndAvatar() {
     await identityReady();
 
@@ -236,48 +208,38 @@ async function saveManualUrl() {
         idw().on("login", done);
       });
       user = currentUser();
-      hide(gateEl);
-    } else {
-      hide(gateEl);
     }
+    hide(gateEl);
 
-    // If we already have a saved avatar: open modal (so user can press Load World),
-    // announce it immediately so the scene knows which avatar to spawn.
-    const saved = getSavedAvatarUrl();
+    // Always open modal so the user can press "Load World"
     show(modalEl);
     mountUseSavedButton();
 
-    if (saved) {
-      announceAvatar(saved);
-    } else {
-      // No saved → user can create or paste
-      if (btnCreate) btnCreate.addEventListener("click", openRPM, { once: true });
-      if (btnLoad) btnLoad.addEventListener("click", () => {
-        const url = getSavedAvatarUrl();
-        if (url) announceAvatar(url);
-        else {
-          if (urlWrap) urlWrap.style.display = "block";
-          if (rpmWrap) rpmWrap.style.display = "none";
-        }
-      }, { once: true });
-      if (urlSave)   urlSave.addEventListener("click", saveManualUrl);
-      if (urlCancel) urlCancel.addEventListener("click", () => hide(urlWrap));
-    }
+    // If we already have a saved avatar, announce it now (enables the button)
+    const saved = getSavedAvatarUrl();
+    if (saved) announceAvatar(saved);
 
-    // Resolve once we know an avatar URL (but leave modal open until Load World is clicked)
+    // Wire actions (create / load / paste)
+    btnCreate?.addEventListener("click", openRPM, { once: true });
+    btnLoad  ?.addEventListener("click", () => {
+      const url = getSavedAvatarUrl();
+      if (url) announceAvatar(url);
+      else { if (urlWrap) urlWrap.style.display = "block"; if (rpmWrap) rpmWrap.style.display = "none"; }
+    }, { once: true });
+    urlSave  ?.addEventListener("click", saveManualUrl);
+    urlCancel?.addEventListener("click", () => hide(urlWrap));
+
+    // Resolve as soon as we know an avatar URL (modal stays until Load World)
     if (lastAvatarUrl) return lastAvatarUrl;
     return await new Promise((resolve) => {
       const onSel = (e) => {
         const url = e.detail?.url;
-        if (url) {
-          window.removeEventListener("dhk:avatar-selected", onSel);
-          resolve(url);
-        }
+        if (url) { window.removeEventListener("dhk:avatar-selected", onSel); resolve(url); }
       };
       window.addEventListener("dhk:avatar-selected", onSel);
     });
   }
 
-  // Expose
+  // Expose public method
   window.DHKAuth.requireAuthAndAvatar = requireAuthAndAvatar;
 })();
