@@ -1,5 +1,6 @@
 // js/try-on-auth.js
 (() => {
+  // DOM
   const gateEl    = document.getElementById('auth-gate');
   const gateBtn   = document.getElementById('gate-signin');
   const modalEl   = document.getElementById('avatar-modal');
@@ -12,49 +13,19 @@
   const urlSave   = document.getElementById('avatar-url-save');
   const urlCancel = document.getElementById('avatar-cancel');
   const worldBtn  = document.getElementById('world-load');
-const DEFAULT_AVATAR = "assets/3d/guest.glb"; // put any .glb you want here
 
-function getSavedAvatarUrl() {
-  const u = currentUser();
-  const idMeta = u?.user_metadata?.avatarUrl;
-  const local = (() => { try { return localStorage.getItem("dhk_avatar_url"); } catch { return ""; } })();
-  return idMeta || local || "";
-}
+  // IMPORTANT: do NOT point this to the bedroom/world — avatars are separate
+  const DEFAULT_AVATAR = ""; // leave blank or swap with a neutral mannequin glb if you have one
 
-async function saveAvatarUrlToIdentity(url) {
-  const w = idw(); const u = currentUser();
-  let final = url;
-  if (w && u) {
-    try {
-      const token = await u.jwt();
-      const res = await fetch("/.netlify/identity/user", {
-        method: "PUT",
-        headers: { "Authorization": `Bearer ${token}`, "Content-Type": "application/json" },
-        body: JSON.stringify({ user_metadata: { avatarUrl: url } })
-      });
-      if (res.ok) {
-        const updated = await res.json();
-        w.setUser(updated);
-        final = updated.user_metadata?.avatarUrl || url;
-      }
-    } catch { /* ignore, we’ll still use local */ }
-  }
-  try { localStorage.setItem("dhk_avatar_url", final); } catch {}
-  return final;
-}
-
-  let lastAvatarUrl = "";
-  window.DHKAuth = window.DHKAuth || {};
-  Object.defineProperty(window.DHKAuth, "selectedAvatarUrl", { get: () => lastAvatarUrl });
-
+  // Identity helpers
   const idw = () => (typeof netlifyIdentity !== "undefined" ? netlifyIdentity : null);
   const currentUser = () => (idw() ? idw().currentUser() : null);
 
-  function identityReady(timeoutMs = 7000) {
+  async function identityReady(timeoutMs = 7000) {
+    const w = idw();
+    if (!w) return null;
+    try { w.init({ APIUrl: window.location.origin + "/.netlify/identity" }); } catch {}
     return new Promise((resolve) => {
-      const w = idw();
-      if (!w) return resolve(null);
-      try { w.init({ APIUrl: window.location.origin + "/.netlify/identity" }); } catch {}
       let done = false;
       const finish = () => { if (!done) { done = true; resolve(w.currentUser()); } };
       w.on("init", finish);
@@ -70,24 +41,39 @@ async function saveAvatarUrlToIdentity(url) {
   const show = (el, mode = "flex") => { if (el) el.style.display = mode; };
   const hide = (el) => { if (el) el.style.display = "none"; };
 
+  function safeLocalGet(k){ try { return localStorage.getItem(k) || ""; } catch { return ""; } }
+  function safeLocalSet(k,v){ try { localStorage.setItem(k,v); } catch {} }
+
   function getSavedAvatarUrl() {
     const u = currentUser();
-    return u?.user_metadata?.avatarUrl || localStorage.getItem("dhk_avatar_url") || "";
+    const idMeta = u?.user_metadata?.avatarUrl || "";
+    const local = safeLocalGet("dhk_avatar_url");
+    return idMeta || local || "";
   }
 
-  async function saveAvatarUrlToIdentity(url) {
+  async function saveAvatarUrl(url) {
+    // Try identity first; if not available, fall back to localStorage
     const w = idw(); const u = currentUser();
-    if (!w || !u) throw new Error("No identity session");
-    const token = await u.jwt();
-    const res = await fetch("/.netlify/identity/user", {
-      method: "PUT",
-      headers: { "Authorization": `Bearer ${token}`, "Content-Type": "application/json" },
-      body: JSON.stringify({ user_metadata: { avatarUrl: url } })
-    });
-    const updated = await res.json();
-    w.setUser(updated);
-    try { localStorage.setItem("dhk_avatar_url", updated.user_metadata?.avatarUrl || url); } catch {}
-    return updated.user_metadata?.avatarUrl || url;
+    let final = url;
+    if (w && u) {
+      try {
+        const token = await u.jwt();
+        const res = await fetch("/.netlify/identity/user", {
+          method: "PUT",
+          headers: { "Authorization": `Bearer ${token}`, "Content-Type": "application/json" },
+          body: JSON.stringify({ user_metadata: { avatarUrl: url } })
+        });
+        if (res.ok) {
+          const updated = await res.json();
+          w.setUser(updated);
+          final = updated.user_metadata?.avatarUrl || url;
+        }
+      } catch {
+        // ignore; we’ll still save to local
+      }
+    }
+    safeLocalSet("dhk_avatar_url", final);
+    return final;
   }
 
   function enableWorldBtn() {
@@ -96,16 +82,19 @@ async function saveAvatarUrlToIdentity(url) {
     if (!worldBtn.textContent || /loading/i.test(worldBtn.textContent)) worldBtn.textContent = "Load World";
   }
 
+  let lastAvatarUrl = "";
+  window.DHKAuth = window.DHKAuth || {};
+  Object.defineProperty(window.DHKAuth, "selectedAvatarUrl", { get: () => lastAvatarUrl });
+
   function announceAvatar(url) {
     lastAvatarUrl = url;
-    try { localStorage.setItem("dhk_avatar_url", url); } catch {}
+    safeLocalSet("dhk_avatar_url", url);
     window.dispatchEvent(new CustomEvent("dhk:avatar-selected", { detail: { url } }));
     enableWorldBtn();
   }
 
   function openRPM() {
     if (!rpmFrame) return;
-
     if (!rpmFrame.src) {
       rpmFrame.src = "https://demo.readyplayer.me/avatar?frameApi";
       rpmFrame.setAttribute("allow", "camera; microphone; autoplay; clipboard-write");
@@ -118,7 +107,7 @@ async function saveAvatarUrlToIdentity(url) {
       try {
         rpmFrame.contentWindow.postMessage(
           { target: "readyplayer.me", type: "subscribe", eventName: "v1.avatar.exported" },
-          "*"  // first subscribe before the iframe asserts origin
+          "*"
         );
       } catch {}
     };
@@ -135,40 +124,35 @@ async function saveAvatarUrlToIdentity(url) {
         u.search = "";
         return u.toString();
       }
-      if (u.pathname.endsWith(".glb")) return u.toString();
+      if (/\.(glb|gltf|vrm)$/i.test(u.pathname)) return u.toString();
     } catch {}
     return input;
   }
 
-  // Only accept messages from readyplayer.me after it’s loaded
+  // Accept RPM messages
   window.addEventListener("message", async (e) => {
     let data = e.data;
     if (typeof data === "string") { try { data = JSON.parse(data); } catch {} }
-    const ok = typeof e.origin === "string" && /(^|\.)readyplayer\.me$/i.test(new URL(e.origin).hostname);
+    const ok = (() => {
+      try { return /(^|\.)readyplayer\.me$/i.test(new URL(e.origin).hostname); } catch { return false; }
+    })();
     if (!ok || !data || data.source !== "readyplayer.me") return;
 
     if (data.eventName === "v1.avatar.exported" && data.data?.url) {
-  const glb = normalizeAvatarUrl(data.data.url);
-  let saved = glb;
-  try { saved = await saveAvatarUrlToIdentity(glb); } catch {}
-  announceAvatar(saved); // <- always announce
-}
+      const glb = normalizeAvatarUrl(data.data.url);
+      const saved = await saveAvatarUrl(glb);
+      announceAvatar(saved);
+    }
   });
 
   async function saveManualUrl() {
     const val = (urlInput?.value || "").trim();
     if (!val) return alert("Paste a valid URL.");
-    const glb = normalizeAvatarUrl(val);
-    const final = await saveAvatarUrlToIdentity(glb);
+    const final = await saveAvatarUrl(normalizeAvatarUrl(val));
     announceAvatar(final);
   }
 
-const btnGuest = document.getElementById("avatar-guest");
-btnGuest?.addEventListener("click", () => {
-  announceAvatar(DEFAULT_AVATAR);
-});
-
-  // Public API used by try-on.js
+  // Public API: waits for login + avatar selection, returns URL
   async function requireAuthAndAvatar() {
     await identityReady();
 
@@ -179,7 +163,7 @@ btnGuest?.addEventListener("click", () => {
       gateBtn?.addEventListener("click", () => idw()?.open("login"), { once: true });
       await new Promise((resolve) => {
         const done = () => { idw().off("login", done); hide(gateEl); resolve(); };
-        idw().on("login", done);
+        idw()?.on("login", done);
       });
       user = currentUser();
       hide(gateEl);
@@ -190,21 +174,25 @@ btnGuest?.addEventListener("click", () => {
     show(modalEl);
 
     const saved = getSavedAvatarUrl();
-    if (saved) announceAvatar(saved);
-    else {
+    if (saved) {
+      announceAvatar(saved);
+    } else {
       btnCreate?.addEventListener("click", openRPM, { once: true });
-      btnLoad?.addEventListener("click", () => {
+      btnLoad  ?.addEventListener("click", () => {
         const s = getSavedAvatarUrl();
         if (s) announceAvatar(s);
         else { if (urlWrap) urlWrap.style.display = "block"; if (rpmWrap) rpmWrap.style.display = "none"; }
       }, { once: true });
-      urlSave?.addEventListener("click", saveManualUrl);
+      urlSave ?.addEventListener("click", saveManualUrl);
       urlCancel?.addEventListener("click", () => hide(urlWrap));
     }
 
     if (lastAvatarUrl) return lastAvatarUrl;
     return await new Promise((resolve) => {
-      const onSel = (e) => { const url = e.detail?.url; if (url) { window.removeEventListener("dhk:avatar-selected", onSel); resolve(url); } };
+      const onSel = (e) => {
+        const url = e.detail?.url;
+        if (url) { window.removeEventListener("dhk:avatar-selected", onSel); resolve(url); }
+      };
       window.addEventListener("dhk:avatar-selected", onSel);
     });
   }
