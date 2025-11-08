@@ -1,86 +1,54 @@
-(() => {
-  const WORLD_URL = "assets/3d/bedroom.glb";
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>DHK — TRY ON</title>
+  <link rel="icon" href="assets/img/DHK_transparent.gif" type="image/gif" sizes="any">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/styles.css">
+  
+  <!-- Ready Player Me -->
+  <script src="https://unpkg.com/@readyplayerme/visage@latest/dist/index.umd.js" defer></script>
 
-  let engine, scene, avatar, worldLoaded = false;
-  let chosenAvatarUrl = "";
+  <!-- Netlify Identity -->
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 
-  // Ready Player Me setup
-  window.addEventListener("message", (event) => {
-    if (!event.data || !event.data.source || event.data.source !== "readyplayerme") return;
+  <style>
+    body,html{margin:0;height:100%;background:#000;color:#fff;font-family:'Cinzel',serif;}
+    #renderCanvas{width:100%;height:100%;display:block;outline:none}
+    .hud{position:absolute;inset:0;pointer-events:none}
+    .chip{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);
+      padding:8px 12px;border-radius:999px;font:600 12px/1 'Cinzel',serif;
+      letter-spacing:.1em;text-transform:uppercase;cursor:pointer;pointer-events:auto}
+    .panel{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);display:flex;gap:10px}
+  </style>
+</head>
 
-    if (event.data.eventName === "v1.avatar.exported") {
-      const avatarUrl = event.data.data?.url;
-      if (avatarUrl && avatarUrl.endsWith(".glb")) {
-        console.log("🎯 Avatar exported:", avatarUrl);
-        localStorage.setItem("dhk_avatar_url", avatarUrl);
-        chosenAvatarUrl = avatarUrl;
-        document.getElementById("world-load")?.removeAttribute("disabled");
-        document.getElementById("avatar-modal").style.display = "none";
-      } else {
-        alert("Avatar failed to load. Make sure you used the Ready Player Me export link (ending in .glb).");
-      }
-    }
-  });
+<body>
+  <canvas id="renderCanvas"></canvas>
 
-  async function loadWorld() {
-    console.log("🌎 Loading world:", WORLD_URL);
-    await BABYLON.SceneLoader.AppendAsync("", WORLD_URL, scene);
-    worldLoaded = true;
-    console.log("✅ World loaded.");
-    if (chosenAvatarUrl) await loadAvatar(chosenAvatarUrl);
-  }
+  <div class="hud">
+    <div class="panel">
+      <button id="avatar-create" class="chip">Create New</button>
+      <button id="avatar-load" class="chip">Load Saved</button>
+      <button id="world-load" class="chip" disabled>Load World</button>
+    </div>
+  </div>
 
-  async function loadAvatar(url) {
-    try {
-      console.log("🧍 Loading avatar:", url);
-      const result = await BABYLON.SceneLoader.ImportMeshAsync("", "", url, scene);
-      const root = result.meshes[0];
-      root.scaling.setAll(1.6);
-      root.position.set(0, 0, 0);
-      avatar = root;
-      console.log("✅ Avatar loaded successfully.");
-    } catch (e) {
-      console.error("❌ Failed to load avatar:", e);
-      alert("Avatar failed to load. Make sure the URL is a valid Ready Player Me .glb file.");
-    }
-  }
+  <!-- Avatar Modal -->
+  <div id="avatar-modal" style="position:absolute;inset:0;display:none;background:rgba(0,0,0,.8);align-items:center;justify-content:center;z-index:10000;">
+    <div style="background:#0a0a0a;border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:20px;width:min(92vw,720px);max-height:90vh;overflow:auto;">
+      <h3 style="margin:0 0 10px;">Create Your Avatar</h3>
+      <iframe id="rpm-iframe" src="" style="width:100%;height:540px;border:0;" allow="camera;microphone;autoplay;clipboard-write"></iframe>
+    </div>
+  </div>
 
-  function bindUI(canvas) {
-    const modal = document.getElementById("avatar-modal");
-    const iframe = document.getElementById("rpm-iframe");
+  <!-- Babylon -->
+  <script src="https://cdn.babylonjs.com/babylon.js"></script>
+  <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
 
-    document.getElementById("avatar-create").addEventListener("click", () => {
-      modal.style.display = "flex";
-      iframe.src = "https://readyplayer.me/avatar?frameApi";
-    });
-
-    document.getElementById("avatar-load").addEventListener("click", () => {
-      const saved = localStorage.getItem("dhk_avatar_url");
-      if (saved && saved.endsWith(".glb")) {
-        chosenAvatarUrl = saved;
-        document.getElementById("world-load")?.removeAttribute("disabled");
-        alert("Loaded your saved avatar!");
-      } else {
-        alert("No saved avatar found. Please create one first.");
-      }
-    });
-
-    document.getElementById("world-load").addEventListener("click", async () => {
-      if (!worldLoaded) await loadWorld();
-      if (chosenAvatarUrl) await loadAvatar(chosenAvatarUrl);
-    });
-  }
-
-  function init() {
-    const canvas = document.getElementById("renderCanvas");
-    engine = new BABYLON.Engine(canvas, true);
-    scene = new BABYLON.Scene(engine);
-    scene.createDefaultCameraOrLight(true, true, true);
-
-    bindUI(canvas);
-    engine.runRenderLoop(() => scene.render());
-    window.addEventListener("resize", () => engine.resize());
-  }
-
-  document.addEventListener("DOMContentLoaded", init);
-})();
+  <!-- DHK Logic -->
+  <script src="js/try-on.js?v=20251108b"></script>
+</body>
+</html>
