@@ -1,26 +1,25 @@
 // js/try-on.js
 (() => {
-  const DATA_URL   = "data/products.json";
-  const WORLD_ROOT = "assets/3d/";
-  const WORLD_FILE = "bedroom.glb";
+  const DATA_URL  = "data/products.json";
+  const WORLD_URL = "assets/3d/bedroom.glb";
 
   let engine, scene, avatar;
+  let isFirstPerson = false;
   let worldLoaded = false;
   let chosenAvatarUrl = "";
   let tvVideoTex = null;
   let spawnPoint = new BABYLON.Vector3(0, 0, 0);
   let spawnYaw = 0;
 
-  const getIdentity  = () => (typeof netlifyIdentity !== "undefined" ? netlifyIdentity : null);
-  const currentUser  = () => (getIdentity() ? getIdentity().currentUser() : null);
+  // ---------- Identity helpers (for signed media only) ----------
+  const getIdentity = () => (typeof netlifyIdentity !== "undefined" ? netlifyIdentity : null);
+  const currentUser = () => { const id = getIdentity(); return id ? id.currentUser() : null; };
 
   async function getSignedMedia(id, type){
     const user = currentUser();
     if (!user) throw new Error("Login required");
     const token = await user.jwt();
-    const res = await fetch(`/.netlify/functions/get-signed-media?id=${encodeURIComponent(id)}&type=${encodeURIComponent(type||"")}`, {
-      headers: { Authorization: `Bearer ${token}` }
-    });
+    const res = await fetch(`/.netlify/functions/get-signed-media?id=${encodeURIComponent(id)}&type=${encodeURIComponent(type||"")}`, { headers: { Authorization: `Bearer ${token}` }});
     if (!res.ok) throw new Error(await res.text());
     return res.json();
   }
@@ -31,80 +30,75 @@
     return r.json();
   }
 
+  // ---------- Cameras ----------
   function makeArcCam(canvas) {
     const cam = new BABYLON.ArcRotateCamera("arc", Math.PI * 1.2, 1.0, 6.5, new BABYLON.Vector3(0, 1.6, 0), scene);
-    cam.lowerRadiusLimit = 2.2; cam.upperRadiusLimit = 10; cam.wheelPrecision = 50; cam.panningSensibility = 0; cam.attachControl(canvas, true);
+    cam.lowerRadiusLimit = 2.2; cam.upperRadiusLimit = 10; cam.wheelPrecision = 50; cam.panningSensibility = 0;
+    cam.attachControl(canvas, true);
     return cam;
   }
 
-  function buildLights() {
-    const h = new BABYLON.HemisphericLight("h", new BABYLON.Vector3(0,1,0), scene);
-    h.intensity = 0.9;
+  function makeFPSCam(canvas) {
+    const cam = new BABYLON.UniversalCamera("fps", new BABYLON.Vector3(0, 1.7, -2), scene);
+    cam.minZ = 0.05; cam.speed = 0.35; cam.inertia = 0.7; cam.angularSensibility = 5000;
+    cam.attachControl(canvas, true);
+    cam.applyGravity = true; cam.checkCollisions = true; cam.ellipsoid = new BABYLON.Vector3(0.35, 0.9, 0.35);
+    cam.keysUp=[87,38]; cam.keysDown=[83,40]; cam.keysLeft=[65,37]; cam.keysRight=[68,39];
+    return cam;
   }
 
-  async function loadWorld() {
-    if (worldLoaded) return;
-    console.log("🌎 Loading world:", WORLD_ROOT + WORLD_FILE);
+  // ---------- World loader ----------
+  async function loadWorld(){
+    console.log("🌎 Loading world:", WORLD_URL);
+    const result = await BABYLON.SceneLoader.ImportMeshAsync("", "", WORLD_URL, scene);
+    const root = result.meshes[0]; root.name = "WorldRoot"; root.scaling = new BABYLON.Vector3(1,1,1);
+    scene.createDefaultEnvironment({ createSkybox:false, createGround:false });
 
-    const result = await BABYLON.SceneLoader.ImportMeshAsync("", WORLD_ROOT, WORLD_FILE, scene);
-    const root = result.meshes[0];
-    root.name = "WorldRoot";
+    // collisions
+    scene.meshes.forEach(m=>{
+      const n=(m.name||"").toLowerCase();
+      if(["floor","ground","wall","door","closet","furniture"].some(k=>n.includes(k))) m.checkCollisions=true;
+    });
 
-    // TV video surface
-    const tv = scene.getMeshByName("TV");
-    if (tv){
-      tvVideoTex = new BABYLON.VideoTexture(
-        "tvtex",
-        "assets/media/sample-video.mp4",
-        scene,
-        true,  // generateMipMaps
-        true,  // invertY for video
-        BABYLON.VideoTexture.TRILINEAR_SAMPLINGMODE,
-        { autoPlay:true, loop:true, muted:true }
-      );
-      const tvMat = new BABYLON.StandardMaterial("tvmat", scene);
-      tvMat.emissiveTexture = tvVideoTex;
-      tv.material = tvMat;
-
-      tv.actionManager = new BABYLON.ActionManager(scene);
-      tv.actionManager.registerAction(
-        new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPickTrigger, async ()=>{
-          try{
-            const { url } = await getSignedMedia("unreleased-vid-1","video");
-            const vid = tvVideoTex.video;
-            const wasPlaying = !vid.paused;
-            vid.src = url;
-            vid.loop = true;
-            if (wasPlaying) vid.play().catch(()=>{});
-          } catch {
-            alert("Login required to view unreleased video.");
-          }
-        })
-      );
-    }
-
-    // Spawn extraction
+    // spawn
     const spawnNode =
       scene.getTransformNodeByName("Spawn") ||
       scene.getTransformNodeByName("spawn") ||
       scene.getTransformNodeByName("PlayerStart") ||
       scene.getTransformNodeByName("player_start");
 
-    if (spawnNode) {
+    if (spawnNode){
       spawnPoint = spawnNode.getAbsolutePosition?.() || spawnNode.position.clone();
-      const r = spawnNode.rotationQuaternion
-        ? spawnNode.rotationQuaternion.toEulerAngles()
-        : (spawnNode.rotation || new BABYLON.Vector3(0,0,0));
+      const r = spawnNode.rotationQuaternion ? spawnNode.rotationQuaternion.toEulerAngles() : (spawnNode.rotation || new BABYLON.Vector3(0,0,0));
       spawnYaw = r.y || 0;
+    }
+
+    // TV (optional, signed URL on click)
+    const tv = scene.getMeshByName("TV");
+    if (tv){
+      tvVideoTex = new BABYLON.VideoTexture("tvtex","assets/media/sample-video.mp4",scene,true,true,BABYLON.VideoTexture.TRILINEAR_SAMPLINGMODE,{autoPlay:true,loop:true,muted:true});
+      const tvMat = new BABYLON.StandardMaterial("tvmat",scene); tvMat.emissiveTexture=tvVideoTex; tv.material=tvMat;
+      tv.actionManager = new BABYLON.ActionManager(scene);
+      tv.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPickTrigger, async ()=>{
+        try{
+          const { url } = await getSignedMedia("unreleased-vid-1","video");
+          const vid = tvVideoTex.video; const wasPlaying = !vid.paused;
+          vid.src = url; vid.loop = true; if (wasPlaying) vid.play().catch(()=>{});
+        } catch { alert("Login required to view unreleased video."); }
+      }));
     }
 
     worldLoaded = true;
     console.log("✅ Bedroom world loaded");
 
-    // If avatar was chosen before the world, re-place it now
+    // Re-place avatar now that we know spawn
     if (chosenAvatarUrl) await replaceAvatar(chosenAvatarUrl);
   }
 
+  async function loadWorldOnce(){ if (worldLoaded) return true; await loadWorld(); return true; }
+  window.DHKWorld = { loadWorldOnce };
+
+  // ---------- Avatar replace ----------
   async function replaceAvatar(avatarUrl){
     if (!avatarUrl){ console.warn("No avatar URL to load."); return; }
     console.log("🧍 Loading avatar:", avatarUrl);
@@ -112,7 +106,6 @@
     if (avatar){ try{ avatar.dispose(); }catch{} avatar = null; }
 
     try{
-      // Let Babylon derive root; avatarUrl may be cross-origin RPM GLB
       const res  = await BABYLON.SceneLoader.ImportMeshAsync("", "", avatarUrl, scene);
       const root = res.meshes[0]; root.name = "AvatarRoot"; avatar = root;
 
@@ -121,78 +114,63 @@
         const height = bounds.max.y - bounds.min.y;
         const s = 1.75 / Math.max(0.01, height);
         root.scaling.set(s,s,s);
-
         const footLift = -bounds.min.y * s;
         const pos = spawnPoint || BABYLON.Vector3.Zero();
         root.position.set(pos.x, pos.y + footLift, pos.z);
         root.rotation = root.rotation || new BABYLON.Vector3(0,0,0);
         root.rotation.y = spawnYaw || 0;
       }
-
-      const idle = res.animationGroups?.find(a=>/idle/i.test(a.name));
-      idle?.start(true);
-
+      const idle = res.animationGroups?.find(a=>/idle/i.test(a.name)); idle?.start(true);
       console.log("✅ Avatar loaded.");
     } catch(err){
       console.error("❌ Failed to load avatar:", err);
+      alert("Avatar failed to load. Make sure you used the Ready Player Me export link (ending in .glb).");
     }
   }
 
-  function buildOutfitBar(products){
-    // (stub) — Your existing outfit bar logic hooks here.
-    // Keep IDs (#outfit-panel) the same; not changing your UI structure.
-  }
+  // Avatar selected (from RPM or saved)
+  window.addEventListener("dhk:avatar-selected", (e) => {
+    const url = e.detail?.url;
+    if (!url) return;
+    chosenAvatarUrl = url;
+    console.log("🎯 Avatar chosen:", url);
+    document.getElementById("world-load")?.removeAttribute("disabled");
+    if (worldLoaded) replaceAvatar(url);
+  });
 
-  function wireRackPickers(products){
-    // (stub) — Hook your clickable “rack” meshes or UI buttons to swap meshes/materials.
-  }
-
+  // ---------- UI ----------
   function bindUI(canvas){
+    const viewBtn = document.getElementById("view-btn");
     const loadWorldBtn = document.getElementById("world-load");
+
     loadWorldBtn?.addEventListener("click", async () => {
       if (worldLoaded) return;
-      loadWorldBtn.disabled = true;
-      loadWorldBtn.textContent = "Loading…";
-      try {
-        await loadWorld();
+      loadWorldBtn.disabled = true; loadWorldBtn.textContent = "Loading…";
+      try{
+        await loadWorldOnce();
         loadWorldBtn.textContent = "World Loaded";
         const modal = document.getElementById("avatar-modal");
-        if (modal) modal.style.display = "none";
-        document.documentElement.classList.remove("avatar-open"); /* NEW */
-      } catch (e) {
-        console.error(e);
+        if (modal && modal.style) modal.style.display = "none";
+      } catch(err){
+        console.error(err);
         alert("Could not load world.");
-        loadWorldBtn.disabled = false;
-        loadWorldBtn.textContent = "Load World";
+        loadWorldBtn.disabled = false; loadWorldBtn.textContent = "Load World";
       }
     });
 
-    // Camera toggle (example: you already have #view-btn)
-    const viewBtn = document.getElementById("view-btn");
-    let thirdPerson = true;
     viewBtn?.addEventListener("click", () => {
-      thirdPerson = !thirdPerson;
-      if (thirdPerson) {
-        scene.activeCamera?.dispose?.();
-        scene.activeCamera = new BABYLON.ArcRotateCamera("arc", Math.PI * 1.2, 1.0, 6.5, new BABYLON.Vector3(0, 1.6, 0), scene);
-        scene.activeCamera.attachControl(canvas, true);
-        viewBtn.textContent = "3rd Person";
-      } else {
-        scene.activeCamera?.dispose?.();
-        const cam = new BABYLON.UniversalCamera("fps", new BABYLON.Vector3(spawnPoint.x, spawnPoint.y + 1.7, spawnPoint.z - 2), scene);
-        cam.minZ = 0.05; cam.speed = 0.35; cam.inertia = 0.7; cam.angularSensibility = 5000;
-        cam.applyGravity = true; cam.checkCollisions = true; cam.ellipsoid = new BABYLON.Vector3(0.35, 0.9, 0.35);
-        cam.attachControl(canvas, true);
-        scene.activeCamera = cam;
-        viewBtn.textContent = "1st Person";
-      }
+      isFirstPerson = !isFirstPerson;
+      const active = scene.activeCamera; active?.detachControl(canvas);
+      if (isFirstPerson){ scene.activeCamera = makeFPSCam(canvas); viewBtn.textContent = "1st Person"; if (!/Mobi|Android/i.test(navigator.userAgent)) canvas.requestPointerLock?.(); }
+      else { document.exitPointerLock?.(); scene.activeCamera = makeArcCam(canvas); viewBtn.textContent = "3rd Person"; }
     });
   }
 
+  // ---------- Init ----------
   async function init(){
     try{
       console.log("🚀 Initializing...");
-      const avatarUrl = await window.DHKAuth.requireAuthAndAvatar(); // waits for login + choose avatar
+      const avatarUrl = await window.DHKAuth.requireAuthAndAvatar();
       chosenAvatarUrl = avatarUrl || "";
 
       const canvas = document.getElementById("renderCanvas");
@@ -203,12 +181,11 @@
       scene.gravity = new BABYLON.Vector3(0,-0.5,0);
 
       scene.activeCamera = makeArcCam(canvas);
-      buildLights();
+      new BABYLON.HemisphericLight("h", new BABYLON.Vector3(0,1,0), scene).intensity = 0.9;
 
-      // Show the avatar immediately (will be re-placed after the world loads)
+      // (optional) show avatar immediately; re-place after world loads
       if (chosenAvatarUrl) { await replaceAvatar(chosenAvatarUrl); }
 
-      // Products bar (optional)
       try{
         const products = await fetchJSON(DATA_URL);
         buildOutfitBar(products);
@@ -216,23 +193,40 @@
       } catch (err){ console.warn("Products failed to load:", err); }
 
       bindUI(canvas);
-
-      // Render loop
       engine.runRenderLoop(() => scene.render());
       window.addEventListener("resize", () => engine.resize());
-    } catch (err) {
+    } catch(err){
       console.error("❌ init() failed:", err);
     }
   }
 
-  // When an avatar is selected after init, remember & prep world button
-  window.addEventListener("dhk:avatar-selected", (e) => {
-    const url = e.detail?.url;
-    if (!url) return;
-    chosenAvatarUrl = url;
-    document.getElementById("world-load")?.removeAttribute("disabled");
-    if (worldLoaded) replaceAvatar(url);
-  });
+  // ---------- Outfit ----------
+  function buildOutfitBar(products){
+    const panel = document.getElementById("outfit-panel"); if (!panel) return;
+    const wearable = products.filter(p => p.images && p.images.length);
+    panel.innerHTML = wearable.map(p => `<button class="btn" data-id="${p.id}" title="${p.title}">${p.title.replace("The Dark Harlem ","")}</button>`).join("");
+    panel.addEventListener("click", async (e) => {
+      const btn = e.target.closest("button[data-id]"); if (!btn) return;
+      const id = btn.getAttribute("data-id");
+      try { await wearGarment(`assets/3d/clothes/${id}.glb`); }
+      catch { alert("Garment not available yet."); }
+    });
+  }
+
+  async function wearGarment(){ /* hook when clothes assets are ready */ }
+
+  function wireRackPickers(products){
+    const byId = Object.fromEntries(products.map(p => [p.id, p]));
+    scene.meshes.forEach(m => {
+      const match = /^(rack|hanger)_(.+)$/i.exec(m.name || ""); if (!match) return;
+      const productId = match[2]; if (!byId[productId]) return;
+      m.actionManager = new BABYLON.ActionManager(scene);
+      m.actionManager.registerAction(new BABYLON.ExecuteCodeAction(
+        BABYLON.ActionManager.OnPickTrigger,
+        async () => { try { await wearGarment(`assets/3d/clothes/${productId}.glb`); } catch { alert("Garment not available yet."); } }
+      ));
+    });
+  }
 
   document.addEventListener("DOMContentLoaded", init);
 })();
