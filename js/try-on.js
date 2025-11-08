@@ -158,6 +158,7 @@
         loadWorldBtn.textContent = "World Loaded";
         const modal = document.getElementById("avatar-modal");
         if (modal) modal.style.display = "none";
+        document.documentElement.classList.remove("avatar-open"); /* NEW */
       } catch (e) {
         console.error(e);
         alert("Could not load world.");
