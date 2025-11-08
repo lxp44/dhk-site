@@ -172,7 +172,7 @@
     }
 
     show(modalEl);
-
+document.documentElement.classList.add("avatar-open"); /* NEW */
     const saved = getSavedAvatarUrl();
     if (saved) {
       announceAvatar(saved);
