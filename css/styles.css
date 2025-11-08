@@ -1006,3 +1006,94 @@ body.modal-open .dhk-overlay { z-index: 1000 !important; }
     right: 12px;
   }
 }
+<style>
+  /* Overlay */
+  .avatar-overlay{
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(0,0,0,.78);
+    z-index: 10001;
+  }
+
+  /* Card */
+  .avatar-card{
+    width: min(96vw, 860px);
+    max-height: 90vh;
+    overflow: auto;
+    background: #0d0e10;
+    border: 1px solid rgba(255,255,255,.14);
+    border-radius: 18px;
+    box-shadow: 0 24px 80px rgba(0,0,0,.6);
+    padding: 18px 18px 20px;
+  }
+
+  /* Title glow to match "before" */
+  .avatar-title{
+    margin: 2px 2px 12px;
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    font-size: 18px;
+    color: #e9ecf7;
+    text-shadow:
+      0 0 6px rgba(255,255,255,.35),
+      0 0 18px rgba(80,140,255,.25);
+  }
+
+  /* Top actions (pills) */
+  .avatar-actions{
+    display: flex; flex-wrap: wrap; gap: 10px;
+    margin-bottom: 12px;
+  }
+  .avatar-actions .btn{
+    background: rgba(255,255,255,.08);
+    border: 1px solid rgba(255,255,255,.18);
+    border-radius: 999px;
+    color: #dbe2ff;
+    padding: 10px 14px;
+    font: 600 12px/1 'Cinzel', serif;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    box-shadow: 0 0 0 1px rgba(0,0,0,.2) inset;
+  }
+  .avatar-actions .btn:disabled{
+    opacity: .45;
+  }
+
+  /* The big stage box (restores the large black panel look) */
+  .avatar-stage{
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 14px;
+    background: #0b0c0f;
+    /* This height is what makes it feel like the "before" screenshot */
+    height: min(58vh, 560px);
+    min-height: 360px;
+    overflow: hidden;
+  }
+  .avatar-stage iframe{
+    width: 100%; height: 100%; border: 0; display: block;
+    background: #0b0c0f;
+  }
+
+  /* URL entry panel (same width, subtle) */
+  .avatar-url{
+    margin-top: 12px;
+    border: 1px solid rgba(255,255,255,.10);
+    border-radius: 12px;
+    padding: 12px;
+    background: #0f1013;
+  }
+  .avatar-url label{
+    display:block; font-size:12px; opacity:.8; margin-bottom:6px;
+    letter-spacing:.06em; text-transform:uppercase; font-family:'Cinzel',serif;
+  }
+  .avatar-url input{
+    width:100%; padding:10px;
+    background:#121214; color:#fff;
+    border:1px solid #2a2a2a; border-radius:8px;
+  }
+  .avatar-url .url-actions{ margin-top:8px; display:flex; gap:8px; }
+</style>
