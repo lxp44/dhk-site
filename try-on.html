@@ -8,83 +8,55 @@
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/styles.css">
 
-  <!-- Force apex -> www BEFORE anything else -->
+  <!-- Always use www. for Identity cookie consistency -->
   <script>
-    (function () {
-      var host = location.hostname;
-      if (host === "darkharlemknight.com") {
+    (function(){
+      const h = location.hostname;
+      if (h === "darkharlemknight.com") {
         location.replace("https://www.darkharlemknight.com" + location.pathname + location.search + location.hash);
       }
     })();
   </script>
 
-  <!-- Ready Player Me helper (optional but harmless to keep) -->
-  <script src="https://unpkg.com/@readyplayerme/visage@latest/dist/index.umd.js" defer></script>
+  <!-- Netlify Identity -->
+  <script defer src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 
-  <!-- Netlify Identity widget (load ONCE) -->
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js" defer></script>
+  <!-- Initialize Identity -->
+  <script>
+    document.addEventListener("DOMContentLoaded",()=>{
+      if(!window.netlifyIdentity) return;
+      const API_URL="https://www.darkharlemknight.com/.netlify/identity";
+      netlifyIdentity.init({ APIUrl:API_URL });
 
-  <!-- Keep Identity modal above all UI -->
+      // When login succeeds → close widget & continue
+      netlifyIdentity.on("login",(user)=>{
+        console.log("[ID] Logged in:",user.email);
+        netlifyIdentity.close();
+        document.dispatchEvent(new CustomEvent("dhk:identity-ready",{detail:{user}}));
+      });
+      netlifyIdentity.on("error",(e)=>console.warn("[ID] error",e));
+    });
+  </script>
+
   <style>
     body,html{margin:0;height:100%;background:#0a0a0a;color:#eaeaea;}
     #tryon-root{position:relative;height:100vh;width:100vw;overflow:hidden;}
     #renderCanvas{width:100%;height:100%;display:block;outline:none}
     .hud{position:absolute;inset:0;pointer-events:none}
     .hud .topbar{pointer-events:auto;position:absolute;top:12px;left:12px;right:12px;display:flex;gap:8px;align-items:center;justify-content:space-between}
-    .chip{background:rgba(255,255,255,.06);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.12);padding:8px 12px;border-radius:999px;font:600 12px/1 'Cinzel', serif;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap}
+    .chip{background:rgba(255,255,255,.06);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.12);padding:8px 12px;border-radius:999px;font:600 12px/1 'Cinzel',serif;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap}
     .btn{pointer-events:auto;cursor:pointer}
     .panel{pointer-events:auto;position:absolute;bottom:16px;left:50%;transform:translateX(-50%);display:flex;gap:8px;align-items:center}
     .panel .btn{padding:10px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.08)}
     .legend{position:absolute;bottom:16px;right:16px;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.16);padding:8px 10px;border-radius:10px;font:12px/1.4 Roboto,system-ui}
-
-    /* Identity modal on top */
-    #netlify-identity-widget,
-    .netlify-identity-widget,.netlify-identity-modal,.netlify-identity-root{
-      position:fixed!important; inset:0!important; width:100vw!important; height:100vh!important;
-      z-index:2147483647!important; pointer-events:auto!important;
-    }
-    html.netlify-identity-open, body.netlify-identity-open{ overflow:hidden!important; touch-action:none!important; }
-
-    /* Bottom dock */
-    .dock{
-      position: fixed; left: 50%; transform: translateX(-50%);
-      bottom: max(14px, env(safe-area-inset-bottom));
-      display: flex; gap: 10px; z-index: 9999; pointer-events: auto;
-    }
-    .dock .btn{
-      -webkit-appearance:none; appearance:none;
-      background: rgba(255,255,255,.08);
-      border:1px solid rgba(255,255,255,.16);
-      border-radius:12px; color:#fff; padding:10px 14px;
-      font:600 12px/1 'Cinzel', serif; letter-spacing:.1em; text-transform:uppercase;
-      cursor:pointer;
-    }
-    @media (max-width:900px){
-      .hud .topbar{display:none}
-      .dock .btn{font-size:11px;padding:10px 12px;border-radius:999px;letter-spacing:.08em}
-      .legend{display:none}
-    }
+    #netlify-identity-widget,.netlify-identity-widget,.netlify-identity-modal,.netlify-identity-root{position:fixed!important;inset:0!important;width:100vw!important;height:100vh!important;z-index:2147483647!important;pointer-events:auto!important}
   </style>
 </head>
 <body>
-  <!-- Header strip (kept minimal so canvas fills screen) -->
-  <div class="section-header header-wrapper color-scheme-4 gradient" data-sticky-type="on-scroll-up">
-    <header class="site-header header header--middle-left header--mobile-center">
-      <div class="page-width header-grid">
-        <nav class="nav-left desktop-only"><a class="nav-link" href="index.html">Home</a></nav>
-        <a class="header__logo" href="index.html" aria-label="DarkHarlemKnight">
-          <img src="assets/img/DHK_transparent.gif" alt="DarkHarlemKnight" width="120" height="120" loading="eager"/>
-        </a>
-        <nav class="nav-right desktop-only"><a href="cart.html" class="nav-link button--ghost" aria-label="Cart">Cart</a></nav>
-      </div>
-    </header>
-  </div>
-
   <main id="tryon-root">
     <canvas id="renderCanvas"></canvas>
 
     <div class="hud">
-      <!-- Desktop top bar -->
       <div class="topbar">
         <div class="chip">TRY ON — DHK CLOSET</div>
         <div>
@@ -95,81 +67,64 @@
         </div>
       </div>
 
-      <!-- Outfit buttons (populated by JS) -->
       <div class="panel" id="outfit-panel"></div>
-
-      <!-- Controls legend -->
-      <div class="legend">
-        <b>Controls</b><br/>WASD to move • Mouse to look • V to switch view • E to interact
-      </div>
+      <div class="legend"><b>Controls</b><br/>WASD to move • Mouse to look • V to switch view • E to interact</div>
 
       <!-- AUTH GATE -->
-      <div id="auth-gate" style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; background:#000; color:#fff; z-index:10000; flex-direction:column; gap:14px;">
-        <div style="font-family:'Cinzel',serif; letter-spacing:.12em; text-transform:uppercase;">Sign in to enter the DHK Closet</div>
-        <button id="gate-signin" class="btn chip" style="pointer-events:auto;">Sign In</button>
+      <div id="auth-gate" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:#000;color:#fff;z-index:10000;flex-direction:column;gap:14px;">
+        <div style="font-family:'Cinzel',serif;letter-spacing:.12em;text-transform:uppercase;">Sign in to enter the DHK Closet</div>
+        <button id="gate-signin" class="btn chip">Sign In</button>
       </div>
 
       <!-- AVATAR MODAL -->
-      <div id="avatar-modal" style="position:absolute; inset:0; background:rgba(0,0,0,.78); z-index:10001; display:none; align-items:center; justify-content:center;">
-        <div style="background:#0f0f10; border:1px solid rgba(255,255,255,.15); border-radius:14px; padding:18px; width:min(92vw,720px); max-height:90vh; overflow:auto;">
-          <h3 style="margin:0 0 10px; font-family:'Cinzel',serif; letter-spacing:.12em; text-transform:uppercase;">Choose your avatar</h3>
-
-          <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:12px;">
+      <div id="avatar-modal" style="position:absolute;inset:0;background:rgba(0,0,0,.78);z-index:10001;display:none;align-items:center;justify-content:center;">
+        <div style="background:#0f0f10;border:1px solid rgba(255,255,255,.15);border-radius:14px;padding:18px;width:min(92vw,720px);max-height:90vh;overflow:auto;">
+          <h3 style="margin:0 0 10px;font-family:'Cinzel',serif;letter-spacing:.12em;text-transform:uppercase;">Choose your avatar</h3>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;">
             <button id="avatar-create" class="btn chip">Create new</button>
-            <button id="avatar-load"   class="btn chip">Load saved</button>
-            <button id="world-load"    class="btn chip" disabled>Load World</button>
+            <button id="avatar-load" class="btn chip">Load saved</button>
+            <button id="world-load" class="btn chip" disabled>Load World</button>
           </div>
-
-          <!-- inside the AVATAR MODAL in try-on.html -->
-<div id="rpm-wrap" style="display:none; border:1px solid rgba(255,255,255,.12); border-radius:10px;">
-  <iframe id="rpm-iframe" src="" style="width:100%; height:540px; border:0;"
-          allow="camera; microphone; autoplay; clipboard-write" allowfullscreen></iframe>
-</div>
-
-          <div id="url-wrap" style="display:none; margin-top:10px;">
-            <label for="avatar-url-input" style="display:block; font-size:12px; opacity:.8; margin-bottom:6px;">Paste avatar URL</label>
-            <input id="avatar-url-input" type="url" placeholder="https://models.readyplayer.me/xxxxxxxx.glb" style="width:100%; padding:10px; background:#121214; color:#fff; border:1px solid #2a2a2a; border-radius:8px;">
-            <div style="margin-top:8px; display:flex; gap:8px;">
+          <div id="rpm-wrap" style="display:none;border:1px solid rgba(255,255,255,.12);border-radius:10px;">
+            <iframe id="rpm-iframe" src="" style="width:100%;height:540px;border:0;" allow="camera;microphone;autoplay;clipboard-write"></iframe>
+          </div>
+          <div id="url-wrap" style="display:none;margin-top:10px;">
+            <label style="display:block;font-size:12px;opacity:.8;margin-bottom:6px;">Paste avatar URL</label>
+            <input id="avatar-url-input" type="url" placeholder="https://..." style="width:100%;padding:10px;background:#121214;color:#fff;border:1px solid #2a2a2a;border-radius:8px;">
+            <div style="margin-top:8px;display:flex;gap:8px;">
               <button id="avatar-url-save" class="btn chip">Save</button>
-              <button id="avatar-cancel"    class="btn chip">Cancel</button>
+              <button id="avatar-cancel" class="btn chip">Cancel</button>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Bottom dock (jukebox proxies kept) -->
+    <!-- DOCK -->
     <div id="jukebox-controls" class="dock">
-      <button id="auth-btn-dock"   class="btn">Sign In</button>
-      <button id="view-btn-dock"   class="btn">3rd Person</button>
-      <button id="music-btn-dock"  class="btn">Play Music</button>
+      <button id="auth-btn-dock" class="btn">Sign In</button>
+      <button id="view-btn-dock" class="btn">3rd Person</button>
+      <button id="music-btn-dock" class="btn">Play Music</button>
       <button id="music-next-dock" class="btn">Next Track</button>
     </div>
   </main>
 
-  <!-- Dock proxies + Identity open -->
+  <!-- Proxy buttons -->
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const proxy = (fromId, toId) =>
-        document.getElementById(fromId)?.addEventListener('click', () =>
-          document.getElementById(toId)?.click()
-        );
-      proxy('auth-btn-dock',  'auth-btn');
-      proxy('view-btn-dock',  'view-btn');
-      proxy('music-btn-dock', 'music-btn');
-      proxy('music-next-dock','music-next');
-
-      document.getElementById('auth-btn')   ?.addEventListener('click', () => window.netlifyIdentity?.open('login'));
-      document.getElementById('gate-signin')?.addEventListener('click', () => window.netlifyIdentity?.open('login'));
+    document.addEventListener("DOMContentLoaded",()=>{
+      document.getElementById("auth-btn")?.addEventListener("click",()=>window.netlifyIdentity?.open("login"));
+      document.getElementById("gate-signin")?.addEventListener("click",()=>window.netlifyIdentity?.open("login"));
+      ["auth-btn-dock","view-btn-dock","music-btn-dock","music-next-dock"].forEach(id=>{
+        const main=id.replace("-dock","");
+        document.getElementById(id)?.addEventListener("click",()=>document.getElementById(main)?.click());
+      });
     });
   </script>
 
-  <!-- Babylon -->
+  <!-- Babylon & DHK scripts -->
   <script src="https://cdn.babylonjs.com/babylon.js" defer></script>
   <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js" defer></script>
-
-  <!-- DHK scripts -->
-  <script src="/js/try-on-auth.js?v=2025-11-08" defer></script>
-  <script src="/js/try-on.js?v=2025-11-08" defer></script>
+  <script src="js/try-on-auth.js?v=20251108" defer></script>
+  <script src="js/try-on.js?v=20251108" defer></script>
 </body>
 </html>
