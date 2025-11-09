@@ -2,6 +2,7 @@
 (() => {
   const DATA_URL  = "data/products.json";
   const WORLD_URL = "assets/3d/bedroom.glb";
+  /assets/3d/*  /assets/3d/:splat  200
 
   let engine, scene, avatar;
   let isFirstPerson = false;
