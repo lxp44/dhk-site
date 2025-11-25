@@ -5,37 +5,55 @@
 
   // ===========================
   //  STRIPE (Optional) - Frontend publishable key
-  //  If you want to use stripe.redirectToCheckout() instead of simple URL redirect,
-  //  paste your publishable key here and load Stripe.js in your HTML:
-  //    <script src="https://js.stripe.com/v3/"></script>
-  //  Then set STRIPE_PUBLISHABLE_KEY below.
-  //  For server-redirect mode (recommended), leave as an empty string.
   // ===========================
   const STRIPE_PUBLISHABLE_KEY = ""; // e.g. "pk_test_123..." if you choose to use Stripe.js redirect
 
-  const STORAGE_KEY = "dhk_cart_v1";
+  const STORAGE_KEY = 'dhk_cart_v1';
 
-  // ----- Discount code (PLUS = 25% off) -----
-  const DISCOUNT_CODE = "PLUS";
-  const DISCOUNT_RATE = 0.25; // 25% of subtotal
-  const DISCOUNT_STORAGE_KEY = "dhk_discount_code";
+  // ---- Discount config (PLUS = 25% off) ----
+  const DISCOUNT_STORAGE_KEY = 'dhk_discount_v1';
+  const DISCOUNT_CODES = {
+    PLUS: 0.25, // 25% off
+  };
 
-  let currentDiscountCode = null;
+  function getDiscountState() {
+    try {
+      const raw = localStorage.getItem(DISCOUNT_STORAGE_KEY);
+      if (!raw) return { code: null, percent: 0 };
+      const parsed = JSON.parse(raw);
+      if (!parsed || !parsed.code || !parsed.percent) {
+        return { code: null, percent: 0 };
+      }
+      return parsed;
+    } catch {
+      return { code: null, percent: 0 };
+    }
+  }
+
+  function setDiscountState(code, percent) {
+    if (!code || !percent) {
+      localStorage.removeItem(DISCOUNT_STORAGE_KEY);
+    } else {
+      localStorage.setItem(
+        DISCOUNT_STORAGE_KEY,
+        JSON.stringify({ code, percent })
+      );
+    }
+  }
 
   // ---------- Price helpers ----------
   function toCents(v) {
     if (v == null) return 0;
-    if (typeof v === "number" && Number.isFinite(v)) {
+    if (typeof v === 'number' && Number.isFinite(v)) {
       // Heuristic: treat small numbers as dollars, big as cents
       return v >= 1000 ? Math.round(v) : Math.round(v * 100);
     }
-    if (typeof v === "string") {
-      const clean = v.replace(/[$,\s]/g, "");
+    if (typeof v === 'string') {
+      const clean = v.replace(/[$,\s]/g, '');
       if (!clean) return 0;
       const n = Number(clean);
       if (!Number.isFinite(n)) return 0;
-      // If original had a dot, we know it was dollars
-      return v.includes(".") ? Math.round(n * 100) : Math.round(n * 100);
+      return Math.round(n * 100);
     }
     const n = Number(v);
     return Number.isFinite(n) ? Math.round(n * 100) : 0;
@@ -45,25 +63,21 @@
   function centsFromElement(el) {
     if (!el) return 0;
     // prefer cents attribute
-    const pc = el.getAttribute("data-price-cents");
+    const pc = el.getAttribute('data-price-cents');
     if (pc != null) {
       const n = Number(pc);
       return Number.isFinite(n) ? Math.round(n) : 0;
     }
     // fallback dollars attribute
-    const pd = el.getAttribute("data-price");
+    const pd = el.getAttribute('data-price');
     if (pd != null) return toCents(pd);
     return 0;
   }
 
   const fmt = (n) =>
-    (n || 0).toLocaleString(undefined, {
-      style: "currency",
-      currency: "USD",
-    });
-
+    (n || 0).toLocaleString(undefined, { style: 'currency', currency: 'USD' });
   const keyFor = (item) =>
-    item.id + (item.variant ? `__${item.variant}` : "");
+    item.id + (item.variant ? `__${item.variant}` : '');
 
   // ---------- Storage (with migration) ----------
   function migrateItems(items) {
@@ -83,7 +97,7 @@
         out.priceCents = Math.round(Number(out.priceCents)) || 0;
       }
       // ensure stripePriceId field exists (for older carts)
-      if (!("stripePriceId" in out)) out.stripePriceId = null;
+      if (!('stripePriceId' in out)) out.stripePriceId = null;
       return out;
     });
   }
@@ -119,54 +133,9 @@
   const subtotalCents = (items) =>
     (items || []).reduce(
       (sum, it) =>
-        sum +
-        (Number(it.priceCents) || 0) * (Number(it.qty) || 1),
+        sum + (Number(it.priceCents) || 0) * (Number(it.qty) || 1),
       0
     );
-
-  // ---------- Summary (subtotal / discount / total) ----------
-  function updateSummaryUI(items) {
-    const subCents = subtotalCents(items);
-    const subtotalDrawer = document.getElementById("cart-subtotal");
-    const subtotalPage = document.getElementById("cartp-subtotal");
-
-    // Show subtotal (before discount) wherever it exists
-    if (subtotalDrawer)
-      subtotalDrawer.textContent = fmt(subCents / 100);
-    if (subtotalPage) subtotalPage.textContent = fmt(subCents / 100);
-
-    // Drawer discount elements
-    const discountRow = document.getElementById("cart-discount-row");
-    const discountLabelEl =
-      document.getElementById("cart-discount-label");
-    const discountAmtEl =
-      document.getElementById("cart-discount-amount");
-    const totalEl = document.getElementById("cart-total");
-
-    let discountCents = 0;
-
-    if (
-      currentDiscountCode &&
-      currentDiscountCode.toUpperCase() === DISCOUNT_CODE
-    ) {
-      discountCents = Math.round(subCents * DISCOUNT_RATE);
-
-      if (discountRow) discountRow.hidden = subCents === 0;
-      if (discountLabelEl)
-        discountLabelEl.textContent =
-          currentDiscountCode.toUpperCase();
-      if (discountAmtEl)
-        discountAmtEl.textContent =
-          "- " + fmt(discountCents / 100);
-    } else {
-      if (discountRow) discountRow.hidden = true;
-      if (discountAmtEl)
-        discountAmtEl.textContent = "- " + fmt(0);
-    }
-
-    const totalCents = Math.max(0, subCents - discountCents);
-    if (totalEl) totalEl.textContent = fmt(totalCents / 100);
-  }
 
   // ---------- Public API ----------
   function add(item, options = { open: true }) {
@@ -177,8 +146,7 @@
     // Resolve price in cents with multiple fallbacks
     let priceCents = 0;
     if (item.priceCents != null) {
-      priceCents =
-        Math.round(Number(item.priceCents)) || 0;
+      priceCents = Math.round(Number(item.priceCents)) || 0;
     } else if (item.price != null) {
       priceCents = toCents(item.price);
     } else if (item.el) {
@@ -186,10 +154,8 @@
     }
 
     if (i >= 0) {
-      items[i].qty =
-        (Number(items[i].qty) || 1) + 1;
-      if (!items[i].priceCents && priceCents)
-        items[i].priceCents = priceCents;
+      items[i].qty = (Number(items[i].qty) || 1) + 1;
+      if (!items[i].priceCents && priceCents) items[i].priceCents = priceCents;
       // keep existing stripePriceId if present; if missing and item has it, set it
       if (!items[i].stripePriceId && item.stripePriceId)
         items[i].stripePriceId = item.stripePriceId;
@@ -217,69 +183,59 @@
 
   // ---------- Element getters ----------
   const drawerEls = () => ({
-    wrapper: document.getElementById("cart-drawer"),
-    items: document.getElementById("cart-items"),
-    empty: document.getElementById("cart-empty"),
-    subtotal: document.getElementById("cart-subtotal"),
-    checkout: document.getElementById("cart-checkout"),
-    overlay: document.querySelector(
-      "#cart-drawer .cart-drawer__overlay"
-    ),
-    panel: document.querySelector(
-      "#cart-drawer .cart-drawer__panel"
-    ),
+    wrapper: document.getElementById('cart-drawer'),
+    items: document.getElementById('cart-items'),
+    empty: document.getElementById('cart-empty'),
+    subtotal: document.getElementById('cart-subtotal'),
+    checkout: document.getElementById('cart-checkout'),
+    overlay: document.querySelector('#cart-drawer .cart-drawer__overlay'),
+    panel: document.querySelector('#cart-drawer .cart-drawer__panel'),
   });
   const pageEls = () => ({
-    wrapper: document.getElementById("cart-page"),
-    items: document.getElementById("cartp-items"),
-    empty: document.getElementById("cartp-empty"),
-    subtotal: document.getElementById("cartp-subtotal"),
-    checkout: document.getElementById("cartp-checkout"),
+    wrapper: document.getElementById('cart-page'),
+    items: document.getElementById('cartp-items'),
+    empty: document.getElementById('cartp-empty'),
+    subtotal: document.getElementById('cartp-subtotal'),
+    checkout: document.getElementById('cartp-checkout'),
   });
 
   function getContext() {
     const d = drawerEls();
-    if (d.items && d.empty && d.subtotal)
-      return { type: "drawer", ...d };
+    if (d.items && d.empty && d.subtotal) return { type: 'drawer', ...d };
     const p = pageEls();
-    if (p.items && p.empty && p.subtotal)
-      return { type: "page", ...p };
-    return { type: "none" };
+    if (p.items && p.empty && p.subtotal) return { type: 'page', ...p };
+    return { type: 'none' };
   }
 
   // ---------- Drawer control ----------
   function openDrawer() {
     const ctx = getContext();
-    if (ctx.type !== "drawer") return;
-    ctx.wrapper.classList.add("is-open");
-    ctx.wrapper.setAttribute("aria-hidden", "false");
-    document.documentElement.classList.add("no-scroll");
+    if (ctx.type !== 'drawer') return;
+    ctx.wrapper.classList.add('is-open');
+    ctx.wrapper.setAttribute('aria-hidden', 'false');
+    document.documentElement.classList.add('no-scroll');
     ctx.panel?.focus();
   }
   function closeDrawer() {
     const ctx = getContext();
-    if (ctx.type !== "drawer") return;
-    ctx.wrapper.classList.remove("is-open");
-    ctx.wrapper.setAttribute("aria-hidden", "true");
-    document.documentElement.classList.remove("no-scroll");
+    if (ctx.type !== 'drawer') return;
+    ctx.wrapper.classList.remove('is-open');
+    ctx.wrapper.setAttribute('aria-hidden', 'true');
+    document.documentElement.classList.remove('no-scroll');
   }
 
   // ---------- Row HTML ----------
   function rowHtml(it) {
-    const each = fmt(
-      (Number(it.priceCents) || 0) / 100
-    );
+    const each = fmt((Number(it.priceCents) || 0) / 100);
     const line = fmt(
-      ((Number(it.priceCents) || 0) *
-        (Number(it.qty) || 1)) /
-        100
+      ((Number(it.priceCents) || 0) * (Number(it.qty) || 1)) / 100
     );
     const thumb = it.thumbnail
       ? `<img src="${it.thumbnail}" alt="" loading="lazy" />`
-      : "";
+      : '';
     const variant = it.variant
       ? `<div class="ci__variant">${it.variant}</div>`
-      : "";
+      : '';
     const titleHtml = it.url
       ? `<a class="ci__title" href="${it.url}">${it.title}</a>`
       : `<div class="ci__title">${it.title}</div>`;
@@ -307,66 +263,86 @@
     const ctx = getContext();
     const items = read();
 
-    if (ctx.type === "none") {
+    if (ctx.type === 'none') {
       updateHeaderCount();
       return;
     }
 
+    const discountState = getDiscountState();
+
     if (items.length === 0) {
-      ctx.items.innerHTML = "";
+      ctx.items.innerHTML = '';
       ctx.empty.hidden = false;
-      updateSummaryUI([]); // subtotal = 0, discount cleared, total = 0
+
+      // clear discount message if any
+      const msgEl = document.getElementById('cart-discount-message');
+      const amtEl = document.getElementById('cart-discount-amount');
+      if (msgEl) msgEl.textContent = '';
+      if (amtEl) amtEl.textContent = '';
+
+      ctx.subtotal.textContent = fmt(0);
       if (ctx.checkout) ctx.checkout.disabled = true;
       return;
     }
 
     ctx.empty.hidden = true;
-    ctx.items.innerHTML = items.map(rowHtml).join("");
-    updateSummaryUI(items); // subtotal / discount / total
+    ctx.items.innerHTML = items.map(rowHtml).join('');
+
+    const baseSubtotal = subtotalCents(items);
+    let finalSubtotal = baseSubtotal;
+    let discountCents = 0;
+
+    if (discountState.code && discountState.percent > 0) {
+      discountCents = Math.round(baseSubtotal * discountState.percent);
+      finalSubtotal = baseSubtotal - discountCents;
+    }
+
+    const amtEl = document.getElementById('cart-discount-amount');
+    if (amtEl) {
+      if (discountCents > 0) {
+        amtEl.textContent = `- ${fmt(discountCents / 100)}`;
+      } else {
+        amtEl.textContent = '';
+      }
+    }
+
+    ctx.subtotal.textContent = fmt(finalSubtotal / 100);
     if (ctx.checkout) ctx.checkout.disabled = false;
   }
 
   // ---------- Header bubble ----------
   function updateHeaderCount() {
     const items = read();
-    const count = items.reduce(
-      (n, it) => n + (Number(it.qty) || 1),
-      0
+    const count = items.reduce((n, it) => n + (Number(it.qty) || 1), 0);
+
+    document.querySelectorAll('[data-cart-count], .cart-count').forEach(
+      (el) => {
+        el.textContent = count > 0 ? String(count) : '';
+        if ('hidden' in el) el.hidden = count === 0;
+      }
     );
 
-    document
-      .querySelectorAll("[data-cart-count], .cart-count")
-      .forEach((el) => {
-        el.textContent =
-          count > 0 ? String(count) : "";
-        if ("hidden" in el) el.hidden = count === 0;
-      });
-
-    let bubble = document.getElementById("cart-count");
+    let bubble = document.getElementById('cart-count');
     if (!bubble) {
-      const cartLink = document.querySelector(
-        'a[aria-label="Cart"]'
-      );
+      const cartLink = document.querySelector('a[aria-label="Cart"]');
       if (cartLink) {
-        bubble = document.createElement("span");
-        bubble.id = "cart-count";
-        bubble.className = "cart-count-bubble";
+        bubble = document.createElement('span');
+        bubble.id = 'cart-count';
+        bubble.className = 'cart-count-bubble';
         cartLink.appendChild(bubble);
       }
     }
-    if (bubble)
-      bubble.textContent =
-        count > 0 ? String(count) : "";
+    if (bubble) bubble.textContent = count > 0 ? String(count) : '';
   }
 
   // ---------- Events ----------
   function onItemsClick(e) {
-    const row = e.target.closest(".cart-item");
+    const row = e.target.closest('.cart-item');
     if (!row) return;
-    const key = row.getAttribute("data-key");
+    const key = row.getAttribute('data-key');
     if (!key) return;
 
-    if (e.target.matches("[data-remove]")) {
+    if (e.target.matches('[data-remove]')) {
       remove(key);
       return;
     }
@@ -375,15 +351,11 @@
     const idx = items.findIndex((it) => it.key === key);
     if (idx === -1) return;
 
-    if (e.target.matches("[data-incr]")) {
-      items[idx].qty =
-        (Number(items[idx].qty) || 1) + 1;
+    if (e.target.matches('[data-incr]')) {
+      items[idx].qty = (Number(items[idx].qty) || 1) + 1;
       write(items);
-    } else if (e.target.matches("[data-decr]")) {
-      const next = Math.max(
-        0,
-        (Number(items[idx].qty) || 1) - 1
-      );
+    } else if (e.target.matches('[data-decr]')) {
+      const next = Math.max(0, (Number(items[idx].qty) || 1) - 1);
       if (next === 0) items.splice(idx, 1);
       else items[idx].qty = next;
       write(items);
@@ -400,43 +372,29 @@
         .filter((it) => it.stripePriceId) // only items that have a Stripe price
         .map((it) => ({
           price: it.stripePriceId,
-          quantity:
-            Math.max(1, Number(it.qty) || 1),
+          quantity: Math.max(1, Number(it.qty) || 1),
         }));
 
       if (lineItems.length === 0) {
-        alert(
-          "Your cart items are missing Stripe price IDs."
-        );
+        alert('Your cart items are missing Stripe price IDs.');
         return;
       }
 
-      // Call Netlify function to create a Checkout Session
-      const res = await fetch(
-        "/.netlify/functions/create-checkout-session",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            items: lineItems,
-            success_url:
-              window.location.origin + "/success.html",
-            cancel_url:
-              window.location.origin + "/cancel.html",
-            // pass discount code along; your Netlify function
-            // can choose to apply a real Stripe coupon
-            discount_code:
-              currentDiscountCode &&
-              currentDiscountCode.toUpperCase() ===
-                DISCOUNT_CODE
-                ? currentDiscountCode.toUpperCase()
-                : null,
-          }),
-        }
-      );
+      const discountState = getDiscountState();
 
-      if (!res.ok)
-        throw new Error("Checkout request failed");
+      // Call Netlify function to create a Checkout Session
+      const res = await fetch('/.netlify/functions/create-checkout-session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          items: lineItems,
+          discountCode: discountState.code || null, // sent to backend (optional use)
+          success_url: window.location.origin + '/success.html',
+          cancel_url: window.location.origin + '/cancel.html',
+        }),
+      });
+
+      if (!res.ok) throw new Error('Checkout request failed');
       const data = await res.json();
 
       // Default: simple redirect using the session URL from server (no publishable key needed)
@@ -447,138 +405,93 @@
 
       // OPTIONAL: If you prefer using Stripe.js redirect (requires publishable key + Stripe.js script)
       if (STRIPE_PUBLISHABLE_KEY && window.Stripe && data.id) {
-        const stripe = window.Stripe(
-          STRIPE_PUBLISHABLE_KEY
-        );
-        const { error } =
-          await stripe.redirectToCheckout({
-            sessionId: data.id,
-          });
+        const stripe = window.Stripe(STRIPE_PUBLISHABLE_KEY);
+        const { error } = await stripe.redirectToCheckout({
+          sessionId: data.id,
+        });
         if (error) throw error;
       } else {
-        alert(
-          "Stripe did not return a checkout URL."
-        );
+        alert('Stripe did not return a checkout URL.');
       }
     } catch (err) {
       console.error(err);
-      alert("Checkout failed. Please try again.");
+      alert('Checkout failed. Please try again.');
     }
   }
 
   function bindCheckoutButtons() {
-    const drawerBtn =
-      document.getElementById("cart-checkout");
-    const pageBtn =
-      document.getElementById("cartp-checkout");
+    const drawerBtn = document.getElementById('cart-checkout');
+    const pageBtn = document.getElementById('cartp-checkout');
 
     if (drawerBtn && !drawerBtn.__dhkBound) {
-      drawerBtn.addEventListener(
-        "click",
-        startCheckout
-      );
+      drawerBtn.addEventListener('click', startCheckout);
       drawerBtn.__dhkBound = true;
     }
     if (pageBtn && !pageBtn.__dhkBound) {
-      pageBtn.addEventListener(
-        "click",
-        startCheckout
-      );
+      pageBtn.addEventListener('click', startCheckout);
       pageBtn.__dhkBound = true;
     }
   }
 
-  // ---------- Discount code UI ----------
   function bindDiscountUI() {
-    const input = document.getElementById(
-      "cart-discount-input"
-    );
-    const applyBtn = document.getElementById(
-      "cart-discount-apply"
-    );
+    const input = document.getElementById('cart-discount-input');
+    const applyBtn = document.getElementById('cart-discount-apply');
+    const msgEl = document.getElementById('cart-discount-message');
 
     if (!input || !applyBtn) return;
 
-    // Load saved code (if any)
-    try {
-      const saved = localStorage.getItem(
-        DISCOUNT_STORAGE_KEY
-      );
-      if (
-        saved &&
-        saved.toUpperCase() === DISCOUNT_CODE
-      ) {
-        currentDiscountCode = saved.toUpperCase();
-        input.value = currentDiscountCode;
-      }
-    } catch {}
+    // restore saved code
+    const state = getDiscountState();
+    if (state.code) {
+      input.value = state.code;
+    }
 
-    const apply = () => {
-      const raw = (input.value || "")
-        .trim()
-        .toUpperCase();
-
+    function applyCode() {
+      const raw = (input.value || '').trim().toUpperCase();
       if (!raw) {
-        currentDiscountCode = null;
-        try {
-          localStorage.removeItem(DISCOUNT_STORAGE_KEY);
-        } catch {}
-        input.classList.remove("error");
-        updateSummaryUI(read());
+        setDiscountState(null, 0);
+        if (msgEl) msgEl.textContent = '';
+        render();
         return;
       }
 
-      if (raw === DISCOUNT_CODE) {
-        currentDiscountCode = raw;
-        try {
-          localStorage.setItem(
-            DISCOUNT_STORAGE_KEY,
-            raw
-          );
-        } catch {}
-        input.classList.remove("error");
+      const percent = DISCOUNT_CODES[raw] || 0;
+      if (percent > 0) {
+        setDiscountState(raw, percent);
+        if (msgEl) msgEl.textContent = `${Math.round(
+          percent * 100
+        )}% off applied.`;
       } else {
-        currentDiscountCode = null;
-        try {
-          localStorage.removeItem(DISCOUNT_STORAGE_KEY);
-        } catch {}
-        input.classList.add("error");
+        setDiscountState(null, 0);
+        if (msgEl) msgEl.textContent = 'Code not valid.';
       }
+      render();
+    }
 
-      updateSummaryUI(read());
-    };
-
-    applyBtn.addEventListener("click", apply);
-    input.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") {
+    applyBtn.addEventListener('click', applyCode);
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
         e.preventDefault();
-        apply();
+        applyCode();
       }
     });
-
-    // Initial summary with any saved code
-    updateSummaryUI(read());
   }
 
   function bindGlobalEvents() {
     // Drawer open/close
     document.addEventListener(
-      "click",
+      'click',
       (e) => {
-        if (e.target.closest("[data-cart-open]")) {
+        if (e.target.closest('[data-cart-open]')) {
           e.preventDefault();
           openDrawer();
         }
-        if (e.target.closest("[data-cart-close]")) {
+        if (e.target.closest('[data-cart-close]')) {
           e.preventDefault();
           closeDrawer();
         }
         const { type, overlay } = getContext();
-        if (
-          type === "drawer" &&
-          overlay &&
-          e.target === overlay
-        ) {
+        if (type === 'drawer' && overlay && e.target === overlay) {
           closeDrawer();
         }
       },
@@ -586,8 +499,8 @@
     );
 
     // Esc
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") closeDrawer();
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeDrawer();
     });
 
     // Items (delegate once per container)
@@ -595,10 +508,7 @@
       const ctx = getContext();
       const container = ctx.items;
       if (container && !container.__dhkBound) {
-        container.addEventListener(
-          "click",
-          onItemsClick
-        );
+        container.addEventListener('click', onItemsClick);
         container.__dhkBound = true;
       }
     };
@@ -613,21 +523,14 @@
   }
 
   // ---------- Init ----------
-  document.addEventListener("DOMContentLoaded", () => {
+  document.addEventListener('DOMContentLoaded', () => {
     render();
     updateHeaderCount();
     bindGlobalEvents();
     bindCheckoutButtons(); // wire checkout buttons
-    bindDiscountUI();      // wire discount code
+    bindDiscountUI();      // wire discount input
   });
 
   // Expose API
-  window.Cart = {
-    add,
-    remove,
-    clear,
-    read,
-    open: openDrawer,
-    close: closeDrawer,
-  };
+  window.Cart = { add, remove, clear, read, open: openDrawer, close: closeDrawer };
 })();
