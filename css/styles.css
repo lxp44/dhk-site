@@ -1191,3 +1191,26 @@ html.avatar-open #jukebox-controls{ display: none !important; }
   .avatar-card{ padding: 14px; border-radius: 16px; }
   .avatar-actions .btn{ padding: 9px 12px; font-size: 11px; letter-spacing: .08em; }
 }
+.cart-discount {
+  margin-bottom: 12px;
+  font-size: 12px;
+}
+.cart-discount-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+#cart-discount-input {
+  flex: 1;
+  padding: 6px 8px;
+}
+#cart-discount-apply {
+  padding: 6px 10px;
+}
+.cart-discount-meta {
+  margin-top: 4px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  opacity: 0.85;
+}
