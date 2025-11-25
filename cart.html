@@ -82,6 +82,7 @@
       cursor: pointer;
     }
     .cart-items .ci__remove:hover { color: #fff; }
+
     .cart-totals {
       display: flex; justify-content: flex-end; gap: 12px;
       font-family: 'Cinzel', serif;
@@ -92,6 +93,53 @@
     }
     .cart-totals__label { color: #d9d9d9; font-size: 12px; }
     .cart-totals__value { color: #fff; font-size: 14px; }
+
+    /* Discount block (cart page) */
+    .cart-discount-block {
+      margin-top: 18px;
+      margin-bottom: 6px;
+    }
+    .cart-discount-block label {
+      display:block;
+      font-family: 'Cinzel', serif;
+      font-weight: 700;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      font-size: 11px;
+      color:#dcdcdc;
+      margin-bottom:6px;
+    }
+    .cart-discount-row {
+      display:flex;
+      gap:8px;
+    }
+    .cart-discount-row input {
+      flex:1;
+      padding:8px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.25);
+      background:#101010;
+      color:#fff;
+      font: 500 13px/1 Roboto, system-ui, Arial, sans-serif;
+    }
+    .cart-discount-row button {
+      padding:8px 14px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.3);
+      background:#f1f1f1;
+      color:#000;
+      font:700 11px/1 'Cinzel', serif;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      cursor:pointer;
+      white-space:nowrap;
+    }
+    .cart-discount-message {
+      margin-top:4px;
+      font: 500 11px/1.3 Roboto, system-ui, Arial, sans-serif;
+      color:#d0d0d0;
+      min-height:1.3em;
+    }
   </style>
 </head>
 
@@ -101,7 +149,7 @@
   <div id="storm-overlay"><canvas id="rain-canvas"></canvas></div>
 
   <!-- Header & Nav (unchanged, same as other pages) -->
-  <!-- ... keep your full header/nav code here ... -->
+  <!-- include your normal header/nav here if not already -->
 
   <!-- ===== MAIN ===== -->
   <main id="MainContent" class="section">
@@ -116,6 +164,16 @@
 
       <!-- Items -->
       <div id="cartp-items" class="cart-items" aria-live="polite"></div>
+
+      <!-- Discount input (PAGE) -->
+      <div class="cart-discount-block">
+        <label for="cartp-discount-code">Add discount</label>
+        <div class="cart-discount-row">
+          <input id="cartp-discount-code" type="text" placeholder="Enter code (e.g. PLUS)" autocomplete="off">
+          <button type="button" id="cartp-apply-discount">Apply</button>
+        </div>
+        <p id="cartp-discount-message" class="cart-discount-message"></p>
+      </div>
 
       <!-- Totals -->
       <div class="cart-totals" style="margin-top:16px">
@@ -244,9 +302,8 @@
   <script src="js/shop.js"></script>
   <script src="js/newsletter.js"></script>
   <script src="js/storm_shopify_style.js"></script>
-  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
 
-  <!-- Cart Drawer -->
+  <!-- Cart Drawer (same as home/product pages) -->
   <div id="cart-drawer" class="cart-drawer" aria-hidden="true">
     <div class="cart-drawer__overlay" data-cart-close></div>
     <aside class="cart-drawer__panel" tabindex="-1">
@@ -259,6 +316,8 @@
       <div id="cart-empty" class="cart-empty" hidden style="padding:16px;color:#9a9a9a">
         Your cart is empty.
       </div>
+
+      <!-- (Optional) drawer discount UI – only works if you added the inputs in index.html/product.html, etc. -->
 
       <div class="cart-footer">
         <div class="cart-row">
