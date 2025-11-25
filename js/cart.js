@@ -367,13 +367,14 @@ function getContext() {
     }
   }
 
-  // ---------- Stripe Checkout ----------
+   // ---------- Stripe Checkout ----------
   async function startCheckout() {
     try {
       const items = read();
 
+      // Build Stripe line items from cart
       const lineItems = items
-        .filter(it => it.stripePriceId)
+        .filter(it => it.stripePriceId) // only items that have a Stripe price
         .map(it => ({
           price: it.stripePriceId,
           quantity: Math.max(1, Number(it.qty) || 1),
@@ -384,27 +385,47 @@ function getContext() {
         return;
       }
 
-      const discount = readDiscount();
+      // 🔹 Read discount info from localStorage (same place the cart page uses)
+      let discountCode = null;
+      let discountPercent = 0;
 
+      try {
+        const saved = localStorage.getItem('dhk_discount_v1');
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (parsed && parsed.code && parsed.percent) {
+            discountCode = String(parsed.code).toUpperCase();
+            discountPercent = Number(parsed.percent) || 0;
+          }
+        }
+      } catch (_) {
+        // ignore parse errors – just treat as no discount
+      }
+
+      // Call Netlify function to create a Checkout Session
       const res = await fetch('/.netlify/functions/create-checkout-session', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           items: lineItems,
-          discountCode: discount ? discount.code : null,
           success_url: window.location.origin + '/success.html',
           cancel_url:  window.location.origin + '/cancel.html',
+          // 🔹 send discount data to the backend
+          discountCode,
+          discountPercent,
         }),
       });
 
       if (!res.ok) throw new Error('Checkout request failed');
       const data = await res.json();
 
+      // Default: simple redirect using the session URL from server (no publishable key needed)
       if (data.url) {
         window.location.href = data.url;
         return;
       }
 
+      // OPTIONAL: If you prefer using Stripe.js redirect (requires publishable key + Stripe.js script)
       if (STRIPE_PUBLISHABLE_KEY && window.Stripe && data.id) {
         const stripe = window.Stripe(STRIPE_PUBLISHABLE_KEY);
         const { error } = await stripe.redirectToCheckout({ sessionId: data.id });
@@ -415,109 +436,6 @@ function getContext() {
     } catch (err) {
       console.error(err);
       alert('Checkout failed. Please try again.');
-    }
-  }
-
-  function bindCheckoutButtons() {
-    const drawerBtn = document.getElementById('cart-checkout');
-    const pageBtn   = document.getElementById('cartp-checkout');
-
-    if (drawerBtn && !drawerBtn.__dhkBound) {
-      drawerBtn.addEventListener('click', startCheckout);
-      drawerBtn.__dhkBound = true;
-    }
-    if (pageBtn && !pageBtn.__dhkBound) {
-      pageBtn.addEventListener('click', startCheckout);
-      pageBtn.__dhkBound = true;
-    }
-  }
-
-  function bindGlobalEvents() {
-    document.addEventListener('click', (e) => {
-      if (e.target.closest('[data-cart-open]')) {
-        e.preventDefault();
-        openDrawer();
-      }
-      if (e.target.closest('[data-cart-close]')) {
-        e.preventDefault();
-        closeDrawer();
-      }
-      const { type, overlay } = getContext();
-      if (type === 'drawer' && overlay && e.target === overlay) {
-        closeDrawer();
-      }
-    }, { passive: true });
-
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closeDrawer();
-    });
-
-    const attach = () => {
-      const ctx = getContext();
-      const container = ctx.items;
-      if (container && !container.__dhkBound) {
-        container.addEventListener('click', onItemsClick);
-        container.__dhkBound = true;
-      }
-    };
-
-    attach();
-    const _render = render;
-    render = function patchedRender() { // eslint-disable-line no-func-assign
-      _render();
-      attach();
-    };
-  }
-
-  function bindDiscount() {
-    const input = document.getElementById('discount-code');
-    const btn   = document.getElementById('discount-apply');
-    const msg   = document.getElementById('discount-message');
-    if (!input || !btn) return;
-
-    const apply = () => {
-      const raw = (input.value || '').trim().toUpperCase();
-      if (!raw) {
-        saveDiscount(null);
-        if (msg) {
-          msg.textContent = '';
-          msg.classList.remove('cart-discount__message--error');
-        }
-        render();
-        return;
-      }
-
-      const cfg = DISCOUNT_CODES[raw];
-      if (!cfg) {
-        saveDiscount(null);
-        if (msg) {
-          msg.textContent = 'Code not valid.';
-          msg.classList.add('cart-discount__message--error');
-        }
-        render();
-        return;
-      }
-
-      const d = { code: raw, ...cfg };
-      saveDiscount(d);
-      if (msg) {
-        msg.textContent = 'Code applied.';
-        msg.classList.remove('cart-discount__message--error');
-      }
-      render();
-    };
-
-    btn.addEventListener('click', apply);
-    input.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        apply();
-      }
-    });
-
-    const saved = readDiscount();
-    if (saved && saved.code && !input.value) {
-      input.value = saved.code;
     }
   }
 
