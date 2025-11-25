@@ -1,4 +1,3 @@
-// js/cart.js
 (() => {
   if (window.__DHK_CART_LOADED__) return;           // --- Singleton guard ---
   window.__DHK_CART_LOADED__ = true;
@@ -205,10 +204,18 @@
   });
 
   function getContext() {
-    const d = drawerEls();
-    if (d.items && d.empty && d.subtotal) return { type: 'drawer', ...d };
+    // Prefer full cart page when it exists
     const p = pageEls();
-    if (p.items && p.empty && p.subtotal) return { type: 'page', ...p };
+    if (p.items && p.empty && p.subtotal) {
+      return { type: 'page', ...p };
+    }
+
+    // Fallback to drawer (product pages, etc.)
+    const d = drawerEls();
+    if (d.items && d.empty && d.subtotal) {
+      return { type: 'drawer', ...d };
+    }
+
     return { type: 'none' };
   }
 
@@ -219,24 +226,16 @@
     ctx.wrapper.classList.add('is-open');
     ctx.wrapper.setAttribute('aria-hidden', 'false');
     document.documentElement.classList.add('no-scroll');
-    ctx.panel?.focus();
+    ctx.panel && ctx.panel.focus && ctx.panel.focus();
   }
 
-  function getContext() {
-  // Prefer full cart page when it exists
-  const p = pageEls();
-  if (p.items && p.empty && p.subtotal) {
-    return { type: 'page', ...p };
+  function closeDrawer() {
+    const ctx = getContext();
+    if (ctx.type !== 'drawer') return;
+    ctx.wrapper.classList.remove('is-open');
+    ctx.wrapper.setAttribute('aria-hidden', 'true');
+    document.documentElement.classList.remove('no-scroll');
   }
-
-  // Fallback to drawer (product pages, etc.)
-  const d = drawerEls();
-  if (d.items && d.empty && d.subtotal) {
-    return { type: 'drawer', ...d };
-  }
-
-  return { type: 'none' };
-}
 
   // ---------- Row HTML ----------
   function rowHtml(it) {
@@ -292,7 +291,7 @@
     if (!ctx || ctx.type !== 'page') return;
 
     const discountInput = document.getElementById('discount-code');
-    const discountNotice = document.getElementById('discount-notice');
+    const discountNotice = document.getElementById('discount-message');
 
     if (items.length === 0) {
       ctx.items.innerHTML = '';
@@ -300,7 +299,6 @@
       ctx.subtotal.textContent = fmt(0);
       if (ctx.checkout) ctx.checkout.disabled = true;
 
-      // Clear discount UI if cart empty
       if (discountNotice) discountNotice.textContent = '';
       if (discountInput) discountInput.value = getStoredDiscountCode() || '';
       return;
@@ -408,7 +406,7 @@
   function bindDiscountForm() {
     const input = document.getElementById('discount-code');
     const applyBtn = document.getElementById('discount-apply');
-    const notice = document.getElementById('discount-notice');
+    const notice = document.getElementById('discount-message');
 
     if (!input || !applyBtn || !notice) return;
 
@@ -421,7 +419,6 @@
         render();
         return;
       }
-      // Save whatever they entered; render() will validate
       saveDiscountCode(code);
       render();
     };
