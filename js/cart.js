@@ -188,13 +188,21 @@
     checkout:   document.getElementById('cartp-checkout'),
   });
 
-  function getContext() {
-    const d = drawerEls();
-    if (d.items && d.empty && d.subtotal) return { type: 'drawer', ...d };
-    const p = pageEls();
-    if (p.items && p.empty && p.subtotal) return { type: 'page', ...p };
-    return { type: 'none' };
+function getContext() {
+  // Prefer full cart page when it exists
+  const p = pageEls();
+  if (p.items && p.empty && p.subtotal) {
+    return { type: 'page', ...p };
   }
+
+  // Fallback to drawer (product pages, etc.)
+  const d = drawerEls();
+  if (d.items && d.empty && d.subtotal) {
+    return { type: 'drawer', ...d };
+  }
+
+  return { type: 'none' };
+}
 
   // ---------- Drawer control ----------
   function openDrawer() {
