@@ -51,8 +51,14 @@ exports.handler = async (event) => {
       return { price, quantity: qty };
     });
 
+    // 🔹 Read discount info sent from frontend (cart.js)
+    const discountCode = typeof payload.discountCode === 'string'
+      ? payload.discountCode.trim().toUpperCase()
+      : null;
+    const discountPercent = Number(payload.discountPercent) || 0;
+
     // Figure out base URL for redirects
-    const originHeader = event.headers.origin || event.headers.Origin;
+    const originHeader  = event.headers.origin  || event.headers.Origin;
     const refererHeader = event.headers.referer || event.headers.Referer;
     const baseFromHeader = originHeader || (refererHeader ? new URL(refererHeader).origin : null);
     const baseFromNetlify = process.env.URL || process.env.DEPLOY_PRIME_URL; // Netlify provides these
@@ -61,7 +67,8 @@ exports.handler = async (event) => {
     const successURL = payload.success_url || `${base}/success.html`;
     const cancelURL  = payload.cancel_url  || `${base}/cart.html`;
 
-    const session = await stripe.checkout.sessions.create({
+    // 🔹 Build session config
+    const sessionConfig = {
       mode: 'payment',
       line_items,
       success_url: successURL,
@@ -69,7 +76,17 @@ exports.handler = async (event) => {
       // Optional extras:
       shipping_address_collection: { allowed_countries: ['US', 'CA'] },
       automatic_tax: { enabled: true },
-    });
+    };
+
+    // 🔹 Apply Stripe coupon if code PLUS is active
+    // Make sure you have a coupon in Stripe with ID "plus_25_off" and 25% off.
+    if (discountCode === 'PLUS' && discountPercent > 0) {
+      sessionConfig.discounts = [
+        { coupon: 'plus_25_off' }  // <-- change this ID if your coupon ID is different
+      ];
+    }
+
+    const session = await stripe.checkout.sessions.create(sessionConfig);
 
     return {
       statusCode: 200,
