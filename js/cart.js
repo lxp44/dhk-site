@@ -1,3 +1,4 @@
+// js/cart.js
 (() => {
   if (window.__DHK_CART_LOADED__) return;           // --- Singleton guard ---
   window.__DHK_CART_LOADED__ = true;
@@ -274,17 +275,49 @@
   // ---------- Render ----------
   function renderDrawer(ctx, items) {
     if (!ctx || ctx.type !== 'drawer') return;
+
+    const discountInput = document.getElementById('discount-code-drawer');
+    const discountNotice = document.getElementById('discount-message-drawer');
+
     if (items.length === 0) {
       ctx.items.innerHTML = '';
       ctx.empty.hidden = false;
       ctx.subtotal.textContent = fmt(0);
       if (ctx.checkout) ctx.checkout.disabled = true;
+
+      if (discountNotice) discountNotice.textContent = '';
+      if (discountInput) discountInput.value = getStoredDiscountCode() || '';
       return;
     }
+
     ctx.empty.hidden = true;
     ctx.items.innerHTML = items.map(rowHtml).join('');
-    ctx.subtotal.textContent = fmt(subtotalCents(items) / 100);
+
+    const subCents = subtotalCents(items);
+    const discount = getActiveDiscount(subCents);
+    const totalCents = subCents - (discount ? discount.amountCents : 0);
+
+    ctx.subtotal.textContent = fmt(totalCents / 100);
     if (ctx.checkout) ctx.checkout.disabled = false;
+
+    const storedCode = getStoredDiscountCode();
+
+    if (discountInput) {
+      discountInput.value = storedCode || '';
+    }
+
+    if (discountNotice) {
+      if (discount) {
+        discountNotice.textContent =
+          `Code ${discount.code} applied — -${fmt(discount.amountCents / 100)} (${discount.percent}% off)`;
+        discountNotice.style.color = '#53d46b';
+      } else if (storedCode) {
+        discountNotice.textContent = 'Code not valid for this cart.';
+        discountNotice.style.color = '#f87171';
+      } else {
+        discountNotice.textContent = '';
+      }
+    }
   }
 
   function renderPage(ctx, items) {
@@ -402,44 +435,51 @@
     }
   }
 
-  // ---------- Discount form wiring (cart page) ----------
-  function bindDiscountForm() {
-    const input = document.getElementById('discount-code');
-    const applyBtn = document.getElementById('discount-apply');
-    const notice = document.getElementById('discount-message');
+  // ---------- Discount form wiring (page + drawer) ----------
+  function bindDiscountForms() {
+    const configs = [
+      { codeId: 'discount-code',         applyId: 'discount-apply',         msgId: 'discount-message' },
+      { codeId: 'discount-code-drawer',  applyId: 'discount-apply-drawer',  msgId: 'discount-message-drawer' },
+    ];
 
-    if (!input || !applyBtn || !notice) return;
+    configs.forEach(({ codeId, applyId, msgId }) => {
+      const input = document.getElementById(codeId);
+      const applyBtn = document.getElementById(applyId);
+      const notice = document.getElementById(msgId);
 
-    const apply = () => {
-      const raw = input.value || '';
-      const code = raw.trim().toUpperCase();
-      if (!code) {
-        clearDiscountCode();
-        notice.textContent = '';
+      if (!input || !applyBtn || !notice) return;
+
+      const apply = () => {
+        const raw = input.value || '';
+        const code = raw.trim().toUpperCase();
+        if (!code) {
+          clearDiscountCode();
+          notice.textContent = '';
+          render();
+          return;
+        }
+        saveDiscountCode(code);
         render();
-        return;
-      }
-      saveDiscountCode(code);
-      render();
-    };
+      };
 
-    if (!applyBtn.__dhkBound) {
-      applyBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        apply();
-      });
-      applyBtn.__dhkBound = true;
-    }
-
-    if (!input.__dhkBound) {
-      input.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') {
+      if (!applyBtn.__dhkBound) {
+        applyBtn.addEventListener('click', (e) => {
           e.preventDefault();
           apply();
-        }
-      });
-      input.__dhkBound = true;
-    }
+        });
+        applyBtn.__dhkBound = true;
+      }
+
+      if (!input.__dhkBound) {
+        input.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            apply();
+          }
+        });
+        input.__dhkBound = true;
+      }
+    });
   }
 
   // ---------- Stripe Checkout ----------
@@ -558,7 +598,7 @@
     updateHeaderCount();
     bindGlobalEvents();
     bindCheckoutButtons();
-    bindDiscountForm();
+    bindDiscountForms();
   });
 
   // Expose API
