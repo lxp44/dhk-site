@@ -203,6 +203,33 @@
       }
     </style>
 
+    <!-- HOME HERO: show full background image on all screens -->
+<style>
+  /* Desktop & tablet: keep the whole hero image visible */
+  #hero-dhk .banner__media {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden; /* prevents scrollbars */
+  }
+
+  #hero-dhk .banner__media img {
+    width: auto;                  /* natural width */
+    max-width: 100%;              /* don’t overflow horizontally */
+    max-height: calc(100vh - var(--header-height) - 40px);
+    height: auto;
+    object-fit: contain;          /* 🔑 show full image, no crop */
+    object-position: center;      /* keep it nicely centered */
+  }
+
+  /* On very small screens, keep it tight but still full image */
+  @media (max-width: 900px) {
+    #hero-dhk .banner__media img {
+      max-height: 88vh;
+    }
+  }
+</style>
+
     <!-- FIX: let header & search be clickable above storm -->
     <style id="storm-overlay-fix">
       /* put the rain canvas behind UI and ignore pointer events */
