@@ -1273,30 +1273,3 @@ html.avatar-open #jukebox-controls{ display: none !important; }
     transform: none;               /* no zoom on phones */
   }
 }
-/* === DHK HERO – FORCE ZOOM ON DESKTOP, FULL IMAGE ON MOBILE === */
-
-/* Desktop / tablet: zoomed in, cropped like the original look */
-#hero-dhk .banner__media > picture > img,
-#hero-dhk .banner__media > img,
-#hero-dhk .banner__img {
-  width: 100% !important;
-  height: 100% !important;
-  object-fit: cover !important;          /* fill + crop */
-  object-position: center 62% !important;/* push focus slightly down */
-  transform: scale(2.0) !important;     /* actual zoom */
-  transform-origin: center center !important;
-}
-
-/* Mobile: show full artwork, no crazy zoom */
-@media (max-width: 900px) {
-  #hero-dhk .banner__media > picture > img,
-  #hero-dhk .banner__media > img,
-  #hero-dhk .banner__img {
-    width: 100% !important;
-    height: auto !important;
-    object-fit: contain !important;
-    object-position: center center !important;
-    transform: none !important;
-  }
-}
-
