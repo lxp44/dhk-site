@@ -203,6 +203,39 @@
       }
     </style>
 
+    <!-- MOBILE: center the SHOP ALL button over the hero image -->
+<style>
+  @media (max-width: 900px) {
+
+    /* Make hero content behave like a centered overlay */
+    #hero-dhk .banner__content {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      width: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      pointer-events: none; /* Don't block hero image scroll */
+    }
+
+    /* Center the button itself */
+    #hero-dhk .banner__buttons {
+      pointer-events: auto; /* allow tapping the button */
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      margin: 0;
+    }
+
+    #hero-dhk .banner__buttons .button {
+      margin-top: 0;
+      transform: translateY(0);
+    }
+  }
+</style>
+
     <!-- HOME HERO: show full background image on all screens -->
 <style>
   /* Desktop & tablet: keep the whole hero image visible */
