@@ -960,7 +960,7 @@
             id="discount-code-drawer"
             class="cart-discount__input"
             type="text"
-            placeholder="Enter code"
+            placeholder="Enter code (e.g. PLUS)"
             autocomplete="off"
           />
           <button
@@ -986,107 +986,6 @@
     </div>
   </aside>
 </div>
-        <!-- NEW: Add Discount above subtotal -->
-        <div class="cart-discount">
-          <label for="cart-discount-input" class="cart-discount-label">
-            Add discount
-          </label>
-          <div class="cart-discount-row">
-            <input
-              id="cart-discount-input"
-              type="text"
-              placeholder="Enter code (e.g. PLUS)"
-              autocomplete="off"
-            />
-            <button id="cart-discount-apply" type="button">
-              Apply
-            </button>
-          </div>
-          <div class="cart-discount-meta">
-            <span id="cart-discount-message"></span>
-            <span id="cart-discount-amount"></span>
-          </div>
-        </div>
-        <!-- END NEW -->
-
-        <div class="cart-row">
-          <div class="label">Subtotal</div>
-          <div class="value" id="cart-subtotal">$0.00</div>
-        </div>
-        <button id="cart-checkout" type="button" disabled>Checkout</button>
-      </div>
-    </aside>
-  </div>
-
-          <!-- Subtotal (before discount) -->
-          <div class="cart-row">
-            <div class="label">Subtotal</div>
-            <div class="value" id="cart-subtotal">
-              $0.00
-            </div>
-          </div>
-
-          <!-- Discount code input -->
-          <div class="cart-row">
-            <label
-              for="cart-discount-input"
-              class="label"
-              >Discount code</label
-            >
-            <div
-              class="value cart-discount-input-wrap"
-            >
-              <input
-                id="cart-discount-input"
-                type="text"
-                placeholder="PLUS"
-              />
-              <button
-                id="cart-discount-apply"
-                type="button"
-              >
-                Apply
-              </button>
-            </div>
-          </div>
-
-          <!-- Discount row (hidden until valid code) -->
-          <div
-            class="cart-row"
-            id="cart-discount-row"
-            hidden
-          >
-            <div class="label">
-              Discount
-              (<span id="cart-discount-label"></span>)
-            </div>
-            <div
-              class="value"
-              id="cart-discount-amount"
-            >
-              - $0.00
-            </div>
-          </div>
-
-          <!-- Final total after discount -->
-          <div class="cart-row cart-row-total">
-            <div class="label">Total</div>
-            <div class="value" id="cart-total">
-              $0.00
-            </div>
-          </div>
-
-          <button
-            id="cart-checkout"
-            type="button"
-            disabled
-          >
-            Checkout
-          </button>
-        </div>
-      </aside>
-    </div>
-
     <!-- MOBILE STORM INTRO (Tap to Continue + Fade Out) -->
     <script>
       document.addEventListener(
