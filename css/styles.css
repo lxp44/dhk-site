@@ -431,6 +431,34 @@ a:hover, button:hover, .hoverable:hover, input[type="submit"]:hover { transform:
   border: 1px solid rgba(255,255,255,0.22); background: transparent; color: #fff;
   border-radius: 8px; padding: 8px 12px; cursor: pointer;
 }
+/* Force footer newsletter to look the same on every page (clone of shop.html) */
+.footer .footer-block--newsletter .newsletter-form .field {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 8px;
+  padding: 6px 6px 6px 10px;
+  background: rgba(255,255,255,0.04);
+}
+
+.footer .footer-block--newsletter .field__input {
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: #fff;
+  font-family: "Roboto", sans-serif;
+}
+
+.footer .footer-block--newsletter .field__button {
+  border: 1px solid rgba(255,255,255,0.22);
+  background: transparent;
+  color: #fff;
+  border-radius: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
 .field__button:hover { background: rgba(255,255,255,0.08); }
 
 /* Social list (simple text links — swap to SVGs later if you want) */
