@@ -203,6 +203,26 @@
       }
     </style>
 
+    <!-- MOBILE HERO ZOOM CONTROL -->
+<style>
+  @media (max-width: 900px) {
+    :root {
+      /* 🔧 change this number to tune zoom:
+         1.0 = no zoom, 1.15 = subtle, 1.25 = medium, 1.4 = heavy */
+      --mobile-hero-zoom: 1.25;
+    }
+
+    #hero-dhk .banner__media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;              /* fill the frame */
+      object-position: center center;  /* keep subject centered */
+      transform: scale(var(--mobile-hero-zoom));
+      transform-origin: center center;
+    }
+  }
+</style>
+
     <!-- MOBILE: center the SHOP ALL button over the hero image -->
 <style>
   @media (max-width: 900px) {
