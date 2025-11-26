@@ -2,12 +2,14 @@
    Base theme
    ========================= */
 :root {
-  --header-height: 72px;            /* used for sticky spacing */
+  --header-height: 56px;            /* slim header */
   --hero-overlay: 0.40;             /* tweak to match Shopify's 40% */
+  --hero-zoom-desktop: 1.18;        /* desktop hero zoom */
+  --hero-zoom-mobile: 1.3;          /* mobile hero zoom */
 }
 
 @media (max-width: 900px) {
-  :root { --header-height: 60px; }
+  :root { --header-height: 48px; }
 }
 
 html { scroll-padding-top: var(--header-height); }
@@ -16,7 +18,7 @@ body.template-page {
   background: #0a0a0a;
   color: #f1f1f1;
   font-family: "Cinzel", serif;
-  text-transform: uppercase;
+  /* uppercase is handled on headings/nav/buttons below */
 }
 
 h1, h2, h3 {
@@ -43,18 +45,25 @@ p { color: #ccc; font-size: 18px; font-family: "Roboto", sans-serif; }
   font-family: "Roboto", sans-serif;
   font-size: 12px;
   letter-spacing: .08em;
+  transition: transform .24s ease, opacity .24s ease;
+  will-change: transform, opacity;
 }
 .utility-bar--bottom-border { border-bottom: 1px solid rgba(255,255,255,.08); }
 
 .utility-bar__grid {
   display: grid;
   align-items: center;
-  min-height: 36px;
+  min-height: 30px; /* slightly reduced from default */
   gap: 12px;
   grid-template-columns: 1fr auto; /* default two columns */
 }
 .utility-bar__grid--2-col { grid-template-columns: 1fr auto; }
 .utility-bar__grid--3-col { grid-template-columns: 1fr auto 1fr; }
+
+.utility-bar.hide {
+  transform: translateY(-100%);
+  opacity: 0;
+}
 
 .list-social {
   list-style: none; margin: 0; padding: 0;
@@ -85,7 +94,7 @@ p { color: #ccc; font-size: 18px; font-family: "Roboto", sans-serif; }
   opacity: .95;
   white-space: nowrap;
   display: grid; place-items: center;
-  padding: 6px 0;
+  padding: 4px 0; /* slightly tighter */
 }
 .announcement-bar__link {
   color: #fff; text-decoration: none; opacity: .95;
@@ -129,7 +138,28 @@ p { color: #ccc; font-size: 18px; font-family: "Roboto", sans-serif; }
   min-height: var(--header-height);
 }
 .header__logo { display: inline-flex; align-items: center; justify-content: center; }
-.header__heading-logo { display: block; height: 64px; width: auto; }
+.header__heading-logo {
+  display: block;
+  height: 48px;           /* slim desktop */
+  width: auto;
+}
+
+/* Make it a touch smaller on mobile */
+@media (max-width: 900px) {
+  .header__heading-logo { height: 42px; }
+}
+
+/* Shrink a little more when sticky */
+.shopify-section-header-sticky .header__heading-logo { height: 44px; }
+@media (max-width: 900px) {
+  .shopify-section-header-sticky .header__heading-logo { height: 38px; }
+}
+
+/* Optional max-width constraints on logo */
+.header__heading-logo { max-width: 120px; }
+@media (max-width: 768px) {
+  .header__heading-logo { max-width: 130px; }
+}
 
 /* Dawn-like transitions on the header element */
 .section-header .header {
@@ -158,12 +188,13 @@ p { color: #ccc; font-size: 18px; font-family: "Roboto", sans-serif; }
   color: #fff;
   text-decoration: none;
   opacity: .85;
+  line-height: 1.2; /* tighter row */
 }
 .nav-link:hover, .nav-link:focus { opacity: 1; text-decoration: underline; }
 
 /* Ghost button (desktop Cart) */
 .button--ghost {
-  padding: 8px 12px;
+  padding: 6px 10px;   /* slightly tighter */
   border: 1px solid rgba(255,255,255,.25);
   border-radius: 8px;
 }
@@ -176,7 +207,6 @@ p { color: #ccc; font-size: 18px; font-family: "Roboto", sans-serif; }
   .desktop-only { display: none !important; }
   .mobile-only { display: inline-flex; }
   .header-grid { grid-template-columns: auto 1fr auto; }
-  .header__heading-logo { height: 52px; }
 }
 
 /* =========================
@@ -226,14 +256,28 @@ body.drawer-open { overflow: hidden; }
 .button--secondary:hover { background: rgba(255,255,255,.08); }
 
 /* =========================
-   Hero banner
+   Hero banner (base)
    ========================= */
-.banner { position: relative; width:100%; min-height: calc(100vh - var(--header-height)); display:grid; align-items:end; }
+.banner {
+  position: relative;
+  width:100%;
+  min-height: calc(100vh - var(--header-height));
+  display:grid;
+  align-items:end;
+}
 .banner--large { min-height: calc(100vh - var(--header-height)); }
 .banner__media { position:absolute; inset:0; overflow:hidden; }
 .banner__img { width:100%; height:100%; object-fit:cover; display:block; }
-#hero-dhk::after { content:""; position:absolute; inset:0; background:#000; opacity: var(--hero-overlay); pointer-events:none; }
-.banner__content { position:relative; z-index:2; width:100%; display:grid; place-items:center; padding:32px 16px; }
+#hero-dhk::after {
+  content:"";
+  position:absolute; inset:0;
+  background:#000;
+  opacity: var(--hero-overlay);
+  pointer-events:none;
+}
+.banner__content {
+  position:relative; z-index:2; width:100%; display:grid; place-items:center; padding:32px 16px;
+}
 .banner__box {
   background: rgba(0,0,0,.35);
   border: 1px solid rgba(255,255,255,.12);
@@ -245,6 +289,48 @@ body.drawer-open { overflow: hidden; }
 /* spacing between first and second banner on mobile (keep for later if needed) */
 @media (max-width: 640px) {
   #hero-dhk-2 .banner__box { margin-top: 8px; }
+}
+
+/* =========================
+   HERO ZOOM (single source of truth)
+   ========================= */
+
+/* Desktop / tablet hero – cropped & zoomed */
+@media (min-width: 901px) {
+  #hero-dhk .banner__media {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  #hero-dhk .banner__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 65%; /* focus lower area */
+    transform: scale(var(--hero-zoom-desktop));
+    transform-origin: center center;
+  }
+}
+
+/* Mobile hero – zoom controlled by variable */
+@media (max-width: 900px) {
+  #hero-dhk .banner__media {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  #hero-dhk .banner__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
+    transform: scale(var(--hero-zoom-mobile));
+    transform-origin: center center;
+  }
 }
 
 /* =========================
@@ -268,12 +354,19 @@ body.drawer-open { overflow: hidden; }
 }
 
 /* =========================
-   Bat cursor (optional PNGs)
+   Bat cursor (desktop / precise pointers only)
    ========================= */
-/* Keep these only if you uploaded both PNGs to assets/img/ */
-html, body { cursor: url('../assets/img/cursor-bat-16.png') 8 8, auto; }
-a, button, .hoverable, input[type="submit"] { cursor: url('../assets/img/cursor-bat-32.png') 16 16, auto; transition: transform 0.1s ease; }
-a:hover, button:hover, .hoverable:hover, input[type="submit"]:hover { transform: scale(1.05); }
+@media (pointer: fine) {
+  html, body { cursor: url('../assets/img/cursor-bat-16.png') 8 8, auto; }
+  a, button, .hoverable, input[type="submit"] {
+    cursor: url('../assets/img/cursor-bat-32.png') 16 16, auto;
+    transition: transform 0.1s ease;
+  }
+  a:hover, button:hover, .hoverable:hover, input[type="submit"]:hover { transform: scale(1.05); }
+}
+@media (pointer: coarse) {
+  html, body, a, button, .hoverable, input[type="submit"] { cursor: auto !important; }
+}
 
 /* =========================
    Sections & Featured collection (stub)
@@ -353,8 +446,9 @@ a:hover, button:hover, .hoverable:hover, input[type="submit"]:hover { transform:
   font-family: "Roboto", sans-serif;
   font-size: 13px; color: #ddd; letter-spacing: .02em;
 }
+
 /* =========================
-   Gallery slideshow (True Size)
+   Gallery slideshow (unified)
    ========================= */
 .lxp-slideshow {
   position: relative;
@@ -366,27 +460,86 @@ a:hover, button:hover, .hoverable:hover, input[type="submit"]:hover { transform:
   background: rgba(255,255,255,0.02);
 }
 
-/* Let images decide height instead of forcing 16:9 */
+/* Default: contain (true size) */
 .lxp-slideshow {
-  aspect-ratio: auto;   /* reset aspect ratio */
-  max-height: none;     /* allow full image height */
+  aspect-ratio: auto;
+  max-height: none;
+}
+.lxp-slide img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  display: block;
 }
 
+/* Opt-in cover mode (letterboxed hero style) */
+.lxp-slideshow.lxp--cover {
+  aspect-ratio: 16 / 9;
+  max-height: 70vh;
+}
+.lxp-slideshow.lxp--cover .lxp-slide img {
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Opt-in strict contain mode (explicit if you need it on a page) */
+.lxp-slideshow.lxp--contain .lxp-slide img {
+  height: auto;
+  object-fit: contain;
+}
+
+/* Slides wrapper */
 .lxp-slides {
   display: flex;
   transition: transform 0.6s ease-in-out;
   will-change: transform;
 }
+.lxp-slide { min-width: 100%; }
 
-.lxp-slide {
-  min-width: 100%;
+/* Arrows + dots container */
+.lxp-nav {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  pointer-events: none;
+  padding: 8px;
 }
 
-.lxp-slide img {
-  width: 100%;
-  height: auto;          /* keep natural height */
-  object-fit: contain;   /* ensures no cropping */
-  display: block;
+/* Arrows */
+.lxp-btn {
+  pointer-events: auto;
+  background: rgba(0,0,0,0.5);
+  border: 1px solid rgba(255,255,255,0.25);
+  color: #fff;
+  font-size: 1.8rem;
+  line-height: 1;
+  padding: 6px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.lxp-btn:hover { background: rgba(0,0,0,0.75); }
+
+/* Dots */
+.lxp-dots {
+  pointer-events: auto;
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+}
+.lxp-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: rgba(255,255,255,0.35);
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+.lxp-dot.is-active { background: #fff; }
+
+/* Optional: give the whole page more scrollable height if short */
+body.g4llery-page main {
+  min-height: 100vh;
 }
 
 /* ===== Footer (Dawn-like) ===== */
@@ -431,7 +584,8 @@ a:hover, button:hover, .hoverable:hover, input[type="submit"]:hover { transform:
   border: 1px solid rgba(255,255,255,0.22); background: transparent; color: #fff;
   border-radius: 8px; padding: 8px 12px; cursor: pointer;
 }
-/* Force footer newsletter to look the same on every page (clone of shop.html) */
+
+/* Force footer newsletter to look the same on every page */
 .footer .footer-block--newsletter .newsletter-form .field {
   display: grid;
   grid-template-columns: 1fr auto;
@@ -441,7 +595,6 @@ a:hover, button:hover, .hoverable:hover, input[type="submit"]:hover { transform:
   padding: 6px 6px 6px 10px;
   background: rgba(255,255,255,0.04);
 }
-
 .footer .footer-block--newsletter .field__input {
   border: 0;
   outline: 0;
@@ -449,7 +602,6 @@ a:hover, button:hover, .hoverable:hover, input[type="submit"]:hover { transform:
   color: #fff;
   font-family: "Roboto", sans-serif;
 }
-
 .footer .footer-block--newsletter .field__button {
   border: 1px solid rgba(255,255,255,0.22);
   background: transparent;
@@ -458,7 +610,6 @@ a:hover, button:hover, .hoverable:hover, input[type="submit"]:hover { transform:
   padding: 8px 12px;
   cursor: pointer;
 }
-
 .field__button:hover { background: rgba(255,255,255,0.08); }
 
 /* Social list (simple text links — swap to SVGs later if you want) */
@@ -494,16 +645,6 @@ a:hover, button:hover, .hoverable:hover, input[type="submit"]:hover { transform:
   font-size: 11px;
 }
 
-/* ===== Announcement bar hide/reveal ===== */
-.utility-bar {
-  transition: transform .24s ease, opacity .24s ease;
-  will-change: transform, opacity;
-}
-.utility-bar.hide {
-  transform: translateY(-100%);
-  opacity: 0;
-}
-
 /* ===== A11y helpers ===== */
 .visually-hidden,
 .sr-only {
@@ -512,17 +653,11 @@ a:hover, button:hover, .hoverable:hover, input[type="submit"]:hover { transform:
   overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0;
 }
 a:focus-visible, button:focus-visible, input:focus-visible {
-  outline:2px dashed #fff; outline-offset:2px;
-}
-
-/* ===== Sticky header polish (shrink logo on stick) ===== */
-.shopify-section-header-sticky .header__heading-logo { height: 52px; }
-@media (max-width: 900px) {
-  .shopify-section-header-sticky .header__heading-logo { height: 44px; }
+  outline: 2px dashed #fff;
+  outline-offset: 3px;
 }
 
 /* ===== Search modal (styles) ===== */
-/* Support both your classes and your IDs used in HTML */
 .search-modal,
 #search-modal {
   position: fixed; inset: 0; z-index: 3500; display: none;
@@ -593,83 +728,7 @@ a:focus-visible, button:focus-visible, input:focus-visible {
   font-family: "Roboto", sans-serif;
   font-size: 12px; line-height: 1;
 }
-/* =========================
-   Gallery slideshow
-   ========================= */
-.lxp-slideshow {
-  position: relative;
-  width: 100%;
-  max-width: 100%;
-  overflow: hidden;
-  border: 1px solid rgba(255,255,255,0.12);
-  border-radius: 12px;
-  background: rgba(255,255,255,0.02);
-}
 
-/* Keep it “content height”, not fullscreen */
-.lxp-slideshow { 
-  /* Tune this to taste: */
-  aspect-ratio: 16 / 9;     /* keeps a nice letterbox */
-  max-height: 70vh;         /* never taller than 70% viewport */
-}
-
-.lxp-slides {
-  display: flex;
-  transition: transform 0.6s ease-in-out;
-  will-change: transform;
-}
-
-.lxp-slide {
-  min-width: 100%;
-}
-
-.lxp-slide img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;         /* fills the frame without stretching */
-  display: block;
-}
-
-/* Arrows + dots container */
-.lxp-nav {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  align-items: center;
-  pointer-events: none;
-  padding: 8px;
-}
-
-/* Arrows */
-.lxp-btn {
-  pointer-events: auto;
-  background: rgba(0,0,0,0.5);
-  border: 1px solid rgba(255,255,255,0.25);
-  color: #fff;
-  font-size: 1.8rem;
-  line-height: 1;
-  padding: 6px 12px;
-  border-radius: 8px;
-  cursor: pointer;
-}
-.lxp-btn:hover { background: rgba(0,0,0,0.75); }
-
-/* Dots */
-.lxp-dots {
-  pointer-events: auto;
-  display: flex;
-  gap: 6px;
-  justify-content: center;
-}
-.lxp-dot {
-  width: 8px; height: 8px; border-radius: 50%;
-  background: rgba(255,255,255,0.35);
-  border: 0;
-  padding: 0;
-  cursor: pointer;
-}
-.lxp-dot.is-active { background: #fff; }
 /* === CART DRAWER POLISH === */
 .cart-drawer {
   position: fixed;
@@ -744,80 +803,15 @@ a:focus-visible, button:focus-visible, input:focus-visible {
 #cart-checkout:active, #cartp-checkout:active { transform: translateY(1px); }
 #cart-checkout:disabled, #cartp-checkout:disabled { opacity:.5; cursor:not-allowed; }
 
-/* (Update these values or remove the block entirely) */
-.header__heading-logo { max-width: 120px; height: auto; }
-@media (max-width: 768px) {
-  .header__heading-logo { max-width: 130px; }
-}
+/* ===== Modal / Identity / RPM z-index + pointer logic ===== */
 
-/* =========================
-   Slim Header Pack (overrides)
-   ========================= */
-
-/* 1) Shorter header variable */
-:root {
-  --header-height: 56px;   /* was 72px */
-}
-@media (max-width: 900px) {
-  :root { --header-height: 48px; }  /* was 60px */
-}
-
-/* 2) Tighten the header grid and logo image a bit */
-.header-grid { min-height: var(--header-height); }
-
-.header__heading-logo {
-  height: 48px;            /* desktop header logo height (was 64px earlier) */
-}
-
-/* Make it a touch smaller on mobile */
-@media (max-width: 900px) {
-  .header__heading-logo { height: 42px; }
-}
-
-/* Shrink a little more when sticky */
-.shopify-section-header-sticky .header__heading-logo { height: 44px; }
-@media (max-width: 900px) {
-  .shopify-section-header-sticky .header__heading-logo { height: 38px; }
-}
-
-/* 3) Slightly reduce utility/announcement bar height & padding */
-.utility-bar__grid { min-height: 30px; }       /* was 36px */
-.announcement-bar__message { padding: 4px 0; }  /* was 6px 0 */
-
-/* 4) Trim nav/button padding so the row is tighter */
-.nav-link { line-height: 1.2; }                 /* safe tightening */
-.button--ghost { padding: 6px 10px; }           /* was 8px 12px */
-/* === G4LLERY FULL-SIZE OVERRIDE === */
-.lxp-slideshow {
-  aspect-ratio: auto !important;       /* remove forced 16:9 frame */
-  max-height: none !important;         /* allow full natural height */
-  height: auto !important;
-  border: none !important;             /* optional: remove white border frame */
-  border-radius: 0 !important;         /* optional: remove corner rounding */
-}
-
-.lxp-slides {
-  align-items: stretch !important;     /* ensure full vertical fit */
-}
-
-.lxp-slide img {
-  width: 100% !important;
-  height: auto !important;
-  object-fit: contain !important;      /* no cropping, show full photo */
-  display: block;
-  background: #000;                    /* fallback background for images */
-}
-
-/* Optional: give the whole page more scrollable height if short */
-body.g4llery-page main {
-  min-height: 100vh;
-}
 /* Make Netlify Identity sit on the absolute top layer */
 .netlify-identity-widget,
 .netlify-identity-modal,
 .netlify-identity-modal * {
   z-index: 2147483647 !important; /* max practical */
 }
+
 /* When Identity is open, freeze/disable site chrome so it can't block taps */
 body.identity-open .fixed,
 body.identity-open .sticky,
@@ -833,6 +827,7 @@ body.identity-open .dhk-overlay {
 .floating-logo, #enter-the-storm, .dhk-overlay {
   z-index: 1000; /* keep below the Identity modal */
 }
+
 /* Always put modals/iframes on top */
 .netlify-identity-widget,
 .netlify-identity-modal,
@@ -871,10 +866,13 @@ body.modal-open canvas {
 .dhk-overlay {
   z-index: 1000 !important;
 }
-* { /* DEBUG ONLY */
+
+* {
+  /* DEBUG ONLY */
   /* outline: 1px solid rgba(255,0,0,.15); */
 }
-/* Keep the RPM / Identity modals on top */
+
+/* Keep the RPM / Identity modals on top (belt + suspenders) */
 iframe[src*="readyplayer.me"],
 .netlify-identity-widget,
 .netlify-identity-modal { 
@@ -905,11 +903,12 @@ body.modal-open .dhk-overlay {
 .dhk-overlay {
   z-index: 1000 !important;
 }
+
 /* =========================
-   TRY-ON fixes (append)
+   TRY-ON / Avatar Modal
    ========================= */
 
-/* 1) Make the avatar modal + RPM iframe clickable (they live under .hud { pointer-events:none }) */
+/* Make the avatar modal + RPM iframe clickable (they live under .hud { pointer-events:none }) */
 #avatar-modal,
 #avatar-modal * ,
 #rpm-wrap,
@@ -922,14 +921,14 @@ body.modal-open .dhk-overlay {
   z-index: 10001 !important;
 }
 
-/* 2) When any modal is open, freeze the actual dock used on this page */
+/* When any modal is open, freeze the actual dock used on this page */
 body.modal-open .dock,
 body.modal-open #jukebox-controls {
   pointer-events: none !important;
   filter: blur(1px); /* optional visual cue */
 }
 
-/* 3) Belt-and-suspenders: ensure general site chrome stays below modals */
+/* General site chrome stays below modals */
 body.modal-open .header,
 body.modal-open .floating-logo,
 body.modal-open #storm-overlay,
@@ -937,73 +936,7 @@ body.modal-open #storm-popup,
 body.modal-open .dhk-overlay {
   z-index: 1000 !important; /* safely below Identity/RPM (2.1e9) */
 }
-/* =========================
-   DHK try-on final polish (conflict-free)
-   ========================= */
 
-/* 1) Scope uppercase to headings/nav/UI instead of the whole body */
-body.template-page { text-transform: none; }
-h1,h2,h3,
-.nav-link,
-.chip,
-.dock .btn,
-.button,
-.button--secondary,
-.fc__title { text-transform: uppercase; }
-
-/* 2) Gallery: create explicit modes so rules stop fighting */
-/* Default: contain (true size) */
-.lxp-slideshow { aspect-ratio: auto; max-height: none; }
-.lxp-slide img { width: 100%; height: auto; object-fit: contain; }
-/* Opt-in cover mode (letterboxed hero style) */
-.lxp-slideshow.lxp--cover      { aspect-ratio: 16 / 9; max-height: 70vh; }
-.lxp-slideshow.lxp--cover .lxp-slide img { height: 100%; object-fit: cover; }
-/* Opt-in strict contain mode (explicit if you need it on a page) */
-.lxp-slideshow.lxp--contain .lxp-slide img { height: auto; object-fit: contain; }
-
-/* 3) Cursors only on precise pointers (avoid weirdness on touch) */
-@media (pointer: fine) {
-  html, body { cursor: url('../assets/img/cursor-bat-16.png') 8 8, auto; }
-  a, button, .hoverable, input[type="submit"] {
-    cursor: url('../assets/img/cursor-bat-32.png') 16 16, auto;
-    transition: transform 0.1s ease;
-  }
-}
-@media (pointer: coarse) {
-  html, body, a, button, .hoverable, input[type="submit"] { cursor: auto !important; }
-}
-
-/* 4) Respect reduced motion – kill flashes/flickers for sensitive users */
-@media (prefers-reduced-motion: reduce) {
-  * { animation: none !important; transition: none !important; }
-  .lightning-flash { animation: none !important; }
-}
-
-/* 5) Header variable sanity (keep ONE place winning).
-      If you want the slim header everywhere, keep this; else delete it. */
-:root { --header-height: 56px; }
-@media (max-width: 900px) { :root { --header-height: 48px; } }
-.header-grid { min-height: var(--header-height); }
-.header__heading-logo { height: 48px; }
-@media (max-width: 900px) { .header__heading-logo { height: 42px; } }
-.shopify-section-header-sticky .header__heading-logo { height: 44px; }
-@media (max-width: 900px) { .shopify-section-header-sticky .header__heading-logo { height: 38px; } }
-
-/* 6) Focus ring pop a bit more on dark BG (optional, accessible) */
-a:focus-visible, button:focus-visible, input:focus-visible {
-  outline: 2px dashed #fff; outline-offset: 3px;
-}
-
-/* 7) Keep RPM/Identity/Avatar modal clickability + freeze dock (you added this; keeping it here to ensure last-win) */
-#avatar-modal, #avatar-modal *, #rpm-wrap, #rpm-wrap iframe { pointer-events: auto !important; }
-#avatar-modal { z-index: 10001 !important; }
-body.modal-open .dock,
-body.modal-open #jukebox-controls { pointer-events: none !important; filter: blur(1px); }
-body.modal-open .header,
-body.modal-open .floating-logo,
-body.modal-open #storm-overlay,
-body.modal-open #storm-popup,
-body.modal-open .dhk-overlay { z-index: 1000 !important; }
 /* Saved avatar pill */
 #avatar-use-saved,
 .chip-saved-avatar {
@@ -1043,100 +976,10 @@ body.modal-open .dhk-overlay { z-index: 1000 !important; }
     right: 12px;
   }
 }
-<style>
-  /* Overlay */
-  .avatar-overlay{
-    position: absolute; inset: 0;
-    display: flex; align-items: center; justify-content: center;
-    background: rgba(0,0,0,.78);
-    z-index: 10001;
-  }
 
-  /* Card */
-  .avatar-card{
-    width: min(96vw, 860px);
-    max-height: 90vh;
-    overflow: auto;
-    background: #0d0e10;
-    border: 1px solid rgba(255,255,255,.14);
-    border-radius: 18px;
-    box-shadow: 0 24px 80px rgba(0,0,0,.6);
-    padding: 18px 18px 20px;
-  }
-
-  /* Title glow to match "before" */
-  .avatar-title{
-    margin: 2px 2px 12px;
-    font-family: 'Cinzel', serif;
-    font-weight: 700;
-    letter-spacing: .14em;
-    text-transform: uppercase;
-    font-size: 18px;
-    color: #e9ecf7;
-    text-shadow:
-      0 0 6px rgba(255,255,255,.35),
-      0 0 18px rgba(80,140,255,.25);
-  }
-
-  /* Top actions (pills) */
-  .avatar-actions{
-    display: flex; flex-wrap: wrap; gap: 10px;
-    margin-bottom: 12px;
-  }
-  .avatar-actions .btn{
-    background: rgba(255,255,255,.08);
-    border: 1px solid rgba(255,255,255,.18);
-    border-radius: 999px;
-    color: #dbe2ff;
-    padding: 10px 14px;
-    font: 600 12px/1 'Cinzel', serif;
-    letter-spacing: .1em;
-    text-transform: uppercase;
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    box-shadow: 0 0 0 1px rgba(0,0,0,.2) inset;
-  }
-  .avatar-actions .btn:disabled{
-    opacity: .45;
-  }
-
-  /* The big stage box (restores the large black panel look) */
-  .avatar-stage{
-    border: 1px solid rgba(255,255,255,.12);
-    border-radius: 14px;
-    background: #0b0c0f;
-    /* This height is what makes it feel like the "before" screenshot */
-    height: min(58vh, 560px);
-    min-height: 360px;
-    overflow: hidden;
-  }
-  .avatar-stage iframe{
-    width: 100%; height: 100%; border: 0; display: block;
-    background: #0b0c0f;
-  }
-
-  /* URL entry panel (same width, subtle) */
-  .avatar-url{
-    margin-top: 12px;
-    border: 1px solid rgba(255,255,255,.10);
-    border-radius: 12px;
-    padding: 12px;
-    background: #0f1013;
-  }
-  .avatar-url label{
-    display:block; font-size:12px; opacity:.8; margin-bottom:6px;
-    letter-spacing:.06em; text-transform:uppercase; font-family:'Cinzel',serif;
-  }
-  .avatar-url input{
-    width:100%; padding:10px;
-    background:#121214; color:#fff;
-    border:1px solid #2a2a2a; border-radius:8px;
-  }
-  .avatar-url .url-actions{ margin-top:8px; display:flex; gap:8px; }
-</style>
-/* ===== Avatar Modal (overlay) ===== */
+/* Avatar Modal (overlay layout) */
 .avatar-overlay{
-  position: fixed; /* cover viewport, not just the HUD container */
+  position: fixed; /* cover viewport */
   inset: 0;
   display: flex; align-items: center; justify-content: center;
   background: rgba(0,0,0,.78);
@@ -1155,7 +998,7 @@ body.modal-open .dhk-overlay { z-index: 1000 !important; }
   padding: 18px 18px 20px;
 }
 
-/* Title glow (as before) */
+/* Title glow */
 .avatar-title{
   margin: 2px 2px 12px;
   font-family: 'Cinzel', serif;
@@ -1228,6 +1071,10 @@ html.avatar-open #jukebox-controls{ display: none !important; }
   .avatar-card{ padding: 14px; border-radius: 16px; }
   .avatar-actions .btn{ padding: 9px 12px; font-size: 11px; letter-spacing: .08em; }
 }
+
+/* =========================
+   Discounts (cart + drawer)
+   ========================= */
 .cart-discount {
   margin-bottom: 12px;
   font-size: 12px;
@@ -1251,25 +1098,20 @@ html.avatar-open #jukebox-controls{ display: none !important; }
   font-size: 11px;
   opacity: 0.85;
 }
-/* Desktop hero – zoomed & focused lower on the image */
-#hero-dhk .banner__media img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover !important;
-  object-position: center 65%;     /* push focus down towards the text */
-  transform: scale(1.18);          /* actual zoom */
-  transform-origin: center center;
+
+/* Unified uppercase scope (headings/nav/UI, not body copy) */
+h1,h2,h3,
+.nav-link,
+.chip,
+.dock .btn,
+.button,
+.button--secondary,
+.fc__title {
+  text-transform: uppercase;
 }
 
-/* Mobile hero – show full image, no crazy zoom */
-@media (max-width: 900px) {
-  #hero-dhk .banner__media img {
-    width: 100% !important;
-    height: auto !important;
-    max-width: 100%;
-    max-height: none;
-    object-fit: contain !important;
-    object-position: center center;
-    transform: none;               /* no zoom on phones */
-  }
+/* Respect reduced motion – kill flashes/flickers for sensitive users */
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+  .lightning-flash { animation: none !important; }
 }
