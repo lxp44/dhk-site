@@ -1283,7 +1283,7 @@ html.avatar-open #jukebox-controls{ display: none !important; }
   height: 100% !important;
   object-fit: cover !important;          /* fill + crop */
   object-position: center 62% !important;/* push focus slightly down */
-  transform: scale(1.4) !important;     /* actual zoom */
+  transform: scale(2.4) !important;     /* actual zoom */
   transform-origin: center center !important;
 }
 
