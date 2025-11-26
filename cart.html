@@ -8,13 +8,106 @@
   <!-- Favicon -->
   <link rel="icon" href="assets/img/DHK_transparent.gif" type="image/gif" sizes="any">
 
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/styles.css"/>
+
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 
-  <!-- Styles -->
-  <link rel="stylesheet" href="css/styles.css"/>
+  <!-- Mobile drawer styling -->
+  <style>
+    #menu-drawer {
+      background: rgba(10, 10, 12, 0.88);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      border-right: 1px solid rgba(255,255,255,.08);
+      box-shadow: 0 10px 40px rgba(0,0,0,.55);
+      z-index: 2147483646;
+    }
+    .menu-drawer__menu-item,
+    .menu-drawer__menu .list-menu__item.link {
+      font-family: 'Cinzel', serif;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .18em;
+      font-size: 13px;
+      color: #e6e6e6;
+      text-shadow: 0 0 6px rgba(255,255,255,.12);
+    }
+    .menu-drawer__menu-item:hover,
+    .menu-drawer__menu .list-menu__item.link:hover,
+    .menu-drawer__menu-item:focus-visible {
+      color: #ffffff;
+      text-shadow: 0 0 10px rgba(255,255,255,.28);
+    }
+    .menu-drawer__menu .list-menu__item + .list-menu__item {
+      border-top: 1px solid rgba(255,255,255,.06);
+    }
+    .header__icon--menu svg {
+      filter: drop-shadow(0 0 6px rgba(255,255,255,.28));
+    }
+    details[open] ~ .menu-drawer,
+    details[open] #menu-drawer {
+      z-index: 2147483646;
+    }
+    details[open] ~ #storm-overlay,
+    details[open] #storm-overlay {
+      opacity: 0 !important;
+      pointer-events: none !important;
+      transition: opacity .15s ease;
+    }
+  </style>
+
+  <!-- Announcement center -->
+  <style>
+    .utility-bar .page-width { max-width: none; padding: 0; }
+    .utility-bar .utility-bar__grid {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+    }
+    .utility-bar .list-social,
+    .utility-bar .localization-wrapper {
+      display: none !important;
+    }
+    .announcement-bar {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+    .announcement-track {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+    }
+    .announcement-bar__message { margin: 0; padding: 10px 0; }
+    .announcement-bar__message span {
+      font-family: 'Cinzel', serif;
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: #e5e5e5;
+      text-shadow: 0 0 6px rgba(255,255,255,.12);
+    }
+  </style>
+
+  <!-- Search above storm -->
+  <style>
+    #search-modal { z-index: 2147483647; }
+    body.search-open #storm-overlay {
+      opacity: 0 !important;
+      pointer-events: none !important;
+      transition: opacity .15s ease;
+    }
+  </style>
+
+  <!-- Cart visuals + discount -->
   <style>
     /* ===== DHK Cart Polish ===== */
     .cart-items .cart-item {
@@ -156,7 +249,95 @@
   <div class="lightning-flash"></div>
   <div id="storm-overlay"><canvas id="rain-canvas"></canvas></div>
 
-  <!-- Header & Nav (reuse your existing header/nav from other pages if needed) -->
+  <!-- ===== Announcement / Utility Bar ===== -->
+  <div class="utility-bar color-scheme-4 gradient utility-bar--bottom-border">
+    <div class="page-width utility-bar__grid">
+      <div class="announcement-bar" role="region" aria-label="Site announcements">
+        <button type="button" class="slider-button slider-button--prev" aria-label="Previous" hidden>‹</button>
+        <div class="announcement-track" id="AnnouncementTrack" data-autoplay="true" data-speed="5000">
+          <p class="announcement-bar__message h5"><span>WELCOME TO THE STORM</span></p>
+        </div>
+        <button type="button" class="slider-button slider-button--next" aria-label="Next" hidden>›</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Sticky Header ===== -->
+  <div class="section-header header-wrapper color-scheme-4 gradient" data-sticky-type="on-scroll-up">
+    <header class="site-header header header--middle-left header--mobile-center">
+      <!-- Mobile drawer -->
+      <header-drawer data-breakpoint="tablet">
+        <details id="Details-menu-drawer-container" class="menu-drawer-container">
+          <summary class="header__icon header__icon--menu header__icon--summary link focus-inset" aria-label="Menu">
+            <span aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24"><path d="M3 6h18v2H3zM3 11h18v2H3zM3 16h18v2H3z" fill="currentColor"/></svg>
+              <svg width="22" height="22" viewBox="0 0 24 24"><path d="M18.3 5.7 12 12l6.3 6.3-1.4 1.4L10.6 13.4 4.3 19.7 2.9 18.3 9.2 12 2.9 5.7 4.3 4.3 10.6 10.6 16.9 4.3z" fill="currentColor"/></svg>
+            </span>
+          </summary>
+          <div id="menu-drawer" class="gradient menu-drawer motion-reduce color-scheme-4">
+            <div class="menu-drawer__inner-container">
+              <div class="menu-drawer__navigation-container">
+                <nav class="menu-drawer__navigation" aria-label="Mobile">
+                  <ul class="menu-drawer__menu has-submenu list-menu" role="list">
+                    <li><a href="index.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">Home</a></li>
+                    <li><a href="shop.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">Shop All</a></li>
+                    <li><a href="g4llery.html" class="menu-drawer__menu-item">G4LLERY</a></li>
+                    <li><a href="try-on.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">TRY ON</a></li>
+                    <li><a href="collections.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">Collections</a></li>
+                    <li><a href="4bout-us.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">4bout us</a></li>
+                    <li><a href="contact.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">Contact</a></li>
+                    <li>
+                      <a href="cart.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset" data-loud="heavy">
+                        Cart <span class="cart-count-bubble" data-cart-count></span>
+                      </a>
+                    </li>
+                    <li>
+                      <button id="search-open-mobile" type="button" class="menu-drawer__menu-item link link--text list-menu__item focus-inset">
+                        Search
+                      </button>
+                    </li>
+                  </ul>
+                </nav>
+              </div>
+            </div>
+          </div>
+        </details>
+      </header-drawer>
+
+      <!-- Desktop header grid -->
+      <div class="page-width header-grid">
+        <nav class="nav-left desktop-only" aria-label="Primary">
+          <a href="index.html" class="nav-link">Home</a>
+          <a href="shop.html" class="nav-link">Shop All</a>
+          <a href="g4llery.html" class="nav-link">G4LLERY</a>
+          <a href="try-on.html" class="nav-link">TRY ON</a>
+          <a href="collections.html" class="nav-link">Collections</a>
+        </nav>
+
+        <a class="header__logo" href="index.html" aria-label="DarkHarlemKnight">
+          <img
+            src="assets/img/DHK_transparent.gif"
+            alt="DarkHarlemKnight"
+            width="190" height="190"
+            class="header__heading-logo"
+            loading="eager"
+          />
+        </a>
+
+        <nav class="nav-right desktop-only">
+          <a href="4bout-us.html" class="nav-link">4bout us</a>
+          <a href="contact.html" class="nav-link">Contact</a>
+          <button id="search-open" class="nav-link button--ghost" aria-label="Open search">Search</button>
+          <a href="cart.html" class="nav-link button--ghost" data-loud="heavy" aria-label="Cart">
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+              <path d="M7 4h-2l-1 2v2h2l3.6 7.59-1.35 2.41a1.994 1.994 0 0 0 1.75 2.99H19v-2H10.42c-.14 0-.25-.11-.25-.25l.03-.12L11 16h6.31a2 2 0 0 0 1.79-1.11L22 8H7.42l-.94-2Z" fill="currentColor"/>
+            </svg>
+            Cart <span class="cart-count-bubble" data-cart-count></span>
+          </a>
+        </nav>
+      </div>
+    </header>
+  </div>
 
   <!-- ===== MAIN ===== -->
   <main id="MainContent" class="section">
@@ -282,10 +463,9 @@
       </div>
     </div>
   </footer>
-
   <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
 
-  <!-- Search Modal -->
+  <!-- ===== Search Modal ===== -->
   <div id="search-modal" class="search-modal" aria-hidden="true">
     <div class="search-modal__overlay" data-close-search></div>
     <div class="search-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="search-title">
@@ -317,7 +497,7 @@
   <script src="js/newsletter.js"></script>
   <script src="js/storm_shopify_style.js"></script>
 
-  <!-- Cart Drawer -->
+  <!-- Cart Drawer (with discount) -->
   <div id="cart-drawer" class="cart-drawer" aria-hidden="true">
     <div class="cart-drawer__overlay" data-cart-close></div>
     <aside class="cart-drawer__panel" tabindex="-1">
@@ -332,6 +512,32 @@
       </div>
 
       <div class="cart-footer">
+        <!-- Drawer discount block -->
+        <div class="cart-discount cart-discount--drawer">
+          <label for="discount-code-drawer" class="cart-discount__label">ADD DISCOUNT</label>
+          <div class="cart-discount__row">
+            <input
+              id="discount-code-drawer"
+              class="cart-discount__input"
+              type="text"
+              placeholder="Enter code (e.g. PLUS)"
+              autocomplete="off"
+            />
+            <button
+              id="discount-apply-drawer"
+              class="cart-discount__button"
+              type="button"
+            >
+              APPLY
+            </button>
+          </div>
+          <p
+            id="discount-message-drawer"
+            class="cart-discount__message"
+            aria-live="polite"
+          ></p>
+        </div>
+
         <div class="cart-row">
           <div class="label">Subtotal</div>
           <div class="value" id="cart-subtotal">$0.00</div>
