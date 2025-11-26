@@ -1251,22 +1251,25 @@ html.avatar-open #jukebox-controls{ display: none !important; }
   font-size: 11px;
   opacity: 0.85;
 }
-/* Restore original zoomed-in hero image on desktop */
+/* Desktop hero – zoomed & focused lower on the image */
 #hero-dhk .banner__media img {
   width: 100%;
   height: 100%;
-  object-fit: cover !important;   /* zooms in like before */
-  object-position: center;
+  object-fit: cover !important;
+  object-position: center 65%;     /* push focus down towards the text */
+  transform: scale(1.18);          /* actual zoom */
+  transform-origin: center center;
 }
 
-/* Keep mobile looking correct (full image) */
+/* Mobile hero – show full image, no crazy zoom */
 @media (max-width: 900px) {
   #hero-dhk .banner__media img {
-    width: auto !important;
+    width: 100% !important;
     height: auto !important;
     max-width: 100%;
-    max-height: 90vh;
+    max-height: none;
     object-fit: contain !important;
+    object-position: center center;
+    transform: none;               /* no zoom on phones */
   }
 }
-
