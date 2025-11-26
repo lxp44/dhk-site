@@ -9,6 +9,15 @@
       currency: "USD",
     });
 
+  // === GLOBAL SALE CONFIG (40% OFF ALL ITEMS) ===
+  const SALE_ACTIVE = true;     // turn sale on/off
+  const SALE_PERCENT = 40;      // 40% OFF all items
+
+  function applySale(cents) {
+    if (!SALE_ACTIVE) return Number(cents || 0);
+    return Math.round(Number(cents || 0) * (1 - SALE_PERCENT / 100));
+  }
+
   // ---- Accept both ?handle=... and ?id=...
   function getHandle() {
     const p = new URLSearchParams(location.search);
@@ -24,7 +33,9 @@
 
   // Force fresh products.json each load
   async function loadProducts() {
-    const res = await fetch("data/products.json?ts=" + Date.now(), { cache: "no-cache" });
+    const res = await fetch("data/products.json?ts=" + Date.now(), {
+      cache: "no-cache",
+    });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const raw = await res.json();
     return normalizeProducts(raw);
@@ -34,6 +45,9 @@
     const hasOptions = Array.isArray(p.options) && p.options.length > 0;
     const imgs = Array.isArray(p.images) ? p.images : [];
     const firstImg = imgs.length ? imgs[0] : "";
+
+    const originalPriceCents = Number(p.price) || 0;
+    const salePriceCents = applySale(originalPriceCents);
 
     root.innerHTML = `
       <article class="product-detail">
@@ -68,7 +82,16 @@
 
         <div class="pd__info">
           <h1 class="pd__title">${p.title}</h1>
-          <div class="pd__price">${PRICE(p.price)}</div>
+
+          <!-- PRICE BLOCK WITH 40% OFF -->
+          <div class="pd__price">
+            <span class="price-original" style="opacity:.55;text-decoration:line-through;margin-right:6px;">
+              ${PRICE(originalPriceCents)}
+            </span>
+            <span class="price-sale">
+              ${PRICE(salePriceCents)}
+            </span>
+          </div>
 
           ${
             hasOptions
@@ -113,7 +136,7 @@
       });
     });
 
-    // Add to cart (now includes priceCents + stripePriceId)
+    // Add to cart (now includes discounted priceCents)
     root.querySelector("#add-to-cart")?.addEventListener("click", () => {
       const sizeSel = root.querySelector("#pd-option");
       const variant = sizeSel ? sizeSel.value : null;
@@ -122,7 +145,7 @@
         {
           id: p.id,
           title: p.title,
-          priceCents: Number(p.price) || 0, // cents
+          priceCents: salePriceCents, // 40% OFF price in cents
           thumbnail: p.thumbnail || firstImg || "",
           variant,
           url: `product.html?id=${p.id}`,
