@@ -4,8 +4,8 @@
 :root {
   --header-height: 56px;            /* slim header */
   --hero-overlay: 0.40;             /* tweak to match Shopify's 40% */
-  --hero-zoom-desktop: 2.0;        /* desktop hero zoom */
-  --hero-zoom-mobile: 2.0;          /* mobile hero zoom */
+  --hero-zoom-desktop: 1.50;        /* desktop hero zoom */
+  --hero-zoom-mobile: 1.50;          /* mobile hero zoom */
 }
 
 @media (max-width: 900px) {
