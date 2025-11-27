@@ -14,12 +14,9 @@ const CORS = {
   'Access-Control-Allow-Methods': 'POST,OPTIONS',
 };
 
-/**
- * 🔥 Site-wide sale control
- * Set to 40 for 40% OFF site-wide.
- * Set to 0 to disable the automatic sale.
- */
-const SITE_WIDE_DISCOUNT_PERCENT = 40;
+// 🔥 CONFIG: adjust these when your promos change
+const SITE_WIDE_PERCENT_OFF = 40;   // Black Friday 40% off
+const PLUS_EXTRA_PERCENT_OFF = 25;  // PLUS code = extra 25% off sale price
 
 exports.handler = async (event) => {
   try {
@@ -51,7 +48,7 @@ exports.handler = async (event) => {
       return { statusCode: 400, headers: CORS, body: 'No items in cart.' };
     }
 
-    // Expect: [{ price: 'price_XXX', quantity: number >= 1 }]
+    // Expect: { price: 'price_XXX', quantity: number >= 1 }
     const line_items = items.map((it, i) => {
       if (!it || typeof it !== 'object') {
         throw new Error(`Bad item at index ${i}`);
@@ -81,43 +78,51 @@ exports.handler = async (event) => {
     const successURL = payload.success_url || `${base}/success.html`;
     const cancelURL = payload.cancel_url || `${base}/cart.html`;
 
-    // ===== Discounts =====
-    // We’ll build a single discounts array and pass it to Stripe.
+    // =========================
+    //   DISCOUNT LOGIC
+    // =========================
+
     let discounts = [];
 
-    // 1) Automatic site-wide sale (40% OFF)
-    if (SITE_WIDE_DISCOUNT_PERCENT > 0) {
-      try {
-        const saleCoupon = await stripe.coupons.create({
-          name: `DHK Sitewide ${SITE_WIDE_DISCOUNT_PERCENT}% OFF`,
-          percent_off: SITE_WIDE_DISCOUNT_PERCENT,
-          duration: 'once',
-        });
-        discounts.push({ coupon: saleCoupon.id });
-      } catch (e) {
-        console.error(
-          `Failed to create site-wide ${SITE_WIDE_DISCOUNT_PERCENT}% coupon:`,
-          e
-        );
-        // If this fails we just continue without the auto-sale,
-        // so checkout still works.
-      }
-    }
+    // If you ever want to kill the site-wide sale, set SITE_WIDE_PERCENT_OFF to 0
+    if (SITE_WIDE_PERCENT_OFF > 0) {
+      // Start with just the site-wide sale
+      let effectivePercentOff = SITE_WIDE_PERCENT_OFF;
+      let couponName = `Black Friday ${SITE_WIDE_PERCENT_OFF}% OFF`;
 
-    // 2) (Optional) Manual discount code logic
-    //    If you want PLUS to override the site-wide % later, you can adjust this.
-    if (discountCode === 'PLUS') {
+      // If code PLUS is present, stack it:
+      // 40% off, then 25% off the new price = 55% total off original.
+      if (discountCode === 'PLUS') {
+        const base = SITE_WIDE_PERCENT_OFF / 100;      // 0.40
+        const extra = PLUS_EXTRA_PERCENT_OFF / 100;    // 0.25
+
+        const combined =
+          1 - (1 - base) * (1 - extra);                // 0.55
+        effectivePercentOff = Math.round(combined * 100); // 55
+
+        couponName = `BF ${SITE_WIDE_PERCENT_OFF}% + PLUS ${PLUS_EXTRA_PERCENT_OFF}% OFF`;
+      }
+
       try {
-        // Right now we mirror the same 40% OFF for PLUS.
-        // Change percent_off here if you want a different code deal.
-        const plusCoupon = await stripe.coupons.create({
-          name: 'PLUS 40% OFF',
-          percent_off: 40,
+        const coupon = await stripe.coupons.create({
+          name: couponName,
+          percent_off: effectivePercentOff,
           duration: 'once',
         });
-        // If both auto-sale + PLUS exist, Stripe will just use the first;
-        // you can change this behavior by not pushing the auto-sale when a code is present.
-        discounts = [{ coupon: plusCoupon.id }];
+        discounts.push({ coupon: coupon.id });
+      } catch (e) {
+        console.error('Failed to create coupon for sale:', e);
+        // Continue without coupon if Stripe errors (fails closed)
+      }
+    } else if (discountCode === 'PLUS') {
+      // Fallback: if you ever turn off site-wide sale but still want PLUS alone
+      try {
+        const coupon = await stripe.coupons.create({
+          name: `PLUS ${PLUS_EXTRA_PERCENT_OFF}% OFF`,
+          percent_off: PLUS_EXTRA_PERCENT_OFF,
+          duration: 'once',
+        });
+        discounts.push({ coupon: coupon.id });
       } catch (e) {
         console.error('Failed to create coupon for PLUS:', e);
       }
@@ -132,7 +137,7 @@ exports.handler = async (event) => {
       automatic_tax: { enabled: true },
     };
 
-    if (discounts && discounts.length > 0) {
+    if (discounts.length > 0) {
       sessionParams.discounts = discounts;
     }
 
