@@ -14,6 +14,13 @@ const CORS = {
   'Access-Control-Allow-Methods': 'POST,OPTIONS',
 };
 
+/**
+ * 🔥 Site-wide sale control
+ * Set to 40 for 40% OFF site-wide.
+ * Set to 0 to disable the automatic sale.
+ */
+const SITE_WIDE_DISCOUNT_PERCENT = 40;
+
 exports.handler = async (event) => {
   try {
     // Preflight
@@ -44,7 +51,7 @@ exports.handler = async (event) => {
       return { statusCode: 400, headers: CORS, body: 'No items in cart.' };
     }
 
-    // Expect: { price: 'price_XXX', quantity: number >= 1 }
+    // Expect: [{ price: 'price_XXX', quantity: number >= 1 }]
     const line_items = items.map((it, i) => {
       if (!it || typeof it !== 'object') {
         throw new Error(`Bad item at index ${i}`);
@@ -68,24 +75,51 @@ exports.handler = async (event) => {
       (refererHeader ? new URL(refererHeader).origin : null);
     const baseFromNetlify =
       process.env.URL || process.env.DEPLOY_PRIME_URL;
-    const base = baseFromHeader || baseFromNetlify || 'https://dhk-site.netlify.app';
+    const base =
+      baseFromHeader || baseFromNetlify || 'https://dhk-site.netlify.app';
 
     const successURL = payload.success_url || `${base}/success.html`;
     const cancelURL = payload.cancel_url || `${base}/cart.html`;
 
-    // Optional discounts array
-    let discounts;
-    if (discountCode === 'PLUS') {
+    // ===== Discounts =====
+    // We’ll build a single discounts array and pass it to Stripe.
+    let discounts = [];
+
+    // 1) Automatic site-wide sale (40% OFF)
+    if (SITE_WIDE_DISCOUNT_PERCENT > 0) {
       try {
-        const coupon = await stripe.coupons.create({
-          name: 'PLUS 25% OFF',
-          percent_off: 25,
+        const saleCoupon = await stripe.coupons.create({
+          name: `DHK Sitewide ${SITE_WIDE_DISCOUNT_PERCENT}% OFF`,
+          percent_off: SITE_WIDE_DISCOUNT_PERCENT,
           duration: 'once',
         });
-        discounts = [{ coupon: coupon.id }];
+        discounts.push({ coupon: saleCoupon.id });
+      } catch (e) {
+        console.error(
+          `Failed to create site-wide ${SITE_WIDE_DISCOUNT_PERCENT}% coupon:`,
+          e
+        );
+        // If this fails we just continue without the auto-sale,
+        // so checkout still works.
+      }
+    }
+
+    // 2) (Optional) Manual discount code logic
+    //    If you want PLUS to override the site-wide % later, you can adjust this.
+    if (discountCode === 'PLUS') {
+      try {
+        // Right now we mirror the same 40% OFF for PLUS.
+        // Change percent_off here if you want a different code deal.
+        const plusCoupon = await stripe.coupons.create({
+          name: 'PLUS 40% OFF',
+          percent_off: 40,
+          duration: 'once',
+        });
+        // If both auto-sale + PLUS exist, Stripe will just use the first;
+        // you can change this behavior by not pushing the auto-sale when a code is present.
+        discounts = [{ coupon: plusCoupon.id }];
       } catch (e) {
         console.error('Failed to create coupon for PLUS:', e);
-        // If coupon creation fails, continue without a discount
       }
     }
 
