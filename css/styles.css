@@ -369,6 +369,21 @@ body.drawer-open { overflow: hidden; }
 }
 
 /* =========================
+   Product page – image zoom + magnifying cursor
+   ========================= */
+@media (pointer: fine) {
+  #product-root .product-main img {
+    cursor: zoom-in; /* magnifying glass cursor */
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  #product-root .product-main img:hover {
+    transform: scale(1.04); /* subtle zoom */
+    box-shadow: 0 0 28px rgba(255,255,255,0.16);
+  }
+}
+
+/* =========================
    Sections & Featured collection (stub)
    ========================= */
 .section { padding: 44px 0 36px; }
