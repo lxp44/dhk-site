@@ -10,7 +10,7 @@
     });
 
   // === GLOBAL SALE CONFIG (40% OFF ALL ITEMS) ===
-  const SALE_ACTIVE = true;     // turn sale on/off
+  const SALE_ACTIVE = false;     // turn sale on/off
   const SALE_PERCENT = 40;      // 40% OFF all items
 
   function applySale(cents) {
