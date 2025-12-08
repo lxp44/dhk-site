@@ -9,10 +9,9 @@
       currency: "USD",
     });
 
-  // === GLOBAL SALE CONFIG ===
-  // Toggle this to turn a site-wide % off back on in the FUTURE.
-  const SALE_ACTIVE = false;     // ⬅️ SALE OFF (was true)
-  const SALE_PERCENT = 40;       // 40% OFF when active
+  // === GLOBAL SALE CONFIG (40% OFF ALL ITEMS) ===
+  const SALE_ACTIVE = true;     // turn sale on/off
+  const SALE_PERCENT = 40;      // 40% OFF all items
 
   function applySale(cents) {
     if (!SALE_ACTIVE) return Number(cents || 0);
@@ -50,12 +49,6 @@
     const originalPriceCents = Number(p.price) || 0;
     const salePriceCents = applySale(originalPriceCents);
 
-    // Only show crossed-out + sale if sale is actually active and changes price
-    const showSale =
-      SALE_ACTIVE &&
-      SALE_PERCENT > 0 &&
-      salePriceCents < originalPriceCents;
-
     root.innerHTML = `
       <article class="product-detail">
         <div class="pd__gallery">
@@ -90,24 +83,14 @@
         <div class="pd__info">
           <h1 class="pd__title">${p.title}</h1>
 
-          <!-- PRICE BLOCK -->
+          <!-- PRICE BLOCK WITH 40% OFF -->
           <div class="pd__price">
-            ${
-              showSale
-                ? `
-                  <span class="price-original" style="opacity:.55;text-decoration:line-through;margin-right:6px;">
-                    ${PRICE(originalPriceCents)}
-                  </span>
-                  <span class="price-sale">
-                    ${PRICE(salePriceCents)}
-                  </span>
-                `
-                : `
-                  <span class="price-normal">
-                    ${PRICE(originalPriceCents)}
-                  </span>
-                `
-            }
+            <span class="price-original" style="opacity:.55;text-decoration:line-through;margin-right:6px;">
+              ${PRICE(originalPriceCents)}
+            </span>
+            <span class="price-sale">
+              ${PRICE(salePriceCents)}
+            </span>
           </div>
 
           ${
@@ -142,18 +125,19 @@
     }
 
     // Thumbnail -> main image switcher
+    const imgsLocal = imgs.slice(); // local copy for closure
     root.querySelectorAll(".pd__thumb").forEach((btn) => {
       btn.addEventListener("click", () => {
         const idx = +btn.dataset.idx || 0;
         const mainImg = root.querySelector(".product-main img");
-        if (mainImg && imgs[idx]) {
-          mainImg.src = imgs[idx];
+        if (mainImg && imgsLocal[idx]) {
+          mainImg.src = imgsLocal[idx];
           mainImg.alt = `${p.title} image ${idx + 1}`;
         }
       });
     });
 
-    // Add to cart (uses salePriceCents, which == full price when SALE_ACTIVE=false)
+    // Add to cart (now includes discounted priceCents)
     root.querySelector("#add-to-cart")?.addEventListener("click", () => {
       const sizeSel = root.querySelector("#pd-option");
       const variant = sizeSel ? sizeSel.value : null;
@@ -162,7 +146,7 @@
         {
           id: p.id,
           title: p.title,
-          priceCents: salePriceCents,
+          priceCents: salePriceCents, // 40% OFF price in cents
           thumbnail: p.thumbnail || firstImg || "",
           variant,
           url: `product.html?id=${p.id}`,
@@ -171,6 +155,71 @@
         { open: true }
       );
     });
+
+    // ===== MAGNIFYING LENS (match Collections) =====
+    if (window.matchMedia && window.matchMedia("(pointer: fine)").matches) {
+      const mainImg = root.querySelector(".product-main img");
+      const mainWrap = root.querySelector(".product-main");
+
+      if (mainImg && mainWrap) {
+        // Ensure wrapper can host absolutely positioned lens
+        if (getComputedStyle(mainWrap).position === "static") {
+          mainWrap.style.position = "relative";
+        }
+
+        const lens = document.createElement("div");
+        lens.className = "pd__lens";
+        mainWrap.appendChild(lens);
+
+        const zoom = 2.2;
+
+        function moveLens(evt) {
+          const rect = mainImg.getBoundingClientRect();
+          const lensRect = lens.getBoundingClientRect();
+          const lensR = lensRect.width / 2;
+
+          const clientX = evt.clientX ?? (evt.touches && evt.touches[0]?.clientX);
+          const clientY = evt.clientY ?? (evt.touches && evt.touches[0]?.clientY);
+          if (clientX == null || clientY == null) return;
+
+          let x = clientX - rect.left;
+          let y = clientY - rect.top;
+
+          // Clamp lens center inside the image bounds
+          x = Math.max(lensR, Math.min(rect.width - lensR, x));
+          y = Math.max(lensR, Math.min(rect.height - lensR, y));
+
+          lens.style.left = `${x - lensR}px`;
+          lens.style.top = `${y - lensR}px`;
+
+          lens.style.backgroundImage = `url("${mainImg.src}")`;
+          lens.style.backgroundSize = `${rect.width * zoom}px ${rect.height * zoom}px`;
+          lens.style.backgroundPosition = `-${x * zoom - lensR}px -${y * zoom - lensR}px`;
+        }
+
+        function onEnter() {
+          lens.classList.add("is-active");
+        }
+        function onLeave() {
+          lens.classList.remove("is-active");
+        }
+
+        mainImg.addEventListener("mouseenter", onEnter);
+        mainImg.addEventListener("mouseleave", onLeave);
+        mainImg.addEventListener("mousemove", moveLens);
+
+        // (Optional) basic support for trackpads that fire pointer events
+        mainImg.addEventListener(
+          "pointermove",
+          (e) => {
+            if (e.pointerType === "mouse" || e.pointerType === "pen") {
+              moveLens(e);
+            }
+          },
+          { passive: true }
+        );
+      }
+    }
   }
 
   // ---- Boot
