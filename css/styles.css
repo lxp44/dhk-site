@@ -324,8 +324,8 @@ body.drawer-open { overflow: hidden; }
   }
 
   #hero-dhk .banner__media img {
-    width: 100%;
-    height: 100%;
+    width: 85%;
+    height: 85%;
     object-fit: cover;
     object-position: center center;
     transform: scale(var(--hero-zoom-mobile));
