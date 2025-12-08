@@ -1115,3 +1115,8 @@ h1,h2,h3,
   * { animation: none !important; transition: none !important; }
   .lightning-flash { animation: none !important; }
 }
+/* Turn off old sale prices on product pages */
+.product-price del,
+.product-price s {
+  display: none !important;
+}
