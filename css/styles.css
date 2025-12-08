@@ -369,19 +369,45 @@ body.drawer-open { overflow: hidden; }
 }
 
 /* =========================
-   Product page – image zoom + magnifying cursor
+   Product page – magnifying lens (match Collections)
    ========================= */
 @media (pointer: fine) {
-  #product-root .product-main img,
-  #product-root .pd__thumb img {
-    cursor: zoom-in !important; /* override bat cursor with magnifier */
+  /* Make sure the main image wrapper can host the lens */
+  #product-root .product-main {
+    position: relative;
+  }
+
+  /* Magnifying glass cursor on the main image */
+  #product-root .product-main img {
+    cursor: zoom-in !important;
     transition: transform 0.25s ease, box-shadow 0.25s ease;
   }
 
-  #product-root .product-main img:hover,
-  #product-root .pd__thumb img:hover {
-    transform: scale(1.04);
+  /* Slight glow/scale on hover, like the cards */
+  #product-root .product-main img:hover {
+    transform: scale(1.02);
     box-shadow: 0 0 28px rgba(255,255,255,0.16);
+  }
+
+  /* Circular zoom lens that follows the cursor */
+  #product-root .pd__lens {
+    position: absolute;
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.55);
+    box-shadow: 0 0 22px rgba(0,0,0,0.85);
+    pointer-events: none;
+    overflow: hidden;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 200% 200%;
+    display: none;
+    z-index: 3;
+  }
+
+  #product-root .pd__lens.is-active {
+    display: block;
   }
 }
 
