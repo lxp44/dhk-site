@@ -372,13 +372,15 @@ body.drawer-open { overflow: hidden; }
    Product page – image zoom + magnifying cursor
    ========================= */
 @media (pointer: fine) {
-  #product-root .product-main img {
-    cursor: zoom-in; /* magnifying glass cursor */
+  #product-root .product-main img,
+  #product-root .pd__thumb img {
+    cursor: zoom-in !important; /* override bat cursor with magnifier */
     transition: transform 0.25s ease, box-shadow 0.25s ease;
   }
 
-  #product-root .product-main img:hover {
-    transform: scale(1.04); /* subtle zoom */
+  #product-root .product-main img:hover,
+  #product-root .pd__thumb img:hover {
+    transform: scale(1.04);
     box-shadow: 0 0 28px rgba(255,255,255,0.16);
   }
 }
@@ -1135,39 +1137,21 @@ h1,h2,h3,
 .product-price s {
   display: none !important;
 }
-/* ===== Remove white borders / frames from product page images ===== */
+/* ===== Product page – remove white button borders, keep glow box ===== */
 
-/* Main image wrapper */
-#product-root .product-main img {
-  background: transparent !important;
-  box-shadow: none !important;
-  border-radius: 0 !important;
+/* Reset the thumbnail buttons so they don't draw white borders */
+#product-root .pd__thumb {
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: 6px;
+  border-radius: 0;
+  box-shadow: none;
+  outline: none;
 }
 
-/* Thumbnail wrapper reset */
-#product-root .pd__thumb,
-#product-root .pd__thumbs,
-#product-root .pd__thumb img,
-#product-root .pd__thumbs img {
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-  padding: 0 !important;
-  margin: 0 6px !important;
-  border-radius: 0 !important;
-}
-
-/* Thumbnail hover reset */
-#product-root .pd__thumb img:hover,
-#product-root .pd__thumbs img:hover {
-  transform: none !important;
-  opacity: 1 !important;
-  box-shadow: none !important;
-}
-
-/* Remove any container background behind images */
-#product-root .pd__gallery,
-#product-root .product-main,
-#product-root .pd__thumbs {
-  background: transparent !important;
+/* Make sure the thumbnail images themselves keep their rounded / glow look
+   from product.html (we just don't want extra borders from the button) */
+#product-root .pd__thumb img {
+  display: block;
 }
