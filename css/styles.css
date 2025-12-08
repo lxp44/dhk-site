@@ -1135,3 +1135,39 @@ h1,h2,h3,
 .product-price s {
   display: none !important;
 }
+/* ===== Remove white borders / frames from product page images ===== */
+
+/* Main image wrapper */
+#product-root .product-main img {
+  background: transparent !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+
+/* Thumbnail wrapper reset */
+#product-root .pd__thumb,
+#product-root .pd__thumbs,
+#product-root .pd__thumb img,
+#product-root .pd__thumbs img {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 6px !important;
+  border-radius: 0 !important;
+}
+
+/* Thumbnail hover reset */
+#product-root .pd__thumb img:hover,
+#product-root .pd__thumbs img:hover {
+  transform: none !important;
+  opacity: 1 !important;
+  box-shadow: none !important;
+}
+
+/* Remove any container background behind images */
+#product-root .pd__gallery,
+#product-root .product-main,
+#product-root .pd__thumbs {
+  background: transparent !important;
+}
