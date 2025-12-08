@@ -48,53 +48,53 @@
     "stripePriceId": "price_1SCCbI0cfsBzY9CjkOPTNtKJ"
   },
   {
-  "id": "the-dark-harlem-knight-flare-sweatpants",
-  "title": "The Dark Harlem Knight Flare Sweatpants",
-  "price": 15000,
-  "thumbnail": "assets/img/products/volume-2/resized/MESN-FLAIR-BOTTOM-1-VOL2.jpg",
-  "images": [
-    "assets/img/products/volume-2/resized/MESN-FLAIR-BOTTOM-1-VOL2.jpg",
-    "assets/img/products/volume-2/resized/MESN-FLAIR-BOTTOM-2-VOL2.jpg",
-    "assets/img/products/volume-2/resized/MESN-FLAIR-BOTTOM-3-VOL2.jpg",
-    "assets/img/products/volume-2/resized/MESN-FLAIR-BOTTOM-4-VOL2.jpg"
-  ],
-  "options": ["S", "M", "L", "XL", "2XL", "3XL"],
-  "description": "<div style=\"background-color: #0a0a0a; color: #f1f1f1; font-family: Cinzel, serif; padding: 20px; position: relative; overflow: hidden;\"><h2 class=\"flicker\" style=\"color: #ffffff; text-transform: uppercase; text-shadow: 0 0 5px #ffffff;\">The Dark Harlem Knight Flare Sweatpants</h2><p style=\"font-size: 16px; line-height: 1.6; color: #cccccc;\">Official uniform of the Dark Harlem Knight — below the waist.<br><br>Tailored flare sweatpants cut to stack over your sneakers, finished with hand-set Swarovski® crystals for a spotlight shimmer in every step.<br><br>Built from heavyweight fleece for a luxury drape, engineered to move with you from Harlem blocks to Gotham nights.</p><p style=\"font-size: 16px; line-height: 1.6; color: #cccccc;\">Presentation is power.</p><h3 style=\"color: #ffffff; margin-top: 20px;\">Details:</h3><ul style=\"list-style-type: none; padding: 0; color: #cccccc; font-size: 15px;\"><li>• Sizes: S–3XL</li><li>• Fit: Tailored flare with stacked leg</li><li>• Materials: Heavyweight fleece with ribbed waistband</li><li>• Crystals: Swarovski® crystal 44 detailing</li><li>• Color: Black</li><li>• Designed in Harlem. Gotham certified.</li></ul><!-- Bats Video Overlay --><video style=\"position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.1; pointer-events: none;\" loop muted autoplay><source type=\"video/mp4\" src=\"https://cdn.shopify.com/videos/c/o/v/8046ce6fca4246889bdfa3b7f48c742c.mov\"></video></div><style>@keyframes flicker {0%, 100% { opacity: 1; } 50% { opacity: 0.3; }} .flicker { animation: flicker 1.5s infinite alternate; }</style>",
-  "url": "product.html?id=the-dark-harlem-knight-flare-sweatpants",
-  "stripePriceId": "price_REPLACE_ME_FLARE_SWEATPANTS"
-}
-{
-  "id": "dark-harlem-dame-crop-hoodie",
-  "title": "Dark Harlem Dame Crop Hoodie",
-  "price": 20000,
-  "thumbnail": "assets/img/products/volume-2/WOMENS-HOODIE-VOL2.gif",
-  "images": [
-    "assets/img/products/volume-2/WOMENS-HOODIE-1-VOL2.jpg",
-    "assets/img/products/volume-2/WOMENS-HOODIE-2-VOL2.jpg",
-    "assets/img/products/volume-2/WOMENS-HOODIE-3-VOL2.jpg",
-    "assets/img/products/volume-2/WOMENS-HOODIE-4-VOL2.jpg"
-  ],
-  "options": ["XS", "S", "M", "L", "XL"],
-  "description": "<div style=\"background-color: #0a0a0a; color: #f1f1f1; font-family: Cinzel, serif; padding: 20px; position: relative; overflow: hidden;\"><h2 class=\"flicker\" style=\"color: #ffffff; text-transform: uppercase; text-shadow: 0 0 5px #ffffff;\">Dark Harlem Dame Crop Hoodie</h2><p style=\"font-size: 16px; line-height: 1.6; color: #cccccc;\">Designed for the Dame of Gotham — bold, sharp, and untouchable. This cropped hoodie features hand-set Swarovski® crystals that shimmer through the storm, carving out presence in any room.<br><br>Cut with a premium cropped silhouette and heavyweight fleece for luxury comfort without losing that street-bred attitude.<br><br>Harlem raised. Gotham approved.</p><h3 style=\"color: #ffffff; margin-top: 20px;\">Details:</h3><ul style=\"list-style-type: none; padding: 0; color: #cccccc; font-size: 15px;\"><li>• Sizes: XS–XL</li><li>• Fit: Cropped, form-flattering silhouette</li><li>• Materials: Heavyweight luxury fleece</li><li>• Crystals: Genuine Swarovski® crystal 44 detailing</li><li>• Color: Black</li><li>• Limited Volume II drop</li></ul><!-- Bats Video Overlay --><video style=\"position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.1; pointer-events: none;\" loop muted autoplay><source type=\"video/mp4\" src=\"https://cdn.shopify.com/videos/c/o/v/8046ce6fca4246889bdfa3b7f48c742c.mov\"></video></div><style>@keyframes flicker {0%, 100% { opacity: 1; } 50% { opacity: 0.3; }} .flicker { animation: flicker 1.5s infinite alternate; }</style>",
-  "url": "product.html?id=dark-harlem-dame-crop-hoodie",
-  "stripePriceId": "price_1SCCdN0cfsBzY9CjlRGm2hla"
-}
+    "id": "the-dark-harlem-knight-flare-sweatpants",
+    "title": "The Dark Harlem Knight Flare Sweatpants",
+    "price": 15000,
+    "thumbnail": "assets/img/products/volume-2/resized/MESN-FLAIR-BOTTOM-1-VOL2.jpg",
+    "images": [
+      "assets/img/products/volume-2/resized/MESN-FLAIR-BOTTOM-1-VOL2.jpg",
+      "assets/img/products/volume-2/resized/MESN-FLAIR-BOTTOM-2-VOL2.jpg",
+      "assets/img/products/volume-2/resized/MESN-FLAIR-BOTTOM-3-VOL2.jpg",
+      "assets/img/products/volume-2/resized/MESN-FLAIR-BOTTOM-4-VOL2.jpg"
+    ],
+    "options": ["S", "M", "L", "XL", "2XL", "3XL"],
+    "description": "<div style=\"background-color: #0a0a0a; color: #f1f1f1; font-family: Cinzel, serif; padding: 20px; position: relative; overflow: hidden;\"><h2 class=\"flicker\" style=\"color: #ffffff; text-transform: uppercase; text-shadow: 0 0 5px #ffffff;\">The Dark Harlem Knight Flare Sweatpants</h2><p style=\"font-size: 16px; line-height: 1.6; color: #cccccc;\">Official uniform of the Dark Harlem Knight — below the waist.<br><br>Tailored flare sweatpants cut to stack over your sneakers, finished with hand-set Swarovski® crystals for a spotlight shimmer in every step.<br><br>Built from heavyweight fleece for a luxury drape, engineered to move with you from Harlem blocks to Gotham nights.</p><p style=\"font-size: 16px; line-height: 1.6; color: #cccccc;\">Presentation is power.</p><h3 style=\"color: #ffffff; margin-top: 20px;\">Details:</h3><ul style=\"list-style-type: none; padding: 0; color: #cccccc; font-size: 15px;\"><li>• Sizes: S–3XL</li><li>• Fit: Tailored flare with stacked leg</li><li>• Materials: Heavyweight fleece with ribbed waistband</li><li>• Crystals: Swarovski® crystal 44 detailing</li><li>• Color: Black</li><li>• Designed in Harlem. Gotham certified.</li></ul><!-- Bats Video Overlay --><video style=\"position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.1; pointer-events: none;\" loop muted autoplay><source type=\"video/mp4\" src=\"https://cdn.shopify.com/videos/c/o/v/8046ce6fca4246889bdfa3b7f48c742c.mov\"></video></div><style>@keyframes flicker {0%, 100% { opacity: 1; } 50% { opacity: 0.3; }} .flicker { animation: flicker 1.5s infinite alternate; }</style>",
+    "url": "product.html?id=the-dark-harlem-knight-flare-sweatpants",
+    "stripePriceId": "price_REPLACE_ME_FLARE_SWEATPANTS"
+  },
   {
-  "id": "the-dark-harlem-dame-flare-sweatpants",
-  "title": "The Dark Harlem dame Flare Sweatpants",
-  "price": 15000,
-  "thumbnail": "assets/img/products/volume-2/WOMENS-BOTTOMS-FLAIR-VOL2.gif",
-  "images": [
-    "assets/img/products/volume-2/WOMENS-FLAIR-BOTTOMS-1-VOL2.jpg",
-    "assets/img/products/volume-2/WOMENS-FLAIR-BOTTOMS-2-VOL2.jpg",
-    "assets/img/products/volume-2/WOMENS-FLAIR-BOTTOMS-3-VOL2.jpg",
-    "assets/img/products/volume-2/WOMENS-FLAIR-BOTTOMS-4-VOL2.jpg"
-  ],
-  "options": ["S", "M", "L", "XL", "2XL", "3XL"],
-  "description": "<div style=\"background-color: #0a0a0a; color: #f1f1f1; font-family: Cinzel, serif; padding: 20px; position: relative; overflow: hidden;\"><h2 class=\"flicker\" style=\"color: #ffffff; text-transform: uppercase; text-shadow: 0 0 5px #ffffff;\">The Dark Harlem Knight Flare Sweatpants</h2><p style=\"font-size: 16px; line-height: 1.6; color: #cccccc;\">Official uniform of the Dark Harlem Knight — below the waist.<br><br>Tailored flare sweatpants cut to stack over your sneakers, finished with hand-set Swarovski® crystals for a spotlight shimmer in every step.<br><br>Built from heavyweight fleece for a luxury drape, engineered to move with you from Harlem blocks to Gotham nights.</p><p style=\"font-size: 16px; line-height: 1.6; color: #cccccc;\">Presentation is power.</p><h3 style=\"color: #ffffff; margin-top: 20px;\">Details:</h3><ul style=\"list-style-type: none; padding: 0; color: #cccccc; font-size: 15px;\"><li>• Sizes: S–3XL</li><li>• Fit: Tailored flare with stacked leg</li><li>• Materials: Heavyweight fleece with ribbed waistband</li><li>• Crystals: Swarovski® crystal 44 detailing</li><li>• Color: Black</li><li>• Designed in Harlem. Gotham certified.</li></ul><!-- Bats Video Overlay --><video style=\"position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.1; pointer-events: none;\" loop muted autoplay><source type=\"video/mp4\" src=\"https://cdn.shopify.com/videos/c/o/v/8046ce6fca4246889bdfa3b7f48c742c.mov\"></video></div><style>@keyframes flicker {0%, 100% { opacity: 1; } 50% { opacity: 0.3; }} .flicker { animation: flicker 1.5s infinite alternate; }</style>",
-  "url": "product.html?id=the-dark-harlem-dame-flare-sweatpants",
-  "stripePriceId": "price_REPLACE_ME_FLARE_SWEATPANTS"
-}
+    "id": "dark-harlem-dame-crop-hoodie",
+    "title": "Dark Harlem Dame Crop Hoodie",
+    "price": 20000,
+    "thumbnail": "assets/img/products/volume-2/WOMENS-HOODIE-VOL2.gif",
+    "images": [
+      "assets/img/products/volume-2/WOMENS-HOODIE-1-VOL2.jpg",
+      "assets/img/products/volume-2/WOMENS-HOODIE-2-VOL2.jpg",
+      "assets/img/products/volume-2/WOMENS-HOODIE-3-VOL2.jpg",
+      "assets/img/products/volume-2/WOMENS-HOODIE-4-VOL2.jpg"
+    ],
+    "options": ["XS", "S", "M", "L", "XL"],
+    "description": "<div style=\"background-color: #0a0a0a; color: #f1f1f1; font-family: Cinzel, serif; padding: 20px; position: relative; overflow: hidden;\"><h2 class=\"flicker\" style=\"color: #ffffff; text-transform: uppercase; text-shadow: 0 0 5px #ffffff;\">Dark Harlem Dame Crop Hoodie</h2><p style=\"font-size: 16px; line-height: 1.6; color: #cccccc;\">Designed for the Dame of Gotham — bold, sharp, and untouchable. This cropped hoodie features hand-set Swarovski® crystals that shimmer through the storm, carving out presence in any room.<br><br>Cut with a premium cropped silhouette and heavyweight fleece for luxury comfort without losing that street-bred attitude.<br><br>Harlem raised. Gotham approved.</p><h3 style=\"color: #ffffff; margin-top: 20px;\">Details:</h3><ul style=\"list-style-type: none; padding: 0; color: #cccccc; font-size: 15px;\"><li>• Sizes: XS–XL</li><li>• Fit: Cropped, form-flattering silhouette</li><li>• Materials: Heavyweight luxury fleece</li><li>• Crystals: Genuine Swarovski® crystal 44 detailing</li><li>• Color: Black</li><li>• Limited Volume II drop</li></ul><!-- Bats Video Overlay --><video style=\"position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.1; pointer-events: none;\" loop muted autoplay><source type=\"video/mp4\" src=\"https://cdn.shopify.com/videos/c/o/v/8046ce6fca4246889bdfa3b7f48c742c.mov\"></video></div><style>@keyframes flicker {0%, 100% { opacity: 1; } 50% { opacity: 0.3; }} .flicker { animation: flicker 1.5s infinite alternate; }</style>",
+    "url": "product.html?id=dark-harlem-dame-crop-hoodie",
+    "stripePriceId": "price_1SCCdN0cfsBzY9CjlRGm2hla"
+  },
+  {
+    "id": "the-dark-harlem-dame-flare-sweatpants",
+    "title": "The Dark Harlem Dame Flare Sweatpants",
+    "price": 15000,
+    "thumbnail": "assets/img/products/volume-2/WOMENS-BOTTOMS-FLAIR-VOL2.gif",
+    "images": [
+      "assets/img/products/volume-2/WOMENS-FLAIR-BOTTOMS-1-VOL2.jpg",
+      "assets/img/products/volume-2/WOMENS-FLAIR-BOTTOMS-2-VOL2.jpg",
+      "assets/img/products/volume-2/WOMENS-FLAIR-BOTTOMS-3-VOL2.jpg",
+      "assets/img/products/volume-2/WOMENS-FLAIR-BOTTOMS-4-VOL2.jpg"
+    ],
+    "options": ["S", "M", "L", "XL", "2XL", "3XL"],
+    "description": "<div style=\"background-color: #0a0a0a; color: #f1f1f1; font-family: Cinzel, serif; padding: 20px; position: relative; overflow: hidden;\"><h2 class=\"flicker\" style=\"color: #ffffff; text-transform: uppercase; text-shadow: 0 0 5px #ffffff;\">The Dark Harlem Dame Flare Sweatpants</h2><p style=\"font-size: 16px; line-height: 1.6; color: #cccccc;\">Official Gotham uniform for the Dame in motion.<br><br>Tailored flare sweatpants designed to stack and move, finished with Swarovski® crystal accents that catch every flash of light from hallway to rooftop.<br><br>Luxury fleece feel. Street-bred attitude.</p><h3 style=\"color: #ffffff; margin-top: 20px;\">Details:</h3><ul style=\"list-style-type: none; padding: 0; color: #cccccc; font-size: 15px;\"><li>• Sizes: S–3XL</li><li>• Fit: Tailored flare with stacked leg</li><li>• Materials: Heavyweight fleece with ribbed waistband</li><li>• Crystals: Swarovski® crystal detailing</li><li>• Color: Black</li><li>• Designed in Harlem. Gotham certified.</li></ul><!-- Bats Video Overlay --><video style=\"position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.1; pointer-events: none;\" loop muted autoplay><source type=\"video/mp4\" src=\"https://cdn.shopify.com/videos/c/o/v/8046ce6fca4246889bdfa3b7f48c742c.mov\"></video></div><style>@keyframes flicker {0%, 100% { opacity: 1; } 50% { opacity: 0.3; }} .flicker { animation: flicker 1.5s infinite alternate; }</style>",
+    "url": "product.html?id=the-dark-harlem-dame-flare-sweatpants",
+    "stripePriceId": "price_REPLACE_ME_FLARE_SWEATPANTS"
+  },
   {
     "id": "the-dark-harlem-knight-members",
     "title": "Vol.1 Members ( Custom Name )",
