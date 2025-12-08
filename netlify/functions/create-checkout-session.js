@@ -14,9 +14,10 @@ const CORS = {
   'Access-Control-Allow-Methods': 'POST,OPTIONS',
 };
 
-// 🔥 CONFIG: adjust these when your promos change
-const SITE_WIDE_PERCENT_OFF = 40;   // Black Friday 40% off
-const PLUS_EXTRA_PERCENT_OFF = 25;  // PLUS code = extra 25% off sale price
+// 🔥 SIMPLE SITE-WIDE DISCOUNT CONFIG (backend)
+// Match this with your cart.js config conceptually.
+const ENABLE_SITE_WIDE_DISCOUNT = false; // true to enable, false to disable
+const SITE_WIDE_PERCENT_OFF = 0;         // e.g. 40 for 40% off once per checkout
 
 exports.handler = async (event) => {
   try {
@@ -39,10 +40,6 @@ exports.handler = async (event) => {
 
     const payload = JSON.parse(event.body || '{}');
     const items = Array.isArray(payload.items) ? payload.items : [];
-    const discountCodeRaw = payload.discountCode || null;
-    const discountCode = discountCodeRaw
-      ? String(discountCodeRaw).trim().toUpperCase()
-      : null;
 
     if (items.length === 0) {
       return { statusCode: 400, headers: CORS, body: 'No items in cart.' };
@@ -79,52 +76,21 @@ exports.handler = async (event) => {
     const cancelURL = payload.cancel_url || `${base}/cart.html`;
 
     // =========================
-    //   DISCOUNT LOGIC
+    //   SITE-WIDE DISCOUNT LOGIC
     // =========================
-
     let discounts = [];
 
-    // If you ever want to kill the site-wide sale, set SITE_WIDE_PERCENT_OFF to 0
-    if (SITE_WIDE_PERCENT_OFF > 0) {
-      // Start with just the site-wide sale
-      let effectivePercentOff = SITE_WIDE_PERCENT_OFF;
-      let couponName = `Black Friday ${SITE_WIDE_PERCENT_OFF}% OFF`;
-
-      // If code PLUS is present, stack it:
-      // 40% off, then 25% off the new price = 55% total off original.
-      if (discountCode === 'PLUS') {
-        const base = SITE_WIDE_PERCENT_OFF / 100;      // 0.40
-        const extra = PLUS_EXTRA_PERCENT_OFF / 100;    // 0.25
-
-        const combined =
-          1 - (1 - base) * (1 - extra);                // 0.55
-        effectivePercentOff = Math.round(combined * 100); // 55
-
-        couponName = `BF ${SITE_WIDE_PERCENT_OFF}% + PLUS ${PLUS_EXTRA_PERCENT_OFF}% OFF`;
-      }
-
+    if (ENABLE_SITE_WIDE_DISCOUNT && SITE_WIDE_PERCENT_OFF > 0) {
       try {
         const coupon = await stripe.coupons.create({
-          name: couponName,
-          percent_off: effectivePercentOff,
+          name: `Site-wide ${SITE_WIDE_PERCENT_OFF}% OFF`,
+          percent_off: SITE_WIDE_PERCENT_OFF,
           duration: 'once',
         });
         discounts.push({ coupon: coupon.id });
       } catch (e) {
-        console.error('Failed to create coupon for sale:', e);
-        // Continue without coupon if Stripe errors (fails closed)
-      }
-    } else if (discountCode === 'PLUS') {
-      // Fallback: if you ever turn off site-wide sale but still want PLUS alone
-      try {
-        const coupon = await stripe.coupons.create({
-          name: `PLUS ${PLUS_EXTRA_PERCENT_OFF}% OFF`,
-          percent_off: PLUS_EXTRA_PERCENT_OFF,
-          duration: 'once',
-        });
-        discounts.push({ coupon: coupon.id });
-      } catch (e) {
-        console.error('Failed to create coupon for PLUS:', e);
+        console.error('Failed to create coupon for site-wide sale:', e);
+        // If coupon creation fails, we just proceed without a discount
       }
     }
 
