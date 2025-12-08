@@ -5,7 +5,7 @@
   --header-height: 56px;            /* slim header */
   --hero-overlay: 0.40;             /* tweak to match Shopify's 40% */
   --hero-zoom-desktop: 1.4;        /* desktop hero zoom */
-  --hero-zoom-mobile: 1.5;          /* mobile hero zoom */
+  --hero-zoom-mobile: 1.35;          /* mobile hero zoom */
 }
 
 @media (max-width: 900px) {
@@ -324,8 +324,8 @@ body.drawer-open { overflow: hidden; }
   }
 
   #hero-dhk .banner__media img {
-    width: 85%;
-    height: 90%;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
     object-position: center center;
     transform: scale(var(--hero-zoom-mobile));
