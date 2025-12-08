@@ -1,15 +1,20 @@
 // js/cart.js
 (() => {
-  if (window.__DHK_CART_LOADED__) return;           // --- Singleton guard ---
+  if (window.__DHK_CART_LOADED__) return; // --- Singleton guard ---
   window.__DHK_CART_LOADED__ = true;
 
   // ===========================
-  //  STRIPE (Optional) - Frontend publishable key
+  //  CONFIG
   // ===========================
   const STRIPE_PUBLISHABLE_KEY = ""; // e.g. "pk_test_123..." if you choose to use Stripe.js redirect
 
   const STORAGE_KEY = 'dhk_cart_v1';
-  const DISCOUNT_STORAGE_KEY = 'dhk_discount_v1';
+
+  // 🔥 SIMPLE SITE-WIDE DISCOUNT CONFIG
+  // Turn discount ON/OFF and set percent here.
+  // Example: ENABLE = true, PERCENT = 40 -> 40% off entire cart.
+  const SITE_WIDE_DISCOUNT_ENABLED = false; // set to true when you want a global sale
+  const SITE_WIDE_PERCENT_OFF = 0;          // e.g. 40 for 40% off
 
   // ---------- Price helpers ----------
   function toCents(v) {
@@ -102,42 +107,22 @@
       0
     );
 
-  // ---------- Discount helpers ----------
-  function getStoredDiscountCode() {
-    try {
-      const raw = localStorage.getItem(DISCOUNT_STORAGE_KEY);
-      if (!raw) return null;
-      const data = JSON.parse(raw);
-      if (!data || typeof data.code !== 'string') return null;
-      return data.code;
-    } catch {
-      return null;
-    }
-  }
-
-  function saveDiscountCode(code) {
-    localStorage.setItem(
-      DISCOUNT_STORAGE_KEY,
-      JSON.stringify({ code: String(code || '').toUpperCase() })
-    );
-  }
-
-  function clearDiscountCode() {
-    localStorage.removeItem(DISCOUNT_STORAGE_KEY);
-  }
-
+  // ---------- Simple site-wide discount helper ----------
   function getActiveDiscount(subCents) {
-    const code = (getStoredDiscountCode() || '').trim().toUpperCase();
-    if (!code || subCents <= 0) return null;
+    if (!SITE_WIDE_DISCOUNT_ENABLED) return null;
+    if (!SITE_WIDE_PERCENT_OFF || SITE_WIDE_PERCENT_OFF <= 0) return null;
+    if (subCents <= 0) return null;
 
-    // Only code for now: PLUS = 25% off entire cart
-    if (code === 'PLUS') {
-      const amountCents = Math.round(subCents * 0.25);
-      if (amountCents <= 0) return null;
-      return { code, amountCents, percent: 25 };
-    }
+    const amountCents = Math.round(
+      subCents * (SITE_WIDE_PERCENT_OFF / 100)
+    );
+    if (amountCents <= 0) return null;
 
-    return null;
+    return {
+      code: `${SITE_WIDE_PERCENT_OFF}% OFF`,
+      amountCents,
+      percent: SITE_WIDE_PERCENT_OFF,
+    };
   }
 
   // ---------- Public API ----------
@@ -276,17 +261,11 @@
   function renderDrawer(ctx, items) {
     if (!ctx || ctx.type !== 'drawer') return;
 
-    const discountInput = document.getElementById('discount-code-drawer');
-    const discountNotice = document.getElementById('discount-message-drawer');
-
     if (items.length === 0) {
       ctx.items.innerHTML = '';
       ctx.empty.hidden = false;
       ctx.subtotal.textContent = fmt(0);
       if (ctx.checkout) ctx.checkout.disabled = true;
-
-      if (discountNotice) discountNotice.textContent = '';
-      if (discountInput) discountInput.value = getStoredDiscountCode() || '';
       return;
     }
 
@@ -299,41 +278,16 @@
 
     ctx.subtotal.textContent = fmt(totalCents / 100);
     if (ctx.checkout) ctx.checkout.disabled = false;
-
-    const storedCode = getStoredDiscountCode();
-
-    if (discountInput) {
-      discountInput.value = storedCode || '';
-    }
-
-    if (discountNotice) {
-      if (discount) {
-        discountNotice.textContent =
-          `Code ${discount.code} applied — -${fmt(discount.amountCents / 100)} (${discount.percent}% off)`;
-        discountNotice.style.color = '#53d46b';
-      } else if (storedCode) {
-        discountNotice.textContent = 'Code not valid for this cart.';
-        discountNotice.style.color = '#f87171';
-      } else {
-        discountNotice.textContent = '';
-      }
-    }
   }
 
   function renderPage(ctx, items) {
     if (!ctx || ctx.type !== 'page') return;
 
-    const discountInput = document.getElementById('discount-code');
-    const discountNotice = document.getElementById('discount-message');
-
     if (items.length === 0) {
       ctx.items.innerHTML = '';
       ctx.empty.hidden = false;
       ctx.subtotal.textContent = fmt(0);
       if (ctx.checkout) ctx.checkout.disabled = true;
-
-      if (discountNotice) discountNotice.textContent = '';
-      if (discountInput) discountInput.value = getStoredDiscountCode() || '';
       return;
     }
 
@@ -346,25 +300,6 @@
 
     ctx.subtotal.textContent = fmt(totalCents / 100);
     if (ctx.checkout) ctx.checkout.disabled = false;
-
-    const storedCode = getStoredDiscountCode();
-
-    if (discountInput) {
-      discountInput.value = storedCode || '';
-    }
-
-    if (discountNotice) {
-      if (discount) {
-        discountNotice.textContent =
-          `Code ${discount.code} applied — -${fmt(discount.amountCents / 100)} (${discount.percent}% off)`;
-        discountNotice.style.color = '#53d46b';
-      } else if (storedCode) {
-        discountNotice.textContent = 'Code not valid for this cart.';
-        discountNotice.style.color = '#f87171';
-      } else {
-        discountNotice.textContent = '';
-      }
-    }
   }
 
   function render() {
@@ -435,53 +370,6 @@
     }
   }
 
-  // ---------- Discount form wiring (page + drawer) ----------
-  function bindDiscountForms() {
-    const configs = [
-      { codeId: 'discount-code',         applyId: 'discount-apply',         msgId: 'discount-message' },
-      { codeId: 'discount-code-drawer',  applyId: 'discount-apply-drawer',  msgId: 'discount-message-drawer' },
-    ];
-
-    configs.forEach(({ codeId, applyId, msgId }) => {
-      const input = document.getElementById(codeId);
-      const applyBtn = document.getElementById(applyId);
-      const notice = document.getElementById(msgId);
-
-      if (!input || !applyBtn || !notice) return;
-
-      const apply = () => {
-        const raw = input.value || '';
-        const code = raw.trim().toUpperCase();
-        if (!code) {
-          clearDiscountCode();
-          notice.textContent = '';
-          render();
-          return;
-        }
-        saveDiscountCode(code);
-        render();
-      };
-
-      if (!applyBtn.__dhkBound) {
-        applyBtn.addEventListener('click', (e) => {
-          e.preventDefault();
-          apply();
-        });
-        applyBtn.__dhkBound = true;
-      }
-
-      if (!input.__dhkBound) {
-        input.addEventListener('keydown', (e) => {
-          if (e.key === 'Enter') {
-            e.preventDefault();
-            apply();
-          }
-        });
-        input.__dhkBound = true;
-      }
-    });
-  }
-
   // ---------- Stripe Checkout ----------
   async function startCheckout() {
     try {
@@ -499,16 +387,12 @@
         return;
       }
 
-      const subCents = subtotalCents(items);
-      const discount = getActiveDiscount(subCents);
-      const discountCode = discount ? discount.code : null;
-
       const res = await fetch('/.netlify/functions/create-checkout-session', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           items: lineItems,
-          discountCode,
+          // No discountCode needed anymore — site-wide discount handled server-side
           success_url: window.location.origin + '/success.html',
           cancel_url: window.location.origin + '/cart.html',
         }),
@@ -598,7 +482,6 @@
     updateHeaderCount();
     bindGlobalEvents();
     bindCheckoutButtons();
-    bindDiscountForms();
   });
 
   // Expose API
