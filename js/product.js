@@ -9,9 +9,10 @@
       currency: "USD",
     });
 
-  // === GLOBAL SALE CONFIG (40% OFF ALL ITEMS) ===
-  const SALE_ACTIVE = true;     // turn sale on/off
-  const SALE_PERCENT = 40;      // 40% OFF all items
+  // === GLOBAL SALE CONFIG ===
+  // Toggle this to turn a site-wide % off back on in the FUTURE.
+  const SALE_ACTIVE = false;     // ⬅️ SALE OFF (was true)
+  const SALE_PERCENT = 40;       // 40% OFF when active
 
   function applySale(cents) {
     if (!SALE_ACTIVE) return Number(cents || 0);
@@ -49,6 +50,12 @@
     const originalPriceCents = Number(p.price) || 0;
     const salePriceCents = applySale(originalPriceCents);
 
+    // Only show crossed-out + sale if sale is actually active and changes price
+    const showSale =
+      SALE_ACTIVE &&
+      SALE_PERCENT > 0 &&
+      salePriceCents < originalPriceCents;
+
     root.innerHTML = `
       <article class="product-detail">
         <div class="pd__gallery">
@@ -83,14 +90,24 @@
         <div class="pd__info">
           <h1 class="pd__title">${p.title}</h1>
 
-          <!-- PRICE BLOCK WITH 40% OFF -->
+          <!-- PRICE BLOCK -->
           <div class="pd__price">
-            <span class="price-original" style="opacity:.55;text-decoration:line-through;margin-right:6px;">
-              ${PRICE(originalPriceCents)}
-            </span>
-            <span class="price-sale">
-              ${PRICE(salePriceCents)}
-            </span>
+            ${
+              showSale
+                ? `
+                  <span class="price-original" style="opacity:.55;text-decoration:line-through;margin-right:6px;">
+                    ${PRICE(originalPriceCents)}
+                  </span>
+                  <span class="price-sale">
+                    ${PRICE(salePriceCents)}
+                  </span>
+                `
+                : `
+                  <span class="price-normal">
+                    ${PRICE(originalPriceCents)}
+                  </span>
+                `
+            }
           </div>
 
           ${
@@ -136,7 +153,7 @@
       });
     });
 
-    // Add to cart (now includes discounted priceCents)
+    // Add to cart (uses salePriceCents, which == full price when SALE_ACTIVE=false)
     root.querySelector("#add-to-cart")?.addEventListener("click", () => {
       const sizeSel = root.querySelector("#pd-option");
       const variant = sizeSel ? sizeSel.value : null;
@@ -145,7 +162,7 @@
         {
           id: p.id,
           title: p.title,
-          priceCents: salePriceCents, // 40% OFF price in cents
+          priceCents: salePriceCents,
           thumbnail: p.thumbnail || firstImg || "",
           variant,
           url: `product.html?id=${p.id}`,
