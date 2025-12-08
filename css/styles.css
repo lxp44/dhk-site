@@ -5,7 +5,7 @@
   --header-height: 56px;            /* slim header */
   --hero-overlay: 0.40;             /* tweak to match Shopify's 40% */
   --hero-zoom-desktop: 1.4;        /* desktop hero zoom */
-  --hero-zoom-mobile: 1.25;          /* mobile hero zoom */
+  --hero-zoom-mobile: 1.15;          /* mobile hero zoom */
 }
 
 @media (max-width: 900px) {
