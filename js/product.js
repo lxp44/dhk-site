@@ -11,7 +11,7 @@
 
   // === GLOBAL SALE CONFIG (40% OFF ALL ITEMS) ===
   const SALE_ACTIVE = false;     // turn sale on/off
-  const SALE_PERCENT = 40;      // 40% OFF all items
+  const SALE_PERCENT = 40;       // 40% OFF all items
 
   function applySale(cents) {
     if (!SALE_ACTIVE) return Number(cents || 0);
@@ -49,6 +49,23 @@
     const originalPriceCents = Number(p.price) || 0;
     const salePriceCents = applySale(originalPriceCents);
 
+    // Decide how to render price block
+    const showSale = SALE_ACTIVE && salePriceCents !== originalPriceCents;
+    const priceHtml = showSale
+      ? `
+        <span class="price-original" style="opacity:.55;text-decoration:line-through;margin-right:6px;">
+          ${PRICE(originalPriceCents)}
+        </span>
+        <span class="price-sale">
+          ${PRICE(salePriceCents)}
+        </span>
+      `
+      : `
+        <span class="price-regular">
+          ${PRICE(originalPriceCents)}
+        </span>
+      `;
+
     root.innerHTML = `
       <article class="product-detail">
         <div class="pd__gallery">
@@ -83,14 +100,9 @@
         <div class="pd__info">
           <h1 class="pd__title">${p.title}</h1>
 
-          <!-- PRICE BLOCK WITH 40% OFF -->
+          <!-- PRICE BLOCK -->
           <div class="pd__price">
-            <span class="price-original" style="opacity:.55;text-decoration:line-through;margin-right:6px;">
-              ${PRICE(originalPriceCents)}
-            </span>
-            <span class="price-sale">
-              ${PRICE(salePriceCents)}
-            </span>
+            ${priceHtml}
           </div>
 
           ${
@@ -137,7 +149,10 @@
       });
     });
 
-    // Add to cart (now includes discounted priceCents)
+    // Decide price for cart (matches what we show)
+    const priceForCart = showSale ? salePriceCents : originalPriceCents;
+
+    // Add to cart
     root.querySelector("#add-to-cart")?.addEventListener("click", () => {
       const sizeSel = root.querySelector("#pd-option");
       const variant = sizeSel ? sizeSel.value : null;
@@ -146,7 +161,7 @@
         {
           id: p.id,
           title: p.title,
-          priceCents: salePriceCents, // 40% OFF price in cents
+          priceCents: priceForCart,
           thumbnail: p.thumbnail || firstImg || "",
           variant,
           url: `product.html?id=${p.id}`,
