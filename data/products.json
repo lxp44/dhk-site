@@ -3,7 +3,7 @@
     "id": "the-dark-harlem-white-knight",
     "title": "The Dark Harlem White Knight",
     "price": 8000,
-    "thumbnail": "assets/img/products/volume-2/dhk-white-knight-rhinestones.gif",
+    "thumbnail": "assets/img/products/volume-2/resized/mens-wht-shirt-vol2.gif",
     "images": [
       "assets/img/products/volume-2/MENS-SHIRT-WHT-1-VOL2.jpg",
       "assets/img/products/volume-2/MENS-SHIRT-WHT-2-VOL2.jpg",
@@ -19,7 +19,7 @@
     "id": "the-dark-harlem-black-knight",
     "title": "The Dark Harlem Black Knight",
     "price": 8000,
-    "thumbnail": "assets/img/products/volume-2/dhk-black-knight-rhinestones.gif",
+    "thumbnail": "assets/img/products/volume-2/resized/mens-shirt-blk-vol2.gif",
     "images": [
       "assets/img/products/volume-2/MENS-SHIRT-BLK-1-VOL2.jpg",
       "assets/img/products/volume-2/MENS-SHIRT-BLK-2-VOL2.jpg",
@@ -35,7 +35,7 @@
     "id": "the-dark-harlem-knight-black-hoodie",
     "title": "The Dark Harlem Knight Black Hoodie",
     "price": 20000,
-    "thumbnail": "assets/img/products/volume-2/dhk-black-knight-hoodie-rhinestones.gif",
+    "thumbnail": "assets/img/products/volume-2/resized/mens-hoodie-vol2.gif",
     "images": [
       "assets/img/products/volume-2/MENS-HOODIE-1-VOL2.jpg",
       "assets/img/products/volume-2/MENS-HOODIE-2-VOL2.jpg",
