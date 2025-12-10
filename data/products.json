@@ -3,7 +3,7 @@
     "id": "the-dark-harlem-white-knight",
     "title": "The Dark Harlem White Knight",
     "price": 8000,
-    "thumbnail": "assets/img/products/volume-2/resized/mens-wht-shirt-vol2.gif",
+    "thumbnail": "assets/img/products/volume-2/resized/mens-shirt-wht-vol2.gif",
     "images": [
       "assets/img/products/volume-2/MENS-SHIRT-WHT-1-VOL2.jpg",
       "assets/img/products/volume-2/MENS-SHIRT-WHT-2-VOL2.jpg",
@@ -51,12 +51,12 @@
     "id": "the-dark-harlem-knight-flare-sweatpants",
     "title": "The Dark Harlem Knight Flare Sweatpants",
     "price": 15000,
-    "thumbnail": "assets/img/products/volume-2/resized/MESN-FLAIR-BOTTOM-1-VOL2.jpg",
+    "thumbnail": "assets/img/products/volume-2/resized/mens-flare-bottom-vol2.gif",
     "images": [
-      "assets/img/products/volume-2/resized/MESN-FLAIR-BOTTOM-1-VOL2.jpg",
-      "assets/img/products/volume-2/resized/MESN-FLAIR-BOTTOM-2-VOL2.jpg",
-      "assets/img/products/volume-2/resized/MESN-FLAIR-BOTTOM-3-VOL2.jpg",
-      "assets/img/products/volume-2/resized/MESN-FLAIR-BOTTOM-4-VOL2.jpg"
+      "assets/img/products/volume-2/resized/Mmens-swearpants-flare-1-vol2.jpg",
+      "assets/img/products/volume-2/resized/mens-swearpants-flare-2-vol2.jpg",
+      "assets/img/products/volume-2/resized/mens-swearpants-flare-3-vol2.jpg",
+      "assets/img/products/volume-2/resized/mens-swearpants-flare-4-vol2.jpg"
     ],
     "options": ["S", "M", "L", "XL", "2XL", "3XL"],
     "description": "<div style=\"background-color: #0a0a0a; color: #f1f1f1; font-family: Cinzel, serif; padding: 20px; position: relative; overflow: hidden;\"><h2 class=\\\"flicker\\\" style=\\\"color: #ffffff; text-transform: uppercase; text-shadow: 0 0 5px #ffffff;\\\"> Dark Knight Flare Sweatpants W/ Silk Bag</h2><p style=\\\"font-size: 16px; line-height: 1.6; color: #cccccc;\\\">Precision tailoring meets Gotham energy.<br><br>These flare sweatpants stack perfectly over your sneakers, finished with genuine Swarovski® crystals that glisten like rain hitting concrete under neon lights.<br><br>Each pair arrives sealed inside a custom silk 44 logo bag — the official uniform of the Dark Harlem Knight.</p><h3 style=\\\"color: #ffffff; margin-top: 20px;\\\">Details:</h3><ul style=\\\"list-style-type: none; padding: 0; color: #cccccc; font-size: 15px;\\\"><li>• Sizes: S–3XL</li><li>• Materials: Heavyweight fleece</li><li>• Fit: Tailored flare with stacked leg</li><li>• Crystals: Swarovski® 44 crystal detailing</li><li>• Color: Black</li><li>• Includes: Custom silk 44 logo bag</li></ul><!-- Bats Video Overlay --><video src=\\\"assets/img/8046ce6fca4246889bdfa3b7f48c742c.mov\\\" style=\\\"position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.1; pointer-events: none;\\\" loop muted autoplay playsinline></video></div><style>@keyframes flicker {0%, 100% { opacity: 1; } 50% { opacity: 0.3; }} .flicker { animation: flicker 1.5s infinite alternate; }</style>",
