@@ -15,16 +15,14 @@
 
   <!-- Drawer (mobile) typography + glow to match site -->
   <style>
-    /* Drawer panel background + layering so it always sits above storm */
     #menu-drawer {
       background: rgba(10, 10, 12, 0.88);
       backdrop-filter: blur(6px);
       -webkit-backdrop-filter: blur(6px);
       border-right: 1px solid rgba(255,255,255,.08);
       box-shadow: 0 10px 40px rgba(0,0,0,.55);
-      z-index: 2147483646; /* sit above storm overlay */
+      z-index: 2147483646;
     }
-    /* Menu list items: Cinzel, uppercase, tight tracking, subtle glow */
     .menu-drawer__menu-item,
     .menu-drawer__menu .list-menu__item.link {
       font-family: 'Cinzel', serif;
@@ -35,20 +33,16 @@
       color: #e6e6e6;
       text-shadow: 0 0 6px rgba(255,255,255,.12);
     }
-    /* Hover/active polish */
     .menu-drawer__menu-item:hover,
     .menu-drawer__menu .list-menu__item.link:hover,
     .menu-drawer__menu-item:focus-visible {
       color: #ffffff;
       text-shadow: 0 0 10px rgba(255,255,255,.28);
     }
-    /* Make dividers/submenus feel consistent if present */
     .menu-drawer__menu .list-menu__item + .list-menu__item {
       border-top: 1px solid rgba(255,255,255,.06);
     }
-    /* Hamburger icon: match glow */
     .header__icon--menu svg { filter: drop-shadow(0 0 6px rgba(255,255,255,.28)); }
-    /* When the drawer is open, fade storm overlay so text remains crisp */
     details[open] ~ .menu-drawer, details[open] #menu-drawer { z-index: 2147483646; }
     details[open] ~ #storm-overlay, details[open] #storm-overlay {
       opacity: 0 !important; pointer-events: none !important; transition: opacity .15s ease;
@@ -56,20 +50,17 @@
   </style>
 
   <style>
-    /* Center the announcement row and hide extras */
     .utility-bar .page-width { max-width: none; padding: 0; }
     .utility-bar .utility-bar__grid {
       display: flex; align-items: center; justify-content: center; gap: 0;
     }
     .utility-bar .list-social,
     .utility-bar .localization-wrapper { display: none !important; }
-    /* Keep the track centered */
     .announcement-bar { width: 100%; display: flex; justify-content: center; }
     .announcement-track {
       display: flex; align-items: center; justify-content: center; gap: 24px;
     }
     .announcement-bar__message { margin: 0; padding: 10px 0; }
-    /* Typography to match your home vibe */
     .announcement-bar__message span {
       font-family: 'Cinzel', serif; font-weight: 700; font-size: 13px;
       letter-spacing: .18em; text-transform: uppercase; color: #e5e5e5;
@@ -79,28 +70,39 @@
 
   <!-- Page-scoped gallery styles -->
   <style>
-    /* ===== G4LLERY full-bleed fixes ===== */
     .g4llery-page #MainContent.section,
     .g4llery-page .section.g4llery-full { padding: 0 !important; }
     .g4llery-page .header-wrapper + .section { margin-top: 0 !important; }
     html, body { overflow-x: hidden; }
 
-    /* True full-bleed wrapper (no left/right gutters) */
     .g4llery-bleed {
       position: relative; left: 50%; right: 50%;
       margin-left: -50vw; margin-right: -50vw;
       width: 100vw; background: #000;
     }
 
-    /* Viewport height similar to Shopify's slideshow */
+    /* IMPORTANT: give the slideshow a height so images can render */
+    .lxp-slideshow {
+      position: relative;
+      width: 100vw;
+      height: min(78vh, 720px);
+      overflow: hidden;
+      background: #000;
+    }
+
+    .lxp-slides { display: flex; transition: transform 0.6s ease-in-out; will-change: transform; height: 100%; }
     .lxp-slide { min-width: 100%; height: 100%; position: relative; }
+
     .lxp-slide img {
-      display: block; width: 100%; height: 100%; object-fit: cover;
-      transform-origin: center; animation: g4-ambient 14s ease-in-out infinite;
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform-origin: center;
+      animation: g4-ambient 14s ease-in-out infinite;
     }
     @keyframes g4-ambient { 0%{transform:scale(1.02)} 50%{transform:scale(1.07)} 100%{transform:scale(1.02)} }
 
-    /* Overlay arrows */
     .lxp-nav{ position:absolute; inset:0; display:grid; grid-template-columns:1fr auto 1fr; align-items:center; pointer-events:none; }
     .lxp-btn{
       pointer-events:all; border:0; cursor:pointer; background:rgba(0,0,0,.45); color:#fff;
@@ -110,7 +112,6 @@
     #lxpPrev{ justify-self:start; margin-left:.5rem; }
     #lxpNext{ justify-self:end;   margin-right:.5rem; }
 
-    /* Small centered counter (optional) */
     .lxp-visual{
       position:absolute; left:50%; bottom:12px; transform:translateX(-50%);
       padding:4px 8px; background:rgba(0,0,0,.45); color:#fff; border-radius:12px;
@@ -118,7 +119,6 @@
     }
   </style>
 
-  <!-- Keep search above storm and fade storm while search is open -->
   <style>
     #search-modal{ z-index:2147483647; }
     body.search-open #storm-overlay{
@@ -128,11 +128,11 @@
 </head>
 
 <body class="template-page g4llery-page">
-  <!-- Storm UI (added) -->
+  <!-- Storm UI -->
   <div class="lightning-flash"></div>
   <div id="storm-overlay"><canvas id="rain-canvas"></canvas></div>
 
-  <!-- ===== Announcement / Utility Bar ===== -->
+  <!-- Utility Bar -->
   <div class="utility-bar color-scheme-4 gradient utility-bar--bottom-border">
     <div class="page-width utility-bar__grid">
       <div class="announcement-bar" role="region" aria-label="Site announcements">
@@ -145,10 +145,9 @@
     </div>
   </div>
 
-  <!-- ===== Sticky Header Wrapper ===== -->
+  <!-- Header -->
   <div class="section-header header-wrapper color-scheme-4 gradient" data-sticky-type="on-scroll-up">
     <header class="site-header header header--middle-left header--mobile-center">
-      <!-- Mobile drawer -->
       <header-drawer data-breakpoint="tablet">
         <details id="Details-menu-drawer-container" class="menu-drawer-container">
           <summary class="header__icon header__icon--menu header__icon--summary link focus-inset" aria-label="Menu">
@@ -171,8 +170,7 @@
                     <li><a href="4bout-us.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">4bout us</a></li>
                     <li><a href="contact.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">Contact</a></li>
                     <li>
-                      <a href="cart.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
-                         data-loud="heavy" data-cart-open>
+                      <a href="cart.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset" data-loud="heavy" data-cart-open>
                         Cart <span class="cart-count-bubble" data-cart-count></span>
                       </a>
                     </li>
@@ -185,7 +183,6 @@
         </details>
       </header-drawer>
 
-      <!-- Header grid -->
       <div class="page-width header-grid">
         <nav class="nav-left desktop-only" aria-label="Primary">
           <a href="index.html" class="nav-link">Home</a>
@@ -196,13 +193,7 @@
         </nav>
 
         <a class="header__logo" href="index.html" aria-label="DarkHarlemKnight">
-          <img
-            src="assets/img/DHK_transparent.gif"
-            alt="DarkHarlemKnight"
-            width="190" height="190"
-            class="header__heading-logo"
-            loading="eager"
-          />
+          <img src="assets/img/DHK_transparent.gif" alt="DarkHarlemKnight" width="190" height="190" class="header__heading-logo" loading="eager"/>
         </a>
 
         <nav class="nav-right desktop-only">
@@ -221,96 +212,23 @@
   </div>
 
   <main id="MainContent" class="section g4llery-full">
-    <!-- Full-bleed wrapper (escapes page max-width) -->
     <div class="g4llery-bleed">
       <div class="lxp-slideshow" aria-roledescription="carousel">
-        <div class="lxp-slides" id="lxpSlides" style="transform:translateX(0%)">
+        <!-- IMPORTANT: empty; JS will inject slides safely with encodeURI -->
+        <div class="lxp-slides" id="lxpSlides" style="transform:translateX(0%)"></div>
 
-          <!-- VOL 1 / DK EDIT (EXCLUDES: 4506, all 4718, 5545, 5918, 5920, 5920 2, 6253, 7592/7593 fantastic, 8510 dk 2.0, Ttd recovered dk) -->
-          <figure class="lxp-slide"><img src="assets/img/g4llery/VOL%201/DK%20EDIT/4385%20DK.png" alt="Gallery image 1" /></figure>
-          <figure class="lxp-slide"><img src="assets/img/g4llery/VOL%201/DK%20EDIT/4387%20DK.png" alt="Gallery image 2" /></figure>
-          <figure class="lxp-slide"><img src="assets/img/g4llery/VOL%201/DK%20EDIT/4389%20dk_.png" alt="Gallery image 3" /></figure>
-          <figure class="lxp-slide"><img src="assets/img/g4llery/VOL%201/DK%20EDIT/4390%20dk_.png" alt="Gallery image 4" /></figure>
-
-          <figure class="lxp-slide"><img src="assets/img/g4llery/VOL%201/DK%20EDIT/4511%20DK_.png" alt="Gallery image 5" /></figure>
-          <figure class="lxp-slide"><img src="assets/img/g4llery/VOL%201/DK%20EDIT/4537%20DK_.png" alt="Gallery image 6" /></figure>
-          <figure class="lxp-slide"><img src="assets/img/g4llery/VOL%201/DK%20EDIT/4552%20dk%202_.png" alt="Gallery image 7" /></figure>
-          <figure class="lxp-slide"><img src="assets/img/g4llery/VOL%201/DK%20EDIT/4554%20DK_.png" alt="Gallery image 8" /></figure>
-          <figure class="lxp-slide"><img src="assets/img/g4llery/VOL%201/DK%20EDIT/4561%20DK_.png" alt="Gallery image 9" /></figure>
-          <figure class="lxp-slide"><img src="assets/img/g4llery/VOL%201/DK%20EDIT/4566%20DK_.png" alt="Gallery image 10" /></figure>
-          <figure class="lxp-slide"><img src="assets/img/g4llery/VOL%201/DK%20EDIT/4568%20DK_.png" alt="Gallery image 11" /></figure>
-          <figure class="lxp-slide"><img src="assets/img/g4llery/VOL%201/DK%20EDIT/4570%20DK_.png" alt="Gallery image 12" /></figure>
-          <figure class="lxp-slide"><img src="assets/img/g4llery/VOL%201/DK%20EDIT/4575%20DK_.png" alt="Gallery image 13" /></figure>
-
-          <figure class="lxp-slide"><img src="assets/img/g4llery/VOL%201/DK%20EDIT/4628%20DK.png" alt="Gallery image 14" /></figure>
-          <figure class="lxp-slide"><img src="assets/img/g4llery/VOL%201/DK%20EDIT/4647%20DK.png" alt="Gallery image 15" /></figure>
-          <figure class="lxp-slide"><img src="assets/img/g4llery/VOL%201/DK%20EDIT/4650%20DK_.png" alt="Gallery image 16" /></figure>
-          <figure class="lxp-slide"><img src="assets/img/g4llery/VOL%201/DK%20EDIT/4654%20DK_.png" alt="Gallery image 17" /></figure>
-
-          <figure class="lxp-slide"><img src="assets/img/g4llery/VOL%201/DK%20EDIT/4720%20DK_.png" alt="Gallery image 18" /></figure>
-          <figure class="lxp-slide"><img src="assets/img/g4llery/VOL%201/DK%20EDIT/4722%20DK_.png" alt="Gallery image 19" /></figure>
-          <figure class="lxp-slide"><img src="assets/img/g4llery/VOL%201/DK%20EDIT/4725%20DK_.png" alt="Gallery image 20" /></figure>
-          <figure class="lxp-slide"><img src="assets/img/g4llery/VOL%201/DK%20EDIT/473%20DK%201.png" alt="Gallery image 21" /></figure>
-          <figure class="lxp-slide"><img src="assets/img/g4llery/VOL%201/DK%20EDIT/4735%20DK_.png" alt="Gallery image 22" /></figure>
-
-          <figure class="lxp-slide"><img src="assets/img/g4llery/VOL%201/DK%20EDIT/4795%20DK_.png" alt="Gallery image 23" /></figure>
-          <figure class="lxp-slide"><img src="assets/img/g4llery/VOL%201/DK%20EDIT/4798%20DK_.png" alt="Gallery image 24" /></figure>
-          <figure class="lxp-slide"><img src="assets/img/g4llery/VOL%201/DK%20EDIT/4799%20DK_.png" alt="Gallery image 25" /></figure>
-
-          <figure class="lxp-slide"><img src="assets/img/g4llery/VOL%201/DK%20EDIT/5434%20DK_.png" alt="Gallery image 26" /></figure>
-          <figure class="lxp-slide"><img src="assets/img/g4llery/VOL%201/DK%20EDIT/5436%20DK%201.png" alt="Gallery image 27" /></figure>
-          <figure class="lxp-slide"><img src="assets/img/g4llery/VOL%201/DK%20EDIT/5436%20DK%201_.png" alt="Gallery image 28" /></figure>
-
-          <figure class="lxp-slide"><img src="assets/img/g4llery/VOL%201/DK%20EDIT/5474%20DK_.png" alt="Gallery image 29" /></figure>
-          <figure class="lxp-slide"><img src="assets/img/g4llery/VOL%201/DK%20EDIT/5475%20DK_.png" alt="Gallery image 30" /></figure>
-          <figure class="lxp-slide"><img src="assets/img/g4llery/VOL%201/DK%20EDIT/5494%20DK_.png" alt="Gallery image 31" /></figure>
-
-          <figure class="lxp-slide"><img src="assets/img/g4llery/VOL%201/DK%20EDIT/5522%20DK_.png" alt="Gallery image 32" /></figure>
-          <figure class="lxp-slide"><img src="assets/img/g4llery/VOL%201/DK%20EDIT/5522%20DK_1.png" alt="Gallery image 33" /></figure>
-
-          <figure class="lxp-slide"><img src="assets/img/g4llery/VOL%201/DK%20EDIT/5654%20DK.png" alt="Gallery image 34" /></figure>
-          <figure class="lxp-slide"><img src="assets/img/g4llery/VOL%201/DK%20EDIT/5667%20DK.png" alt="Gallery image 35" /></figure>
-          <figure class="lxp-slide"><img src="assets/img/g4llery/VOL%201/DK%20EDIT/5672%20DK.png" alt="Gallery image 36" /></figure>
-          <figure class="lxp-slide"><img src="assets/img/g4llery/VOL%201/DK%20EDIT/5677%20DK.png" alt="Gallery image 37" /></figure>
-          <figure class="lxp-slide"><img src="assets/img/g4llery/VOL%201/DK%20EDIT/5679%20DK_.png" alt="Gallery image 38" /></figure>
-          <figure class="lxp-slide"><img src="assets/img/g4llery/VOL%201/DK%20EDIT/5680%20DK_.png" alt="Gallery image 39" /></figure>
-          <figure class="lxp-slide"><img src="assets/img/g4llery/VOL%201/DK%20EDIT/5682%20DK.png" alt="Gallery image 40" /></figure>
-
-          <figure class="lxp-slide"><img src="assets/img/g4llery/VOL%201/DK%20EDIT/IMG_0023%20DK.jpg" alt="Gallery image 41" /></figure>
-          <figure class="lxp-slide"><img src="assets/img/g4llery/VOL%201/DK%20EDIT/IMG_5632%20DK_.png" alt="Gallery image 42" /></figure>
-          <figure class="lxp-slide"><img src="assets/img/g4llery/VOL%201/DK%20EDIT/IMG_5633%20DK_.png" alt="Gallery image 43" /></figure>
-          <figure class="lxp-slide"><img src="assets/img/g4llery/VOL%201/DK%20EDIT/IMG_5709%20dk.png" alt="Gallery image 44" /></figure>
-
-          <figure class="lxp-slide"><img src="assets/img/g4llery/VOL%201/DK%20EDIT/IMG_6017%20DK_.png" alt="Gallery image 45" /></figure>
-          <figure class="lxp-slide"><img src="assets/img/g4llery/VOL%201/DK%20EDIT/IMG_6214%202%20DK.png" alt="Gallery image 46" /></figure>
-          <figure class="lxp-slide"><img src="assets/img/g4llery/VOL%201/DK%20EDIT/IMG_6232%20DK_.png" alt="Gallery image 47" /></figure>
-
-          <figure class="lxp-slide"><img src="assets/img/g4llery/VOL%201/DK%20EDIT/IMG_6255%20DK_.png" alt="Gallery image 48" /></figure>
-          <figure class="lxp-slide"><img src="assets/img/g4llery/VOL%201/DK%20EDIT/IMG_6297%20DK_.png" alt="Gallery image 49" /></figure>
-          <figure class="lxp-slide"><img src="assets/img/g4llery/VOL%201/DK%20EDIT/IMG_6328%20DK_.png" alt="Gallery image 50" /></figure>
-          <figure class="lxp-slide"><img src="assets/img/g4llery/VOL%201/DK%20EDIT/IMG_6371%20DK_.png" alt="Gallery image 51" /></figure>
-          <figure class="lxp-slide"><img src="assets/img/g4llery/VOL%201/DK%20EDIT/IMG_6532%20DK_.png" alt="Gallery image 52" /></figure>
-
-          <!-- NOTE: filename has a space before .jpg in your screenshot -->
-          <figure class="lxp-slide"><img src="assets/img/g4llery/VOL%201/DK%20EDIT/IMG_6830%20dk%20.jpg" alt="Gallery image 53" /></figure>
-          <figure class="lxp-slide"><img src="assets/img/g4llery/VOL%201/DK%20EDIT/IMG_7089%20dk.jpg" alt="Gallery image 54" /></figure>
-
-        </div>
-
-        <!-- arrows -->
         <div class="lxp-nav" aria-hidden="true">
           <button class="lxp-btn" type="button" aria-label="Previous slide" id="lxpPrev">‹</button>
           <div></div>
           <button class="lxp-btn" type="button" aria-label="Next slide" id="lxpNext">›</button>
         </div>
 
-        <!-- counter -->
-        <div class="lxp-visual" id="lxpCounter" aria-hidden="true">1/54</div>
+        <div class="lxp-visual" id="lxpCounter" aria-hidden="true">1/1</div>
       </div>
     </div>
   </main>
 
-  <!-- ===== Footer (same as other pages) ===== -->
+  <!-- Footer -->
   <footer class="footer color-scheme-4 gradient section footer--static">
     <div class="footer__content-bottom-wrapper page-width footer__content-bottom-wrapper--center">
       <div class="footer__copyright caption">
@@ -325,7 +243,7 @@
   </footer>
   <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
 
-  <!-- ===== Search Modal ===== -->
+  <!-- Search Modal -->
   <div id="search-modal" class="search-modal" aria-hidden="true">
     <div class="search-modal__overlay" data-close-search></div>
     <div class="search-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="search-title">
@@ -348,19 +266,97 @@
   <audio id="thunder-med"   src="assets/audio/med-thunder.mp3"   loop preload="auto" hidden></audio>
   <audio id="thunder-heavy" src="assets/audio/heavy-thunder.mp3" loop preload="auto" hidden></audio>
 
-  <!-- Scripts: cart first, then the rest -->
+  <!-- Scripts -->
   <script src="js/nav.js"></script>
   <script src="js/announce.js"></script>
   <script src="js/cart.js"></script>
   <script src="js/search.js"></script>
   <script src="js/storm_shopify_style.js"></script>
 
-  <!-- Minimal slider logic -->
+  <!-- Build slides + slider logic -->
   <script>
     (function () {
-      const track   = document.getElementById('lxpSlides');
+      const track = document.getElementById('lxpSlides');
       if (!track) return;
 
+      // Base folder (keep EXACTLY as your repo folders are named)
+      const BASE = "assets/img/g4llery/VOL 1/DK EDIT/";
+
+      // Your allowed filenames (from your screenshots) — excluded items removed
+      const files = [
+        "4385 DK.png",
+        "4387 DK.png",
+        "4389 dk_.png",
+        "4390 dk_.png",
+        "4511 DK_.png",
+        "4537 DK_.png",
+        "4552 dk 2_.png",
+        "4554 DK_.png",
+        "4561 DK_.png",
+        "4566 DK_.png",
+        "4568 DK_.png",
+        "4570 DK_.png",
+        "4575 DK_.png",
+        "4628 DK.png",
+        "4647 DK.png",
+        "4650 DK_.png",
+        "4654 DK_.png",
+        // 4718 excluded (all variants)
+        "4720 DK_.png",
+        "4722 DK_.png",
+        "4725 DK_.png",
+        "473 DK 1.png",
+        "4735 DK_.png",
+        "4795 DK_.png",
+        "4798 DK_.png",
+        "4799 DK_.png",
+        "5434 DK_.png",
+        "5436 DK 1.png",
+        "5436 DK 1_.png",
+        "5474 DK_.png",
+        "5475 DK_.png",
+        "5494 DK_.png",
+        "5522 DK_.png",
+        "5522 DK_1.png",
+        // 5545 excluded
+        "5654 DK.png",
+        "5667 DK.png",
+        "5672 DK.png",
+        "5677 DK.png",
+        "5679 DK_.png",
+        "5680 DK_.png",
+        "5682 DK.png",
+        "IMG_0023 DK.jpg",
+        "IMG_5632 DK_.png",
+        "IMG_5633 DK_.png",
+        "IMG_5709 dk.png",
+        // 5918 excluded
+        // 5920 excluded
+        // 5920 2 excluded
+        "IMG_6017 DK_.png",
+        "IMG_6214 2 DK.png",
+        "IMG_6232 DK_.png",
+        // 6253 excluded
+        "IMG_6255 DK_.png",
+        "IMG_6297 DK_.png",
+        "IMG_6328 DK_.png",
+        "IMG_6371 DK_.png",
+        "IMG_6532 DK_.png",
+        "IMG_6830 dk .jpg",
+        "IMG_7089 dk .jpg"
+        // 7592 fantastic excluded
+        // 7593 fantastic excluded
+        // 8510 dk 2.0 excluded
+        // Ttd recovered dk excluded
+      ];
+
+      // Inject slides safely (encodeURI handles spaces)
+      track.innerHTML = files.map((name, idx) => {
+        const src = encodeURI(BASE + name);
+        return `<figure class="lxp-slide"><img src="${src}" alt="Gallery image ${idx + 1}" loading="${idx < 2 ? 'eager' : 'lazy'}"></figure>`;
+      }).join("");
+
+      // Slider logic
       const slides  = Array.from(track.children);
       const counter = document.getElementById('lxpCounter');
       const N       = slides.length;
@@ -378,7 +374,7 @@
       document.getElementById('lxpNext')?.addEventListener('click', ()=>go(i+1,true));
       document.getElementById('lxpPrev')?.addEventListener('click', ()=>go(i-1,true));
 
-      // touch swipe
+      // Swipe
       let startX = 0;
       track.addEventListener('touchstart', e => (startX = e.touches[0].clientX), {passive:true});
       track.addEventListener('touchend',   e => {
@@ -386,59 +382,47 @@
         if(Math.abs(dx) > 40) go(i + (dx < 0 ? 1 : -1), true);
       });
 
+      // Debug: log broken images (open console)
+      track.querySelectorAll('img').forEach(img => {
+        img.addEventListener('error', () => console.warn('Missing image:', img.getAttribute('src')));
+      });
+
       setCounter(0);
       resetAuto();
     })();
   </script>
 
-<!-- Cart Drawer -->
-<div id="cart-drawer" class="cart-drawer" aria-hidden="true">
-  <div class="cart-drawer__overlay" data-cart-close></div>
-  <aside class="cart-drawer__panel" tabindex="-1">
-    <div class="cart-header">
-      <h2>Your Cart</h2>
-      <button type="button" title="Close" data-cart-close>✕</button>
-    </div>
+  <!-- Cart Drawer -->
+  <div id="cart-drawer" class="cart-drawer" aria-hidden="true">
+    <div class="cart-drawer__overlay" data-cart-close></div>
+    <aside class="cart-drawer__panel" tabindex="-1">
+      <div class="cart-header">
+        <h2>Your Cart</h2>
+        <button type="button" title="Close" data-cart-close>✕</button>
+      </div>
 
-    <div class="cart-list" id="cart-items"></div>
-    <div id="cart-empty" class="cart-empty" hidden style="padding:16px;color:#9a9a9a">
-      Your cart is empty.
-    </div>
+      <div class="cart-list" id="cart-items"></div>
+      <div id="cart-empty" class="cart-empty" hidden style="padding:16px;color:#9a9a9a">
+        Your cart is empty.
+      </div>
 
-    <div class="cart-footer">
-      <!-- Drawer discount block -->
-      <div class="cart-discount cart-discount--drawer">
-        <label for="discount-code-drawer" class="cart-discount__label">ADD DISCOUNT</label>
-        <div class="cart-discount__row">
-          <input
-            id="discount-code-drawer"
-            class="cart-discount__input"
-            type="text"
-            placeholder="Enter code"
-            autocomplete="off"
-          />
-          <button
-            id="discount-apply-drawer"
-            class="cart-discount__button"
-            type="button"
-          >
-            APPLY
-          </button>
+      <div class="cart-footer">
+        <div class="cart-discount cart-discount--drawer">
+          <label for="discount-code-drawer" class="cart-discount__label">ADD DISCOUNT</label>
+          <div class="cart-discount__row">
+            <input id="discount-code-drawer" class="cart-discount__input" type="text" placeholder="Enter code" autocomplete="off"/>
+            <button id="discount-apply-drawer" class="cart-discount__button" type="button">APPLY</button>
+          </div>
+          <p id="discount-message-drawer" class="cart-discount__message" aria-live="polite"></p>
         </div>
-        <p
-          id="discount-message-drawer"
-          class="cart-discount__message"
-          aria-live="polite"
-        ></p>
-      </div>
 
-      <div class="cart-row">
-        <div class="label">Subtotal</div>
-        <div class="value" id="cart-subtotal">$0.00</div>
+        <div class="cart-row">
+          <div class="label">Subtotal</div>
+          <div class="value" id="cart-subtotal">$0.00</div>
+        </div>
+        <button id="cart-checkout" type="button" disabled>Checkout</button>
       </div>
-      <button id="cart-checkout" type="button" disabled>Checkout</button>
-    </div>
-  </aside>
-</div>
+    </aside>
+  </div>
 </body>
 </html>
