@@ -308,6 +308,21 @@
   <figure class="lxp-slide"><img src="assets/img/g4llery/VOL-1/DK%20EDIT/IMG_7089%20dk%20.jpg"></figure>
 
 </div>
+<script>
+  // ===== MASTER G4LLERY ZOOM-OUT CONTROL =====
+  const G4_ZOOM = {
+    start: 1.07,   // zoomed IN at start
+    end: 1.00,     // zoom OUT to (1 = normal, <1 = subtle pull-back)
+    duration: 14   // seconds
+  };
+
+  (function applyG4Zoom(){
+    const r = document.documentElement;
+    r.style.setProperty('--g4-zoom-start', G4_ZOOM.start);
+    r.style.setProperty('--g4-zoom-end',   G4_ZOOM.end);
+    r.style.setProperty('--g4-zoom-dur',   G4_ZOOM.duration + 's');
+  })();
+</script>
         <!-- arrows -->
         <div class="lxp-nav" aria-hidden="true">
           <button class="lxp-btn" type="button" aria-label="Previous slide" id="lxpPrev">‹</button>
