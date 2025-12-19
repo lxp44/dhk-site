@@ -5,10 +5,10 @@
     "price": 8000,
     "thumbnail": "assets/img/products/volume-2/resized/mens-shirt-wht-vol2.gif",
     "images": [
-      "assets/img/products/volume-2/MENS-SHIRT-WHT-1-VOL2.jpg",
-      "assets/img/products/volume-2/MENS-SHIRT-WHT-2-VOL2.jpg",
-      "assets/img/products/volume-2/MENS-SHIRT-WHT-3-VOL2.jpg",
-      "assets/img/products/volume-2/MENS-SHIRT-WHT-4-VOL2.jpg"
+      "assets/img/products/volume-2/resized/MENS-SHIRT-WHT-1-VOL2-RESIZED.jpg",
+      "assets/img/products/volume-2/resized/MENS-SHIRT-WHT-2-VOL2-RESIZED.jpg",
+      "assets/img/products/volume-2/resized/MENS-SHIRT-WHT-3-VOL2-RESIZED.jpg",
+      "assets/img/products/volume-2/resized/MENS-SHIRT-WHT-4-VOL2-RESIZED.jpg"
     ],
     "options": ["S", "M", "L", "XL", "2XL", "3XL"],
     "description": "<div style=\"background-color: #0a0a0a; color: #f1f1f1; font-family: Cinzel, serif; padding: 20px; position: relative; overflow: hidden;\"><h2 class=\\\"flicker\\\" style=\\\"color: #ffffff; text-transform: uppercase; text-shadow: 0 0 6px #ffffff;\\\">White Knight Shirt W/ Silk Bag</h2><p style=\\\"font-size: 16px; line-height: 1.6; color: #cccccc;\\\">A clean, radiant counterpart to the Black Knight — featuring the new Swarovski® crystal 44 emblem handcrafted onto luxury heavyweight cotton. Light-reflective, sharp, and iconic to the Volume II identity.<br><br>Every White Knight tee arrives sealed in a premium silk bag — because presentation is power.</p><h3 style=\\\"color: #ffffff; margin-top: 20px;\\\">Details:</h3><ul style=\\\"list-style-type: none; padding: 0; color: #cccccc; font-size: 15px;\\\"><li>• Sizes: S–3XL</li><li>• Fabric: Heavyweight cotton</li><li>• Logo: Swarovski® crystal set 44 emblem</li><li>• Color: Arctic white</li><li>• Includes premium silk logo bag</li><li>• Volume II limited drop</li></ul><!-- Bats Video Overlay --><video src=\\\"assets/img/8046ce6fca4246889bdfa3b7f48c742c.mov\\\" style=\\\"position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.1; pointer-events: none;\\\" loop muted autoplay playsinline></video></div>",
@@ -21,10 +21,10 @@
     "price": 8000,
     "thumbnail": "assets/img/products/volume-2/resized/mens-shirt-blk-vol2.gif",
     "images": [
-      "assets/img/products/volume-2/MENS-SHIRT-BLK-1-VOL2.jpg",
-      "assets/img/products/volume-2/MENS-SHIRT-BLK-2-VOL2.jpg",
-      "assets/img/products/volume-2/MENS-SHIRT-BLK-3-VOL2.jpg",
-      "assets/img/products/volume-2/MENS-SHIRT-BLK-4-VOL2.jpg"
+      "assets/img/products/volume-2/resized/MENS-SHIRT-BLK-1-VOL2-RESIZED.jpg",
+      "assets/img/products/volume-2/resized/MENS-SHIRT-BLK-2-VOL2-RESIZED.jpg",
+      "assets/img/products/volume-2/resized/MENS-SHIRT-BLK-3-VOL2-RESIZED.jpg",
+      "assets/img/products/volume-2/resized/MENS-SHIRT-BLK-4-VOL2-RESIZED.jpg"
     ],
     "options": ["S", "M", "L", "XL", "2XL", "3XL"],
     "description": "<div style=\"background-color: #0a0a0a; color: #f1f1f1; font-family: Cinzel, serif; padding: 20px; position: relative; overflow: hidden;\"><h2 class=\\\"flicker\\\" style=\\\"color: #ffffff; text-transform: uppercase; text-shadow: 0 0 6px #ffffff;\\\">Black Knight Shirt W/ Silk Bag</h2><p style=\\\"font-size: 16px; line-height: 1.6; color: #cccccc;\\\">A true Volume II upgrade — the Black Knight tee now features a full Swarovski® crystal 44 emblem, set by hand for a shimmering, armor-grade finish that hits under flash like Gotham headlights.<br><br>Cut from heavyweight luxury cotton for a clean, structured silhouette. Sealed in a custom silk logo bag for premium presentation.</p><h3 style=\\\"color: #ffffff; margin-top: 20px;\\\">Details:</h3><ul style=\\\"list-style-type: none; padding: 0; color: #cccccc; font-size: 15px;\\\"><li>• Sizes: S–3XL</li><li>• Fabric: Heavyweight cotton</li><li>• Logo: Hand-set Swarovski® crystal 44 emblem</li><li>• Color: Jet black</li><li>• Includes premium silk bag</li><li>• Volume II limited drop</li></ul><!-- Bats Video Overlay --><video src=\\\"assets/img/8046ce6fca4246889bdfa3b7f48c742c.mov\\\" style=\\\"position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.1; pointer-events: none;\\\" loop muted autoplay playsinline></video></div><style>@keyframes flicker {0%, 100% { opacity: 1; } 50% { opacity: 0.3; }} .flicker { animation: flicker 1.4s infinite alternate; }</style>",
