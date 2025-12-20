@@ -8,7 +8,7 @@
   --hero-zoom-mobile: 1.15;         /* mobile hero zoom */
 
   /* Bats master opacity */
-  --bats-opacity: 0.18;             /* try 0.12 – 0.25 */
+  --bats-opacity: 0.60;             /* try 0.12 – 0.25 */
 }
 
 @media (max-width: 900px) {
