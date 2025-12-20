@@ -456,5 +456,37 @@
       </div>
     </aside>
   </div>
+  <script>
+  (function kickBats(){
+    function playAll(){
+      // ✅ find ANY video inside the injected product description
+      document.querySelectorAll('#product-root #pd-desc video').forEach(v=>{
+        try{
+          // force autoplay-safe settings
+          v.muted = true;
+          v.setAttribute('muted', '');
+          v.loop = true;
+          v.setAttribute('loop', '');
+          v.autoplay = true;
+          v.setAttribute('autoplay', '');
+          v.playsInline = true;
+          v.setAttribute('playsinline', '');
+          v.setAttribute('webkit-playsinline', '');
+          v.preload = 'auto';
+
+          const p = v.play();
+          if (p && p.catch) p.catch(()=>{});
+        }catch(e){}
+      });
+    }
+
+    // run after product.js injects description
+    window.addEventListener('load', playAll);
+
+    // iOS fallback: first user gesture starts video
+    window.addEventListener('touchstart', playAll, { once:true, passive:true });
+    window.addEventListener('click', playAll, { once:true });
+  })();
+</script>
 </body>
 </html>
