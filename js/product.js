@@ -41,45 +41,118 @@
     return normalizeProducts(raw);
   }
 
-  // ---- Ensure bats video works + is behind text
+  // ---------- BATS HELPERS ----------
+  function safePlay(video) {
+    try {
+      const p = video.play();
+      if (p && p.catch) p.catch(() => {});
+    } catch (e) {}
+  }
+
+  function forceVideoAttrs(video) {
+    // Make sure your CSS can target it
+    if (!video.classList.contains("bats-bg")) video.classList.add("bats-bg");
+
+    // Autoplay-safe / iOS-safe attributes
+    try {
+      video.muted = true;
+      video.loop = true;
+      video.autoplay = true;
+      video.playsInline = true;
+
+      video.setAttribute("muted", "");
+      video.setAttribute("loop", "");
+      video.setAttribute("autoplay", "");
+      video.setAttribute("playsinline", "");
+      video.setAttribute("webkit-playsinline", "");
+
+      // Extra “don’t hijack playback UI” flags (helps iOS / Safari quirks)
+      video.setAttribute("disablepictureinpicture", "");
+      video.setAttribute(
+        "controlslist",
+        "nodownload noplaybackrate noremoteplayback"
+      );
+
+      // Safer preload (preload="auto" can be throttled hard on mobile)
+      video.preload = "metadata";
+      video.setAttribute("preload", "metadata");
+    } catch (e) {}
+  }
+
+  // ---- Ensure bats video works (desktop + iOS) ----
   function hydrateBats(descEl) {
     if (!descEl) return;
 
     const vids = descEl.querySelectorAll("video");
+    if (!vids.length) return;
+
     vids.forEach((v) => {
-      // Make sure your kickBats script can find it
-      if (!v.classList.contains("bats-bg")) v.classList.add("bats-bg");
+      forceVideoAttrs(v);
 
-      // Hard-force autoplay-friendly attributes (esp. iOS)
-      try {
-        v.muted = true;
-        v.loop = true;
-        v.autoplay = true;
-        v.preload = "auto";
-        v.playsInline = true;
+      // Force media pipeline to refresh after we change attrs
+      try { v.load(); } catch (e) {}
 
-        v.setAttribute("muted", "");
-        v.setAttribute("playsinline", "");
-        v.setAttribute("autoplay", "");
-        v.setAttribute("loop", "");
-      } catch (e) {}
+      // Try immediately
+      safePlay(v);
 
-      // Try to play immediately (may still require user gesture on some devices)
-      try {
-        const p = v.play();
-        if (p && p.catch) p.catch(() => {});
-      } catch (e) {}
+      // Try again when metadata is ready
+      v.addEventListener(
+        "loadedmetadata",
+        () => safePlay(v),
+        { once: true }
+      );
+
+      // Try again when it can actually play
+      v.addEventListener(
+        "canplay",
+        () => safePlay(v),
+        { once: true }
+      );
     });
 
-    // Also retry shortly after (helps when browser delays media init)
+    // Retry shortly after (helps when browser delays media init)
     setTimeout(() => {
-      descEl.querySelectorAll("video.bats-bg").forEach((v) => {
-        try {
-          const p = v.play();
-          if (p && p.catch) p.catch(() => {});
-        } catch (e) {}
-      });
-    }, 300);
+      descEl.querySelectorAll("video.bats-bg").forEach((v) => safePlay(v));
+    }, 250);
+
+    // Retry again a bit later (desktop Safari can be stubborn)
+    setTimeout(() => {
+      descEl.querySelectorAll("video.bats-bg").forEach((v) => safePlay(v));
+    }, 900);
+
+    // If tab becomes visible again, retry
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "visible") {
+        descEl.querySelectorAll("video.bats-bg").forEach((v) => safePlay(v));
+      }
+    });
+
+    // Start playing as soon as the description is on-screen
+    if ("IntersectionObserver" in window) {
+      const io = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              descEl.querySelectorAll("video.bats-bg").forEach((v) => safePlay(v));
+              io.disconnect();
+            }
+          });
+        },
+        { threshold: 0.15 }
+      );
+      io.observe(descEl);
+    }
+
+    // One user gesture fallback (covers iOS)
+    const gesture = () => {
+      descEl.querySelectorAll("video.bats-bg").forEach((v) => safePlay(v));
+      window.removeEventListener("pointerdown", gesture);
+      window.removeEventListener("touchstart", gesture);
+      window.removeEventListener("click", gesture);
+    };
+    window.addEventListener("pointerdown", gesture, { once: true, passive: true });
+    window.addEventListener("touchstart", gesture, { once: true, passive: true });
+    window.addEventListener("click", gesture, { once: true });
   }
 
   function render(root, p) {
@@ -176,7 +249,7 @@
           : "<p style='opacity:.8'>No description available.</p>";
       descEl.innerHTML = html;
 
-      // ✅ make bats work + sit behind text
+      // ✅ make bats work reliably
       hydrateBats(descEl);
     }
 
