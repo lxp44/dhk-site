@@ -96,3 +96,58 @@
     "stripePriceId": "price_1Sc6Nx0cfsBzY9CjHUfSYxKk"
   }
 ]
+
+{
+  "id": "dhk-heavy-boxy-tshirt",
+  "title": "DHK Heavy Boxy Tshirt",
+  "price": 10000,
+  "color": "dark grey",
+  "material": "heavy suede feel",
+  "thumbnail": "assets/img/products/volume-2/resized/dhk-heavy-boxy-tshirt.gif",
+  "images": [
+    "assets/img/products/volume-2/resized/DHK-HEAVY-BOXY-TSHIRT-1.jpg",
+    "assets/img/products/volume-2/resized/DHK-HEAVY-BOXY-TSHIRT-2.jpg",
+    "assets/img/products/volume-2/resized/DHK-HEAVY-BOXY-TSHIRT-3.jpg",
+    "assets/img/products/volume-2/resized/DHK-HEAVY-BOXY-TSHIRT-4.jpg"
+  ],
+  "options": ["S", "M", "L", "XL", "2XL", "3XL"],
+  "description": "<div class=\\\"product-desc-wrap\\\" style=\\\"color:#f1f1f1;font-family:Cinzel,serif;padding:20px;\\\"><h2 class=\\\"flicker\\\" style=\\\"color:#ffffff;text-transform:uppercase;text-shadow:0 0 6px #ffffff;\\\">DHK Heavy Boxy Tshirt w/ silk bag</h2><p style=\\\"font-size:16px;line-height:1.6;color:#cccccc;\\\">A heavyweight boxy cut in dark grey with a premium suede-touch finish—soft in hand, aggressive in silhouette. Designed to drop on the shoulders and sit wide across the chest for that Gotham-street uniform look.<br><br><strong>Our DHK logo neatly hand placed with Swarvoski crystals</strong></p><h3 style=\\\"color:#ffffff;margin-top:20px;\\\">Details:</h3><ul style=\\\"list-style-type:none;padding:0;color:#cccccc;font-size:15px;\\\"><li>• Color: Dark grey</li><li>• Fit: Heavy / boxy</li><li>• Material: Heavy suede feel</li><li>• Logo: Hand-placed crystal DHK emblem</li><li>• Includes: Premium silk bag</li></ul></div>",
+  "url": "product.html?id=dhk-heavy-boxy-tshirt",
+  "stripePriceId": "REPLACE_WITH_STRIPE_PRICE_ID"
+}
+
+{
+  "id": "dhk-sweater",
+  "title": "DHK Sweater",
+  "price": 15000,
+  "color": "black",
+  "thumbnail": "assets/img/products/volume-2/resized/dhk-sweater.gif",
+  "images": [
+    "assets/img/products/volume-2/resized/DHK-SWEATER-1.jpg",
+    "assets/img/products/volume-2/resized/DHK-SWEATER-2.jpg",
+    "assets/img/products/volume-2/resized/DHK-SWEATER-3.jpg",
+    "assets/img/products/volume-2/resized/DHK-SWEATER-4.jpg"
+  ],
+  "options": ["S", "M", "L", "XL", "2XL", "3XL"],
+  "description": "<div class=\\\"product-desc-wrap\\\" style=\\\"color:#f1f1f1;font-family:Cinzel,serif;padding:20px;\\\"><h2 class=\\\"flicker\\\" style=\\\"color:#ffffff;text-transform:uppercase;text-shadow:0 0 6px #ffffff;\\\">DHK Sweater w/ silk bag</h2><p style=\\\"font-size:16px;line-height:1.6;color:#cccccc;\\\">Built for cold nights and city lights. The DHK Sweater is a clean black essential—structured, heavy, and made to sit sharp over denim or stacked sweats. Minimal from a distance, lethal up close.<br><br><strong>Our DHK logo neatly hand placed with Swarvoski crystals</strong></p><h3 style=\\\"color:#ffffff;margin-top:20px;\\\">Details:</h3><ul style=\\\"list-style-type:none;padding:0;color:#cccccc;font-size:15px;\\\"><li>• Color: Black</li><li>• Fit: Classic / structured sweater fit</li><li>• Feel: Warm, heavyweight knit</li><li>• Logo: Hand-placed crystal DHK emblem</li><li>• Includes: Premium silk bag</li></ul></div>",
+  "url": "product.html?id=dhk-sweater",
+  "stripePriceId": "REPLACE_WITH_STRIPE_PRICE_ID"
+}
+
+{
+  "id": "dhk-tight-ankle-sweatpants",
+  "title": "DHK Tight Ankle Sweatpants",
+  "price": 10000,
+  "color": "black",
+  "thumbnail": "assets/img/products/volume-2/resized/dhk-tight-ankle-sweatpants.gif",
+  "images": [
+    "assets/img/products/volume-2/resized/DHK-TIGHT-ANKLE-SWEATPANTS-1.jpg",
+    "assets/img/products/volume-2/resized/DHK-TIGHT-ANKLE-SWEATPANTS-2.jpg",
+    "assets/img/products/volume-2/resized/DHK-TIGHT-ANKLE-SWEATPANTS-3.jpg",
+    "assets/img/products/volume-2/resized/DHK-TIGHT-ANKLE-SWEATPANTS-4.jpg"
+  ],
+  "options": ["S", "M", "L", "XL", "2XL", "3XL"],
+  "description": "<div class=\\\"product-desc-wrap\\\" style=\\\"color:#f1f1f1;font-family:Cinzel,serif;padding:20px;\\\"><h2 class=\\\"flicker\\\" style=\\\"color:#ffffff;text-transform:uppercase;text-shadow:0 0 6px #ffffff;\\\">DHK Tight Ankle Sweatpants w/ silk bag</h2><p style=\\\"font-size:16px;line-height:1.6;color:#cccccc;\\\">Clean black sweatpants with a locked-in ankle—built to show the sneaker, keep the leg sharp, and move like armor. Heavyweight feel, street-ready finish, and a premium presence that reads luxury even in low light.<br><br><strong>Our DHK logo neatly hand placed with Swarvoski crystals</strong></p><h3 style=\\\"color:#ffffff;margin-top:20px;\\\">Details:</h3><ul style=\\\"list-style-type:none;padding:0;color:#cccccc;font-size:15px;\\\"><li>• Color: Black</li><li>• Fit: Tapered leg with tight ankle cuff</li><li>• Feel: Heavyweight fleece / premium comfort</li><li>• Logo: Hand-placed crystal DHK emblem</li><li>• Includes: Premium silk bag</li></ul></div>",
+  "url": "product.html?id=dhk-tight-ankle-sweatpants",
+  "stripePriceId": "REPLACE_WITH_STRIPE_PRICE_ID"
+}
