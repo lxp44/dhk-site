@@ -49,13 +49,34 @@
     } catch (e) {}
   }
 
+  function absolutizeSrc(src) {
+    // Helps when product description uses relative paths in different folders
+    if (!src) return src;
+    if (/^(https?:)?\/\//i.test(src)) return src; // absolute URL
+    if (src.startsWith("/")) return src;          // site-root absolute
+    // Force relative to site root (your pages are at root)
+    return "./" + src.replace(/^\.\//, "");
+  }
+
   function forceVideoAttrs(video) {
-    // Make sure your CSS can target it
+    // Make sure CSS can target it
     if (!video.classList.contains("bats-bg")) video.classList.add("bats-bg");
+
+    // Ensure source path is correct (prevents silent 404s)
+    const source = video.querySelector("source");
+    if (source && source.getAttribute("src")) {
+      const fixed = absolutizeSrc(source.getAttribute("src"));
+      if (fixed !== source.getAttribute("src")) source.setAttribute("src", fixed);
+    }
+    if (video.getAttribute("src")) {
+      const fixed = absolutizeSrc(video.getAttribute("src"));
+      if (fixed !== video.getAttribute("src")) video.setAttribute("src", fixed);
+    }
 
     // Autoplay-safe / iOS-safe attributes
     try {
       video.muted = true;
+      video.defaultMuted = true;
       video.loop = true;
       video.autoplay = true;
       video.playsInline = true;
@@ -68,14 +89,16 @@
 
       // Extra “don’t hijack playback UI” flags (helps iOS / Safari quirks)
       video.setAttribute("disablepictureinpicture", "");
-      video.setAttribute(
-        "controlslist",
-        "nodownload noplaybackrate noremoteplayback"
-      );
+      video.setAttribute("controlslist", "nodownload noplaybackrate noremoteplayback");
 
-      // Safer preload (preload="auto" can be throttled hard on mobile)
+      // Safer preload (auto can be throttled hard on mobile)
       video.preload = "metadata";
       video.setAttribute("preload", "metadata");
+
+      // Force visible (in case any CSS elsewhere hides it)
+      video.style.display = "block";
+      video.style.visibility = "visible";
+      if (!video.style.opacity) video.style.opacity = "1";
     } catch (e) {}
   }
 
@@ -86,6 +109,10 @@
     const vids = descEl.querySelectorAll("video");
     if (!vids.length) return;
 
+    const tryAll = () => {
+      descEl.querySelectorAll("video.bats-bg").forEach((v) => safePlay(v));
+    };
+
     vids.forEach((v) => {
       forceVideoAttrs(v);
 
@@ -95,36 +122,33 @@
       // Try immediately
       safePlay(v);
 
-      // Try again when metadata is ready
-      v.addEventListener(
-        "loadedmetadata",
-        () => safePlay(v),
-        { once: true }
-      );
+      // Retry once metadata is ready
+      v.addEventListener("loadedmetadata", () => safePlay(v), { once: true });
 
-      // Try again when it can actually play
+      // Retry when it can actually play
+      v.addEventListener("canplay", () => safePlay(v), { once: true });
+
+      // If it errors (often bad path), log it so you can see instantly
       v.addEventListener(
-        "canplay",
-        () => safePlay(v),
+        "error",
+        () => {
+          const src =
+            v.getAttribute("src") ||
+            v.querySelector("source")?.getAttribute("src") ||
+            "(no src)";
+          console.warn("[BATS] video error for:", src, v.error);
+        },
         { once: true }
       );
     });
 
-    // Retry shortly after (helps when browser delays media init)
-    setTimeout(() => {
-      descEl.querySelectorAll("video.bats-bg").forEach((v) => safePlay(v));
-    }, 250);
-
-    // Retry again a bit later (desktop Safari can be stubborn)
-    setTimeout(() => {
-      descEl.querySelectorAll("video.bats-bg").forEach((v) => safePlay(v));
-    }, 900);
+    // Retry shortly after (browser delays media init)
+    setTimeout(tryAll, 250);
+    setTimeout(tryAll, 900);
 
     // If tab becomes visible again, retry
     document.addEventListener("visibilitychange", () => {
-      if (document.visibilityState === "visible") {
-        descEl.querySelectorAll("video.bats-bg").forEach((v) => safePlay(v));
-      }
+      if (document.visibilityState === "visible") tryAll();
     });
 
     // Start playing as soon as the description is on-screen
@@ -133,7 +157,7 @@
         (entries) => {
           entries.forEach((entry) => {
             if (entry.isIntersecting) {
-              descEl.querySelectorAll("video.bats-bg").forEach((v) => safePlay(v));
+              tryAll();
               io.disconnect();
             }
           });
@@ -145,14 +169,18 @@
 
     // One user gesture fallback (covers iOS)
     const gesture = () => {
-      descEl.querySelectorAll("video.bats-bg").forEach((v) => safePlay(v));
+      tryAll();
       window.removeEventListener("pointerdown", gesture);
       window.removeEventListener("touchstart", gesture);
       window.removeEventListener("click", gesture);
+      window.removeEventListener("keydown", gesture);
+      window.removeEventListener("scroll", gesture);
     };
     window.addEventListener("pointerdown", gesture, { once: true, passive: true });
     window.addEventListener("touchstart", gesture, { once: true, passive: true });
     window.addEventListener("click", gesture, { once: true });
+    window.addEventListener("keydown", gesture, { once: true });
+    window.addEventListener("scroll", gesture, { once: true, passive: true });
   }
 
   function render(root, p) {
