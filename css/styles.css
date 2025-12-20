@@ -337,26 +337,6 @@ body.drawer-open { overflow: hidden; }
 }
 
 /* =========================
-   Storm overlay + lightning
-   ========================= */
-#storm-overlay {
-  position: fixed; inset: 0; pointer-events: none;
-  z-index: 3000; mix-blend-mode: screen; display: none;
-}
-#storm-overlay canvas { width: 100%; height: 100%; }
-.lightning-flash {
-  position: fixed; inset: 0; background: white; opacity: 0;
-  z-index: 2999; pointer-events: none; animation: lightning 4s infinite;
-}
-@keyframes lightning { 0%,97%,100%{opacity:0} 98%{opacity:.3} 99%{opacity:0} }
-
-#storm-popup {
-  position: fixed; z-index: 3100; inset: 0; display: flex; align-items: center; justify-content: center;
-  background: black; color: white; font-size: 3rem; font-family: 'Cinzel', serif; letter-spacing: 2px;
-  opacity: 1; transition: opacity 1s ease;
-}
-
-/* =========================
    Bat cursor (desktop / precise pointers only)
    ========================= */
 @media (pointer: fine) {
@@ -1188,39 +1168,75 @@ h1,h2,h3,
 }
 
 /* =========================================================
-   DHK — LAYER ORDER (Rain -> Lightning -> Bats -> Text)
-   (FINAL: BATS MUST APPEAR OVER RAIN)
+   DHK — FINAL STORM + PRODUCT DESC LAYER ORDER
+   GOAL:
+   - Rain visible site-wide
+   - Product description sits ABOVE rain
+   - Bats video sits behind description text
+   - Modals/drawers/cart still sit above everything
    ========================================================= */
 
-/* Keep storm layer where your script expects it */
+/* ---- Storm layers (site-wide) ---- */
+/* Keep storm visible over the site, but below cart/menus/modals */
 #storm-overlay{
   position: fixed;
   inset: 0;
   pointer-events: none;
   z-index: 3000;               /* rain layer */
   mix-blend-mode: screen;
-  display: none;
+  display: none;               /* your JS turns this on */
+  background: transparent;
 }
+
 .lightning-flash{
   position: fixed;
   inset: 0;
-  background: #fff;
-  opacity: 0;
-  z-index: 3001;               /* above rain */
   pointer-events: none;
+  z-index: 3001;               /* above rain */
+  opacity: 0;
+  background: #fff;
+  /* IMPORTANT: your JS already handles flashes.
+     If you want the CSS lightning animation instead, uncomment:
+     animation: lightning 4s infinite;
+  */
 }
 
-/* Product description becomes its OWN stacking world and sits ABOVE the rain */
+/* Optional CSS lightning (ONLY if you want it) */
+/*
+@keyframes lightning {
+  0%,97%,100%{opacity:0}
+  98%{opacity:.3}
+  99%{opacity:0}
+}
+*/
+
+#storm-popup{
+  position: fixed;
+  inset: 0;
+  z-index: 3100;               /* above storm */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+  color: #fff;
+  font-size: 3rem;
+  font-family: 'Cinzel', serif;
+  letter-spacing: 2px;
+  opacity: 1;
+  transition: opacity 1s ease;
+}
+
+/* ---- Product description: create a stacking world ABOVE the rain ---- */
 #product-root .product-desc-wrap{
   position: relative;
-  z-index: 3105;               /* > 3000 so bats/text are above rain */
+  z-index: 3105;               /* > 3000 so desc+bats sit above rain */
   isolation: isolate;          /* prevents weird stacking bugs */
   overflow: hidden;
   border-radius: 12px;
   background: #0a0a0a;
 }
 
-/* Bats video behind the text but visible */
+/* Bats: behind text, but visible */
 #product-root .product-desc-wrap video.bats-bg{
   position: absolute;
   inset: 0;
@@ -1229,14 +1245,14 @@ h1,h2,h3,
   object-fit: cover;
   pointer-events: none;
 
-  /* BOOST visibility so it can't disappear into black */
-  opacity: 0.40;               /* was 0.18 */
+  /* Visibility tuning */
+  opacity: 0.40;               /* raise/lower as you like */
   filter: brightness(1.25) contrast(1.25);
 
   z-index: 1;
 }
 
-/* All text/content above bats */
+/* Text/content always above bats */
 #product-root .product-desc-wrap > :not(video){
   position: relative;
   z-index: 2;
