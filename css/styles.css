@@ -4,12 +4,11 @@
 :root {
   --header-height: 56px;            /* slim header */
   --hero-overlay: 0.40;             /* tweak to match Shopify's 40% */
-  --hero-zoom-desktop: 1.8;        /* desktop hero zoom */
-  --hero-zoom-mobile: 1.15;          /* mobile hero zoom */
-}
+  --hero-zoom-desktop: 1.8;         /* desktop hero zoom */
+  --hero-zoom-mobile: 1.15;         /* mobile hero zoom */
 
-:root {
-  --bats-opacity: 0.18; /* try 0.12 – 0.25 */
+  /* Bats master opacity */
+  --bats-opacity: 0.18;             /* try 0.12 – 0.25 */
 }
 
 @media (max-width: 900px) {
@@ -413,37 +412,6 @@ body.drawer-open { overflow: hidden; }
   #product-root .pd__lens.is-active {
     display: block;
   }
-}
-/* =========================
-   Product description – bats video background
-   ========================= */
-
-#product-root .product-desc-wrap {
-  position: relative;
-  overflow: hidden;
-  border-radius: 12px;
-  background: #0a0a0a;
-}
-
-/* Text stays above bats */
-#product-root .product-desc-wrap > * {
-  position: relative;
-  z-index: 2;
-}
-
-/* Bats video behind text */
-#product-root .product-desc-wrap video.bats-bg {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-
-  z-index: 1;
-  pointer-events: none;
-
-  /* 🎛 MASTER CONTROL */
-  opacity: var(--bats-opacity, 0.18);
 }
 
 /* =========================
@@ -1193,11 +1161,13 @@ h1,h2,h3,
   * { animation: none !important; transition: none !important; }
   .lightning-flash { animation: none !important; }
 }
+
 /* Turn off old sale prices on product pages */
 .product-price del,
 .product-price s {
   display: none !important;
 }
+
 /* ===== Product page – remove white button borders, keep glow box ===== */
 
 /* Reset the thumbnail buttons so they don't draw white borders */
@@ -1216,30 +1186,33 @@ h1,h2,h3,
 #product-root .pd__thumb img {
   display: block;
 }
+
 /* =========================================================
    DHK — BATS VIDEO BACKGROUND (PRODUCT DESCRIPTION)
-   Put this at the bottom of styles.css
+   (KEEP ONLY THIS ONE BLOCK — removed duplicates)
    ========================================================= */
 
-.product-desc-wrap{
+#product-root .product-desc-wrap{
   position: relative;
   overflow: hidden;
+  border-radius: 12px;
   background: #0a0a0a;
 }
 
-.product-desc-wrap .bats-bg{
+/* keep everything above the bats video */
+#product-root .product-desc-wrap > :not(video){
+  position: relative;
+  z-index: 2;
+}
+
+/* bats video behind content */
+#product-root .product-desc-wrap video.bats-bg{
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: .14;              /* adjust intensity */
+  opacity: var(--bats-opacity, 0.18);
   pointer-events: none;
-  z-index: 0;
-}
-
-/* keep all text/content above the bats */
-.product-desc-wrap > *{
-  position: relative;
   z-index: 1;
 }
