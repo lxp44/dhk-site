@@ -410,6 +410,32 @@ body.drawer-open { overflow: hidden; }
     display: block;
   }
 }
+/* =========================
+   Product description – bats video background
+   ========================= */
+#product-root .pd__desc {
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+/* Keep all description content ABOVE the bats */
+#product-root .pd__desc > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* The bats video sits BEHIND the content */
+#product-root .pd__desc video.bats-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.10;              /* adjust 0.06–0.16 */
+  pointer-events: none;
+  z-index: 0;
+}
 
 /* =========================
    Sections & Featured collection (stub)
