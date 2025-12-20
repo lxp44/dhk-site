@@ -1257,3 +1257,33 @@ h1,h2,h3,
   position: relative;
   z-index: 2;
 }
+/* ===== FORCE BATS VISIBILITY (PRODUCT DESC ONLY) ===== */
+#product-root .product-desc-wrap{
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #0a0a0a;
+  isolation: isolate;
+}
+
+/* Put bats behind text, but FORCE it visible */
+#product-root .product-desc-wrap video.bats-bg{
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 0.55 !important;                 /* stronger */
+  mix-blend-mode: screen !important;        /* makes dark elements pop */
+  filter: invert(1) brightness(1.25) contrast(1.25) !important;
+  pointer-events: none !important;
+  z-index: 1 !important;
+}
+
+/* Text above bats */
+#product-root .product-desc-wrap > :not(video){
+  position: relative;
+  z-index: 2;
+}
