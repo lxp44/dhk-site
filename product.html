@@ -456,47 +456,5 @@
       </div>
     </aside>
   </div>
-  
-<script>
-(function kickBats(){
-  const tryPlay = (v) => {
-    try{
-      v.muted = true;
-      v.loop = true;
-      v.autoplay = true;
-      v.preload = 'auto';
-      v.setAttribute('muted','');
-      v.setAttribute('playsinline','');
-      v.setAttribute('autoplay','');
-      v.setAttribute('loop','');
-
-      const p = v.play();
-      if (p && p.catch) p.catch(()=>{});
-    }catch(e){}
-  };
-
-  const playAll = () => {
-    document.querySelectorAll('video.bats-bg').forEach(tryPlay);
-  };
-
-  // 1) run now
-  playAll();
-
-  // 2) run after product.js likely rendered
-  window.addEventListener('load', () => {
-    playAll();
-    setTimeout(playAll, 250);
-    setTimeout(playAll, 800);
-  });
-
-  // 3) if product.js injects later, observe DOM changes
-  const obs = new MutationObserver(() => playAll());
-  obs.observe(document.body, { childList:true, subtree:true });
-
-  // 4) iOS autoplay fallback: first user interaction
-  window.addEventListener('touchstart', playAll, { passive:true });
-  window.addEventListener('click', playAll, { passive:true });
-})();
-</script>
 </body>
 </html>
