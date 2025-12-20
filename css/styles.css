@@ -1181,3 +1181,30 @@ h1,h2,h3,
 #product-root .pd__thumb img {
   display: block;
 }
+/* =========================================================
+   DHK — BATS VIDEO BACKGROUND (PRODUCT DESCRIPTION)
+   Put this at the bottom of styles.css
+   ========================================================= */
+
+.product-desc-wrap{
+  position: relative;
+  overflow: hidden;
+  background: #0a0a0a;
+}
+
+.product-desc-wrap .bats-bg{
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: .14;              /* adjust intensity */
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* keep all text/content above the bats */
+.product-desc-wrap > *{
+  position: relative;
+  z-index: 1;
+}
