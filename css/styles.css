@@ -1189,38 +1189,55 @@ h1,h2,h3,
 
 /* =========================================================
    DHK — LAYER ORDER (Rain -> Lightning -> Bats -> Text)
+   (FINAL: BATS MUST APPEAR OVER RAIN)
    ========================================================= */
 
-/* Storm behind everything */
-#storm-overlay { 
-  z-index: 0 !important; 
+/* Keep storm layer where your script expects it */
+#storm-overlay{
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3000;               /* rain layer */
+  mix-blend-mode: screen;
+  display: none;
 }
-.lightning-flash { 
-  z-index: 1 !important; 
+.lightning-flash{
+  position: fixed;
+  inset: 0;
+  background: #fff;
+  opacity: 0;
+  z-index: 3001;               /* above rain */
+  pointer-events: none;
 }
 
-/* Product description wraps its own stacking context */
+/* Product description becomes its OWN stacking world and sits ABOVE the rain */
 #product-root .product-desc-wrap{
   position: relative;
+  z-index: 3105;               /* > 3000 so bats/text are above rain */
+  isolation: isolate;          /* prevents weird stacking bugs */
   overflow: hidden;
   border-radius: 12px;
   background: #0a0a0a;
 }
 
-/* Bats above rain, behind text */
+/* Bats video behind the text but visible */
 #product-root .product-desc-wrap video.bats-bg{
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: var(--bats-opacity, 0.18);
   pointer-events: none;
-  z-index: 2;
+
+  /* BOOST visibility so it can't disappear into black */
+  opacity: 0.40;               /* was 0.18 */
+  filter: brightness(1.25) contrast(1.25);
+
+  z-index: 1;
 }
 
 /* All text/content above bats */
-#product-root .product-desc-wrap > *{
+#product-root .product-desc-wrap > :not(video){
   position: relative;
-  z-index: 3;
+  z-index: 2;
 }
