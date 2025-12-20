@@ -1216,3 +1216,30 @@ h1,h2,h3,
   pointer-events: none;
   z-index: 1;
 }
+/* Put storm behind site content */
+#storm-overlay { 
+  z-index: 0 !important; 
+}
+
+.lightning-flash { 
+  z-index: 1 !important; 
+}
+
+/* Lift the actual site above rain */
+header, 
+main, 
+footer, 
+#product-root {
+  position: relative;
+  z-index: 5;
+}
+
+/* Bats video above rain but behind text */
+#product-root .product-desc-wrap video.bats-bg { 
+  z-index: 2; 
+}
+
+/* Text always on top */
+#product-root .product-desc-wrap > * { 
+  z-index: 3; 
+}
