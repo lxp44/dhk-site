@@ -456,5 +456,26 @@
       </div>
     </aside>
   </div>
+  
+  <script>
+  (function kickBats(){
+    function playAll(){
+      document.querySelectorAll('video.bats-bg').forEach(v=>{
+        try{
+          v.muted = true;
+          v.playsInline = true;
+          v.loop = true;
+          v.autoplay = true;
+          v.preload = 'auto';
+          const p = v.play();
+          if (p && p.catch) p.catch(()=>{});
+        }catch(e){}
+      });
+    }
+    playAll();
+    window.addEventListener('touchstart', playAll, { once:true, passive:true });
+    window.addEventListener('click', playAll, { once:true });
+  })();
+</script>
 </body>
 </html>
