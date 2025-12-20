@@ -3,7 +3,7 @@
   const on = (el, ev, fn, opts) => el && el.addEventListener(ev, fn, opts || false);
 
   // Elements (assigned after DOMContentLoaded)
-  let popup, overlay, canvas, ctx;
+  let popup, overlay, canvas, ctx, lightning;
 
   // Audio refs
   let A = {};
@@ -89,9 +89,25 @@
     }
   }
 
+  function ensureStormLayering() {
+    // Keep storm visible above page content but below your modals/drawers
+    // (menu/search are in the billions, cart drawer is 9999, so 1500 is safe)
+    if (overlay) {
+      overlay.style.display = "block";
+      overlay.style.pointerEvents = "none";
+      overlay.style.zIndex = "1500";
+      overlay.style.backgroundColor = "transparent";
+    }
+    if (lightning) {
+      lightning.style.pointerEvents = "none";
+      lightning.style.zIndex = "1501";
+    }
+  }
+
   function startVisuals() {
     if (!overlay || !canvas) return;
-    overlay.style.display = "block";
+
+    ensureStormLayering();
 
     // size canvas
     canvas.width = innerWidth;
@@ -128,11 +144,17 @@
     }
     draw();
 
+    // Lightning flash should hit the lightning layer, NOT the overlay
     function flashOnce() {
-      if (!overlay) return;
-      overlay.style.backgroundColor = "rgba(255,255,255,0.28)";
-      setTimeout(() => overlay && (overlay.style.backgroundColor = "transparent"), 100);
-      setTimeout(() => { if (Math.random() > 0.55) flashOnce(); }, Math.random() * 8000 + 2500);
+      if (!lightning) return;
+
+      lightning.style.opacity = "0.22";
+      setTimeout(() => (lightning.style.opacity = "0"), 90);
+
+      // Random extra flashes
+      setTimeout(() => {
+        if (Math.random() > 0.55) flashOnce();
+      }, Math.random() * 8000 + 2500);
     }
     setTimeout(flashOnce, 1800);
   }
@@ -191,11 +213,11 @@
 
   // ---------- INIT ----------
   document.addEventListener("DOMContentLoaded", () => {
-    // Assign (no shadowing)
-    popup   = document.getElementById("storm-popup");
-    overlay = document.getElementById("storm-overlay");
-    canvas  = document.getElementById("rain-canvas");
-    ctx     = canvas ? canvas.getContext("2d") : null;
+    popup     = document.getElementById("storm-popup");
+    overlay   = document.getElementById("storm-overlay");
+    canvas    = document.getElementById("rain-canvas");
+    ctx       = canvas ? canvas.getContext("2d") : null;
+    lightning = document.querySelector(".lightning-flash");
 
     const html = document.documentElement;
 
@@ -203,7 +225,7 @@
     if (html.classList.contains("storm-skipped")) {
       popup?.remove();
       overlay?.remove();
-      document.querySelector(".lightning-flash")?.remove();
+      lightning?.remove();
       return;
     }
 
@@ -212,7 +234,7 @@
       html.classList.add("storm-skipped");
       popup?.remove();
       overlay?.remove();
-      document.querySelector(".lightning-flash")?.remove();
+      lightning?.remove();
       return;
     }
 
