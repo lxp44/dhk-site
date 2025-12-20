@@ -10,8 +10,8 @@
     });
 
   // === GLOBAL SALE CONFIG (40% OFF ALL ITEMS) ===
-  const SALE_ACTIVE = false;     // turn sale on/off
-  const SALE_PERCENT = 40;       // 40% OFF all items
+  const SALE_ACTIVE = false; // turn sale on/off
+  const SALE_PERCENT = 40;   // 40% OFF all items
 
   function applySale(cents) {
     if (!SALE_ACTIVE) return Number(cents || 0);
@@ -39,6 +39,47 @@
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const raw = await res.json();
     return normalizeProducts(raw);
+  }
+
+  // ---- Ensure bats video works + is behind text
+  function hydrateBats(descEl) {
+    if (!descEl) return;
+
+    const vids = descEl.querySelectorAll("video");
+    vids.forEach((v) => {
+      // Make sure your kickBats script can find it
+      if (!v.classList.contains("bats-bg")) v.classList.add("bats-bg");
+
+      // Hard-force autoplay-friendly attributes (esp. iOS)
+      try {
+        v.muted = true;
+        v.loop = true;
+        v.autoplay = true;
+        v.preload = "auto";
+        v.playsInline = true;
+
+        v.setAttribute("muted", "");
+        v.setAttribute("playsinline", "");
+        v.setAttribute("autoplay", "");
+        v.setAttribute("loop", "");
+      } catch (e) {}
+
+      // Try to play immediately (may still require user gesture on some devices)
+      try {
+        const p = v.play();
+        if (p && p.catch) p.catch(() => {});
+      } catch (e) {}
+    });
+
+    // Also retry shortly after (helps when browser delays media init)
+    setTimeout(() => {
+      descEl.querySelectorAll("video.bats-bg").forEach((v) => {
+        try {
+          const p = v.play();
+          if (p && p.catch) p.catch(() => {});
+        } catch (e) {}
+      });
+    }, 300);
   }
 
   function render(root, p) {
@@ -134,6 +175,9 @@
           ? p.description
           : "<p style='opacity:.8'>No description available.</p>";
       descEl.innerHTML = html;
+
+      // ✅ make bats work + sit behind text
+      hydrateBats(descEl);
     }
 
     // Thumbnail -> main image switcher
