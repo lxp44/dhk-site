@@ -132,8 +132,8 @@
     "stripePriceId": "price_1SgTcy0cfsBzY9CjDZzWS9TL"
   },
   {
-    "id": "dhk-tight-ankle-sweatpants",
-    "title": "DHK Tight Ankle Sweatpants",
+    "id": "dhk-joggers",
+    "title": "DHK Joggers",
     "price": 10000,
     "color": "black",
     "thumbnail": "assets/img/products/DRP-2/MENS/BOTTOMS/dk/resized/sweatpants-scrunch-dhk-black-resized.gif",
@@ -145,7 +145,7 @@
     ],
     "options": ["S", "M", "L", "XL", "2XL", "3XL"],
     "description": "<div class=\\\"product-desc-wrap\\\" style=\\\"color:#f1f1f1;font-family:Cinzel,serif;padding:20px;\\\"><h2 class=\\\"flicker\\\" style=\\\"color:#ffffff;text-transform:uppercase;text-shadow:0 0 6px #ffffff;\\\">DHK Tight Ankle Sweatpants w/ silk bag</h2><p style=\\\"font-size:16px;line-height:1.6;color:#cccccc;\\\">Clean black sweatpants with a locked-in ankle—built to show the sneaker, keep the leg sharp, and move like armor. Heavyweight feel, street-ready finish, and a premium presence that reads luxury even in low light.<br><br><strong>Our DHK logo neatly hand placed with Swarvoski crystals</strong></p><h3 style=\\\"color:#ffffff;margin-top:20px;\\\">Details:</h3><ul style=\\\"list-style-type:none;padding:0;color:#cccccc;font-size:15px;\\\"><li>• Color: Black</li><li>• Fit: Tapered leg with tight ankle cuff</li><li>• Feel: Heavyweight fleece / premium comfort</li><li>• Logo: Hand-placed crystal DHK emblem</li><li>• Includes: Premium silk bag</li></ul></div>",
-    "url": "product.html?id=dhk-tight-ankle-sweatpants",
+    "url": "product.html?id=dhk-joggers",
     "stripePriceId": "price_1SgTie0cfsBzY9CjlSCFpeQY"
   }
 ]
