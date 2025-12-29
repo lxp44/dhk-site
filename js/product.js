@@ -41,7 +41,11 @@
     return normalizeProducts(raw);
   }
 
-  // ---------- BATS HELPERS ----------
+  // =========================
+  // ✅ BATS BACKGROUND (AUTO)
+  // =========================
+  const BATS_SRC = "assets/video/bat.mp4";
+
   function safePlay(video) {
     try {
       const p = video.play();
@@ -59,19 +63,7 @@
   }
 
   function forceVideoAttrs(video) {
-    // Make sure CSS can target it
     if (!video.classList.contains("bats-bg")) video.classList.add("bats-bg");
-
-    // Ensure source path is correct (prevents silent 404s)
-    const source = video.querySelector("source");
-    if (source && source.getAttribute("src")) {
-      const fixed = absolutizeSrc(source.getAttribute("src"));
-      if (fixed !== source.getAttribute("src")) source.setAttribute("src", fixed);
-    }
-    if (video.getAttribute("src")) {
-      const fixed = absolutizeSrc(video.getAttribute("src"));
-      if (fixed !== video.getAttribute("src")) video.setAttribute("src", fixed);
-    }
 
     // Autoplay-safe / iOS-safe attributes
     try {
@@ -89,78 +81,115 @@
 
       // Extra “don’t hijack playback UI” flags (helps iOS / Safari quirks)
       video.setAttribute("disablepictureinpicture", "");
-      video.setAttribute("controlslist", "nodownload noplaybackrate noremoteplayback");
+      video.setAttribute(
+        "controlslist",
+        "nodownload noplaybackrate noremoteplayback"
+      );
 
       // Safer preload (auto can be throttled hard on mobile)
       video.preload = "metadata";
       video.setAttribute("preload", "metadata");
 
-      // Force visible (in case any CSS elsewhere hides it)
-      video.style.display = "block";
-      video.style.visibility = "visible";
-      if (!video.style.opacity) video.style.opacity = "1";
+      // Ensure it can't steal clicks / hover
+      video.style.pointerEvents = "none";
     } catch (e) {}
   }
 
-  // ---- Ensure bats video works (desktop + iOS) ----
-  function hydrateBats(descEl) {
-    if (!descEl) return;
+  function buildBatsVideo() {
+    const v = document.createElement("video");
+    v.className = "bats-bg";
+    forceVideoAttrs(v);
 
-    const vids = descEl.querySelectorAll("video");
-    if (!vids.length) return;
+    const s = document.createElement("source");
+    s.src = absolutizeSrc(BATS_SRC);
+    s.type = "video/mp4";
+    v.appendChild(s);
 
-    const tryAll = () => {
-      descEl.querySelectorAll("video.bats-bg").forEach((v) => safePlay(v));
-    };
+    return v;
+  }
 
-    vids.forEach((v) => {
+  // Ensures a bats background layer exists inside the description container,
+  // and that the bats video is inside it (even if the description didn't include a <video>).
+  function ensureBatsBackground(descEl) {
+    if (!descEl) return null;
+
+    // Create a background layer (CSS should position it behind content)
+    let layer = descEl.querySelector(".bats-layer");
+    if (!layer) {
+      layer = document.createElement("div");
+      layer.className = "bats-layer";
+      // insert first so it sits behind
+      descEl.insertBefore(layer, descEl.firstChild);
+    }
+
+    // If the description already contains a bats video, reuse it
+    let v = descEl.querySelector("video.bats-bg") || layer.querySelector("video.bats-bg");
+    if (v) {
       forceVideoAttrs(v);
 
-      // Force media pipeline to refresh after we change attrs
+      // Fix any src paths to prevent silent 404s
+      const source = v.querySelector("source");
+      if (source?.getAttribute("src")) {
+        source.setAttribute("src", absolutizeSrc(source.getAttribute("src")));
+      } else if (v.getAttribute("src")) {
+        v.setAttribute("src", absolutizeSrc(v.getAttribute("src")));
+      }
+
+      // Move video into the layer if needed
+      if (v.parentElement !== layer) layer.appendChild(v);
+
       try { v.load(); } catch (e) {}
+      return v;
+    }
 
-      // Try immediately
-      safePlay(v);
+    // Otherwise inject standard bats video
+    v = buildBatsVideo();
+    layer.appendChild(v);
+    try { v.load(); } catch (e) {}
+    return v;
+  }
 
-      // Retry once metadata is ready
-      v.addEventListener("loadedmetadata", () => safePlay(v), { once: true });
+  function hydrateBats(descEl) {
+    const v = ensureBatsBackground(descEl);
+    if (!v) return;
 
-      // Retry when it can actually play
-      v.addEventListener("canplay", () => safePlay(v), { once: true });
+    const tryPlay = () => safePlay(v);
 
-      // If it errors (often bad path), log it so you can see instantly
-      v.addEventListener(
-        "error",
-        () => {
-          const src =
-            v.getAttribute("src") ||
-            v.querySelector("source")?.getAttribute("src") ||
-            "(no src)";
-          console.warn("[BATS] video error for:", src, v.error);
-        },
-        { once: true }
-      );
-    });
+    // immediate + retries (covers Safari / delayed init)
+    tryPlay();
+    setTimeout(tryPlay, 150);
+    setTimeout(tryPlay, 600);
+    setTimeout(tryPlay, 1400);
 
-    // Retry shortly after (browser delays media init)
-    setTimeout(tryAll, 250);
-    setTimeout(tryAll, 900);
+    v.addEventListener("loadedmetadata", tryPlay, { once: true });
+    v.addEventListener("canplay", tryPlay, { once: true });
+
+    // If it errors (often bad path), log it so you can see instantly
+    v.addEventListener(
+      "error",
+      () => {
+        const src =
+          v.getAttribute("src") ||
+          v.querySelector("source")?.getAttribute("src") ||
+          "(no src)";
+        console.warn("[BATS] video error for:", src, v.error);
+      },
+      { once: true }
+    );
 
     // If tab becomes visible again, retry
     document.addEventListener("visibilitychange", () => {
-      if (document.visibilityState === "visible") tryAll();
+      if (document.visibilityState === "visible") tryPlay();
     });
 
     // Start playing as soon as the description is on-screen
-    if ("IntersectionObserver" in window) {
+    if ("IntersectionObserver" in window && descEl) {
       const io = new IntersectionObserver(
         (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              tryAll();
-              io.disconnect();
-            }
-          });
+          if (entries.some((e) => e.isIntersecting)) {
+            tryPlay();
+            io.disconnect();
+          }
         },
         { threshold: 0.15 }
       );
@@ -169,7 +198,7 @@
 
     // One user gesture fallback (covers iOS)
     const gesture = () => {
-      tryAll();
+      tryPlay();
       window.removeEventListener("pointerdown", gesture);
       window.removeEventListener("touchstart", gesture);
       window.removeEventListener("click", gesture);
@@ -268,21 +297,22 @@
       </article>
     `;
 
-    // Inject rich HTML description (keep container visible)
+    // Inject rich HTML description
     const descEl = root.querySelector("#pd-desc");
     if (descEl) {
       const html =
         typeof p.description === "string" && p.description.trim().length
           ? p.description
           : "<p style='opacity:.8'>No description available.</p>";
+
       descEl.innerHTML = html;
 
-      // ✅ make bats work reliably
+      // ✅ ALWAYS inject/activate bats background behind description
       hydrateBats(descEl);
     }
 
     // Thumbnail -> main image switcher
-    const imgsLocal = imgs.slice(); // local copy for closure
+    const imgsLocal = imgs.slice();
     root.querySelectorAll(".pd__thumb").forEach((btn) => {
       btn.addEventListener("click", () => {
         const idx = +btn.dataset.idx || 0;
@@ -322,7 +352,6 @@
       const mainWrap = root.querySelector(".product-main");
 
       if (mainImg && mainWrap) {
-        // Ensure wrapper can host absolutely positioned lens
         if (getComputedStyle(mainWrap).position === "static") {
           mainWrap.style.position = "relative";
         }
@@ -345,7 +374,6 @@
           let x = clientX - rect.left;
           let y = clientY - rect.top;
 
-          // Clamp lens center inside the image bounds
           x = Math.max(lensR, Math.min(rect.width - lensR, x));
           y = Math.max(lensR, Math.min(rect.height - lensR, y));
 
@@ -357,24 +385,17 @@
           lens.style.backgroundPosition = `-${x * zoom - lensR}px -${y * zoom - lensR}px`;
         }
 
-        function onEnter() {
-          lens.classList.add("is-active");
-        }
-        function onLeave() {
-          lens.classList.remove("is-active");
-        }
+        function onEnter() { lens.classList.add("is-active"); }
+        function onLeave() { lens.classList.remove("is-active"); }
 
         mainImg.addEventListener("mouseenter", onEnter);
         mainImg.addEventListener("mouseleave", onLeave);
         mainImg.addEventListener("mousemove", moveLens);
 
-        // (Optional) basic support for trackpads that fire pointer events
         mainImg.addEventListener(
           "pointermove",
           (e) => {
-            if (e.pointerType === "mouse" || e.pointerType === "pen") {
-              moveLens(e);
-            }
+            if (e.pointerType === "mouse" || e.pointerType === "pen") moveLens(e);
           },
           { passive: true }
         );
