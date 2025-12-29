@@ -15,6 +15,7 @@
 
   <!-- Styles -->
   <link rel="stylesheet" href="css/styles.css"/>
+
   <!-- Drawer (mobile) typography + glow -->
   <style>
     /* Drawer panel background + layering so it always sits above storm */
@@ -81,6 +82,7 @@
       text-shadow: 0 0 6px rgba(255,255,255,.12);
     }
   </style>
+
   <!-- Page-scoped styles for gallery -->
   <style>
     .collections-wrap { padding-block: 28px 40px; }
@@ -160,10 +162,13 @@
       opacity: .9;
     }
     .gif-caption { display: none; }
+
+    /* Make cards clickable without changing your look */
+    .gif-link { display:block; color:inherit; text-decoration:none; }
   </style>
 </head>
-<body class="template-page">
 
+<body class="template-page">
   <style>
     #search-modal{ z-index:2147483647; }
     body.search-open #storm-overlay{ opacity:0 !important; pointer-events:none !important; transition:opacity .15s ease; }
@@ -227,7 +232,7 @@
           <a href="collections.html" class="nav-link is-active">Collections</a>
         </nav>
 
-       <a class="header__logo" href="index.html" aria-label="DarkHarlemKnight">
+        <a class="header__logo" href="index.html" aria-label="DarkHarlemKnight">
           <img
             src="assets/img/DHK_transparent.gif"
             alt="DarkHarlemKnight"
@@ -236,7 +241,7 @@
             loading="eager"
           />
         </a>
-        
+
         <nav class="nav-right desktop-only">
           <a href="4bout-us.html" class="nav-link">4bout us</a>
           <a href="contact.html" class="nav-link">Contact</a>
@@ -262,154 +267,231 @@
       <div class="gif-grid" id="gifGrid">
         <!-- Vol. 1 Cards -->
         <article class="gif-card">
-          <figure>
-            <img class="gif-img"
-                 src="assets/img/products/the-dark-harlem-knight-black-hoodie.gif"
-                 alt="The Dark Harlem Knight Black Hoodie"
-                 loading="lazy">
-          </figure>
-          <div class="lens" aria-hidden="true"></div>
-          <div class="gif-meta">
-            <span class="prod-title">The Dark Harlem Knight — Black Hoodie</span>
-            <p class="prod-desc">Heavyweight fleece. Shadow-stitch crest. Built for the storm.</p>
-          </div>
+          <a class="gif-link" href="product.html?id=the-dark-harlem-knight-black-hoodie">
+            <figure>
+              <img class="gif-img"
+                   src="assets/img/products/the-dark-harlem-knight-black-hoodie.gif"
+                   alt="The Dark Harlem Knight Black Hoodie"
+                   loading="lazy">
+            </figure>
+            <div class="lens" aria-hidden="true"></div>
+            <div class="gif-meta">
+              <span class="prod-title">The Dark Harlem Knight — Black Hoodie</span>
+              <p class="prod-desc">Heavyweight fleece. Shadow-stitch crest. Built for the storm.</p>
+            </div>
+          </a>
         </article>
 
         <article class="gif-card">
-          <figure>
-            <img class="gif-img"
-                 src="assets/img/products/the-dark-harlem-black-knight.gif"
-                 alt="The Dark Harlem Black Knight"
-                 loading="lazy">
-          </figure>
-          <div class="lens" aria-hidden="true"></div>
-          <div class="gif-meta">
-            <span class="prod-title">The Dark Harlem — Black Knight</span>
-            <p class="prod-desc">Jet-black tee. Raised ink sigil. Gotham grit in motion.</p>
-          </div>
+          <a class="gif-link" href="product.html?id=the-dark-harlem-black-knight">
+            <figure>
+              <img class="gif-img"
+                   src="assets/img/products/the-dark-harlem-black-knight.gif"
+                   alt="The Dark Harlem Black Knight"
+                   loading="lazy">
+            </figure>
+            <div class="lens" aria-hidden="true"></div>
+            <div class="gif-meta">
+              <span class="prod-title">The Dark Harlem — Black Knight</span>
+              <p class="prod-desc">Jet-black tee. Raised ink sigil. Gotham grit in motion.</p>
+            </div>
+          </a>
         </article>
 
         <article class="gif-card">
-          <figure>
-            <img class="gif-img"
-                 src="assets/img/products/the-dark-harlem-white-knight.gif"
-                 alt="The Dark Harlem White Knight"
-                 loading="lazy">
-          </figure>
-          <div class="lens" aria-hidden="true"></div>
-          <div class="gif-meta">
-            <span class="prod-title">The Dark Harlem — White Knight</span>
-            <p class="prod-desc">Crisp cotton. Contrast crest. Light through the rain.</p>
-          </div>
+          <a class="gif-link" href="product.html?id=the-dark-harlem-white-knight">
+            <figure>
+              <img class="gif-img"
+                   src="assets/img/products/the-dark-harlem-white-knight.gif"
+                   alt="The Dark Harlem White Knight"
+                   loading="lazy">
+            </figure>
+            <div class="lens" aria-hidden="true"></div>
+            <div class="gif-meta">
+              <span class="prod-title">The Dark Harlem — White Knight</span>
+              <p class="prod-desc">Crisp cotton. Contrast crest. Light through the rain.</p>
+            </div>
+          </a>
         </article>
 
         <article class="gif-card">
-          <figure>
-            <img class="gif-img"
-                 src="assets/img/products/the-dark-harlem-dame.gif"
-                 alt="The Dark Harlem Dame"
-                 loading="lazy">
-          </figure>
-          <div class="lens" aria-hidden="true"></div>
-          <div class="gif-meta">
-            <span class="prod-title">The Dark Harlem — Dame</span>
-            <p class="prod-desc">Cut for command. Elegance with thunder in the seams.</p>
-          </div>
+          <a class="gif-link" href="product.html?id=dark-harlem-dame-crop-hoodie">
+            <figure>
+              <img class="gif-img"
+                   src="assets/img/products/the-dark-harlem-dame.gif"
+                   alt="The Dark Harlem Dame"
+                   loading="lazy">
+            </figure>
+            <div class="lens" aria-hidden="true"></div>
+            <div class="gif-meta">
+              <span class="prod-title">The Dark Harlem — Dame</span>
+              <p class="prod-desc">Cut for command. Elegance with thunder in the seams.</p>
+            </div>
+          </a>
         </article>
       </div>
 
       <!-- ===== Collection II ===== -->
       <div class="collections-vol">Vol. 2</div>
       <div class="gif-grid">
+
         <!-- Vol. 2 — Black Knight Swarovski Hoodie -->
         <article class="gif-card">
-          <figure>
-            <img class="gif-img"
-                 src="assets/img/products/volume-2/dhk-black-knight-hoodie-rhinestones.gif"
-                 alt="The Dark Harlem Knight Black Hoodie — Swarovski Edition"
-                 loading="lazy">
-          </figure>
-          <div class="lens" aria-hidden="true"></div>
-          <div class="gif-meta">
-            <span class="prod-title">The Dark Harlem Knight — Swarovski Hoodie</span>
-            <p class="prod-desc">Heavyweight fleece. Swarovski® 44 crest. Engineered for Gotham nights.</p>
-          </div>
+          <a class="gif-link" href="product.html?id=the-dark-harlem-knight-black-hoodie">
+            <figure>
+              <img class="gif-img"
+                   src="assets/img/products/volume-2/dhk-black-knight-hoodie-rhinestones.gif"
+                   alt="The Dark Harlem Knight Black Hoodie — Swarovski Edition"
+                   loading="lazy">
+            </figure>
+            <div class="lens" aria-hidden="true"></div>
+            <div class="gif-meta">
+              <span class="prod-title">The Dark Harlem Knight — Swarovski Hoodie</span>
+              <p class="prod-desc">Heavyweight fleece. Swarovski® 44 crest. Engineered for Gotham nights.</p>
+            </div>
+          </a>
         </article>
 
         <!-- Vol. 2 — Black Knight Swarovski Tee -->
         <article class="gif-card">
-          <figure>
-            <img class="gif-img"
-                 src="assets/img/products/volume-2/dhk-black-knight-rhinestones.gif"
-                 alt="The Dark Harlem Black Knight Swarovski Tee"
-                 loading="lazy">
-          </figure>
-          <div class="lens" aria-hidden="true"></div>
-          <div class="gif-meta">
-            <span class="prod-title">The Dark Harlem — Black Knight Tee</span>
-            <p class="prod-desc">Jet-black body. Swarovski® 44 mark. Storm-ready uniform.</p>
-          </div>
+          <a class="gif-link" href="product.html?id=the-dark-harlem-black-knight">
+            <figure>
+              <img class="gif-img"
+                   src="assets/img/products/volume-2/dhk-black-knight-rhinestones.gif"
+                   alt="The Dark Harlem Black Knight Swarovski Tee"
+                   loading="lazy">
+            </figure>
+            <div class="lens" aria-hidden="true"></div>
+            <div class="gif-meta">
+              <span class="prod-title">The Dark Harlem — Black Knight Tee</span>
+              <p class="prod-desc">Jet-black body. Swarovski® 44 mark. Storm-ready uniform.</p>
+            </div>
+          </a>
         </article>
 
         <!-- Vol. 2 — White Knight Swarovski Tee -->
         <article class="gif-card">
-          <figure>
-            <img class="gif-img"
-                 src="assets/img/products/volume-2/dhk-white-knight-rhinestones.gif"
-                 alt="The Dark Harlem White Knight Swarovski Tee"
-                 loading="lazy">
-          </figure>
-          <div class="lens" aria-hidden="true"></div>
-          <div class="gif-meta">
-            <span class="prod-title">The Dark Harlem — White Knight Tee</span>
-            <p class="prod-desc">Arctic white base. Swarovski® logo. Light cutting through the storm.</p>
-          </div>
+          <a class="gif-link" href="product.html?id=the-dark-harlem-white-knight">
+            <figure>
+              <img class="gif-img"
+                   src="assets/img/products/volume-2/dhk-white-knight-rhinestones.gif"
+                   alt="The Dark Harlem White Knight Swarovski Tee"
+                   loading="lazy">
+            </figure>
+            <div class="lens" aria-hidden="true"></div>
+            <div class="gif-meta">
+              <span class="prod-title">The Dark Harlem — White Knight Tee</span>
+              <p class="prod-desc">Arctic white base. Swarovski® logo. Light cutting through the storm.</p>
+            </div>
+          </a>
         </article>
 
         <!-- Vol. 2 — Dark Harlem Dame Crop Hoodie -->
         <article class="gif-card">
-          <figure>
-            <img class="gif-img"
-                 src="assets/img/products/volume-2/WOMENS-HOODIE-VOL2.gif"
-                 alt="Dark Harlem Dame Crop Hoodie"
-                 loading="lazy">
-          </figure>
-          <div class="lens" aria-hidden="true"></div>
-          <div class="gif-meta">
-            <span class="prod-title">Dark Harlem Dame — Crop Hoodie</span>
-            <p class="prod-desc">Cropped silhouette. Swarovski® 44 shimmer. Designed for the Dame of Gotham.</p>
-          </div>
+          <a class="gif-link" href="product.html?id=dark-harlem-dame-crop-hoodie">
+            <figure>
+              <img class="gif-img"
+                   src="assets/img/products/volume-2/WOMENS-HOODIE-VOL2.gif"
+                   alt="Dark Harlem Dame Crop Hoodie"
+                   loading="lazy">
+            </figure>
+            <div class="lens" aria-hidden="true"></div>
+            <div class="gif-meta">
+              <span class="prod-title">Dark Harlem Dame — Crop Hoodie</span>
+              <p class="prod-desc">Cropped silhouette. Swarovski® 44 shimmer. Designed for the Dame of Gotham.</p>
+            </div>
+          </a>
         </article>
 
         <!-- Vol. 2 — Men’s Flare Sweatpants -->
         <article class="gif-card">
-          <figure>
-            <img class="gif-img"
-                 src="assets/img/products/volume-2/mens-flare-bottom-vol2.gif"
-                 alt="The Dark Harlem Knight Flare Sweatpants"
-                 loading="lazy">
-          </figure>
-          <div class="lens" aria-hidden="true"></div>
-          <div class="gif-meta">
-            <span class="prod-title">The Dark Harlem Knight — Flare Sweatpants</span>
-            <p class="prod-desc">Stacked flare fit. Swarovski® 44 hits. Built to move through the city.</p>
-          </div>
+          <a class="gif-link" href="product.html?id=the-dark-harlem-knight-flare-sweatpants">
+            <figure>
+              <img class="gif-img"
+                   src="assets/img/products/volume-2/mens-flare-bottom-vol2.gif"
+                   alt="The Dark Harlem Knight Flare Sweatpants"
+                   loading="lazy">
+            </figure>
+            <div class="lens" aria-hidden="true"></div>
+            <div class="gif-meta">
+              <span class="prod-title">The Dark Harlem Knight — Flare Sweatpants</span>
+              <p class="prod-desc">Stacked flare fit. Swarovski® 44 hits. Built to move through the city.</p>
+            </div>
+          </a>
         </article>
 
         <!-- Vol. 2 — Dame Flare Sweatpants -->
         <article class="gif-card">
-          <figure>
-            <img class="gif-img"
-                 src="assets/img/products/volume-2/WOMENS-BOTTOMS-FLAIR-VOL2.gif"
-                 alt="The Dark Harlem Dame Flare Sweatpants"
-                 loading="lazy">
-          </figure>
-          <div class="lens" aria-hidden="true"></div>
-          <div class="gif-meta">
-            <span class="prod-title">Dark Harlem Dame — Flare Sweatpants</span>
-            <p class="prod-desc">Tailored flare. Swarovski® crystal work. Elegance with edge.</p>
-          </div>
+          <a class="gif-link" href="product.html?id=the-dark-harlem-dame-flare-sweatpants">
+            <figure>
+              <img class="gif-img"
+                   src="assets/img/products/volume-2/WOMENS-BOTTOMS-FLAIR-VOL2.gif"
+                   alt="The Dark Harlem Dame Flare Sweatpants"
+                   loading="lazy">
+            </figure>
+            <div class="lens" aria-hidden="true"></div>
+            <div class="gif-meta">
+              <span class="prod-title">Dark Harlem Dame — Flare Sweatpants</span>
+              <p class="prod-desc">Tailored flare. Swarovski® crystal work. Elegance with edge.</p>
+            </div>
+          </a>
         </article>
+
+        <!-- =========================
+             NEW PRODUCTS (DRP-2)
+             ========================= -->
+
+        <!-- DHK Heavy Box Tshirt -->
+        <article class="gif-card">
+          <a class="gif-link" href="product.html?id=dhk-heavy-boxy-tshirt">
+            <figure>
+              <img class="gif-img"
+                   src="assets/img/products/DRP-2/MENS/TOPS/dk/heavybox-dhk-grey.gif"
+                   alt="DHK Heavy Boxy Tshirt"
+                   loading="lazy">
+            </figure>
+            <div class="lens" aria-hidden="true"></div>
+            <div class="gif-meta">
+              <span class="prod-title">DHK Heavy Boxy Tshirt</span>
+              <p class="prod-desc">Dark grey. Heavy suede feel. Boxy cut built like armor.</p>
+            </div>
+          </a>
+        </article>
+
+        <!-- DHK Sweater -->
+        <article class="gif-card">
+          <a class="gif-link" href="product.html?id=dhk-sweater">
+            <figure>
+              <img class="gif-img"
+                   src="assets/img/products/DRP-2/MENS/TOPS/dk/resized/sweater-dhk-black-1-resized.gif"
+                   alt="DHK Sweater"
+                   loading="lazy">
+            </figure>
+            <div class="lens" aria-hidden="true"></div>
+            <div class="gif-meta">
+              <span class="prod-title">DHK Sweater</span>
+              <p class="prod-desc">Black essential. Heavy knit. Clean silhouette for cold nights.</p>
+            </div>
+          </a>
+        </article>
+
+        <!-- DHK Joggers (Tight Ankle Sweatpants) -->
+        <article class="gif-card">
+          <a class="gif-link" href="product.html?id=dhk-tight-ankle-sweatpants">
+            <figure>
+              <img class="gif-img"
+                   src="assets/img/products/DRP-2/MENS/TOPS/dk/resized/sweatpants-scrunch-dhk-black-resized.gif"
+                   alt="DHK Joggers"
+                   loading="lazy">
+            </figure>
+            <div class="lens" aria-hidden="true"></div>
+            <div class="gif-meta">
+              <span class="prod-title">DHK Joggers</span>
+              <p class="prod-desc">Black. Tight ankle finish. Made to show the sneaker clean.</p>
+            </div>
+          </a>
+        </article>
+
       </div>
     </div>
   </main>
@@ -429,7 +511,7 @@
   </footer>
   <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
 
-   <!-- ===== Search Modal ===== -->
+  <!-- ===== Search Modal ===== -->
   <div id="search-modal" class="search-modal" aria-hidden="true">
     <div class="search-modal__overlay" data-close-search></div>
     <div class="search-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="search-title">
@@ -443,7 +525,7 @@
       <div id="search-results" class="search-modal__results" aria-live="polite"></div>
     </div>
   </div>
-  
+
   <!-- Storm audio (kept) -->
   <audio id="rain-light"   src="assets/audio/light-rain.mp3"   loop preload="auto" hidden></audio>
   <audio id="rain-med"     src="assets/audio/med-rain.mp3"     loop preload="auto" hidden></audio>
@@ -459,7 +541,6 @@
   <script src="js/search.js"></script>
   <script src="js/shop.js"></script>
   <script src="js/storm_shopify_style.js"></script>
-  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
 
   <!-- Cart Drawer -->
   <div id="cart-drawer" class="cart-drawer" aria-hidden="true">
@@ -480,26 +561,10 @@
         <div class="cart-discount cart-discount--drawer">
           <label for="discount-code-drawer" class="cart-discount__label">ADD DISCOUNT</label>
           <div class="cart-discount__row">
-            <input
-              id="discount-code-drawer"
-              class="cart-discount__input"
-              type="text"
-              placeholder="Enter code"
-              autocomplete="off"
-            />
-            <button
-              id="discount-apply-drawer"
-              class="cart-discount__button"
-              type="button"
-            >
-              APPLY
-            </button>
+            <input id="discount-code-drawer" class="cart-discount__input" type="text" placeholder="Enter code" autocomplete="off"/>
+            <button id="discount-apply-drawer" class="cart-discount__button" type="button">APPLY</button>
           </div>
-          <p
-            id="discount-message-drawer"
-            class="cart-discount__message"
-            aria-live="polite"
-          ></p>
+          <p id="discount-message-drawer" class="cart-discount__message" aria-live="polite"></p>
         </div>
 
         <div class="cart-row">
@@ -523,7 +588,7 @@
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
 
-        const zoom = 2; // magnification
+        const zoom = 2;
         const bgX = -((x / rect.width) * (img.naturalWidth * zoom - rect.width));
         const bgY = -((y / rect.height) * (img.naturalHeight * zoom - rect.height));
 
@@ -534,13 +599,8 @@
         lens.style.backgroundPosition = `${bgX}px ${bgY}px`;
       });
 
-      card.addEventListener('mouseenter', () => {
-        card.classList.add('is-zooming');
-      });
-
-      card.addEventListener('mouseleave', () => {
-        card.classList.remove('is-zooming');
-      });
+      card.addEventListener('mouseenter', () => card.classList.add('is-zooming'));
+      card.addEventListener('mouseleave', () => card.classList.remove('is-zooming'));
     });
   </script>
 </body>
