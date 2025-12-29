@@ -456,6 +456,48 @@
       </div>
     </aside>
   </div>
+  
+  <style>
+  /* ===== BATS BACKGROUND LAYER (behind description) ===== */
+  #pd-desc.pd__desc,
+  #product-root #pd-desc {
+    position: relative;
+    overflow: hidden;
+    border-radius: 12px;
+    background: rgba(10,10,12,.55);
+    border: 1px solid rgba(255,255,255,.06);
+  }
+
+  /* background video layer */
+  #pd-desc .bats-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  #pd-desc video.bats-bg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    opacity: .22;              /* adjust intensity */
+    filter: contrast(1.05) brightness(.9);
+    transform: scale(1.03);    /* avoids edge gaps */
+  }
+
+  /* keep your text above the bats */
+  #pd-desc .product-desc-wrap {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* if any product description includes its own video tag, force it into background rules */
+  #pd-desc video {
+    max-width: none !important;
+    max-height: none !important;
+  }
+</style>
 
   <!-- ✅ Bats autoplay kick (robust selector) -->
   <script>
