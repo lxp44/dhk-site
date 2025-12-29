@@ -79,7 +79,7 @@
       width: 100vw; background: #000;
     }
 
-    /* ✅ FIX: give the slideshow a real height + flex track */
+    /* ✅ Slideshow frame */
     .lxp-slideshow{
       position: relative;
       width: 100%;
@@ -87,33 +87,59 @@
       min-height: 520px;
       overflow: hidden;
       background:#000;
+      display:block;
     }
+
+    /* Mobile sizing */
+    @media (max-width: 768px){
+      .lxp-slideshow{
+        height: 70vh;
+        min-height: 360px;
+      }
+    }
+
+    /* ✅ Flex track */
     .lxp-slides{
       display:flex;
       width:100%;
       height:100%;
       transition: transform .45s ease;
       will-change: transform;
+      touch-action: pan-y;
     }
 
-    .lxp-slide { min-width: 100%; height: 100%; position: relative; }
-
-    /* ✅ MASTER ZOOM OUT (CSS driven by variables set in JS below) */
-    .lxp-slide img {
-      display: block;
-      width: 100%;
+    /* ✅ IMPORTANT: remove default figure margins + make slide a true full frame */
+    .lxp-slide{
+      min-width: 100%;
       height: 100%;
-      object-fit: cover;
+      position: relative;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      place-items: center;
+      background: #000;
+      overflow: hidden;
+    }
 
+    /* ✅ FIX: show FULL image (no crop) + perfectly centered */
+    .lxp-slide img{
+      display:block;
+      width:100%;
+      height:100%;
+      object-fit: contain;          /* <-- key fix (no zoom/crop) */
+      object-position: center center;
+      background:#000;
+
+      /* zoom animation (very subtle by default so nothing gets cut off) */
       transform-origin: center;
       animation: g4-zoom-out var(--g4-zoom-dur, 14s)
-                 cubic-bezier(.2,.8,.2,1)
-                 infinite alternate;
+                cubic-bezier(.2,.8,.2,1)
+                infinite alternate;
     }
 
-    @keyframes g4-zoom-out {
-      from { transform: scale(var(--g4-zoom-start, 1.07)); }
-      to   { transform: scale(var(--g4-zoom-end, 1.00)); }
+    @keyframes g4-zoom-out{
+      from { transform: scale(var(--g4-zoom-start, 1.00)); }
+      to   { transform: scale(var(--g4-zoom-end,   0.98)); }
     }
 
     .lxp-nav{ position:absolute; inset:0; display:grid; grid-template-columns:1fr auto 1fr; align-items:center; pointer-events:none; z-index: 3; }
@@ -320,11 +346,11 @@
           <figure class="lxp-slide"><img src="assets/img/g4llery/VOL-1/DK%20EDIT/IMG_7089%20dk%20.jpg" alt="Gallery image 55"></figure>
         </div>
 
-        <!-- ✅ MASTER G4LLERY ZOOM-OUT CONTROL -->
+        <!-- ✅ MASTER G4LLERY ZOOM CONTROL (now safe for “full image”) -->
         <script>
           const G4_ZOOM = {
-            start: 1.07,   // zoomed IN at start
-            end: 1.00,     // zoom OUT to (1 = normal, <1 = subtle pull-back)
+            start: 1.00,   // 1.00 = no crop
+            end:   0.98,   // slight pull-back (keeps full frame)
             duration: 14   // seconds
           };
 
