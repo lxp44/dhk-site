@@ -18,7 +18,7 @@
   "id": "dark-harlem-grey-knight-heavy-box-shirt",
   "title": "Dark Harlem Grey Knight Heavy Box Shirt",
   "price": 8000,
-  "thumbnail": "@thumbnail + images",
+  "thumbnail": "assets/img/products/dhk/gif/grey-boxy-shirt.gif",
   "images": [
     "assets/img/products/dhk/detail-shots/t-shirt/grey/shot-1.png",
       "assets/img/products/dhk/detail-shots/t-shirt/grey/shot-2.png",
