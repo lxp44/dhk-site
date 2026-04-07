@@ -198,7 +198,7 @@
   "id": "dark-harlem-grey-knight-joggers",
   "title": "Dark Harlem Grey Knight Joggers",
   "price": 10000,
-  "thumbnail": "@thumbnail + images",
+  "thumbnail": "assets/img/products/dhk/gif/grey-joggers.gif",
   "images": [
     "assets/img/products/dhk/detail-shots/joggers/grey/shot-1.png",
       "assets/img/products/dhk/detail-shots/joggers/grey/shot-2.png",
