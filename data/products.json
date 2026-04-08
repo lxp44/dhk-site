@@ -141,8 +141,7 @@
   "thumbnail": "assets/img/products/dhk/gif/flare-black.gif",
   "images": [
     "assets/img/products/dhk/detail-shots/flare/black/shot-1.png",
-      "assets/img/products/dhk/detail-shots/flare/black/shot-2.png",
-      "assets/img/products/dhk/detail-shots/flare/black/shot-3.png"
+      "assets/img/products/dhk/detail-shots/flare/black/shot-2.png"
   ],
   "options": ["S", "M", "L", "XL", "2XL", "3XL"],
   "description": "<div class=\\\"product-desc-wrap\\\" style=\\\"color:#f1f1f1;font-family:Cinzel,serif;padding:20px;\\\"><h2 class=\\\"flicker\\\" style=\\\"color:#ffffff;text-transform:uppercase;text-shadow:0 0 6px #ffffff;\\\">Dark Harlem Black Knight Flare</h2><p style=\\\"font-size:16px;line-height:1.6;color:#cccccc;\\\">The foundation piece of the DHK fit — crafted in premium 100% cotton with a clean flare silhouette and finished with the Swarovski® crystal DHK emblem. Designed to pair seamlessly with the Knight hoodie and heavy box tee collection.<br><br>Built for luxury streetwear presence from top to bottom.</p><h3 style=\\\"color:#ffffff;margin-top:20px;\\\">Details:</h3><ul style=\\\"list-style-type:none;padding:0;color:#cccccc;font-size:15px;\\\"><li>• Sizes: S–3XL</li><li>• Price: $100</li><li>• Material: 100% cotton</li><li>• Logo: DHK emblem made with Swarovski® crystals</li><li>• Swarovski® Crystal Color: AB crystals</li><li>• Color: Black</li><li>• 2 side pockets</li><li>• 1 right back pocket</li><li>• Functional draw cords</li><li>• Flare fit silhouette</li></ul><video class=\\\"bats-bg\\\" muted autoplay loop playsinline webkit-playsinline preload=\\\"metadata\\\" disablepictureinpicture controlslist=\\\"nodownload noplaybackrate noremoteplayback\\\"><source src=\\\"assets/video/bat.mp4\\\" type=\\\"video/mp4\\\"></video></div>",
@@ -156,8 +155,7 @@
   "thumbnail": "@thumbnail + images",
   "images": [
     "assets/img/products/dhk/detail-shots/flare/grey/shot-1.png",
-      "assets/img/products/dhk/detail-shots/flare/grey/shot-2.png",
-      "assets/img/products/dhk/detail-shots/flare/grey/shot-3.png"
+      "assets/img/products/dhk/detail-shots/flare/grey/shot-2.png"
   ],
   "options": ["S", "M", "L", "XL", "2XL", "3XL"],
   "description": "<div class=\\\"product-desc-wrap\\\" style=\\\"color:#f1f1f1;font-family:Cinzel,serif;padding:20px;\\\"><h2 class=\\\"flicker\\\" style=\\\"color:#ffffff;text-transform:uppercase;text-shadow:0 0 6px #ffffff;\\\">Dark Harlem Grey Knight Flare</h2><p style=\\\"font-size:16px;line-height:1.6;color:#cccccc;\\\">A steel-toned essential of the DHK fit — crafted in premium 100% cotton with a clean flare silhouette and finished with the Swarovski® crystal DHK emblem. Designed to pair seamlessly with the Knight hoodie and heavy box tee collection.<br><br>Built for luxury streetwear presence from top to bottom.</p><h3 style=\\\"color:#ffffff;margin-top:20px;\\\">Details:</h3><ul style=\\\"list-style-type:none;padding:0;color:#cccccc;font-size:15px;\\\"><li>• Sizes: S–3XL</li><li>• Price: $100</li><li>• Material: 100% cotton</li><li>• Logo: DHK emblem made with Swarovski® crystals</li><li>• Swarovski® Crystal Color: AB crystals</li><li>• Color: Grey</li><li>• 2 side pockets</li><li>• 1 right back pocket</li><li>• Functional draw cords</li><li>• Flare fit silhouette</li></ul><video class=\\\"bats-bg\\\" muted autoplay loop playsinline webkit-playsinline preload=\\\"metadata\\\" disablepictureinpicture controlslist=\\\"nodownload noplaybackrate noremoteplayback\\\"><source src=\\\"assets/video/bat.mp4\\\" type=\\\"video/mp4\\\"></video></div>",
@@ -171,8 +169,7 @@
   "thumbnail": "@thumbnail + images",
   "images": [
     "assets/img/products/dhk/detail-shots/flare/white/shot-1.png",
-      "assets/img/products/dhk/detail-shots/flare/white/shot-2.png",
-      "assets/img/products/dhk/detail-shots/flare/white/shot-3.png"
+      "assets/img/products/dhk/detail-shots/flare/white/shot-2.png"
   ],
   "options": ["S", "M", "L", "XL", "2XL", "3XL"],
   "description": "<div class=\\\"product-desc-wrap\\\" style=\\\"color:#f1f1f1;font-family:Cinzel,serif;padding:20px;\\\"><h2 class=\\\"flicker\\\" style=\\\"color:#ffffff;text-transform:uppercase;text-shadow:0 0 6px #ffffff;\\\">Dark Harlem White Knight Flare</h2><p style=\\\"font-size:16px;line-height:1.6;color:#cccccc;\\\">The radiant foundation of the DHK fit — crafted in premium 100% cotton with a clean flare silhouette and finished with the Swarovski® crystal DHK emblem. Designed to pair seamlessly with the White Knight hoodie and heavy box tee collection.<br><br>Built for luxury streetwear presence from top to bottom.</p><h3 style=\\\"color:#ffffff;margin-top:20px;\\\">Details:</h3><ul style=\\\"list-style-type:none;padding:0;color:#cccccc;font-size:15px;\\\"><li>• Sizes: S–3XL</li><li>• Price: $100</li><li>• Material: 100% cotton</li><li>• Logo: DHK emblem made with Swarovski® crystals</li><li>• Swarovski® Crystal Color: AB crystals</li><li>• Color: White</li><li>• 2 side pockets</li><li>• 1 right back pocket</li><li>• Functional draw cords</li><li>• Flare fit silhouette</li></ul><video class=\\\"bats-bg\\\" muted autoplay loop playsinline webkit-playsinline preload=\\\"metadata\\\" disablepictureinpicture controlslist=\\\"nodownload noplaybackrate noremoteplayback\\\"><source src=\\\"assets/video/bat.mp4\\\" type=\\\"video/mp4\\\"></video></div>",
