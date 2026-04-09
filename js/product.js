@@ -202,52 +202,44 @@
     });
   }
 
-  function splitDescription(html) {
-    if (!html || typeof html !== "string") {
-      return {
-        introHtml: "<p style='opacity:.8'>No description available.</p>",
-        detailsHtml: "",
-      };
-    }
-
-    const wrapper = document.createElement("div");
-    wrapper.innerHTML = html;
-
-    const video = wrapper.querySelector("video.bats-bg, video");
-    if (video) video.remove();
-
-    const heading = wrapper.querySelector("h3");
-    if (!heading) {
-      return {
-        introHtml: wrapper.innerHTML,
-        detailsHtml: "",
-      };
-    }
-
-    let introHtml = "";
-    let detailsHtml = "";
-    let hitDetails = false;
-
-    Array.from(wrapper.childNodes).forEach((node) => {
-      if (
-        node.nodeType === 1 &&
-        node.tagName &&
-        node.tagName.toLowerCase() === "h3"
-      ) {
-        hitDetails = true;
-      }
-      if (hitDetails) {
-        detailsHtml += node.outerHTML || node.textContent || "";
-      } else {
-        introHtml += node.outerHTML || node.textContent || "";
-      }
-    });
-
+function splitDescription(html) {
+  if (!html || typeof html !== "string") {
     return {
-      introHtml: introHtml.trim(),
-      detailsHtml: detailsHtml.trim(),
+      introHtml: "<p style='opacity:.8'>No description available.</p>",
+      detailsHtml: "",
     };
   }
+
+  const wrapper = document.createElement("div");
+  wrapper.innerHTML = html;
+
+  const video = wrapper.querySelector("video.bats-bg, video");
+  if (video) video.remove();
+
+  const heading = wrapper.querySelector("h3");
+  const list = wrapper.querySelector("ul");
+
+  let introHtml = "";
+  let detailsHtml = "";
+
+  if (heading && list) {
+    heading.remove();
+    list.remove();
+    introHtml = wrapper.innerHTML.trim();
+    detailsHtml = `
+      <h3>${heading.outerHTML.replace(/^<h3[^>]*>|<\/h3>$/g, "").trim()}</h3>
+      ${list.outerHTML}
+    `;
+  } else {
+    introHtml = wrapper.innerHTML.trim();
+    detailsHtml = "";
+  }
+
+  return {
+    introHtml,
+    detailsHtml,
+  };
+}
 
   function renderDesktopGallery(imgs, title) {
     if (!imgs.length) {
