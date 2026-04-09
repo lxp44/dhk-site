@@ -2,7 +2,7 @@
   {
     "id": "dark-harlem-black-knight-heavy-box-shirt",
     "title": "Dark Harlem Black Knight Heavy Box Shirt",
-    "displayTitle": "Black Knight Heavy Box Shirt"
+    "displayTitle": "Black Knight Heavy Box Shirt",
     "price": 8000,
     "thumbnail": "assets/img/products/dhk/detail-shots/t-shirt/black/shot-1.png",
     "hoverImage": "assets/img/products/dhk/portrait/shirt/black/black-shirt-1.png",
@@ -19,7 +19,7 @@
   {
     "id": "dark-harlem-grey-knight-heavy-box-shirt",
     "title": "Dark Harlem Grey Knight Heavy Box Shirt",
-    "displayTitle": "Grey Knight Heavy Box Shirt"
+    "displayTitle": "Grey Knight Heavy Box Shirt",
     "price": 8000,
     "thumbnail": "assets/img/products/dhk/gif/grey-boxy-shirt.gif",
     "hoverImage": "assets/img/products/dhk/portrait/shirt/grey/grey-shirt-1.png",
@@ -36,7 +36,7 @@
   {
     "id": "dark-harlem-white-knight-heavy-box-shirt",
     "title": "Dark Harlem White Knight Heavy Box Shirt",
-    "displayTitle": "White Knight Heavy Box Shirt"
+    "displayTitle": "White Knight Heavy Box Shirt",
     "price": 8000,
     "thumbnail": "assets/img/products/dhk/detail-shots/t-shirt/white/shot-1.png",
     "hoverImage": "assets/img/products/dhk/portrait/shirt/white/white-shirt-1.png",
@@ -53,7 +53,7 @@
   {
     "id": "dark-harlem-black-knight-hoodie",
     "title": "The Dark Harlem Black Knight Hoodie",
-    "displayTitle": "Black Knight Hoodie"
+    "displayTitle": "Black Knight Hoodie",
     "price": 12500,
     "thumbnail": "assets/img/products/dhk/gif/hoodie-black.gif",
     "hoverImage": "assets/img/products/dhk/portrait/hoodie/black/black-hoodie-1.png",
@@ -70,7 +70,7 @@
   {
     "id": "dark-harlem-grey-knight-hoodie",
     "title": "The Dark Harlem Grey Knight Hoodie",
-     "displayTitle": "Grey Knight Hoodie"
+     "displayTitle": "Grey Knight Hoodie",
     "price": 12500,
     "thumbnail": "assets/img/products/dhk/gif/hoodie-grey.gif",
     "hoverImage": "assets/img/products/dhk/portrait/hoodie/grey/grey-hoodie-1.png",
@@ -87,7 +87,7 @@
   {
     "id": "dark-harlem-white-knight-hoodie",
     "title": "The Dark Harlem White Knight Hoodie",
-     "displayTitle": "White Knight Hoodie"
+     "displayTitle": "White Knight Hoodie",
     "price": 12500,
     "thumbnail": "assets/img/products/dhk/detail-shots/hoodie/white/shot-1.png",
     "hoverImage": "assets/img/products/dhk/portrait/hoodie/white/white-hoodie-1.png",
@@ -104,7 +104,7 @@
   {
     "id": "dark-harlem-black-knight-crown-hoodie",
     "title": "Dark Harlem Black Knight Crown Hoodie",
-     "displayTitle": "Black Knight Crown"
+     "displayTitle": "Black Knight Crown",
     "price": 20000,
     "thumbnail": "assets/img/products/dhk/gif/crown-black.gif",
     "hoverImage": "assets/img/products/dhk/portrait/crown-hoodie/black/black-crown-1.png",
@@ -121,7 +121,7 @@
   {
     "id": "dark-harlem-grey-knight-crown-hoodie",
     "title": "Dark Harlem Grey Knight Crown Hoodie",
-     "displayTitle": "Grey Knight Crown"
+     "displayTitle": "Grey Knight Crown",
     "price": 20000,
     "thumbnail": "assets/img/products/dhk/gif/crown-grey.gif",
     "hoverImage": "assets/img/products/dhk/portrait/crown-hoodie/grey/grey-crown-1.png",
@@ -138,7 +138,7 @@
   {
     "id": "dark-harlem-white-knight-crown-hoodie",
     "title": "Dark Harlem White Knight Crown Hoodie",
-     "displayTitle": "White Knight Crown"
+     "displayTitle": "White Knight Crown",
     "price": 20000,
     "thumbnail": "assets/img/products/dhk/detail-shots/crown/white/shot-1.png",
     "hoverImage": "assets/img/products/dhk/portrait/crown-hoodie/white/white-crown-1.png",
@@ -155,7 +155,7 @@
   {
     "id": "dark-harlem-black-knight-flare",
     "title": "Dark Harlem Black Knight Flare",
-     "displayTitle": "Black Knight Flare"
+     "displayTitle": "Black Knight Flare",
     "price": 10000,
     "thumbnail": "assets/img/products/dhk/gif/flare-black.gif",
     "hoverImage": "assets/img/products/dhk/portrait/flare/black/black-flare-1.png",
@@ -171,7 +171,7 @@
   {
     "id": "dark-harlem-grey-knight-flare",
     "title": "Dark Harlem Grey Knight Flare",
-     "displayTitle": "Grey Knight Flare"
+     "displayTitle": "Grey Knight Flare",
     "price": 10000,
     "thumbnail": "assets/img/products/dhk/detail-shots/flare/grey/shot-1.png",
     "hoverImage": "assets/img/products/dhk/portrait/flare/grey/grey-flare-1.png",
@@ -187,7 +187,7 @@
   {
     "id": "dark-harlem-white-knight-flare",
     "title": "Dark Harlem White Knight Flare",
-     "displayTitle": "White Knight Flare"
+     "displayTitle": "White Knight Flare",
     "price": 10000,
     "thumbnail": "assets/img/products/dhk/detail-shots/flare/white/shot-1.png",
     "hoverImage": "assets/img/products/dhk/portrait/flare/white/white-flare-1.png",
@@ -203,7 +203,7 @@
   {
     "id": "dark-harlem-black-knight-joggers",
     "title": "Dark Harlem Black Knight Joggers",
-     "displayTitle": "Black Knight Joggers"
+     "displayTitle": "Black Knight Joggers",
     "price": 10000,
     "thumbnail": "assets/img/products/dhk/gif/joggers-black.gif",
     "hoverImage": "assets/img/products/dhk/portrait/joggers/black/black-joggers-1.png",
@@ -220,7 +220,7 @@
   {
     "id": "dark-harlem-grey-knight-joggers",
     "title": "Dark Harlem Grey Knight Joggers",
-     "displayTitle": "Grey Knight Joggers"
+     "displayTitle": "Grey Knight Joggers",
     "price": 10000,
     "thumbnail": "assets/img/products/dhk/gif/grey-joggers.gif",
     "hoverImage": "assets/img/products/dhk/portrait/joggers/grey/grey-jogger-1.png",
@@ -237,7 +237,7 @@
   {
     "id": "dark-harlem-white-knight-joggers",
     "title": "Dark Harlem White Knight Joggers",
-     "displayTitle": "White Knight Joggers"
+     "displayTitle": "White Knight Joggers",
     "price": 10000,
     "thumbnail": "assets/img/products/dhk/detail-shots/joggers/white/shot-1.png",
     "hoverImage": "assets/img/products/dhk/portrait/joggers/white/white-jogger-1.png",
