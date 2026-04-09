@@ -452,7 +452,7 @@
               Add to cart
             </button>
           </div>
-
+<div class="mobile-buybar-stop mobile-only-block" aria-hidden="true"></div>
           ${
             hasOptions
               ? `
