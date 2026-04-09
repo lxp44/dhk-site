@@ -322,31 +322,55 @@
   }
 
   function bindMobileStickyBar(root) {
-    const buyBar = root.querySelector(".mobile-buybar");
-    if (!buyBar) return;
+  const buyBar = root.querySelector(".mobile-buybar");
+  const stopTarget = root.querySelector(".mobile-buybar-stop");
+  const mq = window.matchMedia("(max-width: 900px)");
 
-    const footer = document.querySelector("footer");
-    const mq = window.matchMedia("(max-width: 900px)");
+  if (!buyBar || !stopTarget) return;
 
-    const update = () => {
-      if (!mq.matches) {
-        buyBar.classList.remove("is-fixed", "is-released");
-        return;
+  let observer = null;
+
+  const setDesktopState = () => {
+    buyBar.classList.remove("is-fixed", "is-released");
+  };
+
+  const setMobileObserver = () => {
+    buyBar.classList.add("is-fixed");
+    buyBar.classList.remove("is-released");
+
+    if (observer) observer.disconnect();
+
+    observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        const shouldRelease = entry.isIntersecting;
+
+        buyBar.classList.toggle("is-fixed", !shouldRelease);
+        buyBar.classList.toggle("is-released", shouldRelease);
+      },
+      {
+        root: null,
+        threshold: 0,
+        rootMargin: "0px 0px -120px 0px"
       }
+    );
 
-      const footerTop = footer ? footer.getBoundingClientRect().top : Infinity;
-      const viewportHeight = window.innerHeight;
+    observer.observe(stopTarget);
+  };
 
-      const shouldRelease = footerTop < viewportHeight + 40;
+  const updateMode = () => {
+    if (!mq.matches) {
+      if (observer) observer.disconnect();
+      setDesktopState();
+      return;
+    }
+    setMobileObserver();
+  };
 
-      buyBar.classList.toggle("is-fixed", !shouldRelease);
-      buyBar.classList.toggle("is-released", shouldRelease);
-    };
-
-    update();
-    window.addEventListener("scroll", update, { passive: true });
-    window.addEventListener("resize", update, { passive: true });
-  }
+  updateMode();
+  mq.addEventListener("change", updateMode);
+  window.addEventListener("resize", updateMode, { passive: true });
+}
 
   function render(root, p) {
     const hasOptions = Array.isArray(p.options) && p.options.length > 0;
