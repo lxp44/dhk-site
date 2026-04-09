@@ -2,6 +2,7 @@
   {
     "id": "dark-harlem-black-knight-heavy-box-shirt",
     "title": "Dark Harlem Black Knight Heavy Box Shirt",
+    "displayTitle": "Black Knight Heavy Box Shirt"
     "price": 8000,
     "thumbnail": "assets/img/products/dhk/detail-shots/t-shirt/black/shot-1.png",
     "hoverImage": "assets/img/products/dhk/portrait/shirt/black/black-shirt-1.png",
@@ -18,6 +19,7 @@
   {
     "id": "dark-harlem-grey-knight-heavy-box-shirt",
     "title": "Dark Harlem Grey Knight Heavy Box Shirt",
+    "displayTitle": "Grey Knight Heavy Box Shirt"
     "price": 8000,
     "thumbnail": "assets/img/products/dhk/gif/grey-boxy-shirt.gif",
     "hoverImage": "assets/img/products/dhk/portrait/shirt/grey/grey-shirt-1.png",
@@ -34,6 +36,7 @@
   {
     "id": "dark-harlem-white-knight-heavy-box-shirt",
     "title": "Dark Harlem White Knight Heavy Box Shirt",
+    "displayTitle": "White Knight Heavy Box Shirt"
     "price": 8000,
     "thumbnail": "assets/img/products/dhk/detail-shots/t-shirt/white/shot-1.png",
     "hoverImage": "assets/img/products/dhk/portrait/shirt/white/white-shirt-1.png",
@@ -50,6 +53,7 @@
   {
     "id": "dark-harlem-black-knight-hoodie",
     "title": "The Dark Harlem Black Knight Hoodie",
+    "displayTitle": "Black Knight Hoodie"
     "price": 12500,
     "thumbnail": "assets/img/products/dhk/gif/hoodie-black.gif",
     "hoverImage": "assets/img/products/dhk/portrait/hoodie/black/black-hoodie-1.png",
@@ -66,6 +70,7 @@
   {
     "id": "dark-harlem-grey-knight-hoodie",
     "title": "The Dark Harlem Grey Knight Hoodie",
+     "displayTitle": "Grey Knight Hoodie"
     "price": 12500,
     "thumbnail": "assets/img/products/dhk/gif/hoodie-grey.gif",
     "hoverImage": "assets/img/products/dhk/portrait/hoodie/grey/grey-hoodie-1.png",
@@ -82,6 +87,7 @@
   {
     "id": "dark-harlem-white-knight-hoodie",
     "title": "The Dark Harlem White Knight Hoodie",
+     "displayTitle": "White Knight Hoodie"
     "price": 12500,
     "thumbnail": "assets/img/products/dhk/detail-shots/hoodie/white/shot-1.png",
     "hoverImage": "assets/img/products/dhk/portrait/hoodie/white/white-hoodie-1.png",
@@ -98,6 +104,7 @@
   {
     "id": "dark-harlem-black-knight-crown-hoodie",
     "title": "Dark Harlem Black Knight Crown Hoodie",
+     "displayTitle": "Black Knight Crown"
     "price": 20000,
     "thumbnail": "assets/img/products/dhk/gif/crown-black.gif",
     "hoverImage": "assets/img/products/dhk/portrait/crown-hoodie/black/black-crown-1.png",
