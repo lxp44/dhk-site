@@ -4,7 +4,7 @@
     "title": "Dark Harlem Black Knight Heavy Box Shirt",
     "displayTitle": "Black Knight Heavy Box Shirt",
     "price": 8000,
-    "thumbnail": "assets/img/products/dhk/portrait/shirt/black/black-shirt-1",
+    "thumbnail": "assets/img/products/dhk/detail-shots/t-shirt/black/shot-1.png",
     "hoverImage": "assets/img/products/dhk/portrait/shirt/black/black-shirt-1.png",
     "images": [
       "assets/img/products/dhk/portrait/shirt/black/black-shirt-1.png",
@@ -120,10 +120,10 @@
     "images": [
       "assets/img/products/dhk/gif/crown-black.gif",
       "assets/img/products/dhk/campaign-1/studio-shots/portrait/black-crown-portrait.jpeg",
-      "assets/img/products/dhk/portrait/crown-hoodie/black/black-hoodie-1.png",
-      "assets/img/products/dhk/portrait/crown-hoodie/black/black-hoodie-2.png",
-      "assets/img/products/dhk/portrait/crown-hoodie/black/black-hoodie-3.png",
-      "assets/img/products/dhk/portrait/crown-hoodie/black/black-hoodie-4.png"
+      "assets/img/products/dhk/portrait/crown-hoodie/black/black-crown-1.png",
+      "assets/img/products/dhk/portrait/crown-hoodie/black/black-crown-2.png",
+      "assets/img/products/dhk/portrait/crown-hoodie/black/black-crown-3.png",
+      "assets/img/products/dhk/portrait/crown-hoodie/black/black-crown-4.png"
     ],
     "options": ["S", "M", "L", "XL", "2XL", "3XL"],
     "description": "<div class=\\\"product-desc-wrap\\\" style=\\\"color:#f1f1f1;padding:20px;\\\"><p style=\\\"font-family:Roboto,Arial,sans-serif;font-size:15px;line-height:1.85;font-weight:300;letter-spacing:0.01em;color:#d7d7d7;\\\">The signature statement hoodie of the collection. Built in ultra-premium heavyweight cotton and finished with the Swarovski® crystal DHK emblem and Swarovski® crystal crown on the hood, it carries the full Dark Harlem Knight identity with the strongest visual presence in the line.</p><h3 style=\\\"font-family:Roboto,Arial,sans-serif;font-size:12px;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:#f2f2f2;margin-top:28px;margin-bottom:14px;\\\">Details</h3><ul style=\\\"list-style-type:none;padding:0;margin:0;color:#d7d7d7;font-family:Roboto,Arial,sans-serif;font-size:15px;line-height:1.85;font-weight:300;letter-spacing:0.01em;\\\"><li>• Sizes: S–3XL</li><li>• Price: $200</li><li>• Weight: 600 gsm</li><li>• Material: 100% cotton</li><li>• Logo: DHK emblem made with Swarovski® crystals</li><li>• Crown: Hood crown made with Swarovski® crystals</li><li>• Swarovski® Crystal Color: AB crystal</li><li>• Color: Black</li><li>• No draw cords</li><li>• Drop shoulder fit</li><li>• Bio polished finish</li><li>• Inner side raised lining</li><li>• Kangaroo pocket</li></ul><video class=\\\"bats-bg\\\" muted autoplay loop playsinline webkit-playsinline preload=\\\"metadata\\\" disablepictureinpicture controlslist=\\\"nodownload noplaybackrate noremoteplayback\\\"><source src=\\\"assets/video/bat.mp4\\\" type=\\\"video/mp4\\\"></video></div>",
@@ -140,10 +140,10 @@
     "images": [
       "assets/img/products/dhk/gif/crown-grey.gif",
       "assets/img/products/dhk/campaign-1/studio-shots/portrait/grey-crown-portrait.jpeg",
-      "assets/img/products/dhk/portrait/crown-hoodie/grey/grey-hoodie-1.png",
-      "assets/img/products/dhk/portrait/crown-hoodie/grey/grey-hoodie-2.png",
-      "assets/img/products/dhk/portrait/crown-hoodie/grey/grey-hoodie-3.png",
-      "assets/img/products/dhk/portrait/crown-hoodie/grey/grey-hoodie-4.png"
+      "assets/img/products/dhk/portrait/crown-hoodie/grey/grey-crown-1.png",
+      "assets/img/products/dhk/portrait/crown-hoodie/grey/grey-crown-2.png",
+      "assets/img/products/dhk/portrait/crown-hoodie/grey/grey-crown-3.png",
+      "assets/img/products/dhk/portrait/crown-hoodie/grey/grey-crown-4.png"
     ],
     "options": ["S", "M", "L", "XL", "2XL", "3XL"],
     "description": "<div class=\\\"product-desc-wrap\\\" style=\\\"color:#f1f1f1;padding:20px;\\\"><p style=\\\"font-family:Roboto,Arial,sans-serif;font-size:15px;line-height:1.85;font-weight:300;letter-spacing:0.01em;color:#d7d7d7;\\\">The signature statement hoodie of the collection. Built in ultra-premium heavyweight cotton and finished with the Swarovski® crystal DHK emblem and Swarovski® crystal crown on the hood, it carries the full Dark Harlem Knight identity with the strongest visual presence in the line.</p><h3 style=\\\"font-family:Roboto,Arial,sans-serif;font-size:12px;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:#f2f2f2;margin-top:28px;margin-bottom:14px;\\\">Details</h3><ul style=\\\"list-style-type:none;padding:0;margin:0;color:#d7d7d7;font-family:Roboto,Arial,sans-serif;font-size:15px;line-height:1.85;font-weight:300;letter-spacing:0.01em;\\\"><li>• Sizes: S–3XL</li><li>• Price: $200</li><li>• Weight: 600 gsm</li><li>• Material: 100% cotton</li><li>• Logo: DHK emblem made with Swarovski® crystals</li><li>• Crown: Hood crown made with Swarovski® crystals</li><li>• Swarovski® Crystal Color: AB crystal</li><li>• Color: Grey</li><li>• No draw cords</li><li>• Drop shoulder fit</li><li>• Bio polished finish</li><li>• Inner side raised lining</li><li>• Kangaroo pocket</li></ul><video class=\\\"bats-bg\\\" muted autoplay loop playsinline webkit-playsinline preload=\\\"metadata\\\" disablepictureinpicture controlslist=\\\"nodownload noplaybackrate noremoteplayback\\\"><source src=\\\"assets/video/bat.mp4\\\" type=\\\"video/mp4\\\"></video></div>",
@@ -160,10 +160,10 @@
     "images": [
       "assets/img/products/dhk/detail-shots/crown/white/shot-1.png",
       "assets/img/products/dhk/campaign-1/studio-shots/portrait/white-crown-portrait.jpeg",
-      "assets/img/products/dhk/portrait/crown-hoodie/white/white-hoodie-1.png",
-      "assets/img/products/dhk/portrait/crown-hoodie/white/white-hoodie-2.png",
-      "assets/img/products/dhk/portrait/crown-hoodie/white/white-hoodie-3.png",
-      "assets/img/products/dhk/portrait/crown-hoodie/white/white-hoodie-4.png"
+      "assets/img/products/dhk/portrait/crown-hoodie/white/white-crown-1.png",
+      "assets/img/products/dhk/portrait/crown-hoodie/white/white-crown-2.png",
+      "assets/img/products/dhk/portrait/crown-hoodie/white/white-crown-3.png",
+      "assets/img/products/dhk/portrait/crown-hoodie/white/white-crown-4.png"
     ],
     "options": ["S", "M", "L", "XL", "2XL", "3XL"],
     "description": "<div class=\\\"product-desc-wrap\\\" style=\\\"color:#f1f1f1;padding:20px;\\\"><p style=\\\"font-family:Roboto,Arial,sans-serif;font-size:15px;line-height:1.85;font-weight:300;letter-spacing:0.01em;color:#d7d7d7;\\\">The signature statement hoodie of the collection. Built in ultra-premium heavyweight cotton and finished with the Swarovski® crystal DHK emblem and Swarovski® crystal crown on the hood, it carries the full Dark Harlem Knight identity with the strongest visual presence in the line.</p><h3 style=\\\"font-family:Roboto,Arial,sans-serif;font-size:12px;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:#f2f2f2;margin-top:28px;margin-bottom:14px;\\\">Details</h3><ul style=\\\"list-style-type:none;padding:0;margin:0;color:#d7d7d7;font-family:Roboto,Arial,sans-serif;font-size:15px;line-height:1.85;font-weight:300;letter-spacing:0.01em;\\\"><li>• Sizes: S–3XL</li><li>• Price: $200</li><li>• Weight: 600 gsm</li><li>• Material: 100% cotton</li><li>• Logo: DHK emblem made with Swarovski® crystals</li><li>• Crown: Hood crown made with Swarovski® crystals</li><li>• Swarovski® Crystal Color: AB crystal</li><li>• Color: White</li><li>• No draw cords</li><li>• Drop shoulder fit</li><li>• Bio polished finish</li><li>• Inner side raised lining</li><li>• Kangaroo pocket</li></ul><video class=\\\"bats-bg\\\" muted autoplay loop playsinline webkit-playsinline preload=\\\"metadata\\\" disablepictureinpicture controlslist=\\\"nodownload noplaybackrate noremoteplayback\\\"><source src=\\\"assets/video/bat.mp4\\\" type=\\\"video/mp4\\\"></video></div>",
