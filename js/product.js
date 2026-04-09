@@ -54,18 +54,15 @@
   }
 
   function absolutizeSrc(src) {
-    // Helps when product description uses relative paths in different folders
     if (!src) return src;
-    if (/^(https?:)?\/\//i.test(src)) return src; // absolute URL
-    if (src.startsWith("/")) return src;          // site-root absolute
-    // Force relative to site root (your pages are at root)
+    if (/^(https?:)?\/\//i.test(src)) return src;
+    if (src.startsWith("/")) return src;
     return "./" + src.replace(/^\.\//, "");
   }
 
   function forceVideoAttrs(video) {
     if (!video.classList.contains("bats-bg")) video.classList.add("bats-bg");
 
-    // Autoplay-safe / iOS-safe attributes
     try {
       video.muted = true;
       video.defaultMuted = true;
@@ -78,19 +75,14 @@
       video.setAttribute("autoplay", "");
       video.setAttribute("playsinline", "");
       video.setAttribute("webkit-playsinline", "");
-
-      // Extra “don’t hijack playback UI” flags (helps iOS / Safari quirks)
       video.setAttribute("disablepictureinpicture", "");
       video.setAttribute(
         "controlslist",
         "nodownload noplaybackrate noremoteplayback"
       );
 
-      // Safer preload (auto can be throttled hard on mobile)
       video.preload = "metadata";
       video.setAttribute("preload", "metadata");
-
-      // Ensure it can't steal clicks / hover
       video.style.pointerEvents = "none";
     } catch (e) {}
   }
@@ -108,26 +100,20 @@
     return v;
   }
 
-  // Ensures a bats background layer exists inside the description container,
-  // and that the bats video is inside it (even if the description didn't include a <video>).
   function ensureBatsBackground(descEl) {
     if (!descEl) return null;
 
-    // Create a background layer (CSS should position it behind content)
     let layer = descEl.querySelector(".bats-layer");
     if (!layer) {
       layer = document.createElement("div");
       layer.className = "bats-layer";
-      // insert first so it sits behind
       descEl.insertBefore(layer, descEl.firstChild);
     }
 
-    // If the description already contains a bats video, reuse it
     let v = descEl.querySelector("video.bats-bg") || layer.querySelector("video.bats-bg");
     if (v) {
       forceVideoAttrs(v);
 
-      // Fix any src paths to prevent silent 404s
       const source = v.querySelector("source");
       if (source?.getAttribute("src")) {
         source.setAttribute("src", absolutizeSrc(source.getAttribute("src")));
@@ -135,14 +121,12 @@
         v.setAttribute("src", absolutizeSrc(v.getAttribute("src")));
       }
 
-      // Move video into the layer if needed
       if (v.parentElement !== layer) layer.appendChild(v);
 
       try { v.load(); } catch (e) {}
       return v;
     }
 
-    // Otherwise inject standard bats video
     v = buildBatsVideo();
     layer.appendChild(v);
     try { v.load(); } catch (e) {}
@@ -155,7 +139,6 @@
 
     const tryPlay = () => safePlay(v);
 
-    // immediate + retries (covers Safari / delayed init)
     tryPlay();
     setTimeout(tryPlay, 150);
     setTimeout(tryPlay, 600);
@@ -164,7 +147,6 @@
     v.addEventListener("loadedmetadata", tryPlay, { once: true });
     v.addEventListener("canplay", tryPlay, { once: true });
 
-    // If it errors (often bad path), log it so you can see instantly
     v.addEventListener(
       "error",
       () => {
@@ -177,12 +159,10 @@
       { once: true }
     );
 
-    // If tab becomes visible again, retry
     document.addEventListener("visibilitychange", () => {
       if (document.visibilityState === "visible") tryPlay();
     });
 
-    // Start playing as soon as the description is on-screen
     if ("IntersectionObserver" in window && descEl) {
       const io = new IntersectionObserver(
         (entries) => {
@@ -196,7 +176,6 @@
       io.observe(descEl);
     }
 
-    // One user gesture fallback (covers iOS)
     const gesture = () => {
       tryPlay();
       window.removeEventListener("pointerdown", gesture);
@@ -220,7 +199,6 @@
     const originalPriceCents = Number(p.price) || 0;
     const salePriceCents = applySale(originalPriceCents);
 
-    // Decide how to render price block
     const showSale = SALE_ACTIVE && salePriceCents !== originalPriceCents;
     const priceHtml = showSale
       ? `
@@ -238,40 +216,35 @@
       `;
 
     root.innerHTML = `
-      <article class="product-detail">
-        <div class="pd__gallery">
-
-          <!-- MAIN IMAGE WRAPPER -->
-          <div class="product-main">
-            ${
-              firstImg
-                ? `<img class="pd__img is-active" src="${firstImg}" alt="${p.title} image 1" loading="eager">`
-                : `<div class="pd__img fallback" aria-hidden="true" style="height:320px;border-radius:12px;background:#111;display:grid;place-items:center;color:#777">No image</div>`
-            }
-          </div>
-
-          <!-- THUMBNAILS -->
+      <article class="product-detail fog-layout">
+        <div class="fog-gallery">
           ${
             imgs.length
-              ? `<div class="pd__thumbs">
-                  ${imgs
-                    .map(
-                      (src, i) => `
-                    <button class="pd__thumb" data-idx="${i}" aria-label="View image ${i + 1}">
-                      <img src="${src}" alt="">
-                    </button>
-                  `
-                    )
-                    .join("")}
-                 </div>`
-              : ""
+              ? imgs
+                  .map(
+                    (src, i) => `
+                <div class="fog-image-wrap">
+                  <img
+                    src="${src}"
+                    alt="${p.title} image ${i + 1}"
+                    loading="${i === 0 ? "eager" : "lazy"}"
+                    class="fog-image"
+                  >
+                </div>
+              `
+                  )
+                  .join("")
+              : `
+              <div class="fog-image-wrap">
+                <div style="height:600px;background:#111;border-radius:12px;"></div>
+              </div>
+            `
           }
         </div>
 
-        <div class="pd__info">
+        <div class="fog-info">
           <h1 class="pd__title">${p.title}</h1>
 
-          <!-- PRICE BLOCK -->
           <div class="pd__price">
             ${priceHtml}
           </div>
@@ -279,12 +252,13 @@
           ${
             hasOptions
               ? `
-          <label class="pd__opt-label">
-            Size
-            <select id="pd-option" class="pd__select" aria-label="Choose size">
-              ${p.options.map((o) => `<option value="${o}">${o}</option>`).join("")}
-            </select>
-          </label>`
+            <label class="pd__opt-label">
+              Size
+              <select id="pd-option" class="pd__select" aria-label="Choose size">
+                ${p.options.map((o) => `<option value="${o}">${o}</option>`).join("")}
+              </select>
+            </label>
+          `
               : ""
           }
 
@@ -297,7 +271,6 @@
       </article>
     `;
 
-    // Inject rich HTML description
     const descEl = root.querySelector("#pd-desc");
     if (descEl) {
       const html =
@@ -306,28 +279,11 @@
           : "<p style='opacity:.8'>No description available.</p>";
 
       descEl.innerHTML = html;
-
-      // ✅ ALWAYS inject/activate bats background behind description
       hydrateBats(descEl);
     }
 
-    // Thumbnail -> main image switcher
-    const imgsLocal = imgs.slice();
-    root.querySelectorAll(".pd__thumb").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const idx = +btn.dataset.idx || 0;
-        const mainImg = root.querySelector(".product-main img");
-        if (mainImg && imgsLocal[idx]) {
-          mainImg.src = imgsLocal[idx];
-          mainImg.alt = `${p.title} image ${idx + 1}`;
-        }
-      });
-    });
-
-    // Decide price for cart (matches what we show)
     const priceForCart = showSale ? salePriceCents : originalPriceCents;
 
-    // Add to cart
     root.querySelector("#add-to-cart")?.addEventListener("click", () => {
       const sizeSel = root.querySelector("#pd-option");
       const variant = sizeSel ? sizeSel.value : null;
@@ -345,62 +301,6 @@
         { open: true }
       );
     });
-
-    // ===== MAGNIFYING LENS (match Collections) =====
-    if (window.matchMedia && window.matchMedia("(pointer: fine)").matches) {
-      const mainImg = root.querySelector(".product-main img");
-      const mainWrap = root.querySelector(".product-main");
-
-      if (mainImg && mainWrap) {
-        if (getComputedStyle(mainWrap).position === "static") {
-          mainWrap.style.position = "relative";
-        }
-
-        const lens = document.createElement("div");
-        lens.className = "pd__lens";
-        mainWrap.appendChild(lens);
-
-        const zoom = 2.2;
-
-        function moveLens(evt) {
-          const rect = mainImg.getBoundingClientRect();
-          const lensRect = lens.getBoundingClientRect();
-          const lensR = lensRect.width / 2;
-
-          const clientX = evt.clientX ?? (evt.touches && evt.touches[0]?.clientX);
-          const clientY = evt.clientY ?? (evt.touches && evt.touches[0]?.clientY);
-          if (clientX == null || clientY == null) return;
-
-          let x = clientX - rect.left;
-          let y = clientY - rect.top;
-
-          x = Math.max(lensR, Math.min(rect.width - lensR, x));
-          y = Math.max(lensR, Math.min(rect.height - lensR, y));
-
-          lens.style.left = `${x - lensR}px`;
-          lens.style.top = `${y - lensR}px`;
-
-          lens.style.backgroundImage = `url("${mainImg.src}")`;
-          lens.style.backgroundSize = `${rect.width * zoom}px ${rect.height * zoom}px`;
-          lens.style.backgroundPosition = `-${x * zoom - lensR}px -${y * zoom - lensR}px`;
-        }
-
-        function onEnter() { lens.classList.add("is-active"); }
-        function onLeave() { lens.classList.remove("is-active"); }
-
-        mainImg.addEventListener("mouseenter", onEnter);
-        mainImg.addEventListener("mouseleave", onLeave);
-        mainImg.addEventListener("mousemove", moveLens);
-
-        mainImg.addEventListener(
-          "pointermove",
-          (e) => {
-            if (e.pointerType === "mouse" || e.pointerType === "pen") moveLens(e);
-          },
-          { passive: true }
-        );
-      }
-    }
   }
 
   // ---- Boot
