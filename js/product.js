@@ -321,6 +321,33 @@
     `;
   }
 
+  function bindMobileStickyBar(root) {
+    const buyBar = root.querySelector(".mobile-buybar");
+    if (!buyBar) return;
+
+    const footer = document.querySelector("footer");
+    const mq = window.matchMedia("(max-width: 900px)");
+
+    const update = () => {
+      if (!mq.matches) {
+        buyBar.classList.remove("is-fixed", "is-released");
+        return;
+      }
+
+      const footerTop = footer ? footer.getBoundingClientRect().top : Infinity;
+      const viewportHeight = window.innerHeight;
+
+      const shouldRelease = footerTop < viewportHeight + 40;
+
+      buyBar.classList.toggle("is-fixed", !shouldRelease);
+      buyBar.classList.toggle("is-released", shouldRelease);
+    };
+
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update, { passive: true });
+  }
+
   function render(root, p) {
     const hasOptions = Array.isArray(p.options) && p.options.length > 0;
     const imgs = Array.isArray(p.images) ? p.images : [];
@@ -383,10 +410,29 @@
             </details>
           </div>
 
+          <div class="mobile-buybar mobile-only-block">
+            ${
+              hasOptions
+                ? `
+              <label class="pd__opt-label mobile-buybar__field">
+                Size
+                <select id="pd-option-mobile" class="pd__select" aria-label="Choose size">
+                  ${p.options.map((o) => `<option value="${o}">${o}</option>`).join("")}
+                </select>
+              </label>
+            `
+                : ""
+            }
+
+            <button id="add-to-cart-mobile" class="button button--secondary mobile-buybar__button" data-id="${p.id}" type="button">
+              Add to cart
+            </button>
+          </div>
+
           ${
             hasOptions
               ? `
-            <label class="pd__opt-label">
+            <label class="pd__opt-label desktop-only-block">
               Size
               <select id="pd-option" class="pd__select" aria-label="Choose size">
                 ${p.options.map((o) => `<option value="${o}">${o}</option>`).join("")}
@@ -396,7 +442,7 @@
               : ""
           }
 
-          <button id="add-to-cart" class="button button--secondary" data-id="${p.id}" type="button">
+          <button id="add-to-cart" class="button button--secondary desktop-only-block" data-id="${p.id}" type="button">
             Add to cart
           </button>
 
@@ -425,8 +471,8 @@
 
     const priceForCart = showSale ? salePriceCents : originalPriceCents;
 
-    root.querySelector("#add-to-cart")?.addEventListener("click", () => {
-      const sizeSel = root.querySelector("#pd-option");
+    function addCurrentProductToCart(selectId) {
+      const sizeSel = root.querySelector(selectId);
       const variant = sizeSel ? sizeSel.value : null;
 
       window.Cart?.add(
@@ -441,6 +487,14 @@
         },
         { open: true }
       );
+    }
+
+    root.querySelector("#add-to-cart")?.addEventListener("click", () => {
+      addCurrentProductToCart("#pd-option");
+    });
+
+    root.querySelector("#add-to-cart-mobile")?.addEventListener("click", () => {
+      addCurrentProductToCart("#pd-option-mobile");
     });
 
     const track = root.querySelector("#mobile-product-track");
@@ -471,6 +525,8 @@
 
       updateDots();
     }
+
+    bindMobileStickyBar(root);
   }
 
   document.addEventListener("DOMContentLoaded", async () => {
