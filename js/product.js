@@ -2,36 +2,31 @@
 // Render product.html from data/products.json using ?handle=<id> or ?id=<id>
 
 (() => {
-  // ---- Money (cents -> $X.XX)
   const PRICE = (cents) =>
     (Number(cents || 0) / 100).toLocaleString(undefined, {
       style: "currency",
       currency: "USD",
     });
 
-  // === GLOBAL SALE CONFIG (40% OFF ALL ITEMS) ===
-  const SALE_ACTIVE = false; // turn sale on/off
-  const SALE_PERCENT = 40;   // 40% OFF all items
+  const SALE_ACTIVE = false;
+  const SALE_PERCENT = 40;
 
   function applySale(cents) {
     if (!SALE_ACTIVE) return Number(cents || 0);
     return Math.round(Number(cents || 0) * (1 - SALE_PERCENT / 100));
   }
 
-  // ---- Accept both ?handle=... and ?id=...
   function getHandle() {
     const p = new URLSearchParams(location.search);
     return p.get("handle") || p.get("id");
   }
 
-  // ---- Accept either an array or { products: [...] }
   function normalizeProducts(data) {
     if (Array.isArray(data)) return data;
     if (data && Array.isArray(data.products)) return data.products;
     return [];
   }
 
-  // Force fresh products.json each load
   async function loadProducts() {
     const res = await fetch("data/products.json?ts=" + Date.now(), {
       cache: "no-cache",
@@ -41,9 +36,6 @@
     return normalizeProducts(raw);
   }
 
-  // =========================
-  // ✅ BATS BACKGROUND (AUTO)
-  // =========================
   const BATS_SRC = "assets/video/bat.mp4";
 
   function safePlay(video) {
@@ -110,7 +102,10 @@
       descEl.insertBefore(layer, descEl.firstChild);
     }
 
-    let v = descEl.querySelector("video.bats-bg") || layer.querySelector("video.bats-bg");
+    let v =
+      descEl.querySelector("video.bats-bg") ||
+      layer.querySelector("video.bats-bg");
+
     if (v) {
       forceVideoAttrs(v);
 
@@ -123,13 +118,19 @@
 
       if (v.parentElement !== layer) layer.appendChild(v);
 
-      try { v.load(); } catch (e) {}
+      try {
+        v.load();
+      } catch (e) {}
       return v;
     }
 
     v = buildBatsVideo();
     layer.appendChild(v);
-    try { v.load(); } catch (e) {}
+
+    try {
+      v.load();
+    } catch (e) {}
+
     return v;
   }
 
@@ -184,11 +185,148 @@
       window.removeEventListener("keydown", gesture);
       window.removeEventListener("scroll", gesture);
     };
-    window.addEventListener("pointerdown", gesture, { once: true, passive: true });
-    window.addEventListener("touchstart", gesture, { once: true, passive: true });
+
+    window.addEventListener("pointerdown", gesture, {
+      once: true,
+      passive: true,
+    });
+    window.addEventListener("touchstart", gesture, {
+      once: true,
+      passive: true,
+    });
     window.addEventListener("click", gesture, { once: true });
     window.addEventListener("keydown", gesture, { once: true });
-    window.addEventListener("scroll", gesture, { once: true, passive: true });
+    window.addEventListener("scroll", gesture, {
+      once: true,
+      passive: true,
+    });
+  }
+
+  function splitDescription(html) {
+    if (!html || typeof html !== "string") {
+      return {
+        introHtml: "<p style='opacity:.8'>No description available.</p>",
+        detailsHtml: "",
+      };
+    }
+
+    const wrapper = document.createElement("div");
+    wrapper.innerHTML = html;
+
+    const video = wrapper.querySelector("video.bats-bg, video");
+    if (video) video.remove();
+
+    const heading = wrapper.querySelector("h3");
+    if (!heading) {
+      return {
+        introHtml: wrapper.innerHTML,
+        detailsHtml: "",
+      };
+    }
+
+    let introHtml = "";
+    let detailsHtml = "";
+    let hitDetails = false;
+
+    Array.from(wrapper.childNodes).forEach((node) => {
+      if (
+        node.nodeType === 1 &&
+        node.tagName &&
+        node.tagName.toLowerCase() === "h3"
+      ) {
+        hitDetails = true;
+      }
+      if (hitDetails) {
+        detailsHtml += node.outerHTML || node.textContent || "";
+      } else {
+        introHtml += node.outerHTML || node.textContent || "";
+      }
+    });
+
+    return {
+      introHtml: introHtml.trim(),
+      detailsHtml: detailsHtml.trim(),
+    };
+  }
+
+  function renderDesktopGallery(imgs, title) {
+    if (!imgs.length) {
+      return `
+        <div class="fog-gallery">
+          <div class="fog-image-wrap">
+            <div style="height:600px;background:#111;border-radius:12px;"></div>
+          </div>
+        </div>
+      `;
+    }
+
+    return `
+      <div class="fog-gallery desktop-gallery">
+        ${imgs
+          .map(
+            (src, i) => `
+          <div class="fog-image-wrap">
+            <img
+              src="${src}"
+              alt="${title} image ${i + 1}"
+              loading="${i === 0 ? "eager" : "lazy"}"
+              class="fog-image"
+            >
+          </div>
+        `
+          )
+          .join("")}
+      </div>
+    `;
+  }
+
+  function renderMobileGallery(imgs, title) {
+    if (!imgs.length) {
+      return `
+        <div class="mobile-product-gallery">
+          <div class="mobile-product-track">
+            <div class="mobile-product-slide">
+              <div style="height:420px;background:#111;"></div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    return `
+      <div class="mobile-product-gallery">
+        <div class="mobile-product-track" id="mobile-product-track">
+          ${imgs
+            .map(
+              (src, i) => `
+            <div class="mobile-product-slide">
+              <img
+                src="${src}"
+                alt="${title} image ${i + 1}"
+                loading="${i === 0 ? "eager" : "lazy"}"
+                class="mobile-product-image"
+              >
+            </div>
+          `
+            )
+            .join("")}
+        </div>
+        <div class="mobile-product-dots" id="mobile-product-dots">
+          ${imgs
+            .map(
+              (_, i) => `
+            <button
+              type="button"
+              class="mobile-product-dot${i === 0 ? " is-active" : ""}"
+              data-dot-index="${i}"
+              aria-label="Go to image ${i + 1}"
+            ></button>
+          `
+            )
+            .join("")}
+        </div>
+      </div>
+    `;
   }
 
   function render(root, p) {
@@ -196,10 +334,13 @@
     const imgs = Array.isArray(p.images) ? p.images : [];
     const firstImg = imgs.length ? imgs[0] : "";
 
+    const brandLabel = p.brandLabel || "DarkHarlemKnight";
+    const displayTitle = p.displayTitle || "@ product title";
+
     const originalPriceCents = Number(p.price) || 0;
     const salePriceCents = applySale(originalPriceCents);
-
     const showSale = SALE_ACTIVE && salePriceCents !== originalPriceCents;
+
     const priceHtml = showSale
       ? `
         <span class="price-original" style="opacity:.55;text-decoration:line-through;margin-right:6px;">
@@ -215,38 +356,40 @@
         </span>
       `;
 
+    const { introHtml, detailsHtml } = splitDescription(p.description);
+
     root.innerHTML = `
       <article class="product-detail fog-layout">
-        <div class="fog-gallery">
-          ${
-            imgs.length
-              ? imgs
-                  .map(
-                    (src, i) => `
-                <div class="fog-image-wrap">
-                  <img
-                    src="${src}"
-                    alt="${p.title} image ${i + 1}"
-                    loading="${i === 0 ? "eager" : "lazy"}"
-                    class="fog-image"
-                  >
-                </div>
-              `
-                  )
-                  .join("")
-              : `
-              <div class="fog-image-wrap">
-                <div style="height:600px;background:#111;border-radius:12px;"></div>
-              </div>
-            `
-          }
+        <div class="mobile-only-block">
+          ${renderMobileGallery(imgs, displayTitle)}
+        </div>
+
+        <div class="desktop-only-block">
+          ${renderDesktopGallery(imgs, displayTitle)}
         </div>
 
         <div class="fog-info">
-          <h1 class="pd__title">${p.title}</h1>
+          <div class="pd__brand-glow mobile-brand-only">${brandLabel}</div>
+          <div class="pd__brand-glow desktop-brand-only">${brandLabel}</div>
+
+          <h1 class="pd__title mobile-title-only">${displayTitle}</h1>
+          <h1 class="pd__title desktop-title-only">${displayTitle}</h1>
 
           <div class="pd__price">
             ${priceHtml}
+          </div>
+
+          <div class="pd__intro mobile-intro-only">
+            ${introHtml || "<p style='opacity:.8'>No description available.</p>"}
+          </div>
+
+          <div class="pd__mobile-accordion mobile-only-block">
+            <details class="pd__accordion">
+              <summary>Details</summary>
+              <div class="pd__accordion-body">
+                ${detailsHtml || "<p style='opacity:.8'>No details available.</p>"}
+              </div>
+            </details>
           </div>
 
           ${
@@ -266,21 +409,22 @@
             Add to cart
           </button>
 
-          <div id="pd-desc" class="pd__desc"></div>
+          <div id="pd-desc" class="pd__desc desktop-desc-only">
+            ${
+              typeof p.description === "string" && p.description.trim().length
+                ? p.description
+                : "<p style='opacity:.8'>No description available.</p>"
+            }
+          </div>
         </div>
       </article>
     `;
 
     const descEl = root.querySelector("#pd-desc");
-    if (descEl) {
-      const html =
-        typeof p.description === "string" && p.description.trim().length
-          ? p.description
-          : "<p style='opacity:.8'>No description available.</p>";
+    if (descEl) hydrateBats(descEl);
 
-      descEl.innerHTML = html;
-      hydrateBats(descEl);
-    }
+    const mobileAccordionBody = root.querySelector(".pd__accordion-body");
+    if (mobileAccordionBody) hydrateBats(mobileAccordionBody);
 
     const priceForCart = showSale ? salePriceCents : originalPriceCents;
 
@@ -291,7 +435,7 @@
       window.Cart?.add(
         {
           id: p.id,
-          title: p.title,
+          title: displayTitle,
           priceCents: priceForCart,
           thumbnail: p.thumbnail || firstImg || "",
           variant,
@@ -301,9 +445,37 @@
         { open: true }
       );
     });
+
+    const track = root.querySelector("#mobile-product-track");
+    const dots = Array.from(root.querySelectorAll(".mobile-product-dot"));
+
+    if (track && dots.length) {
+      const updateDots = () => {
+        const slideWidth = track.clientWidth;
+        if (!slideWidth) return;
+        const index = Math.round(track.scrollLeft / slideWidth);
+        dots.forEach((dot, i) => {
+          dot.classList.toggle("is-active", i === index);
+        });
+      };
+
+      track.addEventListener("scroll", () => {
+        window.requestAnimationFrame(updateDots);
+      });
+
+      dots.forEach((dot, i) => {
+        dot.addEventListener("click", () => {
+          track.scrollTo({
+            left: track.clientWidth * i,
+            behavior: "smooth",
+          });
+        });
+      });
+
+      updateDots();
+    }
   }
 
-  // ---- Boot
   document.addEventListener("DOMContentLoaded", async () => {
     const root = document.getElementById("product-root");
     if (!root) return;
