@@ -361,9 +361,8 @@ function splitDescription(html) {
         </div>
 
         <div class="fog-info">
-          <div class="pd__brand-glow mobile-brand-only">${brandLabel}</div>
-          <div class="pd__brand-glow desktop-brand-only">${brandLabel}</div>
-
+          <div class="pd__brand-glow">${brandLabel}</div>
+          
           <h1 class="pd__title mobile-title-only">${displayTitle}</h1>
           <h1 class="pd__title desktop-title-only">${displayTitle}</h1>
 
