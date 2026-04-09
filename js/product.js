@@ -202,44 +202,44 @@
     });
   }
 
-function splitDescription(html) {
-  if (!html || typeof html !== "string") {
+  function splitDescription(html) {
+    if (!html || typeof html !== "string") {
+      return {
+        introHtml: "<p style='opacity:.8'>No description available.</p>",
+        detailsHtml: "",
+      };
+    }
+
+    const wrapper = document.createElement("div");
+    wrapper.innerHTML = html;
+
+    const video = wrapper.querySelector("video.bats-bg, video");
+    if (video) video.remove();
+
+    const heading = wrapper.querySelector("h3");
+    const list = wrapper.querySelector("ul");
+
+    let introHtml = "";
+    let detailsHtml = "";
+
+    if (heading && list) {
+      heading.remove();
+      list.remove();
+      introHtml = wrapper.innerHTML.trim();
+      detailsHtml = `
+        <h3>${heading.outerHTML.replace(/^<h3[^>]*>|<\/h3>$/g, "").trim()}</h3>
+        ${list.outerHTML}
+      `;
+    } else {
+      introHtml = wrapper.innerHTML.trim();
+      detailsHtml = "";
+    }
+
     return {
-      introHtml: "<p style='opacity:.8'>No description available.</p>",
-      detailsHtml: "",
+      introHtml,
+      detailsHtml,
     };
   }
-
-  const wrapper = document.createElement("div");
-  wrapper.innerHTML = html;
-
-  const video = wrapper.querySelector("video.bats-bg, video");
-  if (video) video.remove();
-
-  const heading = wrapper.querySelector("h3");
-  const list = wrapper.querySelector("ul");
-
-  let introHtml = "";
-  let detailsHtml = "";
-
-  if (heading && list) {
-    heading.remove();
-    list.remove();
-    introHtml = wrapper.innerHTML.trim();
-    detailsHtml = `
-      <h3>${heading.outerHTML.replace(/^<h3[^>]*>|<\/h3>$/g, "").trim()}</h3>
-      ${list.outerHTML}
-    `;
-  } else {
-    introHtml = wrapper.innerHTML.trim();
-    detailsHtml = "";
-  }
-
-  return {
-    introHtml,
-    detailsHtml,
-  };
-}
 
   function renderDesktopGallery(imgs, title) {
     if (!imgs.length) {
@@ -362,7 +362,7 @@ function splitDescription(html) {
 
         <div class="fog-info">
           <div class="pd__brand-glow">${brandLabel}</div>
-          
+
           <h1 class="pd__title mobile-title-only">${displayTitle}</h1>
           <h1 class="pd__title desktop-title-only">${displayTitle}</h1>
 
@@ -400,12 +400,17 @@ function splitDescription(html) {
             Add to cart
           </button>
 
-          <div id="pd-desc" class="pd__desc desktop-desc-only">
-            ${
-              typeof p.description === "string" && p.description.trim().length
-                ? p.description
-                : "<p style='opacity:.8'>No description available.</p>"
-            }
+          <div class="pd__desktop-desc desktop-desc-only">
+            <div id="pd-desc" class="pd__desc">
+              ${introHtml || "<p style='opacity:.8'>No description available.</p>"}
+            </div>
+
+            <details class="pd__accordion pd__accordion--desktop">
+              <summary>Details</summary>
+              <div class="pd__accordion-body">
+                ${detailsHtml || "<p style='opacity:.8'>No details available.</p>"}
+              </div>
+            </details>
           </div>
         </div>
       </article>
@@ -414,8 +419,9 @@ function splitDescription(html) {
     const descEl = root.querySelector("#pd-desc");
     if (descEl) hydrateBats(descEl);
 
-    const mobileAccordionBody = root.querySelector(".pd__accordion-body");
-    if (mobileAccordionBody) hydrateBats(mobileAccordionBody);
+    root.querySelectorAll(".pd__accordion-body").forEach((el) => {
+      hydrateBats(el);
+    });
 
     const priceForCart = showSale ? salePriceCents : originalPriceCents;
 
