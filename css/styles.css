@@ -1322,3 +1322,45 @@ h1,h2,h3,
   position: relative;
   z-index: 2;
 }
+.fog-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 58%) minmax(320px, 42%);
+  gap: 48px;
+  align-items: start;
+}
+
+.fog-gallery {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.fog-image-wrap {
+  width: 100%;
+}
+
+.fog-image {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+  border-radius: 0;
+  background: #0f0f0f;
+}
+
+.fog-info {
+  position: sticky;
+  top: 120px;
+  align-self: start;
+}
+
+@media (max-width: 900px) {
+  .fog-layout {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .fog-info {
+    position: static;
+    top: auto;
+  }
+}
