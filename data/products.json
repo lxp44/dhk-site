@@ -58,6 +58,7 @@
     "thumbnail": "assets/img/products/dhk/gif/hoodie-black.gif",
     "hoverImage": "assets/img/products/dhk/portrait/hoodie/black/black-hoodie-1.png",
     "images": [
+      "assets/img/products/dhk/campaign-1/studio-shots/portrait/black-portrait.jpeg",
       "assets/img/products/dhk/detail-shots/hoodie/black/shot-1.png",
       "assets/img/products/dhk/detail-shots/hoodie/black/shot-2.png",
       "assets/img/products/dhk/detail-shots/hoodie/black/shot-3.png"
@@ -75,6 +76,7 @@
     "thumbnail": "assets/img/products/dhk/gif/hoodie-grey.gif",
     "hoverImage": "assets/img/products/dhk/portrait/hoodie/grey/grey-hoodie-1.png",
     "images": [
+      "assets/img/products/dhk/campaign-1/studio-shots/portrait/grey-portrait.jpeg",
       "assets/img/products/dhk/detail-shots/hoodie/grey/shot-1.png",
       "assets/img/products/dhk/detail-shots/hoodie/grey/shot-2.png",
       "assets/img/products/dhk/detail-shots/hoodie/grey/shot-3.png"
@@ -92,6 +94,7 @@
     "thumbnail": "assets/img/products/dhk/detail-shots/hoodie/white/shot-1.png",
     "hoverImage": "assets/img/products/dhk/portrait/hoodie/white/white-hoodie-1.png",
     "images": [
+      "assets/img/products/dhk/campaign-1/studio-shots/portrait/white-portrait.jpeg",
       "assets/img/products/dhk/detail-shots/hoodie/white/shot-1.png",
       "assets/img/products/dhk/detail-shots/hoodie/white/shot-2.png",
       "assets/img/products/dhk/detail-shots/hoodie/white/shot-3.png"
@@ -109,6 +112,7 @@
     "thumbnail": "assets/img/products/dhk/gif/crown-black.gif",
     "hoverImage": "assets/img/products/dhk/portrait/crown-hoodie/black/black-crown-1.png",
     "images": [
+      "assets/img/products/dhk/campaign-1/studio-shots/portrait/black-crown-portrait.jpeg",
       "assets/img/products/dhk/detail-shots/crown/black/shot-1.png",
       "assets/img/products/dhk/detail-shots/crown/black/shot-2.png",
       "assets/img/products/dhk/detail-shots/crown/black/shot-3.png"
@@ -126,6 +130,7 @@
     "thumbnail": "assets/img/products/dhk/gif/crown-grey.gif",
     "hoverImage": "assets/img/products/dhk/portrait/crown-hoodie/grey/grey-crown-1.png",
     "images": [
+      "assets/img/products/dhk/campaign-1/studio-shots/portrait/grey-crown-portrait.jpeg",
       "assets/img/products/dhk/detail-shots/crown/grey/shot-1.png",
       "assets/img/products/dhk/detail-shots/crown/grey/shot-2.png",
       "assets/img/products/dhk/detail-shots/crown/grey/shot-3.png"
@@ -144,6 +149,7 @@
     "hoverImage": "assets/img/products/dhk/portrait/crown-hoodie/white/white-crown-1.png",
     "images": [
       "assets/img/products/dhk/detail-shots/crown/white/shot-1.png",
+      "assets/img/products/dhk/campaign-1/studio-shots/portrait/white-crown-portrait.jpeg",
       "assets/img/products/dhk/detail-shots/crown/white/shot-2.png",
       "assets/img/products/dhk/detail-shots/crown/white/shot-3.png"
     ],
