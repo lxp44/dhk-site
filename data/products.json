@@ -1,40 +1,40 @@
 [
   {
-  "id": "dark-harlem-black-knight-heavy-box-shirt",
-  "title": "Dark Harlem Black Knight Heavy Box Shirt",
-  "price": 8000,
-  "thumbnail": "assets/img/products/dhk/detail-shots/t-shirt/black/shot-1.png",
+    "id": "dark-harlem-black-knight-heavy-box-shirt",
+    "title": "Dark Harlem Black Knight Heavy Box Shirt",
+    "price": 8000,
+    "thumbnail": "assets/img/products/dhk/detail-shots/t-shirt/black/shot-1.png",
     "hoverImage": "assets/img/products/dhk/portrait/shirt/black/black-shirt-1.png",
-  "images": [
-     "assets/img/products/dhk/detail-shots/t-shirt/black/shot-1.png",
+    "images": [
+      "assets/img/products/dhk/detail-shots/t-shirt/black/shot-1.png",
       "assets/img/products/dhk/detail-shots/t-shirt/black/shot-2.png",
       "assets/img/products/dhk/detail-shots/t-shirt/black/shot-3.png"
-  ],
-  "options": ["S", "M", "L", "XL", "2XL", "3XL"],
-  "description": "<div class=\\\"product-desc-wrap\\\" style=\\\"color:#f1f1f1;padding:20px;\\\"><p style=\\\"font-family:Roboto,Arial,sans-serif;font-size:15px;line-height:1.85;font-weight:300;letter-spacing:0.01em;color:#d7d7d7;\\\">A heavyweight cotton tee finished with the Swarovski® crystal DHK emblem. Built to carry the Dark Harlem Knight identity with a clean silhouette, sharp finish, and elevated everyday weight.<br><br>Each piece arrives with a premium silk logo bag.</p><h3 style=\\\"font-family:Roboto,Arial,sans-serif;font-size:12px;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:#f2f2f2;margin-top:28px;margin-bottom:14px;\\\">Details</h3><ul style=\\\"list-style-type:none;padding:0;margin:0;color:#d7d7d7;font-family:Roboto,Arial,sans-serif;font-size:15px;line-height:1.85;font-weight:300;letter-spacing:0.01em;\\\"><li>• Sizes: S–3XL</li><li>• Weight: 330 gsm</li><li>• Material: 100% cotton</li><li>• Logo: DHK emblem made with Swarovski® crystals</li><li>• Rhinestone Color: AB crystals</li><li>• Color: [Black / Grey / White]</li><li>• Includes premium silk logo bag</li></ul><video class=\\\"bats-bg\\\" muted autoplay loop playsinline webkit-playsinline preload=\\\"metadata\\\" disablepictureinpicture controlslist=\\\"nodownload noplaybackrate noremoteplayback\\\"><source src=\\\"assets/video/bat.mp4\\\" type=\\\"video/mp4\\\"></video></div>",
-  "url": "product.html?id=dark-harlem-black-knight-heavy-box-shirt",
-  "stripePriceId": "price_1TJP5i0cfsBzY9CjXE6vNJN6"
-},
+    ],
+    "options": ["S", "M", "L", "XL", "2XL", "3XL"],
+    "description": "<div class=\\\"product-desc-wrap\\\" style=\\\"color:#f1f1f1;padding:20px;\\\"><p style=\\\"font-family:Roboto,Arial,sans-serif;font-size:15px;line-height:1.85;font-weight:300;letter-spacing:0.01em;color:#d7d7d7;\\\">A heavyweight cotton tee finished with the Swarovski® crystal DHK emblem. Built to carry the Dark Harlem Knight identity with a clean silhouette, sharp finish, and elevated everyday weight.<br><br>Each piece arrives with a premium silk logo bag.</p><h3 style=\\\"font-family:Roboto,Arial,sans-serif;font-size:12px;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:#f2f2f2;margin-top:28px;margin-bottom:14px;\\\">Details</h3><ul style=\\\"list-style-type:none;padding:0;margin:0;color:#d7d7d7;font-family:Roboto,Arial,sans-serif;font-size:15px;line-height:1.85;font-weight:300;letter-spacing:0.01em;\\\"><li>• Sizes: S–3XL</li><li>• Weight: 330 gsm</li><li>• Material: 100% cotton</li><li>• Logo: DHK emblem made with Swarovski® crystals</li><li>• Rhinestone Color: AB crystals</li><li>• Color: Black</li><li>• Includes premium silk logo bag</li></ul><video class=\\\"bats-bg\\\" muted autoplay loop playsinline webkit-playsinline preload=\\\"metadata\\\" disablepictureinpicture controlslist=\\\"nodownload noplaybackrate noremoteplayback\\\"><source src=\\\"assets/video/bat.mp4\\\" type=\\\"video/mp4\\\"></video></div>",
+    "url": "product.html?id=dark-harlem-black-knight-heavy-box-shirt",
+    "stripePriceId": "price_1TJP5i0cfsBzY9CjXE6vNJN6"
+  },
   {
-  "id": "dark-harlem-grey-knight-heavy-box-shirt",
-  "title": "Dark Harlem Grey Knight Heavy Box Shirt",
-  "price": 8000,
-  "thumbnail": "assets/img/products/dhk/gif/grey-boxy-shirt.gif",
+    "id": "dark-harlem-grey-knight-heavy-box-shirt",
+    "title": "Dark Harlem Grey Knight Heavy Box Shirt",
+    "price": 8000,
+    "thumbnail": "assets/img/products/dhk/gif/grey-boxy-shirt.gif",
     "hoverImage": "assets/img/products/dhk/portrait/shirt/grey/grey-shirt-1.png",
-  "images": [
-    "assets/img/products/dhk/detail-shots/t-shirt/grey/shot-1.png",
+    "images": [
+      "assets/img/products/dhk/detail-shots/t-shirt/grey/shot-1.png",
       "assets/img/products/dhk/detail-shots/t-shirt/grey/shot-2.png",
       "assets/img/products/dhk/detail-shots/t-shirt/grey/shot-3.png"
-  ],
-  "options": ["S", "M", "L", "XL", "2XL", "3XL"],
- 
-  "description": "<div class=\\\"product-desc-wrap\\\" style=\\\"color:#f1f1f1;padding:20px;\\\"><p style=\\\"font-family:Roboto,Arial,sans-serif;font-size:15px;line-height:1.85;font-weight:300;letter-spacing:0.01em;color:#d7d7d7;\\\">A heavyweight cotton tee finished with the Swarovski® crystal DHK emblem. Built to carry the Dark Harlem Knight identity with a clean silhouette, sharp finish, and elevated everyday weight.<br><br>Each piece arrives with a premium silk logo bag.</p><h3 style=\\\"font-family:Roboto,Arial,sans-serif;font-size:12px;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:#f2f2f2;margin-top:28px;margin-bottom:14px;\\\">Details</h3><ul style=\\\"list-style-type:none;padding:0;margin:0;color:#d7d7d7;font-family:Roboto,Arial,sans-serif;font-size:15px;line-height:1.85;font-weight:300;letter-spacing:0.01em;\\\"><li>• Sizes: S–3XL</li><li>• Weight: 330 gsm</li><li>• Material: 100% cotton</li><li>• Logo: DHK emblem made with Swarovski® crystals</li><li>• Rhinestone Color: AB crystals</li><li>• Color: [Black / Grey / White]</li><li>• Includes premium silk logo bag</li></ul><video class=\\\"bats-bg\\\" muted autoplay loop playsinline webkit-playsinline preload=\\\"metadata\\\" disablepictureinpicture controlslist=\\\"nodownload noplaybackrate noremoteplayback\\\"><source src=\\\"assets/video/bat.mp4\\\" type=\\\"video/mp4\\\"></video></div>",  "url": "product.html?id=dark-harlem-grey-knight-heavy-box-shirt",
-  "stripePriceId": "price_1TJP6G0cfsBzY9CjthvNq7aB"
-},
+    ],
+    "options": ["S", "M", "L", "XL", "2XL", "3XL"],
+    "description": "<div class=\\\"product-desc-wrap\\\" style=\\\"color:#f1f1f1;padding:20px;\\\"><p style=\\\"font-family:Roboto,Arial,sans-serif;font-size:15px;line-height:1.85;font-weight:300;letter-spacing:0.01em;color:#d7d7d7;\\\">A heavyweight cotton tee finished with the Swarovski® crystal DHK emblem. Built to carry the Dark Harlem Knight identity with a clean silhouette, sharp finish, and elevated everyday weight.<br><br>Each piece arrives with a premium silk logo bag.</p><h3 style=\\\"font-family:Roboto,Arial,sans-serif;font-size:12px;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:#f2f2f2;margin-top:28px;margin-bottom:14px;\\\">Details</h3><ul style=\\\"list-style-type:none;padding:0;margin:0;color:#d7d7d7;font-family:Roboto,Arial,sans-serif;font-size:15px;line-height:1.85;font-weight:300;letter-spacing:0.01em;\\\"><li>• Sizes: S–3XL</li><li>• Weight: 330 gsm</li><li>• Material: 100% cotton</li><li>• Logo: DHK emblem made with Swarovski® crystals</li><li>• Rhinestone Color: AB crystals</li><li>• Color: Grey</li><li>• Includes premium silk logo bag</li></ul><video class=\\\"bats-bg\\\" muted autoplay loop playsinline webkit-playsinline preload=\\\"metadata\\\" disablepictureinpicture controlslist=\\\"nodownload noplaybackrate noremoteplayback\\\"><source src=\\\"assets/video/bat.mp4\\\" type=\\\"video/mp4\\\"></video></div>",
+    "url": "product.html?id=dark-harlem-grey-knight-heavy-box-shirt",
+    "stripePriceId": "price_1TJP6G0cfsBzY9CjthvNq7aB"
+  },
   {
-  "id": "dark-harlem-white-knight-heavy-box-shirt",
-  "title": "Dark Harlem White Knight Heavy Box Shirt",
-  "price": 8000,
+    "id": "dark-harlem-white-knight-heavy-box-shirt",
+    "title": "Dark Harlem White Knight Heavy Box Shirt",
+    "price": 8000,
     "thumbnail": "assets/img/products/dhk/detail-shots/t-shirt/white/shot-1.png",
     "hoverImage": "assets/img/products/dhk/portrait/shirt/white/white-shirt-1.png",
     "images": [
@@ -43,198 +43,197 @@
       "assets/img/products/dhk/detail-shots/t-shirt/white/shot-3.png"
     ],
     "options": ["S", "M", "L", "XL", "2XL", "3XL"],
-    
-  "description": "<div class=\\\"product-desc-wrap\\\" style=\\\"color:#f1f1f1;padding:20px;\\\"><p style=\\\"font-family:Roboto,Arial,sans-serif;font-size:15px;line-height:1.85;font-weight:300;letter-spacing:0.01em;color:#d7d7d7;\\\">A heavyweight cotton tee finished with the Swarovski® crystal DHK emblem. Built to carry the Dark Harlem Knight identity with a clean silhouette, sharp finish, and elevated everyday weight.<br><br>Each piece arrives with a premium silk logo bag.</p><h3 style=\\\"font-family:Roboto,Arial,sans-serif;font-size:12px;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:#f2f2f2;margin-top:28px;margin-bottom:14px;\\\">Details</h3><ul style=\\\"list-style-type:none;padding:0;margin:0;color:#d7d7d7;font-family:Roboto,Arial,sans-serif;font-size:15px;line-height:1.85;font-weight:300;letter-spacing:0.01em;\\\"><li>• Sizes: S–3XL</li><li>• Weight: 330 gsm</li><li>• Material: 100% cotton</li><li>• Logo: DHK emblem made with Swarovski® crystals</li><li>• Rhinestone Color: AB crystals</li><li>• Color: [Black / Grey / White]</li><li>• Includes premium silk logo bag</li></ul><video class=\\\"bats-bg\\\" muted autoplay loop playsinline webkit-playsinline preload=\\\"metadata\\\" disablepictureinpicture controlslist=\\\"nodownload noplaybackrate noremoteplayback\\\"><source src=\\\"assets/video/bat.mp4\\\" type=\\\"video/mp4\\\"></video></div>",  "url": "product.html?id=dark-harlem-white-knight-heavy-box-shirt",
+    "description": "<div class=\\\"product-desc-wrap\\\" style=\\\"color:#f1f1f1;padding:20px;\\\"><p style=\\\"font-family:Roboto,Arial,sans-serif;font-size:15px;line-height:1.85;font-weight:300;letter-spacing:0.01em;color:#d7d7d7;\\\">A heavyweight cotton tee finished with the Swarovski® crystal DHK emblem. Built to carry the Dark Harlem Knight identity with a clean silhouette, sharp finish, and elevated everyday weight.<br><br>Each piece arrives with a premium silk logo bag.</p><h3 style=\\\"font-family:Roboto,Arial,sans-serif;font-size:12px;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:#f2f2f2;margin-top:28px;margin-bottom:14px;\\\">Details</h3><ul style=\\\"list-style-type:none;padding:0;margin:0;color:#d7d7d7;font-family:Roboto,Arial,sans-serif;font-size:15px;line-height:1.85;font-weight:300;letter-spacing:0.01em;\\\"><li>• Sizes: S–3XL</li><li>• Weight: 330 gsm</li><li>• Material: 100% cotton</li><li>• Logo: DHK emblem made with Swarovski® crystals</li><li>• Rhinestone Color: AB crystals</li><li>• Color: White</li><li>• Includes premium silk logo bag</li></ul><video class=\\\"bats-bg\\\" muted autoplay loop playsinline webkit-playsinline preload=\\\"metadata\\\" disablepictureinpicture controlslist=\\\"nodownload noplaybackrate noremoteplayback\\\"><source src=\\\"assets/video/bat.mp4\\\" type=\\\"video/mp4\\\"></video></div>",
+    "url": "product.html?id=dark-harlem-white-knight-heavy-box-shirt",
     "stripePriceId": "price_1TJPCc0cfsBzY9Cj93uO51aF"
   },
   {
-  "id": "dark-harlem-black-knight-hoodie",
-  "title": "The Dark Harlem Black Knight Hoodie",
-  "price": 12500,
-  "thumbnail": "assets/img/products/dhk/gif/hoodie-black.gif",
+    "id": "dark-harlem-black-knight-hoodie",
+    "title": "The Dark Harlem Black Knight Hoodie",
+    "price": 12500,
+    "thumbnail": "assets/img/products/dhk/gif/hoodie-black.gif",
     "hoverImage": "assets/img/products/dhk/portrait/hoodie/black/black-hoodie-1.png",
-  "images": [
-    "assets/img/products/dhk/detail-shots/hoodie/black/shot-1.png",
+    "images": [
+      "assets/img/products/dhk/detail-shots/hoodie/black/shot-1.png",
       "assets/img/products/dhk/detail-shots/hoodie/black/shot-2.png",
       "assets/img/products/dhk/detail-shots/hoodie/black/shot-3.png"
-  ],
-  "options": ["S", "M", "L", "XL", "2XL", "3XL"],
-  "description": "<div class=\\\"product-desc-wrap\\\" style=\\\"color:#f1f1f1;padding:20px;\\\"><p style=\\\"font-family:Roboto,Arial,sans-serif;font-size:15px;line-height:1.85;font-weight:300;letter-spacing:0.01em;color:#d7d7d7;\\\">An ultra-premium heavyweight hoodie cut for structure, drape, and presence. Finished with the Swarovski® crystal DHK emblem, it delivers the core Dark Harlem Knight silhouette in a clean luxury streetwear form.</p><h3 style=\\\"font-family:Roboto,Arial,sans-serif;font-size:12px;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:#f2f2f2;margin-top:28px;margin-bottom:14px;\\\">Details</h3><ul style=\\\"list-style-type:none;padding:0;margin:0;color:#d7d7d7;font-family:Roboto,Arial,sans-serif;font-size:15px;line-height:1.85;font-weight:300;letter-spacing:0.01em;\\\"><li>• Sizes: S–3XL</li><li>• Weight: 600 gsm</li><li>• Material: 100% cotton</li><li>• Logo: DHK emblem made with Swarovski® crystals</li><li>• Swarovski® Crystal Color: AB crystal</li><li>• Color: [Black / Grey / White]</li><li>• No draw cords</li><li>• Drop shoulder fit</li><li>• Bio polished finish</li><li>• Inner side raised lining</li><li>• Kangaroo pocket</li></ul><video class=\\\"bats-bg\\\" muted autoplay loop playsinline webkit-playsinline preload=\\\"metadata\\\" disablepictureinpicture controlslist=\\\"nodownload noplaybackrate noremoteplayback\\\"><source src=\\\"assets/video/bat.mp4\\\" type=\\\"video/mp4\\\"></video></div>",
-  "url": "product.html?id=dark-harlem-black-knight-hoodie",
-  "stripePriceId": "price_1TJP1X0cfsBzY9Cjg4UTkn2u"
-},
+    ],
+    "options": ["S", "M", "L", "XL", "2XL", "3XL"],
+    "description": "<div class=\\\"product-desc-wrap\\\" style=\\\"color:#f1f1f1;padding:20px;\\\"><p style=\\\"font-family:Roboto,Arial,sans-serif;font-size:15px;line-height:1.85;font-weight:300;letter-spacing:0.01em;color:#d7d7d7;\\\">An ultra-premium heavyweight hoodie cut for structure, drape, and presence. Finished with the Swarovski® crystal DHK emblem, it delivers the core Dark Harlem Knight silhouette in a clean luxury streetwear form.</p><h3 style=\\\"font-family:Roboto,Arial,sans-serif;font-size:12px;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:#f2f2f2;margin-top:28px;margin-bottom:14px;\\\">Details</h3><ul style=\\\"list-style-type:none;padding:0;margin:0;color:#d7d7d7;font-family:Roboto,Arial,sans-serif;font-size:15px;line-height:1.85;font-weight:300;letter-spacing:0.01em;\\\"><li>• Sizes: S–3XL</li><li>• Weight: 600 gsm</li><li>• Material: 100% cotton</li><li>• Logo: DHK emblem made with Swarovski® crystals</li><li>• Swarovski® Crystal Color: AB crystal</li><li>• Color: Black</li><li>• No draw cords</li><li>• Drop shoulder fit</li><li>• Bio polished finish</li><li>• Inner side raised lining</li><li>• Kangaroo pocket</li></ul><video class=\\\"bats-bg\\\" muted autoplay loop playsinline webkit-playsinline preload=\\\"metadata\\\" disablepictureinpicture controlslist=\\\"nodownload noplaybackrate noremoteplayback\\\"><source src=\\\"assets/video/bat.mp4\\\" type=\\\"video/mp4\\\"></video></div>",
+    "url": "product.html?id=dark-harlem-black-knight-hoodie",
+    "stripePriceId": "price_1TJP1X0cfsBzY9Cjg4UTkn2u"
+  },
   {
-  "id": "dark-harlem-grey-knight-hoodie",
-  "title": "The Dark Harlem Grey Knight Hoodie",
-  "price": 12500,
-  "thumbnail": "assets/img/products/dhk/gif/hoodie-grey.gif",
+    "id": "dark-harlem-grey-knight-hoodie",
+    "title": "The Dark Harlem Grey Knight Hoodie",
+    "price": 12500,
+    "thumbnail": "assets/img/products/dhk/gif/hoodie-grey.gif",
     "hoverImage": "assets/img/products/dhk/portrait/hoodie/grey/grey-hoodie-1.png",
-  "images": [
-    "assets/img/products/dhk/detail-shots/hoodie/grey/shot-1.png",
+    "images": [
+      "assets/img/products/dhk/detail-shots/hoodie/grey/shot-1.png",
       "assets/img/products/dhk/detail-shots/hoodie/grey/shot-2.png",
       "assets/img/products/dhk/detail-shots/hoodie/grey/shot-3.png"
-  ],
-  "options": ["S", "M", "L", "XL", "2XL", "3XL"],
-  
-  "description": "<div class=\\\"product-desc-wrap\\\" style=\\\"color:#f1f1f1;padding:20px;\\\"><p style=\\\"font-family:Roboto,Arial,sans-serif;font-size:15px;line-height:1.85;font-weight:300;letter-spacing:0.01em;color:#d7d7d7;\\\">An ultra-premium heavyweight hoodie cut for structure, drape, and presence. Finished with the Swarovski® crystal DHK emblem, it delivers the core Dark Harlem Knight silhouette in a clean luxury streetwear form.</p><h3 style=\\\"font-family:Roboto,Arial,sans-serif;font-size:12px;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:#f2f2f2;margin-top:28px;margin-bottom:14px;\\\">Details</h3><ul style=\\\"list-style-type:none;padding:0;margin:0;color:#d7d7d7;font-family:Roboto,Arial,sans-serif;font-size:15px;line-height:1.85;font-weight:300;letter-spacing:0.01em;\\\"><li>• Sizes: S–3XL</li><li>• Weight: 600 gsm</li><li>• Material: 100% cotton</li><li>• Logo: DHK emblem made with Swarovski® crystals</li><li>• Swarovski® Crystal Color: AB crystal</li><li>• Color: [Black / Grey / White]</li><li>• No draw cords</li><li>• Drop shoulder fit</li><li>• Bio polished finish</li><li>• Inner side raised lining</li><li>• Kangaroo pocket</li></ul><video class=\\\"bats-bg\\\" muted autoplay loop playsinline webkit-playsinline preload=\\\"metadata\\\" disablepictureinpicture controlslist=\\\"nodownload noplaybackrate noremoteplayback\\\"><source src=\\\"assets/video/bat.mp4\\\" type=\\\"video/mp4\\\"></video></div>",
-  "url": "product.html?id=dark-harlem-grey-knight-hoodie",
-  "stripePriceId": "price_1TJP2L0cfsBzY9CjcA29inPJ"
-},
+    ],
+    "options": ["S", "M", "L", "XL", "2XL", "3XL"],
+    "description": "<div class=\\\"product-desc-wrap\\\" style=\\\"color:#f1f1f1;padding:20px;\\\"><p style=\\\"font-family:Roboto,Arial,sans-serif;font-size:15px;line-height:1.85;font-weight:300;letter-spacing:0.01em;color:#d7d7d7;\\\">An ultra-premium heavyweight hoodie cut for structure, drape, and presence. Finished with the Swarovski® crystal DHK emblem, it delivers the core Dark Harlem Knight silhouette in a clean luxury streetwear form.</p><h3 style=\\\"font-family:Roboto,Arial,sans-serif;font-size:12px;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:#f2f2f2;margin-top:28px;margin-bottom:14px;\\\">Details</h3><ul style=\\\"list-style-type:none;padding:0;margin:0;color:#d7d7d7;font-family:Roboto,Arial,sans-serif;font-size:15px;line-height:1.85;font-weight:300;letter-spacing:0.01em;\\\"><li>• Sizes: S–3XL</li><li>• Weight: 600 gsm</li><li>• Material: 100% cotton</li><li>• Logo: DHK emblem made with Swarovski® crystals</li><li>• Swarovski® Crystal Color: AB crystal</li><li>• Color: Grey</li><li>• No draw cords</li><li>• Drop shoulder fit</li><li>• Bio polished finish</li><li>• Inner side raised lining</li><li>• Kangaroo pocket</li></ul><video class=\\\"bats-bg\\\" muted autoplay loop playsinline webkit-playsinline preload=\\\"metadata\\\" disablepictureinpicture controlslist=\\\"nodownload noplaybackrate noremoteplayback\\\"><source src=\\\"assets/video/bat.mp4\\\" type=\\\"video/mp4\\\"></video></div>",
+    "url": "product.html?id=dark-harlem-grey-knight-hoodie",
+    "stripePriceId": "price_1TJP2L0cfsBzY9CjcA29inPJ"
+  },
   {
-  "id": "dark-harlem-white-knight-hoodie",
-  "title": "The Dark Harlem White Knight Hoodie",
-  "price": 12500,
-  "thumbnail": "assets/img/products/dhk/detail-shots/hoodie/white/shot-1.png",
+    "id": "dark-harlem-white-knight-hoodie",
+    "title": "The Dark Harlem White Knight Hoodie",
+    "price": 12500,
+    "thumbnail": "assets/img/products/dhk/detail-shots/hoodie/white/shot-1.png",
     "hoverImage": "assets/img/products/dhk/portrait/hoodie/white/white-hoodie-1.png",
-  "images": [
-    "assets/img/products/dhk/detail-shots/hoodie/white/shot-1.png",
+    "images": [
+      "assets/img/products/dhk/detail-shots/hoodie/white/shot-1.png",
       "assets/img/products/dhk/detail-shots/hoodie/white/shot-2.png",
       "assets/img/products/dhk/detail-shots/hoodie/white/shot-3.png"
-  ],
-  "options": ["S", "M", "L", "XL", "2XL", "3XL"],
-  "description": "<div class=\\\"product-desc-wrap\\\" style=\\\"color:#f1f1f1;padding:20px;\\\"><p style=\\\"font-family:Roboto,Arial,sans-serif;font-size:15px;line-height:1.85;font-weight:300;letter-spacing:0.01em;color:#d7d7d7;\\\">An ultra-premium heavyweight hoodie cut for structure, drape, and presence. Finished with the Swarovski® crystal DHK emblem, it delivers the core Dark Harlem Knight silhouette in a clean luxury streetwear form.</p><h3 style=\\\"font-family:Roboto,Arial,sans-serif;font-size:12px;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:#f2f2f2;margin-top:28px;margin-bottom:14px;\\\">Details</h3><ul style=\\\"list-style-type:none;padding:0;margin:0;color:#d7d7d7;font-family:Roboto,Arial,sans-serif;font-size:15px;line-height:1.85;font-weight:300;letter-spacing:0.01em;\\\"><li>• Sizes: S–3XL</li><li>• Weight: 600 gsm</li><li>• Material: 100% cotton</li><li>• Logo: DHK emblem made with Swarovski® crystals</li><li>• Swarovski® Crystal Color: AB crystal</li><li>• Color: [Black / Grey / White]</li><li>• No draw cords</li><li>• Drop shoulder fit</li><li>• Bio polished finish</li><li>• Inner side raised lining</li><li>• Kangaroo pocket</li></ul><video class=\\\"bats-bg\\\" muted autoplay loop playsinline webkit-playsinline preload=\\\"metadata\\\" disablepictureinpicture controlslist=\\\"nodownload noplaybackrate noremoteplayback\\\"><source src=\\\"assets/video/bat.mp4\\\" type=\\\"video/mp4\\\"></video></div>",
-  "url": "product.html?id=dark-harlem-white-knight-hoodie",
-  "stripePriceId": "price_1TJP310cfsBzY9CjxS3mfprb"
-},
+    ],
+    "options": ["S", "M", "L", "XL", "2XL", "3XL"],
+    "description": "<div class=\\\"product-desc-wrap\\\" style=\\\"color:#f1f1f1;padding:20px;\\\"><p style=\\\"font-family:Roboto,Arial,sans-serif;font-size:15px;line-height:1.85;font-weight:300;letter-spacing:0.01em;color:#d7d7d7;\\\">An ultra-premium heavyweight hoodie cut for structure, drape, and presence. Finished with the Swarovski® crystal DHK emblem, it delivers the core Dark Harlem Knight silhouette in a clean luxury streetwear form.</p><h3 style=\\\"font-family:Roboto,Arial,sans-serif;font-size:12px;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:#f2f2f2;margin-top:28px;margin-bottom:14px;\\\">Details</h3><ul style=\\\"list-style-type:none;padding:0;margin:0;color:#d7d7d7;font-family:Roboto,Arial,sans-serif;font-size:15px;line-height:1.85;font-weight:300;letter-spacing:0.01em;\\\"><li>• Sizes: S–3XL</li><li>• Weight: 600 gsm</li><li>• Material: 100% cotton</li><li>• Logo: DHK emblem made with Swarovski® crystals</li><li>• Swarovski® Crystal Color: AB crystal</li><li>• Color: White</li><li>• No draw cords</li><li>• Drop shoulder fit</li><li>• Bio polished finish</li><li>• Inner side raised lining</li><li>• Kangaroo pocket</li></ul><video class=\\\"bats-bg\\\" muted autoplay loop playsinline webkit-playsinline preload=\\\"metadata\\\" disablepictureinpicture controlslist=\\\"nodownload noplaybackrate noremoteplayback\\\"><source src=\\\"assets/video/bat.mp4\\\" type=\\\"video/mp4\\\"></video></div>",
+    "url": "product.html?id=dark-harlem-white-knight-hoodie",
+    "stripePriceId": "price_1TJP310cfsBzY9CjxS3mfprb"
+  },
   {
-  "id": "dark-harlem-black-knight-crown-hoodie",
-  "title": "Dark Harlem Black Knight Crown Hoodie",
-  "price": 20000,
-  "thumbnail": "assets/img/products/dhk/gif/crown-black.gif",
+    "id": "dark-harlem-black-knight-crown-hoodie",
+    "title": "Dark Harlem Black Knight Crown Hoodie",
+    "price": 20000,
+    "thumbnail": "assets/img/products/dhk/gif/crown-black.gif",
     "hoverImage": "assets/img/products/dhk/portrait/crown-hoodie/black/black-crown-1.png",
-  "images": [
-    "assets/img/products/dhk/detail-shots/crown/black/shot-1.png",
+    "images": [
+      "assets/img/products/dhk/detail-shots/crown/black/shot-1.png",
       "assets/img/products/dhk/detail-shots/crown/black/shot-2.png",
       "assets/img/products/dhk/detail-shots/crown/black/shot-3.png"
-  ],
-  "options": ["S", "M", "L", "XL", "2XL", "3XL"],
-  "description": "<div class=\\\"product-desc-wrap\\\" style=\\\"color:#f1f1f1;padding:20px;\\\"><p style=\\\"font-family:Roboto,Arial,sans-serif;font-size:15px;line-height:1.85;font-weight:300;letter-spacing:0.01em;color:#d7d7d7;\\\">The signature statement hoodie of the collection. Built in ultra-premium heavyweight cotton and finished with the Swarovski® crystal DHK emblem and Swarovski® crystal crown on the hood, it carries the full Dark Harlem Knight identity with the strongest visual presence in the line.</p><h3 style=\\\"font-family:Roboto,Arial,sans-serif;font-size:12px;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:#f2f2f2;margin-top:28px;margin-bottom:14px;\\\">Details</h3><ul style=\\\"list-style-type:none;padding:0;margin:0;color:#d7d7d7;font-family:Roboto,Arial,sans-serif;font-size:15px;line-height:1.85;font-weight:300;letter-spacing:0.01em;\\\"><li>• Sizes: S–3XL</li><li>• Price: $200</li><li>• Weight: 600 gsm</li><li>• Material: 100% cotton</li><li>• Logo: DHK emblem made with Swarovski® crystals</li><li>• Crown: Hood crown made with Swarovski® crystals</li><li>• Swarovski® Crystal Color: AB crystal</li><li>• Color: [Black / Grey / White]</li><li>• No draw cords</li><li>• Drop shoulder fit</li><li>• Bio polished finish</li><li>• Inner side raised lining</li><li>• Kangaroo pocket</li></ul><video class=\\\"bats-bg\\\" muted autoplay loop playsinline webkit-playsinline preload=\\\"metadata\\\" disablepictureinpicture controlslist=\\\"nodownload noplaybackrate noremoteplayback\\\"><source src=\\\"assets/video/bat.mp4\\\" type=\\\"video/mp4\\\"></video></div>",
-  "url": "product.html?id=dark-harlem-black-knight-crown-hoodie",
-  "stripePriceId": "price_1TJOuX0cfsBzY9CjYtoAF2r4"
-},
+    ],
+    "options": ["S", "M", "L", "XL", "2XL", "3XL"],
+    "description": "<div class=\\\"product-desc-wrap\\\" style=\\\"color:#f1f1f1;padding:20px;\\\"><p style=\\\"font-family:Roboto,Arial,sans-serif;font-size:15px;line-height:1.85;font-weight:300;letter-spacing:0.01em;color:#d7d7d7;\\\">The signature statement hoodie of the collection. Built in ultra-premium heavyweight cotton and finished with the Swarovski® crystal DHK emblem and Swarovski® crystal crown on the hood, it carries the full Dark Harlem Knight identity with the strongest visual presence in the line.</p><h3 style=\\\"font-family:Roboto,Arial,sans-serif;font-size:12px;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:#f2f2f2;margin-top:28px;margin-bottom:14px;\\\">Details</h3><ul style=\\\"list-style-type:none;padding:0;margin:0;color:#d7d7d7;font-family:Roboto,Arial,sans-serif;font-size:15px;line-height:1.85;font-weight:300;letter-spacing:0.01em;\\\"><li>• Sizes: S–3XL</li><li>• Price: $200</li><li>• Weight: 600 gsm</li><li>• Material: 100% cotton</li><li>• Logo: DHK emblem made with Swarovski® crystals</li><li>• Crown: Hood crown made with Swarovski® crystals</li><li>• Swarovski® Crystal Color: AB crystal</li><li>• Color: Black</li><li>• No draw cords</li><li>• Drop shoulder fit</li><li>• Bio polished finish</li><li>• Inner side raised lining</li><li>• Kangaroo pocket</li></ul><video class=\\\"bats-bg\\\" muted autoplay loop playsinline webkit-playsinline preload=\\\"metadata\\\" disablepictureinpicture controlslist=\\\"nodownload noplaybackrate noremoteplayback\\\"><source src=\\\"assets/video/bat.mp4\\\" type=\\\"video/mp4\\\"></video></div>",
+    "url": "product.html?id=dark-harlem-black-knight-crown-hoodie",
+    "stripePriceId": "price_1TJOuX0cfsBzY9CjYtoAF2r4"
+  },
   {
-  "id": "dark-harlem-grey-knight-crown-hoodie",
-  "title": "Dark Harlem Grey Knight Crown Hoodie",
-  "price": 20000,
-  "thumbnail": "assets/img/products/dhk/gif/crown-grey.gif",
-      "hoverImage": "assets/img/products/dhk/portrait/crown-hoodie/grey/grey-crown-1.png",
-  "images": [
-    "assets/img/products/dhk/detail-shots/crown/grey/shot-1.png",
+    "id": "dark-harlem-grey-knight-crown-hoodie",
+    "title": "Dark Harlem Grey Knight Crown Hoodie",
+    "price": 20000,
+    "thumbnail": "assets/img/products/dhk/gif/crown-grey.gif",
+    "hoverImage": "assets/img/products/dhk/portrait/crown-hoodie/grey/grey-crown-1.png",
+    "images": [
+      "assets/img/products/dhk/detail-shots/crown/grey/shot-1.png",
       "assets/img/products/dhk/detail-shots/crown/grey/shot-2.png",
       "assets/img/products/dhk/detail-shots/crown/grey/shot-3.png"
-  ],
-  "options": ["S", "M", "L", "XL", "2XL", "3XL"],
-  "description": "<div class=\\\"product-desc-wrap\\\" style=\\\"color:#f1f1f1;padding:20px;\\\"><p style=\\\"font-family:Roboto,Arial,sans-serif;font-size:15px;line-height:1.85;font-weight:300;letter-spacing:0.01em;color:#d7d7d7;\\\">The signature statement hoodie of the collection. Built in ultra-premium heavyweight cotton and finished with the Swarovski® crystal DHK emblem and Swarovski® crystal crown on the hood, it carries the full Dark Harlem Knight identity with the strongest visual presence in the line.</p><h3 style=\\\"font-family:Roboto,Arial,sans-serif;font-size:12px;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:#f2f2f2;margin-top:28px;margin-bottom:14px;\\\">Details</h3><ul style=\\\"list-style-type:none;padding:0;margin:0;color:#d7d7d7;font-family:Roboto,Arial,sans-serif;font-size:15px;line-height:1.85;font-weight:300;letter-spacing:0.01em;\\\"><li>• Sizes: S–3XL</li><li>• Price: $200</li><li>• Weight: 600 gsm</li><li>• Material: 100% cotton</li><li>• Logo: DHK emblem made with Swarovski® crystals</li><li>• Crown: Hood crown made with Swarovski® crystals</li><li>• Swarovski® Crystal Color: AB crystal</li><li>• Color: [Black / Grey / White]</li><li>• No draw cords</li><li>• Drop shoulder fit</li><li>• Bio polished finish</li><li>• Inner side raised lining</li><li>• Kangaroo pocket</li></ul><video class=\\\"bats-bg\\\" muted autoplay loop playsinline webkit-playsinline preload=\\\"metadata\\\" disablepictureinpicture controlslist=\\\"nodownload noplaybackrate noremoteplayback\\\"><source src=\\\"assets/video/bat.mp4\\\" type=\\\"video/mp4\\\"></video></div>",
-  "url": "product.html?id=dark-harlem-grey-knight-crown-hoodie",
-  "stripePriceId": "price_1TJOvH0cfsBzY9CjD7BnecOP"
-},
+    ],
+    "options": ["S", "M", "L", "XL", "2XL", "3XL"],
+    "description": "<div class=\\\"product-desc-wrap\\\" style=\\\"color:#f1f1f1;padding:20px;\\\"><p style=\\\"font-family:Roboto,Arial,sans-serif;font-size:15px;line-height:1.85;font-weight:300;letter-spacing:0.01em;color:#d7d7d7;\\\">The signature statement hoodie of the collection. Built in ultra-premium heavyweight cotton and finished with the Swarovski® crystal DHK emblem and Swarovski® crystal crown on the hood, it carries the full Dark Harlem Knight identity with the strongest visual presence in the line.</p><h3 style=\\\"font-family:Roboto,Arial,sans-serif;font-size:12px;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:#f2f2f2;margin-top:28px;margin-bottom:14px;\\\">Details</h3><ul style=\\\"list-style-type:none;padding:0;margin:0;color:#d7d7d7;font-family:Roboto,Arial,sans-serif;font-size:15px;line-height:1.85;font-weight:300;letter-spacing:0.01em;\\\"><li>• Sizes: S–3XL</li><li>• Price: $200</li><li>• Weight: 600 gsm</li><li>• Material: 100% cotton</li><li>• Logo: DHK emblem made with Swarovski® crystals</li><li>• Crown: Hood crown made with Swarovski® crystals</li><li>• Swarovski® Crystal Color: AB crystal</li><li>• Color: Grey</li><li>• No draw cords</li><li>• Drop shoulder fit</li><li>• Bio polished finish</li><li>• Inner side raised lining</li><li>• Kangaroo pocket</li></ul><video class=\\\"bats-bg\\\" muted autoplay loop playsinline webkit-playsinline preload=\\\"metadata\\\" disablepictureinpicture controlslist=\\\"nodownload noplaybackrate noremoteplayback\\\"><source src=\\\"assets/video/bat.mp4\\\" type=\\\"video/mp4\\\"></video></div>",
+    "url": "product.html?id=dark-harlem-grey-knight-crown-hoodie",
+    "stripePriceId": "price_1TJOvH0cfsBzY9CjD7BnecOP"
+  },
   {
-  "id": "dark-harlem-white-knight-crown-hoodie",
-  "title": "Dark Harlem White Knight Crown Hoodie",
-  "price": 20000,
-  "thumbnail": "assets/img/products/dhk/detail-shots/crown/white/shot-1.png",
-      "hoverImage": "assets/img/products/dhk/portrait/crown-hoodie/white/white-crown-1.png",
-  "images": [
-    "assets/img/products/dhk/detail-shots/crown/white/shot-1.png",
+    "id": "dark-harlem-white-knight-crown-hoodie",
+    "title": "Dark Harlem White Knight Crown Hoodie",
+    "price": 20000,
+    "thumbnail": "assets/img/products/dhk/detail-shots/crown/white/shot-1.png",
+    "hoverImage": "assets/img/products/dhk/portrait/crown-hoodie/white/white-crown-1.png",
+    "images": [
+      "assets/img/products/dhk/detail-shots/crown/white/shot-1.png",
       "assets/img/products/dhk/detail-shots/crown/white/shot-2.png",
       "assets/img/products/dhk/detail-shots/crown/white/shot-3.png"
-  ],
-  "options": ["S", "M", "L", "XL", "2XL", "3XL"],
-  "description": "<div class=\\\"product-desc-wrap\\\" style=\\\"color:#f1f1f1;padding:20px;\\\"><p style=\\\"font-family:Roboto,Arial,sans-serif;font-size:15px;line-height:1.85;font-weight:300;letter-spacing:0.01em;color:#d7d7d7;\\\">The signature statement hoodie of the collection. Built in ultra-premium heavyweight cotton and finished with the Swarovski® crystal DHK emblem and Swarovski® crystal crown on the hood, it carries the full Dark Harlem Knight identity with the strongest visual presence in the line.</p><h3 style=\\\"font-family:Roboto,Arial,sans-serif;font-size:12px;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:#f2f2f2;margin-top:28px;margin-bottom:14px;\\\">Details</h3><ul style=\\\"list-style-type:none;padding:0;margin:0;color:#d7d7d7;font-family:Roboto,Arial,sans-serif;font-size:15px;line-height:1.85;font-weight:300;letter-spacing:0.01em;\\\"><li>• Sizes: S–3XL</li><li>• Price: $200</li><li>• Weight: 600 gsm</li><li>• Material: 100% cotton</li><li>• Logo: DHK emblem made with Swarovski® crystals</li><li>• Crown: Hood crown made with Swarovski® crystals</li><li>• Swarovski® Crystal Color: AB crystal</li><li>• Color: [Black / Grey / White]</li><li>• No draw cords</li><li>• Drop shoulder fit</li><li>• Bio polished finish</li><li>• Inner side raised lining</li><li>• Kangaroo pocket</li></ul><video class=\\\"bats-bg\\\" muted autoplay loop playsinline webkit-playsinline preload=\\\"metadata\\\" disablepictureinpicture controlslist=\\\"nodownload noplaybackrate noremoteplayback\\\"><source src=\\\"assets/video/bat.mp4\\\" type=\\\"video/mp4\\\"></video></div>"",
-  "url": "product.html?id=dark-harlem-white-knight-crown-hoodie",
-  "stripePriceId": "price_1TJOwj0cfsBzY9CjDNld3ATJ"
-},
+    ],
+    "options": ["S", "M", "L", "XL", "2XL", "3XL"],
+    "description": "<div class=\\\"product-desc-wrap\\\" style=\\\"color:#f1f1f1;padding:20px;\\\"><p style=\\\"font-family:Roboto,Arial,sans-serif;font-size:15px;line-height:1.85;font-weight:300;letter-spacing:0.01em;color:#d7d7d7;\\\">The signature statement hoodie of the collection. Built in ultra-premium heavyweight cotton and finished with the Swarovski® crystal DHK emblem and Swarovski® crystal crown on the hood, it carries the full Dark Harlem Knight identity with the strongest visual presence in the line.</p><h3 style=\\\"font-family:Roboto,Arial,sans-serif;font-size:12px;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:#f2f2f2;margin-top:28px;margin-bottom:14px;\\\">Details</h3><ul style=\\\"list-style-type:none;padding:0;margin:0;color:#d7d7d7;font-family:Roboto,Arial,sans-serif;font-size:15px;line-height:1.85;font-weight:300;letter-spacing:0.01em;\\\"><li>• Sizes: S–3XL</li><li>• Price: $200</li><li>• Weight: 600 gsm</li><li>• Material: 100% cotton</li><li>• Logo: DHK emblem made with Swarovski® crystals</li><li>• Crown: Hood crown made with Swarovski® crystals</li><li>• Swarovski® Crystal Color: AB crystal</li><li>• Color: White</li><li>• No draw cords</li><li>• Drop shoulder fit</li><li>• Bio polished finish</li><li>• Inner side raised lining</li><li>• Kangaroo pocket</li></ul><video class=\\\"bats-bg\\\" muted autoplay loop playsinline webkit-playsinline preload=\\\"metadata\\\" disablepictureinpicture controlslist=\\\"nodownload noplaybackrate noremoteplayback\\\"><source src=\\\"assets/video/bat.mp4\\\" type=\\\"video/mp4\\\"></video></div>",
+    "url": "product.html?id=dark-harlem-white-knight-crown-hoodie",
+    "stripePriceId": "price_1TJOwj0cfsBzY9CjDNld3ATJ"
+  },
   {
-  "id": "dark-harlem-black-knight-flare",
-  "title": "Dark Harlem Black Knight Flare",
-  "price": 10000,
-  "thumbnail": "assets/img/products/dhk/gif/flare-black.gif",
-      "hoverImage": "assets/img/products/dhk/portrait/flare/black/black-flare-1.png",
-  "images": [
-    "assets/img/products/dhk/detail-shots/flare/black/shot-1.png",
+    "id": "dark-harlem-black-knight-flare",
+    "title": "Dark Harlem Black Knight Flare",
+    "price": 10000,
+    "thumbnail": "assets/img/products/dhk/gif/flare-black.gif",
+    "hoverImage": "assets/img/products/dhk/portrait/flare/black/black-flare-1.png",
+    "images": [
+      "assets/img/products/dhk/detail-shots/flare/black/shot-1.png",
       "assets/img/products/dhk/detail-shots/flare/black/shot-2.png"
-  ],
-  "options": ["S", "M", "L", "XL", "2XL", "3XL"],
-  "description": "<div class=\\\"product-desc-wrap\\\" style=\\\"color:#f1f1f1;padding:20px;\\\"><p style=\\\"font-family:Roboto,Arial,sans-serif;font-size:15px;line-height:1.85;font-weight:300;letter-spacing:0.01em;color:#d7d7d7;\\\">A clean flare silhouette built to complete the DHK uniform from the waist down. Crafted in premium cotton and finished with the Swarovski® crystal DHK emblem, it pairs naturally with the matching hoodie and heavy box tee.</p><h3 style=\\\"font-family:Roboto,Arial,sans-serif;font-size:12px;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:#f2f2f2;margin-top:28px;margin-bottom:14px;\\\">Details</h3><ul style=\\\"list-style-type:none;padding:0;margin:0;color:#d7d7d7;font-family:Roboto,Arial,sans-serif;font-size:15px;line-height:1.85;font-weight:300;letter-spacing:0.01em;\\\"><li>• Sizes: S–3XL</li><li>• Price: $100</li><li>• Material: 100% cotton</li><li>• Logo: DHK emblem made with Swarovski® crystals</li><li>• Swarovski® Crystal Color: AB crystals</li><li>• Color: [Black / Grey / White]</li><li>• 2 side pockets</li><li>• 1 right back pocket</li><li>• Functional draw cords</li><li>• Flare fit silhouette</li></ul><video class=\\\"bats-bg\\\" muted autoplay loop playsinline webkit-playsinline preload=\\\"metadata\\\" disablepictureinpicture controlslist=\\\"nodownload noplaybackrate noremoteplayback\\\"><source src=\\\"assets/video/bat.mp4\\\" type=\\\"video/mp4\\\"></video></div>",
-  "url": "product.html?id=dark-harlem-black-knight-flare",
-  "stripePriceId": "price_1TJOme0cfsBzY9Cj0GRHvCNo"
-},
+    ],
+    "options": ["S", "M", "L", "XL", "2XL", "3XL"],
+    "description": "<div class=\\\"product-desc-wrap\\\" style=\\\"color:#f1f1f1;padding:20px;\\\"><p style=\\\"font-family:Roboto,Arial,sans-serif;font-size:15px;line-height:1.85;font-weight:300;letter-spacing:0.01em;color:#d7d7d7;\\\">A clean flare silhouette built to complete the DHK uniform from the waist down. Crafted in premium cotton and finished with the Swarovski® crystal DHK emblem, it pairs naturally with the matching hoodie and heavy box tee.</p><h3 style=\\\"font-family:Roboto,Arial,sans-serif;font-size:12px;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:#f2f2f2;margin-top:28px;margin-bottom:14px;\\\">Details</h3><ul style=\\\"list-style-type:none;padding:0;margin:0;color:#d7d7d7;font-family:Roboto,Arial,sans-serif;font-size:15px;line-height:1.85;font-weight:300;letter-spacing:0.01em;\\\"><li>• Sizes: S–3XL</li><li>• Price: $100</li><li>• Material: 100% cotton</li><li>• Logo: DHK emblem made with Swarovski® crystals</li><li>• Swarovski® Crystal Color: AB crystals</li><li>• Color: Black</li><li>• 2 side pockets</li><li>• 1 right back pocket</li><li>• Functional draw cords</li><li>• Flare fit silhouette</li></ul><video class=\\\"bats-bg\\\" muted autoplay loop playsinline webkit-playsinline preload=\\\"metadata\\\" disablepictureinpicture controlslist=\\\"nodownload noplaybackrate noremoteplayback\\\"><source src=\\\"assets/video/bat.mp4\\\" type=\\\"video/mp4\\\"></video></div>",
+    "url": "product.html?id=dark-harlem-black-knight-flare",
+    "stripePriceId": "price_1TJOme0cfsBzY9Cj0GRHvCNo"
+  },
   {
-  "id": "dark-harlem-grey-knight-flare",
-  "title": "Dark Harlem Grey Knight Flare",
-  "price": 10000,
-  "thumbnail": "assets/img/products/dhk/detail-shots/flare/grey/shot-1.png",
-      "hoverImage": "assets/img/products/dhk/portrait/flare/grey/grey-flare-1.png",
-  "images": [
-    "assets/img/products/dhk/detail-shots/flare/grey/shot-1.png",
+    "id": "dark-harlem-grey-knight-flare",
+    "title": "Dark Harlem Grey Knight Flare",
+    "price": 10000,
+    "thumbnail": "assets/img/products/dhk/detail-shots/flare/grey/shot-1.png",
+    "hoverImage": "assets/img/products/dhk/portrait/flare/grey/grey-flare-1.png",
+    "images": [
+      "assets/img/products/dhk/detail-shots/flare/grey/shot-1.png",
       "assets/img/products/dhk/detail-shots/flare/grey/shot-2.png"
-  ],
-  "options": ["S", "M", "L", "XL", "2XL", "3XL"],
-  "description": "<div class=\\\"product-desc-wrap\\\" style=\\\"color:#f1f1f1;padding:20px;\\\"><p style=\\\"font-family:Roboto,Arial,sans-serif;font-size:15px;line-height:1.85;font-weight:300;letter-spacing:0.01em;color:#d7d7d7;\\\">A clean flare silhouette built to complete the DHK uniform from the waist down. Crafted in premium cotton and finished with the Swarovski® crystal DHK emblem, it pairs naturally with the matching hoodie and heavy box tee.</p><h3 style=\\\"font-family:Roboto,Arial,sans-serif;font-size:12px;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:#f2f2f2;margin-top:28px;margin-bottom:14px;\\\">Details</h3><ul style=\\\"list-style-type:none;padding:0;margin:0;color:#d7d7d7;font-family:Roboto,Arial,sans-serif;font-size:15px;line-height:1.85;font-weight:300;letter-spacing:0.01em;\\\"><li>• Sizes: S–3XL</li><li>• Price: $100</li><li>• Material: 100% cotton</li><li>• Logo: DHK emblem made with Swarovski® crystals</li><li>• Swarovski® Crystal Color: AB crystals</li><li>• Color: [Black / Grey / White]</li><li>• 2 side pockets</li><li>• 1 right back pocket</li><li>• Functional draw cords</li><li>• Flare fit silhouette</li></ul><video class=\\\"bats-bg\\\" muted autoplay loop playsinline webkit-playsinline preload=\\\"metadata\\\" disablepictureinpicture controlslist=\\\"nodownload noplaybackrate noremoteplayback\\\"><source src=\\\"assets/video/bat.mp4\\\" type=\\\"video/mp4\\\"></video></div>",
-  "url": "product.html?id=dark-harlem-grey-knight-flare",
-  "stripePriceId": "price_1TJOq70cfsBzY9CjqVvShXsF"
-},
+    ],
+    "options": ["S", "M", "L", "XL", "2XL", "3XL"],
+    "description": "<div class=\\\"product-desc-wrap\\\" style=\\\"color:#f1f1f1;padding:20px;\\\"><p style=\\\"font-family:Roboto,Arial,sans-serif;font-size:15px;line-height:1.85;font-weight:300;letter-spacing:0.01em;color:#d7d7d7;\\\">A clean flare silhouette built to complete the DHK uniform from the waist down. Crafted in premium cotton and finished with the Swarovski® crystal DHK emblem, it pairs naturally with the matching hoodie and heavy box tee.</p><h3 style=\\\"font-family:Roboto,Arial,sans-serif;font-size:12px;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:#f2f2f2;margin-top:28px;margin-bottom:14px;\\\">Details</h3><ul style=\\\"list-style-type:none;padding:0;margin:0;color:#d7d7d7;font-family:Roboto,Arial,sans-serif;font-size:15px;line-height:1.85;font-weight:300;letter-spacing:0.01em;\\\"><li>• Sizes: S–3XL</li><li>• Price: $100</li><li>• Material: 100% cotton</li><li>• Logo: DHK emblem made with Swarovski® crystals</li><li>• Swarovski® Crystal Color: AB crystals</li><li>• Color: Grey</li><li>• 2 side pockets</li><li>• 1 right back pocket</li><li>• Functional draw cords</li><li>• Flare fit silhouette</li></ul><video class=\\\"bats-bg\\\" muted autoplay loop playsinline webkit-playsinline preload=\\\"metadata\\\" disablepictureinpicture controlslist=\\\"nodownload noplaybackrate noremoteplayback\\\"><source src=\\\"assets/video/bat.mp4\\\" type=\\\"video/mp4\\\"></video></div>",
+    "url": "product.html?id=dark-harlem-grey-knight-flare",
+    "stripePriceId": "price_1TJOq70cfsBzY9CjqVvShXsF"
+  },
   {
-  "id": "dark-harlem-white-knight-flare",
-  "title": "Dark Harlem White Knight Flare",
-  "price": 10000,
-  "thumbnail": "assets/img/products/dhk/detail-shots/flare/white/shot-1.png",
+    "id": "dark-harlem-white-knight-flare",
+    "title": "Dark Harlem White Knight Flare",
+    "price": 10000,
+    "thumbnail": "assets/img/products/dhk/detail-shots/flare/white/shot-1.png",
     "hoverImage": "assets/img/products/dhk/portrait/flare/white/white-flare-1.png",
-  "images": [
-    "assets/img/products/dhk/detail-shots/flare/white/shot-1.png",
+    "images": [
+      "assets/img/products/dhk/detail-shots/flare/white/shot-1.png",
       "assets/img/products/dhk/detail-shots/flare/white/shot-2.png"
-  ],
-  "options": ["S", "M", "L", "XL", "2XL", "3XL"],
-  "description": "<div class=\\\"product-desc-wrap\\\" style=\\\"color:#f1f1f1;padding:20px;\\\"><p style=\\\"font-family:Roboto,Arial,sans-serif;font-size:15px;line-height:1.85;font-weight:300;letter-spacing:0.01em;color:#d7d7d7;\\\">A clean flare silhouette built to complete the DHK uniform from the waist down. Crafted in premium cotton and finished with the Swarovski® crystal DHK emblem, it pairs naturally with the matching hoodie and heavy box tee.</p><h3 style=\\\"font-family:Roboto,Arial,sans-serif;font-size:12px;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:#f2f2f2;margin-top:28px;margin-bottom:14px;\\\">Details</h3><ul style=\\\"list-style-type:none;padding:0;margin:0;color:#d7d7d7;font-family:Roboto,Arial,sans-serif;font-size:15px;line-height:1.85;font-weight:300;letter-spacing:0.01em;\\\"><li>• Sizes: S–3XL</li><li>• Price: $100</li><li>• Material: 100% cotton</li><li>• Logo: DHK emblem made with Swarovski® crystals</li><li>• Swarovski® Crystal Color: AB crystals</li><li>• Color: [Black / Grey / White]</li><li>• 2 side pockets</li><li>• 1 right back pocket</li><li>• Functional draw cords</li><li>• Flare fit silhouette</li></ul><video class=\\\"bats-bg\\\" muted autoplay loop playsinline webkit-playsinline preload=\\\"metadata\\\" disablepictureinpicture controlslist=\\\"nodownload noplaybackrate noremoteplayback\\\"><source src=\\\"assets/video/bat.mp4\\\" type=\\\"video/mp4\\\"></video></div>",
-  "url": "product.html?id=dark-harlem-white-knight-flare",
-  "stripePriceId": "price_1TJOpI0cfsBzY9CjKcEQvQaI"
-},
+    ],
+    "options": ["S", "M", "L", "XL", "2XL", "3XL"],
+    "description": "<div class=\\\"product-desc-wrap\\\" style=\\\"color:#f1f1f1;padding:20px;\\\"><p style=\\\"font-family:Roboto,Arial,sans-serif;font-size:15px;line-height:1.85;font-weight:300;letter-spacing:0.01em;color:#d7d7d7;\\\">A clean flare silhouette built to complete the DHK uniform from the waist down. Crafted in premium cotton and finished with the Swarovski® crystal DHK emblem, it pairs naturally with the matching hoodie and heavy box tee.</p><h3 style=\\\"font-family:Roboto,Arial,sans-serif;font-size:12px;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:#f2f2f2;margin-top:28px;margin-bottom:14px;\\\">Details</h3><ul style=\\\"list-style-type:none;padding:0;margin:0;color:#d7d7d7;font-family:Roboto,Arial,sans-serif;font-size:15px;line-height:1.85;font-weight:300;letter-spacing:0.01em;\\\"><li>• Sizes: S–3XL</li><li>• Price: $100</li><li>• Material: 100% cotton</li><li>• Logo: DHK emblem made with Swarovski® crystals</li><li>• Swarovski® Crystal Color: AB crystals</li><li>• Color: White</li><li>• 2 side pockets</li><li>• 1 right back pocket</li><li>• Functional draw cords</li><li>• Flare fit silhouette</li></ul><video class=\\\"bats-bg\\\" muted autoplay loop playsinline webkit-playsinline preload=\\\"metadata\\\" disablepictureinpicture controlslist=\\\"nodownload noplaybackrate noremoteplayback\\\"><source src=\\\"assets/video/bat.mp4\\\" type=\\\"video/mp4\\\"></video></div>",
+    "url": "product.html?id=dark-harlem-white-knight-flare",
+    "stripePriceId": "price_1TJOpI0cfsBzY9CjKcEQvQaI"
+  },
   {
-  "id": "dark-harlem-black-knight-joggers",
-  "title": "Dark Harlem Black Knight Joggers",
-  "price": 10000,
-  "thumbnail": "assets/img/products/dhk/gif/joggers-black.gif",
+    "id": "dark-harlem-black-knight-joggers",
+    "title": "Dark Harlem Black Knight Joggers",
+    "price": 10000,
+    "thumbnail": "assets/img/products/dhk/gif/joggers-black.gif",
     "hoverImage": "assets/img/products/dhk/portrait/joggers/black/black-joggers-1.png",
-  "images": [
-    "assets/img/products/dhk/detail-shots/joggers/black/shot-1.png",
+    "images": [
+      "assets/img/products/dhk/detail-shots/joggers/black/shot-1.png",
       "assets/img/products/dhk/detail-shots/joggers/black/shot-2.png",
       "assets/img/products/dhk/detail-shots/joggers/black/shot-3.png"
-  ],
-  "options": ["S", "M", "L", "XL", "2XL", "3XL"],
-  "description": "<div class=\\\"product-desc-wrap\\\" style=\\\"color:#f1f1f1;padding:20px;\\\"><p style=\\\"font-family:Roboto,Arial,sans-serif;font-size:15px;line-height:1.85;font-weight:300;letter-spacing:0.01em;color:#d7d7d7;\\\">A premium cotton jogger built for comfort, movement, and a cleaner tailored finish. Finished with the Swarovski® crystal DHK emblem, it is designed to complete the full Dark Harlem Knight fit with elevated utility.</p><h3 style=\\\"font-family:Roboto,Arial,sans-serif;font-size:12px;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:#f2f2f2;margin-top:28px;margin-bottom:14px;\\\">Details</h3><ul style=\\\"list-style-type:none;padding:0;margin:0;color:#d7d7d7;font-family:Roboto,Arial,sans-serif;font-size:15px;line-height:1.85;font-weight:300;letter-spacing:0.01em;\\\"><li>• Sizes: S–3XL</li><li>• Price: $100</li><li>• Material: 100% cotton</li><li>• Logo: DHK emblem made with Swarovski® crystals</li><li>• Swarovski® Crystal Color: AB crystals</li><li>• Color: [Black / Grey / White]</li><li>• 2 side pockets</li><li>• 1 back zipper bone pocket</li><li>• Functional draw cords</li><li>• Elastic pochni hem</li></ul><video class=\\\"bats-bg\\\" muted autoplay loop playsinline webkit-playsinline preload=\\\"metadata\\\" disablepictureinpicture controlslist=\\\"nodownload noplaybackrate noremoteplayback\\\"><source src=\\\"assets/video/bat.mp4\\\" type=\\\"video/mp4\\\"></video></div>",
-  "url": "product.html?id=dark-harlem-black-knight-joggers",
-  "stripePriceId": "price_1TJOcY0cfsBzY9Cj8ehEe1m2"
-},
+    ],
+    "options": ["S", "M", "L", "XL", "2XL", "3XL"],
+    "description": "<div class=\\\"product-desc-wrap\\\" style=\\\"color:#f1f1f1;padding:20px;\\\"><p style=\\\"font-family:Roboto,Arial,sans-serif;font-size:15px;line-height:1.85;font-weight:300;letter-spacing:0.01em;color:#d7d7d7;\\\">A premium cotton jogger built for comfort, movement, and a cleaner tailored finish. Finished with the Swarovski® crystal DHK emblem, it is designed to complete the full Dark Harlem Knight fit with elevated utility.</p><h3 style=\\\"font-family:Roboto,Arial,sans-serif;font-size:12px;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:#f2f2f2;margin-top:28px;margin-bottom:14px;\\\">Details</h3><ul style=\\\"list-style-type:none;padding:0;margin:0;color:#d7d7d7;font-family:Roboto,Arial,sans-serif;font-size:15px;line-height:1.85;font-weight:300;letter-spacing:0.01em;\\\"><li>• Sizes: S–3XL</li><li>• Price: $100</li><li>• Material: 100% cotton</li><li>• Logo: DHK emblem made with Swarovski® crystals</li><li>• Swarovski® Crystal Color: AB crystals</li><li>• Color: Black</li><li>• 2 side pockets</li><li>• 1 back zipper bone pocket</li><li>• Functional draw cords</li><li>• Elastic pochni hem</li></ul><video class=\\\"bats-bg\\\" muted autoplay loop playsinline webkit-playsinline preload=\\\"metadata\\\" disablepictureinpicture controlslist=\\\"nodownload noplaybackrate noremoteplayback\\\"><source src=\\\"assets/video/bat.mp4\\\" type=\\\"video/mp4\\\"></video></div>",
+    "url": "product.html?id=dark-harlem-black-knight-joggers",
+    "stripePriceId": "price_1TJOcY0cfsBzY9Cj8ehEe1m2"
+   },
   {
-  "id": "dark-harlem-grey-knight-joggers",
-  "title": "Dark Harlem Grey Knight Joggers",
-  "price": 10000,
-  "thumbnail": "assets/img/products/dhk/gif/grey-joggers.gif",
-      "hoverImage": "assets/img/products/dhk/portrait/joggers/grey/grey-jogger-1.png",
-  "images": [
-    "assets/img/products/dhk/detail-shots/joggers/grey/shot-1.png",
+    "id": "dark-harlem-grey-knight-joggers",
+    "title": "Dark Harlem Grey Knight Joggers",
+    "price": 10000,
+    "thumbnail": "assets/img/products/dhk/gif/grey-joggers.gif",
+    "hoverImage": "assets/img/products/dhk/portrait/joggers/grey/grey-jogger-1.png",
+    "images": [
+      "assets/img/products/dhk/detail-shots/joggers/grey/shot-1.png",
       "assets/img/products/dhk/detail-shots/joggers/grey/shot-2.png",
       "assets/img/products/dhk/detail-shots/joggers/grey/shot-3.png"
-  ],
-  "options": ["S", "M", "L", "XL", "2XL", "3XL"],
-  "description": "<div class=\\\"product-desc-wrap\\\" style=\\\"color:#f1f1f1;padding:20px;\\\"><p style=\\\"font-family:Roboto,Arial,sans-serif;font-size:15px;line-height:1.85;font-weight:300;letter-spacing:0.01em;color:#d7d7d7;\\\">A premium cotton jogger built for comfort, movement, and a cleaner tailored finish. Finished with the Swarovski® crystal DHK emblem, it is designed to complete the full Dark Harlem Knight fit with elevated utility.</p><h3 style=\\\"font-family:Roboto,Arial,sans-serif;font-size:12px;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:#f2f2f2;margin-top:28px;margin-bottom:14px;\\\">Details</h3><ul style=\\\"list-style-type:none;padding:0;margin:0;color:#d7d7d7;font-family:Roboto,Arial,sans-serif;font-size:15px;line-height:1.85;font-weight:300;letter-spacing:0.01em;\\\"><li>• Sizes: S–3XL</li><li>• Price: $100</li><li>• Material: 100% cotton</li><li>• Logo: DHK emblem made with Swarovski® crystals</li><li>• Swarovski® Crystal Color: AB crystals</li><li>• Color: [Black / Grey / White]</li><li>• 2 side pockets</li><li>• 1 back zipper bone pocket</li><li>• Functional draw cords</li><li>• Elastic pochni hem</li></ul><video class=\\\"bats-bg\\\" muted autoplay loop playsinline webkit-playsinline preload=\\\"metadata\\\" disablepictureinpicture controlslist=\\\"nodownload noplaybackrate noremoteplayback\\\"><source src=\\\"assets/video/bat.mp4\\\" type=\\\"video/mp4\\\"></video></div>",
-  "url": "product.html?id=dark-harlem-grey-knight-joggers",
+    ],
+    "options": ["S", "M", "L", "XL", "2XL", "3XL"],
+    "description": "<div class=\\\"product-desc-wrap\\\" style=\\\"color:#f1f1f1;padding:20px;\\\"><p style=\\\"font-family:Roboto,Arial,sans-serif;font-size:15px;line-height:1.85;font-weight:300;letter-spacing:0.01em;color:#d7d7d7;\\\">A premium cotton jogger built for comfort, movement, and a cleaner tailored finish. Finished with the Swarovski® crystal DHK emblem, it is designed to complete the full Dark Harlem Knight fit with elevated utility.</p><h3 style=\\\"font-family:Roboto,Arial,sans-serif;font-size:12px;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:#f2f2f2;margin-top:28px;margin-bottom:14px;\\\">Details</h3><ul style=\\\"list-style-type:none;padding:0;margin:0;color:#d7d7d7;font-family:Roboto,Arial,sans-serif;font-size:15px;line-height:1.85;font-weight:300;letter-spacing:0.01em;\\\"><li>• Sizes: S–3XL</li><li>• Price: $100</li><li>• Material: 100% cotton</li><li>• Logo: DHK emblem made with Swarovski® crystals</li><li>• Swarovski® Crystal Color: AB crystals</li><li>• Color: Grey</li><li>• 2 side pockets</li><li>• 1 back zipper bone pocket</li><li>• Functional draw cords</li><li>• Elastic pochni hem</li></ul><video class=\\\"bats-bg\\\" muted autoplay loop playsinline webkit-playsinline preload=\\\"metadata\\\" disablepictureinpicture controlslist=\\\"nodownload noplaybackrate noremoteplayback\\\"><source src=\\\"assets/video/bat.mp4\\\" type=\\\"video/mp4\\\"></video></div>",
+    "url": "product.html?id=dark-harlem-grey-knight-joggers",
   "stripePriceId": "price_1TJOeO0cfsBzY9Cj2rOYprFP"
 },
-  {
-  "id": "dark-harlem-white-knight-joggers",
-  "title": "Dark Harlem White Knight Joggers",
-  "price": 10000,
-  "thumbnail": "assets/img/products/dhk/detail-shots/joggers/white/shot-1.png",
-      "hoverImage": "assets/img/products/dhk/portrait/joggers/white/white-jogger-1.png",
-  "images": [
-    "assets/img/products/dhk/detail-shots/joggers/white/shot-1.png",
-      "assets/img/products/dhk/detail-shots/joggers/white/shot-2.png",
-      "assets/img/products/dhk/detail-shots/joggers/white/shot-3.png"
-  ],
-  "options": ["S", "M", "L", "XL", "2XL", "3XL"],
-  "description": "<div class=\\\"product-desc-wrap\\\" style=\\\"color:#f1f1f1;padding:20px;\\\"><p style=\\\"font-family:Roboto,Arial,sans-serif;font-size:15px;line-height:1.85;font-weight:300;letter-spacing:0.01em;color:#d7d7d7;\\\">A premium cotton jogger built for comfort, movement, and a cleaner tailored finish. Finished with the Swarovski® crystal DHK emblem, it is designed to complete the full Dark Harlem Knight fit with elevated utility.</p><h3 style=\\\"font-family:Roboto,Arial,sans-serif;font-size:12px;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:#f2f2f2;margin-top:28px;margin-bottom:14px;\\\">Details</h3><ul style=\\\"list-style-type:none;padding:0;margin:0;color:#d7d7d7;font-family:Roboto,Arial,sans-serif;font-size:15px;line-height:1.85;font-weight:300;letter-spacing:0.01em;\\\"><li>• Sizes: S–3XL</li><li>• Price: $100</li><li>• Material: 100% cotton</li><li>• Logo: DHK emblem made with Swarovski® crystals</li><li>• Swarovski® Crystal Color: AB crystals</li><li>• Color: [Black / Grey / White]</li><li>• 2 side pockets</li><li>• 1 back zipper bone pocket</li><li>• Functional draw cords</li><li>• Elastic pochni hem</li></ul><video class=\\\"bats-bg\\\" muted autoplay loop playsinline webkit-playsinline preload=\\\"metadata\\\" disablepictureinpicture controlslist=\\\"nodownload noplaybackrate noremoteplayback\\\"><source src=\\\"assets/video/bat.mp4\\\" type=\\\"video/mp4\\\"></video></div>",
-  "url": "product.html?id=dark-harlem-white-knight-joggers",
+   {
+    "id": "dark-harlem-grey-knight-joggers",
+    "title": "Dark Harlem Grey Knight Joggers",
+    "price": 10000,
+    "thumbnail": "assets/img/products/dhk/gif/grey-joggers.gif",
+    "hoverImage": "assets/img/products/dhk/portrait/joggers/grey/grey-jogger-1.png",
+    "images": [
+      "assets/img/products/dhk/detail-shots/joggers/grey/shot-1.png",
+      "assets/img/products/dhk/detail-shots/joggers/grey/shot-2.png",
+      "assets/img/products/dhk/detail-shots/joggers/grey/shot-3.png"
+    ],
+    "options": ["S", "M", "L", "XL", "2XL", "3XL"],
+    "description": "<div class=\\\"product-desc-wrap\\\" style=\\\"color:#f1f1f1;padding:20px;\\\"><p style=\\\"font-family:Roboto,Arial,sans-serif;font-size:15px;line-height:1.85;font-weight:300;letter-spacing:0.01em;color:#d7d7d7;\\\">A premium cotton jogger built for comfort, movement, and a cleaner tailored finish. Finished with the Swarovski® crystal DHK emblem, it is designed to complete the full Dark Harlem Knight fit with elevated utility.</p><h3 style=\\\"font-family:Roboto,Arial,sans-serif;font-size:12px;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:#f2f2f2;margin-top:28px;margin-bottom:14px;\\\">Details</h3><ul style=\\\"list-style-type:none;padding:0;margin:0;color:#d7d7d7;font-family:Roboto,Arial,sans-serif;font-size:15px;line-height:1.85;font-weight:300;letter-spacing:0.01em;\\\"><li>• Sizes: S–3XL</li><li>• Price: $100</li><li>• Material: 100% cotton</li><li>• Logo: DHK emblem made with Swarovski® crystals</li><li>• Swarovski® Crystal Color: AB crystals</li><li>• Color: Grey</li><li>• 2 side pockets</li><li>• 1 back zipper bone pocket</li><li>• Functional draw cords</li><li>• Elastic pochni hem</li></ul><video class=\\\"bats-bg\\\" muted autoplay loop playsinline webkit-playsinline preload=\\\"metadata\\\" disablepictureinpicture controlslist=\\\"nodownload noplaybackrate noremoteplayback\\\"><source src=\\\"assets/video/bat.mp4\\\" type=\\\"video/mp4\\\"></video></div>",
+    "url": "product.html?id=dark-harlem-grey-knight-joggers",
   "stripePriceId": "price_1TJOex0cfsBzY9CjDInmglRR"
-}
+ },
 ]
