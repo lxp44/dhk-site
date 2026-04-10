@@ -1733,21 +1733,34 @@ h1,h2,h3,
   color: inherit !important;
   display: block;
 }
+/* CENTER THE SMALL DHK UNDER THE HAMBURGER ON MOBILE */
 @media (max-width: 900px) {
-  .floating-logo {
-    position: fixed !important;
-    top: 150px !important;
+  .site-header {
+    position: relative;
+  }
+
+  .header-grid {
+    position: relative;
+    grid-template-columns: auto 1fr auto !important;
+    min-height: 56px;
+  }
+
+  .header__logo {
+    position: absolute !important;
     left: 50% !important;
-    right: auto !important;
+    top: 62px !important;
     transform: translateX(-50%) !important;
     display: block !important;
+    width: auto !important;
     margin: 0 !important;
-    text-align: center !important;
     z-index: 1001 !important;
   }
 
-  .floating-logo img {
+  .header__heading-logo {
     display: block;
+    height: 42px !important;
+    width: auto !important;
+    max-width: none !important;
     margin: 0 auto !important;
   }
 }
