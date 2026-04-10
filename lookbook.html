@@ -1,0 +1,872 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>DHK — Lookbook</title>
+
+    <link
+      rel="icon"
+      href="assets/img/DHK_transparent.gif"
+      type="image/gif"
+      sizes="any"
+    />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="css/styles.css" />
+
+    <style>
+      .utility-bar .page-width {
+        max-width: none;
+        padding: 0;
+      }
+      .utility-bar .utility-bar__grid {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0;
+      }
+      .utility-bar .list-social,
+      .utility-bar .localization-wrapper {
+        display: none !important;
+      }
+      .announcement-bar {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+      }
+      .announcement-track {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 24px;
+      }
+      .announcement-bar__message {
+        margin: 0;
+        padding: 10px 0;
+      }
+      .announcement-bar__message span {
+        font-family: "Cinzel", serif;
+        font-weight: 700;
+        font-size: 13px;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: #e5e5e5;
+        text-shadow: 0 0 6px rgba(255, 255, 255, 0.12);
+      }
+
+      #menu-drawer {
+        position: fixed;
+        inset: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(5, 5, 7, 0.97);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        z-index: 2147483646;
+        padding: 34px 28px 40px;
+        overflow-y: auto;
+        box-shadow: none;
+      }
+
+      .menu-drawer__inner-container,
+      .menu-drawer__navigation-container,
+      .menu-drawer__navigation {
+        height: 100%;
+      }
+
+      .menu-drawer__menu {
+        list-style: none;
+        padding: 72px 0 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+      }
+
+      .menu-drawer__menu-item,
+      .menu-drawer__menu .list-menu__item.link,
+      .menu-drawer__menu button {
+        font-family: "Cinzel", serif;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.16em;
+        font-size: clamp(24px, 2.2vw, 34px);
+        color: #f1f1f1;
+        text-decoration: none;
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.08);
+        background: transparent;
+        border: 0;
+        padding: 0;
+        cursor: pointer;
+        text-align: left;
+      }
+
+      .menu-drawer__menu-item:hover,
+      .menu-drawer__menu .list-menu__item.link:hover,
+      .menu-drawer__menu-item:focus-visible,
+      .menu-drawer__menu button:hover {
+        color: #fff;
+        text-shadow: 0 0 14px rgba(255, 255, 255, 0.18);
+      }
+
+      .menu-drawer__menu .list-menu__item + .list-menu__item {
+        border-top: 0;
+      }
+
+      .header__icon--menu {
+        z-index: 2147483647;
+      }
+
+      .header__icon--menu svg {
+        filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.28));
+      }
+
+      .header__icon--summary {
+        list-style: none;
+      }
+      .header__icon--summary::-webkit-details-marker {
+        display: none;
+      }
+
+      .header__icon--summary span {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        position: relative;
+      }
+
+      .header__icon--summary svg:first-child {
+        display: block;
+      }
+      .header__icon--summary svg:last-child {
+        display: none;
+      }
+
+      details[open] .header__icon--summary svg:first-child {
+        display: none;
+      }
+      details[open] .header__icon--summary svg:last-child {
+        display: block;
+      }
+
+      #storm-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 1;
+        pointer-events: none;
+      }
+
+      .section-header {
+        position: relative;
+        z-index: 20;
+      }
+
+      #search-modal {
+        z-index: 2147483647;
+      }
+
+      body.search-open #storm-overlay {
+        opacity: 0 !important;
+        pointer-events: none !important;
+        transition: opacity 0.15s ease;
+      }
+
+      .header-grid {
+        display: grid !important;
+        grid-template-columns: 48px 1fr 48px !important;
+        align-items: center;
+        min-height: 64px;
+        position: relative;
+      }
+
+      .nav-left,
+      .nav-right {
+        display: none !important;
+      }
+
+      .header__logo {
+        grid-column: 2;
+        justify-self: center;
+        display: inline-flex !important;
+        align-items: center;
+        justify-content: center;
+        position: static !important;
+        transform: none !important;
+        margin: 0 !important;
+      }
+
+      .header__heading-logo {
+        display: block;
+        height: 34px !important;
+        width: auto;
+        max-width: none !important;
+        margin: 0 auto !important;
+      }
+
+      header-drawer {
+        grid-column: 1;
+        justify-self: start;
+      }
+
+      .lookbook-page {
+        background: #e9e9e6;
+        color: #111;
+      }
+
+      .lookbook-page .footer,
+      .lookbook-page .utility-bar,
+      .lookbook-page .section-header {
+        background: #000;
+      }
+
+      .lookbook-shell {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 70px 22px 90px;
+      }
+
+      .lookbook-intro-image {
+        width: 100%;
+        margin: 0 auto 38px;
+      }
+
+      .lookbook-intro-image img {
+        display: block;
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+      }
+
+      .lookbook-editorial {
+        max-width: 1020px;
+        margin: 0 auto 56px;
+        text-align: center;
+      }
+
+      .lookbook-title {
+        margin: 0 0 26px;
+        color: #111;
+        text-shadow: none;
+        font-family: "Cinzel", serif;
+        font-weight: 400;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+        line-height: 0.96;
+        font-size: clamp(34px, 5vw, 76px);
+      }
+
+      .lookbook-copy {
+        margin: 0 auto 34px;
+        max-width: 980px;
+        color: #202020;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(20px, 2vw, 28px);
+        line-height: 1.68;
+      }
+
+      .lookbook-shop-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: min(500px, 86vw);
+        min-height: 88px;
+        padding: 0 28px;
+        border: 2px solid #151515;
+        color: #111;
+        text-decoration: none;
+        background: transparent;
+        font-family: "Roboto", sans-serif;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        font-size: clamp(18px, 1.4vw, 22px);
+      }
+
+      .lookbook-shop-btn:hover {
+        background: rgba(0, 0, 0, 0.035);
+      }
+
+      .lookbook-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 22px;
+      }
+
+      .lookbook-item {
+        position: relative;
+        display: block;
+        text-decoration: none;
+        color: inherit;
+        cursor: pointer;
+        overflow: hidden;
+        background: #dfdfda;
+      }
+
+      .lookbook-frame {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 0.78 / 1;
+        overflow: hidden;
+        background: #ddd8d2;
+      }
+
+      .lookbook-frame img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: opacity 0.28s ease, transform 0.28s ease;
+      }
+
+      .lookbook-frame .img-secondary {
+        opacity: 0;
+      }
+
+      .lookbook-item.is-revealed .img-primary,
+      .lookbook-item:hover .img-primary {
+        opacity: 0;
+      }
+
+      .lookbook-item.is-revealed .img-secondary,
+      .lookbook-item:hover .img-secondary {
+        opacity: 1;
+      }
+
+      .lookbook-item:hover .lookbook-frame img {
+        transform: scale(1.01);
+      }
+
+      .lookbook-backtop {
+        position: fixed;
+        right: 18px;
+        bottom: 18px;
+        width: 58px;
+        height: 58px;
+        border-radius: 50%;
+        border: 1px solid rgba(0, 0, 0, 0.12);
+        background: rgba(255, 255, 255, 0.82);
+        color: #111;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        font-size: 28px;
+        z-index: 40;
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+      }
+
+      .lookbook-lightbox {
+        position: fixed;
+        inset: 0;
+        z-index: 2147483647;
+        background: rgba(233, 233, 230, 0.98);
+        display: none;
+        overflow: auto;
+        padding: 110px 28px 40px;
+      }
+
+      .lookbook-lightbox.is-open {
+        display: block;
+      }
+
+      .lookbook-lightbox__close {
+        position: absolute;
+        top: 34px;
+        right: 34px;
+        border: 0;
+        background: transparent;
+        color: rgba(50, 50, 50, 0.52);
+        font-family: "Roboto", sans-serif;
+        text-transform: uppercase;
+        letter-spacing: 0.14em;
+        font-size: 22px;
+        cursor: pointer;
+      }
+
+      .lookbook-lightbox__close:hover {
+        color: rgba(20, 20, 20, 0.92);
+      }
+
+      .lookbook-lightbox__image {
+        display: block;
+        max-width: 1100px;
+        width: 100%;
+        margin: 0 auto;
+        height: auto;
+      }
+
+      @media (hover: none) {
+        .lookbook-item:hover .img-primary,
+        .lookbook-item:hover .img-secondary {
+          opacity: initial;
+        }
+
+        .lookbook-item:hover .img-primary {
+          opacity: 1;
+        }
+
+        .lookbook-item:hover .img-secondary {
+          opacity: 0;
+        }
+      }
+
+      @media (max-width: 900px) {
+        .menu-drawer__menu {
+          padding-top: 56px;
+          gap: 20px;
+        }
+
+        .menu-drawer__menu-item,
+        .menu-drawer__menu .list-menu__item.link,
+        .menu-drawer__menu button {
+          font-size: 26px;
+        }
+
+        .header__heading-logo {
+          height: 30px !important;
+        }
+
+        .lookbook-shell {
+          padding: 38px 16px 70px;
+        }
+
+        .lookbook-intro-image {
+          margin-bottom: 30px;
+        }
+
+        .lookbook-editorial {
+          margin-bottom: 42px;
+        }
+
+        .lookbook-title {
+          font-size: 34px;
+          line-height: 0.98;
+          margin-bottom: 18px;
+        }
+
+        .lookbook-copy {
+          font-size: 18px;
+          line-height: 1.72;
+          margin-bottom: 26px;
+        }
+
+        .lookbook-shop-btn {
+          min-width: 78vw;
+          min-height: 70px;
+          font-size: 16px;
+        }
+
+        .lookbook-grid {
+          gap: 16px;
+        }
+
+        .lookbook-backtop {
+          width: 52px;
+          height: 52px;
+          font-size: 24px;
+          right: 14px;
+          bottom: 14px;
+        }
+
+        .lookbook-lightbox {
+          padding: 88px 14px 28px;
+        }
+
+        .lookbook-lightbox__close {
+          top: 24px;
+          right: 18px;
+          font-size: 18px;
+        }
+      }
+    </style>
+  </head>
+
+  <body class="template-page lookbook-page" id="top">
+    <div class="lightning-flash"></div>
+
+    <audio id="rain-light" src="assets/audio/light-rain.mp3" loop preload="auto" hidden></audio>
+    <audio id="rain-med" src="assets/audio/med-rain.mp3" loop preload="auto" hidden></audio>
+    <audio id="rain-heavy" src="assets/audio/heavy-rain.mp3" loop preload="auto" hidden></audio>
+    <audio id="thunder-light" src="assets/audio/light-thunder.mp3" loop preload="auto" hidden></audio>
+    <audio id="thunder-med" src="assets/audio/med-thunder.mp3" loop preload="auto" hidden></audio>
+    <audio id="thunder-heavy" src="assets/audio/heavy-thunder.mp3" loop preload="auto" hidden></audio>
+
+    <div id="storm-overlay">
+      <canvas id="rain-canvas"></canvas>
+    </div>
+
+    <div class="utility-bar color-scheme-4 gradient utility-bar--bottom-border">
+      <div class="page-width utility-bar__grid">
+        <div class="announcement-bar" role="region" aria-label="Site announcements">
+          <button type="button" class="slider-button slider-button--prev" aria-label="Previous" hidden>‹</button>
+          <div class="announcement-track" id="AnnouncementTrack" data-autoplay="true" data-speed="5000">
+            <p class="announcement-bar__message h5">
+              <span>WELCOME TO THE STORM</span>
+            </p>
+          </div>
+          <button type="button" class="slider-button slider-button--next" aria-label="Next" hidden>›</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-header header-wrapper color-scheme-4 gradient" data-sticky-type="on-scroll-up">
+      <header class="site-header header header--middle-left header--mobile-center">
+        <div class="page-width header-grid">
+          <header-drawer data-breakpoint="all">
+            <details id="Details-menu-drawer-container" class="menu-drawer-container">
+              <summary class="header__icon header__icon--menu header__icon--summary link focus-inset" aria-label="Menu">
+                <span aria-hidden="true">
+                  <svg width="22" height="22" viewBox="0 0 24 24">
+                    <path d="M3 6h18v2H3zM3 11h18v2H3zM3 16h18v2H3z" fill="currentColor" />
+                  </svg>
+                  <svg width="22" height="22" viewBox="0 0 24 24">
+                    <path d="M18.3 5.7 12 12l6.3 6.3-1.4 1.4L10.6 13.4 4.3 19.7 2.9 18.3 9.2 12 2.9 5.7 4.3 4.3 10.6 10.6 16.9 4.3z" fill="currentColor" />
+                  </svg>
+                </span>
+              </summary>
+
+              <div id="menu-drawer" class="gradient menu-drawer motion-reduce color-scheme-4">
+                <div class="menu-drawer__inner-container">
+                  <div class="menu-drawer__navigation-container">
+                    <nav class="menu-drawer__navigation" aria-label="Site navigation">
+                      <ul class="menu-drawer__menu has-submenu list-menu" role="list">
+                        <li><a href="index.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">Home</a></li>
+                        <li><a href="lookbook.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">Lookbook</a></li>
+                        <li><a href="shop.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">Shop All</a></li>
+                        <li><a href="g4llery.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">G4LLERY</a></li>
+                        <li><a href="try-on.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">TRY ON</a></li>
+                        <li><a href="collections.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">Collections</a></li>
+                        <li><a href="4bout-us.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">4bout us</a></li>
+                        <li><a href="contact.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">Contact</a></li>
+                        <li>
+                          <a href="cart.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset" data-loud="heavy" data-cart-open>
+                            Cart <span class="cart-count-bubble" data-cart-count></span>
+                          </a>
+                        </li>
+                        <li>
+                          <button id="search-open-mobile" type="button" class="menu-drawer__menu-item link link--text list-menu__item focus-inset">
+                            Search
+                          </button>
+                        </li>
+                      </ul>
+                    </nav>
+                  </div>
+                </div>
+              </div>
+            </details>
+          </header-drawer>
+
+          <a class="header__logo" href="index.html" aria-label="DarkHarlemKnight">
+            <img
+              src="assets/img/DHK_transparent.gif"
+              alt="DarkHarlemKnight"
+              width="190"
+              height="190"
+              class="header__heading-logo"
+              loading="eager"
+            />
+          </a>
+
+          <div></div>
+        </div>
+      </header>
+    </div>
+
+    <main id="MainContent">
+      <section class="lookbook-shell">
+        <div class="lookbook-intro-image">
+          <img
+            src="assets/img/lookbook/lookbook-intro.jpg"
+            alt="DHK lookbook introduction image"
+          />
+        </div>
+
+        <div class="lookbook-editorial">
+          <h1 class="lookbook-title">Dark Harlem Knight<br />Lookbook</h1>
+          <p class="lookbook-copy">
+            Dark Harlem Knight presents a visual study in storm-born luxury — disciplined silhouettes, grounded strength, and a quiet sense of command. The lookbook moves through shadow, texture, and presence, revealing a uniform shaped for the city and sharpened by purpose.
+          </p>
+          <a href="shop.html" class="lookbook-shop-btn">Shop</a>
+        </div>
+
+        <div class="lookbook-grid" id="lookbookGrid">
+          <article
+            class="lookbook-item"
+            data-primary="assets/img/lookbook/look-01a.jpg"
+            data-secondary="assets/img/lookbook/look-01b.jpg"
+          >
+            <div class="lookbook-frame">
+              <img class="img-primary" src="assets/img/lookbook/look-01a.jpg" alt="DHK look 1 primary" />
+              <img class="img-secondary" src="assets/img/lookbook/look-01b.jpg" alt="DHK look 1 secondary" />
+            </div>
+          </article>
+
+          <article
+            class="lookbook-item"
+            data-primary="assets/img/lookbook/look-02a.jpg"
+            data-secondary="assets/img/lookbook/look-02b.jpg"
+          >
+            <div class="lookbook-frame">
+              <img class="img-primary" src="assets/img/lookbook/look-02a.jpg" alt="DHK look 2 primary" />
+              <img class="img-secondary" src="assets/img/lookbook/look-02b.jpg" alt="DHK look 2 secondary" />
+            </div>
+          </article>
+
+          <article
+            class="lookbook-item"
+            data-primary="assets/img/lookbook/look-03a.jpg"
+            data-secondary="assets/img/lookbook/look-03b.jpg"
+          >
+            <div class="lookbook-frame">
+              <img class="img-primary" src="assets/img/lookbook/look-03a.jpg" alt="DHK look 3 primary" />
+              <img class="img-secondary" src="assets/img/lookbook/look-03b.jpg" alt="DHK look 3 secondary" />
+            </div>
+          </article>
+
+          <article
+            class="lookbook-item"
+            data-primary="assets/img/lookbook/look-04a.jpg"
+            data-secondary="assets/img/lookbook/look-04b.jpg"
+          >
+            <div class="lookbook-frame">
+              <img class="img-primary" src="assets/img/lookbook/look-04a.jpg" alt="DHK look 4 primary" />
+              <img class="img-secondary" src="assets/img/lookbook/look-04b.jpg" alt="DHK look 4 secondary" />
+            </div>
+          </article>
+
+          <article
+            class="lookbook-item"
+            data-primary="assets/img/lookbook/look-05a.jpg"
+            data-secondary="assets/img/lookbook/look-05b.jpg"
+          >
+            <div class="lookbook-frame">
+              <img class="img-primary" src="assets/img/lookbook/look-05a.jpg" alt="DHK look 5 primary" />
+              <img class="img-secondary" src="assets/img/lookbook/look-05b.jpg" alt="DHK look 5 secondary" />
+            </div>
+          </article>
+
+          <article
+            class="lookbook-item"
+            data-primary="assets/img/lookbook/look-06a.jpg"
+            data-secondary="assets/img/lookbook/look-06b.jpg"
+          >
+            <div class="lookbook-frame">
+              <img class="img-primary" src="assets/img/lookbook/look-06a.jpg" alt="DHK look 6 primary" />
+              <img class="img-secondary" src="assets/img/lookbook/look-06b.jpg" alt="DHK look 6 secondary" />
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <a href="#top" class="lookbook-backtop" aria-label="Back to top">↑</a>
+
+    <div class="lookbook-lightbox" id="lookbookLightbox" aria-hidden="true">
+      <button class="lookbook-lightbox__close" id="lightboxClose" type="button">Close</button>
+      <img class="lookbook-lightbox__image" id="lightboxImage" src="" alt="Expanded lookbook image" />
+    </div>
+
+    <footer class="footer color-scheme-4 gradient section footer--static">
+      <div class="footer__content-top page-width">
+        <div class="footer__blocks-wrapper grid grid--1-col grid--2-col grid--4-col-tablet">
+          <div class="footer-block footer-block--menu grid__item">
+            <h2 class="footer-block__heading inline-richtext">Shop</h2>
+            <ul class="footer-block__details-content list-unstyled">
+              <li><a class="link link--text list-menu__item list-menu__item--link" href="lookbook.html">Lookbook</a></li>
+              <li><a class="link link--text list-menu__item list-menu__item--link" href="collections.html">Collections</a></li>
+              <li><a class="link link--text list-menu__item list-menu__item--link" href="shop.html">All Products</a></li>
+              <li><a class="link link--text list-menu__item list-menu__item--link" href="g4llery.html">G4LLERY</a></li>
+              <li><a class="link link--text list-menu__item list-menu__item--link" href="try-on.html">TRY ON</a></li>
+              <li><a class="link link--text list-menu__item list-menu__item--link" href="4bout-us.html">4bout us</a></li>
+              <li><a class="link link--text list-menu__item list-menu__item--link" href="contact.html">Contact</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-block grid__item">
+            <h2 class="footer-block__heading inline-richtext">Dark Harlem Knight</h2>
+            <div class="footer-block__details-content rte">
+              <p>Forged in the storm. Streetwear with thunder in its veins.</p>
+            </div>
+            <ul class="footer__list-social">
+              <li>
+                <a aria-label="Instagram" class="social-link" href="https://www.instagram.com/darkharlemknight/" target="_blank" rel="noopener">Instagram</a>
+              </li>
+              <li>
+                <a aria-label="TikTok" class="social-link" href="https://www.tiktok.com/@darkharlemknight" target="_blank" rel="noopener">TikTok</a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="footer-block footer-block--newsletter grid__item">
+            <h2 class="footer-block__heading inline-richtext">Join the storm</h2>
+            <form class="footer__newsletter newsletter-form" action="#" method="post" onsubmit="return false;">
+              <div class="newsletter-form__field-wrapper">
+                <div class="field">
+                  <input class="field__input" type="email" placeholder="Email address" required />
+                  <button class="newsletter-form__button field__button" type="submit" aria-label="Subscribe">→</button>
+                </div>
+              </div>
+            </form>
+          </div>
+
+          <div class="footer-block footer-block-image grid__item center">
+            <img src="assets/img/DHK_transparent.gif" alt="DarkHarlemKnight" width="120" height="120" loading="lazy" />
+          </div>
+        </div>
+      </div>
+
+      <div class="footer__content-bottom">
+        <div class="footer__content-bottom-wrapper page-width">
+          <div class="footer__column footer__column--info">
+            <div class="footer__payment">
+              <ul class="list list-payment" role="list">
+                <li class="list-payment__item">Visa</li>
+                <li class="list-payment__item">Mastercard</li>
+                <li class="list-payment__item">Amex</li>
+                <li class="list-payment__item">PayPal</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="footer__content-bottom-wrapper page-width footer__content-bottom-wrapper--center">
+          <div class="footer__copyright caption">
+            <small class="copyright__content">© <span id="year"></span>, Dark Harlem Knight</small>
+            <small class="copyright__content">Powered by the Storm</small>
+            <ul class="policies list-unstyled">
+              <li><small class="copyright__content"><a href="#">Privacy Policy</a></small></li>
+              <li><small class="copyright__content"><a href="#">Terms of Service</a></small></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <div id="search-modal" class="search-modal" aria-hidden="true">
+      <div class="search-modal__overlay" data-close-search></div>
+      <div class="search-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="search-title">
+        <header class="search-modal__header">
+          <h2 id="search-title">Search</h2>
+          <button id="search-close" class="search-modal__close" aria-label="Close search">×</button>
+        </header>
+        <div class="search-modal__field">
+          <input id="search-input" type="search" placeholder="Search products…  ( /  or  ⌘/Ctrl+K )" autocomplete="off" />
+        </div>
+        <div id="search-results" class="search-modal__results" aria-live="polite"></div>
+      </div>
+    </div>
+
+    <script src="js/nav.js"></script>
+    <script src="js/announce.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/search.js"></script>
+    <script src="js/shop.js"></script>
+    <script src="js/newsletter.js"></script>
+    <script src="js/storm_shopify_style.js"></script>
+
+    <script>
+      document.getElementById("year").textContent = new Date().getFullYear();
+
+      (function () {
+        const isTouch = window.matchMedia("(hover: none)").matches;
+        const items = document.querySelectorAll(".lookbook-item");
+        const lightbox = document.getElementById("lookbookLightbox");
+        const lightboxImage = document.getElementById("lightboxImage");
+        const lightboxClose = document.getElementById("lightboxClose");
+
+        function openLightbox(src) {
+          lightboxImage.src = src;
+          lightbox.classList.add("is-open");
+          lightbox.setAttribute("aria-hidden", "false");
+          document.body.style.overflow = "hidden";
+        }
+
+        function closeLightbox() {
+          lightbox.classList.remove("is-open");
+          lightbox.setAttribute("aria-hidden", "true");
+          lightboxImage.src = "";
+          document.body.style.overflow = "";
+        }
+
+        items.forEach((item) => {
+          const primary = item.dataset.primary;
+          const secondary = item.dataset.secondary;
+
+          item.addEventListener("click", (e) => {
+            if (!isTouch) {
+              const useSecondary = item.matches(":hover");
+              openLightbox(useSecondary ? secondary : primary);
+              return;
+            }
+
+            if (!item.classList.contains("is-revealed")) {
+              e.preventDefault();
+              document.querySelectorAll(".lookbook-item.is-revealed").forEach((other) => {
+                if (other !== item) other.classList.remove("is-revealed");
+              });
+              item.classList.add("is-revealed");
+              return;
+            }
+
+            openLightbox(secondary);
+          });
+        });
+
+        lightboxClose.addEventListener("click", closeLightbox);
+        lightbox.addEventListener("click", (e) => {
+          if (e.target === lightbox) closeLightbox();
+        });
+
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Escape") closeLightbox();
+        });
+      })();
+    </script>
+
+    <div id="cart-drawer" class="cart-drawer" aria-hidden="true">
+      <div class="cart-drawer__overlay" data-cart-close></div>
+      <aside class="cart-drawer__panel" tabindex="-1">
+        <div class="cart-header">
+          <h2>Your Cart</h2>
+          <button type="button" title="Close" data-cart-close>✕</button>
+        </div>
+
+        <div class="cart-list" id="cart-items"></div>
+        <div id="cart-empty" class="cart-empty" hidden style="padding: 16px; color: #9a9a9a;">
+          Your cart is empty.
+        </div>
+
+        <div class="cart-footer">
+          <div class="cart-discount cart-discount--drawer">
+            <label for="discount-code-drawer" class="cart-discount__label">ADD DISCOUNT</label>
+            <div class="cart-discount__row">
+              <input id="discount-code-drawer" class="cart-discount__input" type="text" placeholder="Enter code" autocomplete="off" />
+              <button id="discount-apply-drawer" class="cart-discount__button" type="button">APPLY</button>
+            </div>
+            <p id="discount-message-drawer" class="cart-discount__message" aria-live="polite"></p>
+          </div>
+
+          <div class="cart-row">
+            <div class="label">Subtotal</div>
+            <div class="value" id="cart-subtotal">$0.00</div>
+          </div>
+          <button id="cart-checkout" type="button" disabled>Checkout</button>
+        </div>
+      </aside>
+    </div>
+  </body>
+</html>
