@@ -1733,7 +1733,7 @@ h1,h2,h3,
   color: inherit !important;
   display: block;
 }
-/* CENTER THE SMALL DHK UNDER THE HAMBURGER ON MOBILE */
+/* CENTER THE SMALL DHK INSIDE THE MOBILE HEADER */
 @media (max-width: 900px) {
   .section-header.header-wrapper {
     overflow: visible;
@@ -1752,8 +1752,8 @@ h1,h2,h3,
   .header__logo {
     position: absolute !important;
     left: 50% !important;
-    top: calc(100% + 8px) !important;
-    transform: translateX(-50%) !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%) !important;
     display: block !important;
     width: auto !important;
     margin: 0 !important;
@@ -1762,7 +1762,7 @@ h1,h2,h3,
 
   .header__heading-logo {
     display: block;
-    height: 42px !important;
+    height: 32px !important;
     width: auto !important;
     max-width: none !important;
     margin: 0 auto !important;
