@@ -1733,3 +1733,18 @@ h1,h2,h3,
   color: inherit !important;
   display: block;
 }
+@media (max-width: 900px) {
+  .floating-logo {
+    position: relative !important;
+    display: block !important;
+    margin: 0 auto 18px auto !important;
+    left: auto !important;
+    right: auto !important;
+    text-align: center !important;
+  }
+
+  .floating-logo img {
+    display: block;
+    margin: 0 auto !important;
+  }
+}
