@@ -2,6 +2,9 @@
 // Render product.html from data/products.json using ?handle=<id> or ?id=<id>
 
 (() => {
+  if ("scrollRestoration" in history) {
+  history.scrollRestoration = "manual";
+}
   const PRICE = (cents) =>
     (Number(cents || 0) / 100).toLocaleString(undefined, {
       style: "currency",
@@ -303,23 +306,8 @@
             )
             .join("")}
         </div>
-        <div class="mobile-product-dots" id="mobile-product-dots">
-          ${imgs
-            .map(
-              (_, i) => `
-            <button
-              type="button"
-              class="mobile-product-dot${i === 0 ? " is-active" : ""}"
-              data-dot-index="${i}"
-              aria-label="Go to image ${i + 1}"
-            ></button>
-          `
-            )
-            .join("")}
-        </div>
-      </div>
-    `;
-  }
+          </div>
+`;
 
   function bindMobileStickyBar(root) {
   const buyBar = root.querySelector(".mobile-buybar");
@@ -521,35 +509,6 @@
       addCurrentProductToCart("#pd-option-mobile");
     });
 
-    const track = root.querySelector("#mobile-product-track");
-    const dots = Array.from(root.querySelectorAll(".mobile-product-dot"));
-
-    if (track && dots.length) {
-      const updateDots = () => {
-        const slideWidth = track.clientWidth;
-        if (!slideWidth) return;
-        const index = Math.round(track.scrollLeft / slideWidth);
-        dots.forEach((dot, i) => {
-          dot.classList.toggle("is-active", i === index);
-        });
-      };
-
-      track.addEventListener("scroll", () => {
-        window.requestAnimationFrame(updateDots);
-      });
-
-      dots.forEach((dot, i) => {
-        dot.addEventListener("click", () => {
-          track.scrollTo({
-            left: track.clientWidth * i,
-            behavior: "smooth",
-          });
-        });
-      });
-
-      updateDots();
-    }
-
     bindMobileStickyBar(root);
   }
 
@@ -571,6 +530,12 @@
         return;
       }
       render(root, p);
+      window.scrollTo(0, 0);
+
+const mobileTrack = document.getElementById("mobile-product-track");
+if (mobileTrack) {
+  mobileTrack.scrollLeft = 0;
+}
     } catch (e) {
       console.error("Error loading product:", e);
       root.innerHTML = '<p style="color:#ccc">Error loading product.</p>';
