@@ -1733,24 +1733,55 @@ h1,h2,h3,
   color: inherit !important;
   display: block;
 }
-/* MOBILE FLOATING DHK LOGO — STICKS UNDER HEADER */
+/* =========================
+   MOBILE HEADER — CENTER LOGO, NO FLOATING DHK
+   header scrolls away with page
+   ========================= */
 @media (max-width: 900px) {
-  .floating-logo {
-    position: fixed !important;
-    top: 118px !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    z-index: 2001 !important;
-    width: auto !important;
-    margin: 0 !important;
-    pointer-events: none !important;
+  .section-header.header-wrapper {
+    position: relative !important;
+    top: auto !important;
+    z-index: 2000;
+    overflow: visible;
   }
 
-  .floating-logo img {
-    display: block !important;
+  .site-header {
+    position: relative;
+    z-index: 100;
+  }
+
+  .header-grid {
+    display: grid;
+    grid-template-columns: 44px 1fr 44px !important;
+    align-items: center;
+    min-height: 56px;
+    position: relative;
+  }
+
+  .header__logo {
+    grid-column: 2;
+    justify-self: center;
+    display: inline-flex !important;
+    position: static !important;
+    transform: none !important;
+    margin: 0 !important;
+    z-index: auto !important;
+  }
+
+  .header__heading-logo {
     height: 32px !important;
     width: auto !important;
     max-width: none !important;
+    display: block !important;
     margin: 0 auto !important;
+  }
+
+  .floating-logo {
+    display: none !important;
+  }
+
+  .header__icon--menu {
+    grid-column: 1;
+    justify-self: start;
   }
 }
