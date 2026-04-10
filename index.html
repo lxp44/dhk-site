@@ -277,6 +277,66 @@
         justify-self: start;
       }
 
+      /* HERO CTA STACK — MOBILE + DESKTOP */
+      #hero-dhk .banner__content {
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        height: 100%;
+        width: 100%;
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        z-index: 3;
+      }
+
+      #hero-dhk .banner__box {
+        background: transparent;
+        border: 0;
+        padding: 0;
+        border-radius: 0;
+        box-shadow: none;
+        width: 100%;
+      }
+
+      #hero-dhk .banner__buttons.hero-cta-stack {
+        pointer-events: auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 14px;
+        width: 100%;
+        margin: 0 0 8vh;
+      }
+
+      #hero-dhk .banner__buttons.hero-cta-stack .button {
+        width: min(520px, 72vw);
+        min-height: 72px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        border: 1px solid rgba(255, 255, 255, 0.92);
+        background: rgba(0, 0, 0, 0.22);
+        color: #fff;
+        font-family: "Cinzel", serif;
+        font-weight: 400;
+        text-transform: uppercase;
+        letter-spacing: 0.14em;
+        font-size: clamp(18px, 1.8vw, 28px);
+        line-height: 1;
+        border-radius: 0;
+        backdrop-filter: blur(1.5px);
+        -webkit-backdrop-filter: blur(1.5px);
+        box-shadow: none;
+      }
+
+      #hero-dhk .banner__buttons.hero-cta-stack .button:hover {
+        background: rgba(255, 255, 255, 0.08);
+        transform: none;
+      }
+
       @media (max-width: 900px) {
         #storm-popup {
           display: flex;
@@ -303,31 +363,6 @@
           visibility: hidden;
         }
 
-        #hero-dhk .banner__content {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          height: 100%;
-          width: 100%;
-          position: absolute;
-          top: 0;
-          left: 0;
-          pointer-events: none;
-        }
-
-        #hero-dhk .banner__buttons {
-          pointer-events: auto;
-          display: flex;
-          justify-content: center;
-          width: 100%;
-          margin: 0;
-        }
-
-        #hero-dhk .banner__buttons .button {
-          margin-top: 0;
-          transform: translateY(0);
-        }
-
         .menu-drawer__menu {
           padding-top: 56px;
           gap: 20px;
@@ -341,6 +376,18 @@
 
         .header__heading-logo {
           height: 30px !important;
+        }
+
+        #hero-dhk .banner__buttons.hero-cta-stack {
+          gap: 12px;
+          margin: 0 0 10vh;
+        }
+
+        #hero-dhk .banner__buttons.hero-cta-stack .button {
+          width: min(530px, 64vw);
+          min-height: 58px;
+          font-size: 16px;
+          letter-spacing: 0.12em;
         }
       }
     </style>
@@ -500,6 +547,13 @@
                         </li>
                         <li>
                           <a
+                            href="lookbook.html"
+                            class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
+                            >Lookbook</a
+                          >
+                        </li>
+                        <li>
+                          <a
                             href="shop.html"
                             class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
                             >Shop All</a
@@ -617,7 +671,12 @@
           <div
             class="banner__box content-container content-container--full-width-mobile color-scheme-3 gradient"
           >
-            <div class="banner__buttons">
+            <div class="banner__buttons hero-cta-stack">
+              <a
+                href="lookbook.html"
+                class="button button--secondary"
+                >Lookbook</a
+              >
               <a
                 href="shop.html"
                 class="button button--secondary"
@@ -635,6 +694,7 @@
           <div class="footer-block footer-block--menu grid__item">
             <h2 class="footer-block__heading inline-richtext">Shop</h2>
             <ul class="footer-block__details-content list-unstyled">
+              <li><a class="link link--text list-menu__item list-menu__item--link" href="lookbook.html">Lookbook</a></li>
               <li><a class="link link--text list-menu__item list-menu__item--link" href="collections.html">Collections</a></li>
               <li><a class="link link--text list-menu__item list-menu__item--link" href="shop.html">All Products</a></li>
               <li><a class="link link--text list-menu__item list-menu__item--link" href="g4llery.html">G4LLERY</a></li>
