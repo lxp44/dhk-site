@@ -3,8 +3,9 @@
 
 (() => {
   if ("scrollRestoration" in history) {
-  history.scrollRestoration = "manual";
-}
+    history.scrollRestoration = "manual";
+  }
+
   const PRICE = (cents) =>
     (Number(cents || 0) / 100).toLocaleString(undefined, {
       style: "currency",
@@ -279,7 +280,7 @@
     if (!imgs.length) {
       return `
         <div class="mobile-product-gallery">
-          <div class="mobile-product-track">
+          <div class="mobile-product-track" id="mobile-product-track">
             <div class="mobile-product-slide">
               <div style="height:420px;background:#111;"></div>
             </div>
@@ -306,59 +307,66 @@
             )
             .join("")}
         </div>
-          </div>
-`;
+      </div>
+    `;
+  }
 
   function bindMobileStickyBar(root) {
-  const buyBar = root.querySelector(".mobile-buybar");
-  const stopTarget = root.querySelector(".mobile-buybar-stop");
-  const mq = window.matchMedia("(max-width: 900px)");
+    const buyBar = root.querySelector(".mobile-buybar");
+    const stopTarget = root.querySelector(".mobile-buybar-stop");
+    const mq = window.matchMedia("(max-width: 900px)");
 
-  if (!buyBar || !stopTarget) return;
+    if (!buyBar || !stopTarget) return;
 
-  let observer = null;
+    let observer = null;
 
-  const setDesktopState = () => {
-    buyBar.classList.remove("is-fixed", "is-released");
-  };
+    const setDesktopState = () => {
+      buyBar.classList.remove("is-fixed", "is-released");
+    };
 
-  const setMobileObserver = () => {
-    buyBar.classList.add("is-fixed");
-    buyBar.classList.remove("is-released");
+    const setMobileObserver = () => {
+      buyBar.classList.add("is-fixed");
+      buyBar.classList.remove("is-released");
 
-    if (observer) observer.disconnect();
-
-    observer = new IntersectionObserver(
-      (entries) => {
-        const entry = entries[0];
-        const shouldRelease = entry.isIntersecting;
-
-        buyBar.classList.toggle("is-fixed", !shouldRelease);
-        buyBar.classList.toggle("is-released", shouldRelease);
-      },
-      {
-        root: null,
-        threshold: 0,
-        rootMargin: "0px 0px -120px 0px"
-      }
-    );
-
-    observer.observe(stopTarget);
-  };
-
-  const updateMode = () => {
-    if (!mq.matches) {
       if (observer) observer.disconnect();
-      setDesktopState();
-      return;
-    }
-    setMobileObserver();
-  };
 
-  updateMode();
-  mq.addEventListener("change", updateMode);
-  window.addEventListener("resize", updateMode, { passive: true });
-}
+      observer = new IntersectionObserver(
+        (entries) => {
+          const entry = entries[0];
+          const shouldRelease = entry.isIntersecting;
+
+          buyBar.classList.toggle("is-fixed", !shouldRelease);
+          buyBar.classList.toggle("is-released", shouldRelease);
+        },
+        {
+          root: null,
+          threshold: 0,
+          rootMargin: "0px 0px -120px 0px",
+        }
+      );
+
+      observer.observe(stopTarget);
+    };
+
+    const updateMode = () => {
+      if (!mq.matches) {
+        if (observer) observer.disconnect();
+        setDesktopState();
+        return;
+      }
+      setMobileObserver();
+    };
+
+    updateMode();
+
+    if (typeof mq.addEventListener === "function") {
+      mq.addEventListener("change", updateMode);
+    } else if (typeof mq.addListener === "function") {
+      mq.addListener(updateMode);
+    }
+
+    window.addEventListener("resize", updateMode, { passive: true });
+  }
 
   function render(root, p) {
     const hasOptions = Array.isArray(p.options) && p.options.length > 0;
@@ -440,7 +448,9 @@
               Add to cart
             </button>
           </div>
-<div class="mobile-buybar-stop mobile-only-block" aria-hidden="true"></div>
+
+          <div class="mobile-buybar-stop mobile-only-block" aria-hidden="true"></div>
+
           ${
             hasOptions
               ? `
@@ -529,13 +539,15 @@
         root.innerHTML = '<p style="color:#ccc">Product not found.</p>';
         return;
       }
+
       render(root, p);
+
       window.scrollTo(0, 0);
 
-const mobileTrack = document.getElementById("mobile-product-track");
-if (mobileTrack) {
-  mobileTrack.scrollLeft = 0;
-}
+      const mobileTrack = document.getElementById("mobile-product-track");
+      if (mobileTrack) {
+        mobileTrack.scrollLeft = 0;
+      }
     } catch (e) {
       console.error("Error loading product:", e);
       root.innerHTML = '<p style="color:#ccc">Error loading product.</p>';
