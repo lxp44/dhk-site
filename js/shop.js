@@ -23,28 +23,35 @@
     const url = p.url || `product.html?handle=${encodeURIComponent(p.id)}`;
 
     return `
-      <a class="product-card" href="${url}">
-        <div class="pc__media">
-          ${thumb ? `
-            <img
-              src="${thumb}"
-              alt="${p.title}"
-              loading="lazy"
-              class="pc__img"
-              data-default="${thumb}"
-              data-hover="${hover}"
-            >
-          ` : ""}
-        </div>
-        <div class="pc__info">
+      <article class="product-card" data-url="${url}">
+        <a class="pc__media-link" href="${url}" aria-label="${p.title}">
+          <div class="pc__media">
+            ${thumb ? `
+              <img
+                src="${thumb}"
+                alt="${p.title}"
+                loading="lazy"
+                class="pc__img"
+                data-default="${thumb}"
+                data-hover="${hover}"
+                data-url="${url}"
+              >
+            ` : ""}
+          </div>
+        </a>
+
+        <a class="pc__info pc__info-link" href="${url}" aria-label="${p.title}">
           <h3 class="pc__title">${p.title}</h3>
           <div class="pc__price">${fmt(p.price)}</div>
-        </div>
-      </a>
+        </a>
+      </article>
     `;
   }
 
-  function bindHoverSwap() {
+  function bindDesktopHoverSwap() {
+    const isDesktopLike = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+    if (!isDesktopLike) return;
+
     document.querySelectorAll(".pc__img").forEach((img) => {
       const defaultSrc = img.dataset.default;
       const hoverSrc = img.dataset.hover;
@@ -54,16 +61,94 @@
         preload.src = hoverSrc;
       }
 
-      const card = img.closest(".product-card");
-      if (!card) return;
+      const mediaLink = img.closest(".pc__media-link");
+      if (!mediaLink) return;
 
-      card.addEventListener("mouseenter", () => {
+      mediaLink.addEventListener("mouseenter", () => {
         img.src = hoverSrc;
       });
 
-      card.addEventListener("mouseleave", () => {
+      mediaLink.addEventListener("mouseleave", () => {
         img.src = defaultSrc;
       });
+    });
+  }
+
+  function bindMobileTapReveal() {
+    const isMobileLike = window.matchMedia("(hover: none), (pointer: coarse)").matches;
+    if (!isMobileLike) return;
+
+    let activeImg = null;
+
+    const resetImage = (img) => {
+      if (!img) return;
+      img.src = img.dataset.default;
+      img.dataset.tapState = "default";
+      img.closest(".product-card")?.classList.remove("is-tapped");
+    };
+
+    const activateImage = (img) => {
+      if (!img) return;
+      img.src = img.dataset.hover || img.dataset.default;
+      img.dataset.tapState = "hover";
+      img.closest(".product-card")?.classList.add("is-tapped");
+    };
+
+    document.querySelectorAll(".pc__img").forEach((img) => {
+      const defaultSrc = img.dataset.default;
+      const hoverSrc = img.dataset.hover || defaultSrc;
+      const url = img.dataset.url;
+
+      if (hoverSrc && hoverSrc !== defaultSrc) {
+        const preload = new Image();
+        preload.src = hoverSrc;
+      }
+
+      img.dataset.tapState = "default";
+
+      const mediaLink = img.closest(".pc__media-link");
+      if (!mediaLink) return;
+
+      mediaLink.addEventListener("click", (e) => {
+        const alreadyActive = activeImg === img;
+        const isHoverState = img.dataset.tapState === "hover";
+
+        if (!alreadyActive) {
+          e.preventDefault();
+          if (activeImg) resetImage(activeImg);
+          activateImage(img);
+          activeImg = img;
+          return;
+        }
+
+        if (alreadyActive && !isHoverState) {
+          e.preventDefault();
+          activateImage(img);
+          activeImg = img;
+          return;
+        }
+
+        if (alreadyActive && isHoverState) {
+          window.location.href = url;
+        }
+      });
+    });
+
+    document.querySelectorAll(".pc__info-link").forEach((link) => {
+      link.addEventListener("click", () => {
+        if (activeImg) {
+          resetImage(activeImg);
+          activeImg = null;
+        }
+      });
+    });
+
+    document.addEventListener("click", (e) => {
+      const insideCard = e.target.closest(".product-card");
+      if (!insideCard && activeImg) {
+        resetImage(activeImg);
+        activeImg = null;
+      }
     });
   }
 
@@ -81,7 +166,9 @@
     }
 
     grid.innerHTML = products.map(cardHTML).join("");
-    bindHoverSwap();
+
+    bindDesktopHoverSwap();
+    bindMobileTapReveal();
   }
 
   document.addEventListener("DOMContentLoaded", renderGrid);
