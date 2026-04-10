@@ -13,111 +13,134 @@
 
   <!-- Styles -->
   <link rel="stylesheet" href="css/styles.css"/>
-  <style>
 
   <!-- Drawer (mobile) typography + glow to match site -->
-<style>
-  /* Drawer panel background + layering so it always sits above storm */
-  #menu-drawer {
-    background: rgba(10, 10, 12, 0.88);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    border-right: 1px sod rgba(255,255,255,.08);
-    box-shadow: 0 10px 40px rgba(0,0,0,.55);
-    z-index: 2147483646; /* sit above storm overlay */
-  }
-
-  /* Menu st items: Cinzel, uppercase, tight tracking, subtle glow */
-  .menu-drawer__menu-item,
-  .menu-drawer__menu .st-menu__item.nk {
-    font-family: 'Cinzel', serif;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: .18em;
-    font-size: 13px;              /* adjust: 12px–14px to taste */
-    color: #e6e6e6;
-    text-shadow: 0 0 6px rgba(255,255,255,.12);
-  }
-
-  /* Hover/active posh */
-  .menu-drawer__menu-item:hover,
-  .menu-drawer__menu .st-menu__item.nk:hover,
-  .menu-drawer__menu-item:focus-visible {
-    color: #ffffff;
-    text-shadow: 0 0 10px rgba(255,255,255,.28);
-  }
-
-  /* Make dividers/submenus feel consistent if present */
-  .menu-drawer__menu .st-menu__item + .st-menu__item {
-    border-top: 1px sod rgba(255,255,255,.06);
-  }
-
-  /* Hamburger icon: match glow */
-  .header__icon--menu svg {
-    filter: drop-shadow(0 0 6px rgba(255,255,255,.28));
-  }
-
-  /* When the drawer is open, fade storm overlay so text remains crisp */
-  details[open] ~ .menu-drawer,
-  details[open] #menu-drawer {
-    z-index: 2147483646;
-  }
-  details[open] ~ #storm-overlay,
-  details[open] #storm-overlay {
-    opacity: 0 !important;
-    pointer-events: none !important;
-    transition: opacity .15s ease;
-  }
-</style>
   <style>
-  /* Center the announcement row and hide extras */
-  .utity-bar .page-width { max-width: none; padding: 0; }
-  .utity-bar .utity-bar__grid {
-    display: flex; agn-items: center; justify-content: center; gap: 0;
-  }
-  .utity-bar .st-social,
-  .utity-bar .locazation-wrapper { display: none !important; }
+    #menu-drawer {
+      background: rgba(10, 10, 12, 0.88);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      border-right: 1px solid rgba(255,255,255,.08);
+      box-shadow: 0 10px 40px rgba(0,0,0,.55);
+      z-index: 2147483646;
+    }
 
-  /* Keep the track centered */
-  .announcement-bar { width: 100%; display: flex; justify-content: center; }
-  .announcement-track {
-    display: flex; agn-items: center; justify-content: center; gap: 24px;
-  }
-  .announcement-bar__message { margin: 0; padding: 10px 0; }
+    .menu-drawer__menu-item,
+    .menu-drawer__menu .list-menu__item.link {
+      font-family: 'Cinzel', serif;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .18em;
+      font-size: 13px;
+      color: #e6e6e6;
+      text-shadow: 0 0 6px rgba(255,255,255,.12);
+    }
 
-  /* Typography to match your home vibe */
-  .announcement-bar__message span {
-    font-family: 'Cinzel', serif;           /* same family you load */
-    font-weight: 700;
-    font-size: 13px;                        /* tweak if you want it bigger/smaller */
-    letter-spacing: .18em;
-    text-transform: uppercase;
-    color: #e5e5e5;
-    text-shadow: 0 0 6px rgba(255,255,255,.12);
-  }
-</style>
+    .menu-drawer__menu-item:hover,
+    .menu-drawer__menu .list-menu__item.link:hover,
+    .menu-drawer__menu-item:focus-visible {
+      color: #ffffff;
+      text-shadow: 0 0 10px rgba(255,255,255,.28);
+    }
+
+    .menu-drawer__menu .list-menu__item + .list-menu__item {
+      border-top: 1px solid rgba(255,255,255,.06);
+    }
+
+    .header__icon--menu svg {
+      filter: drop-shadow(0 0 6px rgba(255,255,255,.28));
+    }
+
+    details[open] ~ .menu-drawer,
+    details[open] #menu-drawer {
+      z-index: 2147483646;
+    }
+
+    details[open] ~ #storm-overlay,
+    details[open] #storm-overlay {
+      opacity: 0 !important;
+      pointer-events: none !important;
+      transition: opacity .15s ease;
+    }
+  </style>
+
+  <!-- Announcement bar centering -->
+  <style>
+    .utility-bar .page-width {
+      max-width: none;
+      padding: 0;
+    }
+
+    .utility-bar .utility-bar__grid {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+    }
+
+    .utility-bar .list-social,
+    .utility-bar .localization-wrapper {
+      display: none !important;
+    }
+
+    .announcement-bar {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+
+    .announcement-track {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+    }
+
+    .announcement-bar__message {
+      margin: 0;
+      padding: 10px 0;
+    }
+
+    .announcement-bar__message span {
+      font-family: 'Cinzel', serif;
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: #e5e5e5;
+      text-shadow: 0 0 6px rgba(255,255,255,.12);
+    }
+  </style>
 
   <!-- Keep search above storm and fade storm while search is open -->
   <style>
-    #search-modal{ z-index:2147483647; }
-    body.search-open #storm-overlay{ opacity:0 !important; pointer-events:none !important; transition:opacity .15s ease; }
+    #search-modal {
+      z-index: 2147483647;
+    }
+
+    body.search-open #storm-overlay {
+      opacity: 0 !important;
+      pointer-events: none !important;
+      transition: opacity .15s ease;
+    }
   </style>
 </head>
+
 <body class="template-page">
 
-  <!-- Storm UI (added) -->
-  <div class="ghtning-flash"></div>
+  <!-- Storm UI -->
+  <div class="lightning-flash"></div>
   <div id="storm-overlay"><canvas id="rain-canvas"></canvas></div>
 
-  <!-- ===== Announcement / Utity Bar ===== -->
-  <div class="utity-bar color-scheme-4 gradient utity-bar--bottom-border">
-    <div class="page-width utity-bar__grid">
+  <!-- ===== Announcement / Utility Bar ===== -->
+  <div class="utility-bar color-scheme-4 gradient utility-bar--bottom-border">
+    <div class="page-width utility-bar__grid">
       <div class="announcement-bar" role="region" aria-label="Site announcements">
-        <button type="button" class="sder-button sder-button--prev" aria-label="Previous" hidden>‹</button>
+        <button type="button" class="slider-button slider-button--prev" aria-label="Previous" hidden>‹</button>
         <div class="announcement-track" id="AnnouncementTrack" data-autoplay="true" data-speed="5000">
           <p class="announcement-bar__message h5"><span>WELCOME TO THE STORM</span></p>
         </div>
-        <button type="button" class="sder-button sder-button--next" aria-label="Next" hidden>›</button>
+        <button type="button" class="slider-button slider-button--next" aria-label="Next" hidden>›</button>
       </div>
     </div>
   </div>
@@ -129,7 +152,7 @@
       <!-- Header drawer (mobile) -->
       <header-drawer data-breakpoint="tablet">
         <details id="Details-menu-drawer-container" class="menu-drawer-container">
-          <summary class="header__icon header__icon--menu header__icon--summary nk focus-inset" aria-label="Menu">
+          <summary class="header__icon header__icon--menu header__icon--summary link focus-inset" aria-label="Menu">
             <span aria-hidden="true">
               <svg width="22" height="22" viewBox="0 0 24 24">
                 <path d="M3 6h18v2H3zM3 11h18v2H3zM3 16h18v2H3z" fill="currentColor"/>
@@ -144,15 +167,14 @@
             <div class="menu-drawer__inner-container">
               <div class="menu-drawer__navigation-container">
                 <nav class="menu-drawer__navigation" aria-label="Mobile">
-                  <ul class="menu-drawer__menu has-submenu st-menu" role="st">
-                    <><a href="index.html" class="menu-drawer__menu-item st-menu__item nk nk--text focus-inset">Home</a></>
-                    <><a href="shop.html" class="menu-drawer__menu-item st-menu__item nk nk--text focus-inset">Shop All</a></li>
-                    <li><a href="g4llery.html" class="menu-drawer__menu-item">G4LLERY</a></li>
+                  <ul class="menu-drawer__menu has-submenu list-menu" role="list">
+                    <li><a href="index.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">Home</a></li>
+                    <li><a href="shop.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">Shop All</a></li>
+                    <li><a href="g4llery.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">G4LLERY</a></li>
                     <li><a href="collections.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">Collections</a></li>
-                       <li><a href="try-on.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">TRY ON</a></li>
+                    <li><a href="try-on.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">TRY ON</a></li>
                     <li><a href="4bout-us.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">4bout us</a></li>
                     <li><a href="contact.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">Contact</a></li>
-                    <!-- MOBILE CART LINK: opens drawer -->
                     <li>
                       <a href="cart.html"
                          class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
@@ -161,7 +183,11 @@
                         Cart <span class="cart-count-bubble" data-cart-count></span>
                       </a>
                     </li>
-                    <li><button id="search-open-mobile" type="button" class="menu-drawer__menu-item link link--text list-menu__item focus-inset">Search</button></li>
+                    <li>
+                      <button id="search-open-mobile" type="button" class="menu-drawer__menu-item link link--text list-menu__item focus-inset">
+                        Search
+                      </button>
+                    </li>
                   </ul>
                 </nav>
               </div>
@@ -178,14 +204,14 @@
           <a href="g4llery.html" class="nav-link">G4LLERY</a>
           <a href="collections.html" class="nav-link">Collections</a>
           <a href="try-on.html" class="nav-link">TRY ON</a>
-
         </nav>
 
         <a class="header__logo" href="index.html" aria-label="DarkHarlemKnight">
           <img
             src="assets/img/DHK_transparent.gif"
             alt="DarkHarlemKnight"
-            width="190" height="190"
+            width="190"
+            height="190"
             class="header__heading-logo"
             loading="eager"
           />
@@ -194,10 +220,8 @@
         <nav class="nav-right desktop-only">
           <a href="4bout-us.html" class="nav-link">4bout us</a>
           <a href="contact.html" class="nav-link">Contact</a>
-
           <button id="search-open" class="nav-link button--ghost" aria-label="Open search">Search</button>
 
-          <!-- DESKTOP CART LINK: opens drawer -->
           <a href="cart.html"
              class="nav-link button--ghost"
              data-loud="heavy"
@@ -211,6 +235,17 @@
         </nav>
       </div>
     </header>
+  </div>
+
+  <!-- Small floating DHK under hamburger / header area -->
+  <div class="floating-logo" aria-hidden="true">
+    <img
+      src="assets/img/DHK_transparent.gif"
+      alt=""
+      width="190"
+      height="190"
+      loading="eager"
+    />
   </div>
 
   <!-- ===== MAIN ===== -->
@@ -228,7 +263,6 @@
   <footer class="footer color-scheme-4 gradient section footer--static">
     <div class="footer__content-top page-width">
       <div class="footer__blocks-wrapper grid grid--1-col grid--2-col grid--4-col-tablet">
-        <!-- Links -->
         <div class="footer-block footer-block--menu grid__item">
           <h2 class="footer-block__heading inline-richtext">Shop</h2>
           <ul class="footer-block__details-content list-unstyled">
@@ -241,7 +275,6 @@
           </ul>
         </div>
 
-        <!-- Brand blurb + social (fixed structure) -->
         <div class="footer-block grid__item">
           <h2 class="footer-block__heading inline-richtext">Dark Harlem Knight</h2>
           <div class="footer-block__details-content rte">
@@ -257,7 +290,6 @@
           </ul>
         </div>
 
-        <!-- Newsletter -->
         <div class="footer-block footer-block--newsletter grid__item">
           <h2 class="footer-block__heading inline-richtext">Join the storm</h2>
           <form class="footer__newsletter newsletter-form" action="#" method="post" onsubmit="return false;">
@@ -270,10 +302,12 @@
           </form>
         </div>
 
-        <!-- Brand image -->
         <div class="footer-block footer-block-image grid__item center">
           <img src="assets/img/DHK_transparent.gif"
-               alt="DarkHarlemKnight" width="120" height="120" loading="lazy">
+               alt="DarkHarlemKnight"
+               width="120"
+               height="120"
+               loading="lazy">
         </div>
       </div>
     </div>
@@ -304,7 +338,6 @@
       </div>
     </div>
   </footer>
-  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
 
   <!-- ===== Search Modal ===== -->
   <div id="search-modal" class="search-modal" aria-hidden="true">
@@ -320,13 +353,13 @@
       <div id="search-results" class="search-modal__results" aria-live="polite"></div>
     </div>
   </div>
-  
-  <!-- Storm audio (kept) -->
-  <audio id="rain-light"   src="assets/audio/light-rain.mp3"   loop preload="auto" hidden></audio>
-  <audio id="rain-med"     src="assets/audio/med-rain.mp3"     loop preload="auto" hidden></audio>
-  <audio id="rain-heavy"   src="assets/audio/heavy-rain.mp3"   loop preload="auto" hidden></audio>
+
+  <!-- Storm audio -->
+  <audio id="rain-light" src="assets/audio/light-rain.mp3" loop preload="auto" hidden></audio>
+  <audio id="rain-med" src="assets/audio/med-rain.mp3" loop preload="auto" hidden></audio>
+  <audio id="rain-heavy" src="assets/audio/heavy-rain.mp3" loop preload="auto" hidden></audio>
   <audio id="thunder-light" src="assets/audio/light-thunder.mp3" loop preload="auto" hidden></audio>
-  <audio id="thunder-med"   src="assets/audio/med-thunder.mp3"   loop preload="auto" hidden></audio>
+  <audio id="thunder-med" src="assets/audio/med-thunder.mp3" loop preload="auto" hidden></audio>
   <audio id="thunder-heavy" src="assets/audio/heavy-thunder.mp3" loop preload="auto" hidden></audio>
 
   <!-- Scripts -->
@@ -337,56 +370,57 @@
   <script src="js/shop.js"></script>
   <script src="js/newsletter.js"></script>
   <script src="js/storm_shopify_style.js"></script>
-  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
 
   <!-- Cart Drawer -->
-<div id="cart-drawer" class="cart-drawer" aria-hidden="true">
-  <div class="cart-drawer__overlay" data-cart-close></div>
-  <aside class="cart-drawer__panel" tabindex="-1">
-    <div class="cart-header">
-      <h2>Your Cart</h2>
-      <button type="button" title="Close" data-cart-close>✕</button>
-    </div>
+  <div id="cart-drawer" class="cart-drawer" aria-hidden="true">
+    <div class="cart-drawer__overlay" data-cart-close></div>
+    <aside class="cart-drawer__panel" tabindex="-1">
+      <div class="cart-header">
+        <h2>Your Cart</h2>
+        <button type="button" title="Close" data-cart-close>✕</button>
+      </div>
 
-    <div class="cart-list" id="cart-items"></div>
-    <div id="cart-empty" class="cart-empty" hidden style="padding:16px;color:#9a9a9a">
-      Your cart is empty.
-    </div>
+      <div class="cart-list" id="cart-items"></div>
+      <div id="cart-empty" class="cart-empty" hidden style="padding:16px;color:#9a9a9a">
+        Your cart is empty.
+      </div>
 
-    <div class="cart-footer">
-      <!-- Drawer discount block -->
-      <div class="cart-discount cart-discount--drawer">
-        <label for="discount-code-drawer" class="cart-discount__label">ADD DISCOUNT</label>
-        <div class="cart-discount__row">
-          <input
-            id="discount-code-drawer"
-            class="cart-discount__input"
-            type="text"
-            placeholder="Enter code"
-            autocomplete="off"
-          />
-          <button
-            id="discount-apply-drawer"
-            class="cart-discount__button"
-            type="button"
-          >
-            APPLY
-          </button>
+      <div class="cart-footer">
+        <div class="cart-discount cart-discount--drawer">
+          <label for="discount-code-drawer" class="cart-discount__label">ADD DISCOUNT</label>
+          <div class="cart-discount__row">
+            <input
+              id="discount-code-drawer"
+              class="cart-discount__input"
+              type="text"
+              placeholder="Enter code"
+              autocomplete="off"
+            />
+            <button
+              id="discount-apply-drawer"
+              class="cart-discount__button"
+              type="button"
+            >
+              APPLY
+            </button>
+          </div>
+          <p
+            id="discount-message-drawer"
+            class="cart-discount__message"
+            aria-live="polite"
+          ></p>
         </div>
-        <p
-          id="discount-message-drawer"
-          class="cart-discount__message"
-          aria-live="polite"
-        ></p>
-      </div>
 
-      <div class="cart-row">
-        <div class="label">Subtotal</div>
-        <div class="value" id="cart-subtotal">$0.00</div>
+        <div class="cart-row">
+          <div class="label">Subtotal</div>
+          <div class="value" id="cart-subtotal">$0.00</div>
+        </div>
+        <button id="cart-checkout" type="button" disabled>Checkout</button>
       </div>
-      <button id="cart-checkout" type="button" disabled>Checkout</button>
-    </div>
-  </aside>
-</div>
+    </aside>
+  </div>
 </body>
 </html>
