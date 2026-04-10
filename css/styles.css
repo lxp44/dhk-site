@@ -1724,3 +1724,12 @@ h1,h2,h3,
     margin-bottom: 0;
   }
 }
+.pc__info-link,
+.pc__info-link:visited,
+.pc__info-link:hover,
+.pc__info-link:focus,
+.pc__info-link:active {
+  text-decoration: none !important;
+  color: inherit !important;
+  display: block;
+}
