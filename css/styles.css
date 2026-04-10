@@ -1733,22 +1733,20 @@ h1,h2,h3,
   color: inherit !important;
   display: block;
 }
-/* CENTER THE SMALL DHK INSIDE THE MOBILE HEADER */
-/* MOBILE DHK — PIN TO HEADER AREA */
+/* MOBILE FLOATING DHK LOGO — STICKS UNDER HEADER */
 @media (max-width: 900px) {
-  .header__logo {
+  .floating-logo {
     position: fixed !important;
-    left: 50% !important;
     top: 118px !important;
+    left: 50% !important;
     transform: translateX(-50%) !important;
-    display: block !important;
+    z-index: 2001 !important;
     width: auto !important;
     margin: 0 !important;
-    z-index: 2001 !important;
     pointer-events: none !important;
   }
 
-  .header__heading-logo {
+  .floating-logo img {
     display: block !important;
     height: 32px !important;
     width: auto !important;
