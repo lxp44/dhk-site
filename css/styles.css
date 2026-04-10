@@ -1735,12 +1735,15 @@ h1,h2,h3,
 }
 @media (max-width: 900px) {
   .floating-logo {
-    position: relative !important;
-    display: block !important;
-    margin: 0 auto 18px auto !important;
-    left: auto !important;
+    position: fixed !important;
+    top: 150px !important;
+    left: 50% !important;
     right: auto !important;
+    transform: translateX(-50%) !important;
+    display: block !important;
+    margin: 0 !important;
     text-align: center !important;
+    z-index: 1001 !important;
   }
 
   .floating-logo img {
