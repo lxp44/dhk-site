@@ -344,13 +344,17 @@
         opacity: 0;
       }
 
-      .lookbook-item.is-revealed .img-primary,
-      .lookbook-item:hover .img-primary {
+      .lookbook-frame .img-secondary.is-empty {
+        display: none;
+      }
+
+      .lookbook-item.has-swap.is-revealed .img-primary,
+      .lookbook-item.has-swap:hover .img-primary {
         opacity: 0;
       }
 
-      .lookbook-item.is-revealed .img-secondary,
-      .lookbook-item:hover .img-secondary {
+      .lookbook-item.has-swap.is-revealed .img-secondary,
+      .lookbook-item.has-swap:hover .img-secondary {
         opacity: 1;
       }
 
@@ -429,16 +433,16 @@
       }
 
       @media (hover: none) {
-        .lookbook-item:hover .img-primary,
-        .lookbook-item:hover .img-secondary {
+        .lookbook-item.has-swap:hover .img-primary,
+        .lookbook-item.has-swap:hover .img-secondary {
           opacity: initial;
         }
 
-        .lookbook-item:hover .img-primary {
+        .lookbook-item.has-swap:hover .img-primary {
           opacity: 1;
         }
 
-        .lookbook-item:hover .img-secondary {
+        .lookbook-item.has-swap:hover .img-secondary {
           opacity: 0;
         }
       }
@@ -627,131 +631,131 @@
         </div>
 
         <div class="lookbook-grid" id="lookbookGrid">
-    <article
-  class="lookbook-item"
-  data-portrait-primary="assets/img/products/dhk/campaign-1/studio-shots/portrait/grey-portrait.jpeg"
-  data-portrait-secondary="assets/img/products/dhk/campaign-1/studio-shots/close-up/grey-close.jpeg"
-  data-lightbox-one="assets/img/products/dhk/campaign-1/studio-shots/grey-1.jpeg"
-  data-lightbox-two="assets/img/products/dhk/campaign-1/studio-shots/grey-2.jpeg"
->
-  <div class="lookbook-frame">
-    <img
-      class="img-primary"
-      src="assets/img/products/dhk/campaign-1/studio-shots/portrait/grey-portrait.jpeg"
-      alt="DHK grey portrait display image"
-    />
-    <img
-      class="img-secondary"
-      src=""
-      alt=""
-    />
-  </div>
-</article>
+          <article
+            class="lookbook-item"
+            data-portrait-primary="assets/img/products/dhk/campaign-1/studio-shots/portrait/grey-portrait.jpeg"
+            data-portrait-secondary="assets/img/products/dhk/campaign-1/studio-shots/grey-1.jpeg"
+            data-lightbox-one="assets/img/products/dhk/campaign-1/studio-shots/grey-1.jpeg"
+            data-lightbox-two="assets/img/products/dhk/campaign-1/studio-shots/grey-2.jpeg"
+          >
+            <div class="lookbook-frame">
+              <img
+                class="img-primary"
+                src="assets/img/products/dhk/campaign-1/studio-shots/portrait/grey-portrait.jpeg"
+                alt="DHK grey portrait display image"
+              />
+              <img
+                class="img-secondary"
+                src="assets/img/products/dhk/campaign-1/studio-shots/grey-1.jpeg"
+                alt="DHK grey alternate display image"
+              />
+            </div>
+          </article>
 
-           <article
-  class="lookbook-item"
-  data-portrait-primary="assets/img/products/dhk/campaign-1/studio-shots/portrait/grey-crown-portrait.jpeg"
-  data-portrait-secondary="assets/img/products/dhk/campaign-1/studio-shots/close-up/grey-crown-close.jpeg"
-  data-lightbox-one="assets/img/products/dhk/campaign-1/studio-shots/grey-crown-1.jpeg"
-  data-lightbox-two="assets/img/products/dhk/campaign-1/studio-shots/grey-crown-2.jpeg"
->
-  <div class="lookbook-frame">
-    <img
-      class="img-primary"
-      src="assets/img/products/dhk/campaign-1/studio-shots/portrait/grey-crown-portrait.jpeg"
-      alt="DHK grey portrait display image"
-    />
-    <img
-      class="img-secondary"
-      src="assets/img/products/dhk/campaign-1/studio-shots/grey-crown-2.jpeg"
-      alt="DHK grey portrait display image"
-    />
-  </div>
-</article>
+          <article
+            class="lookbook-item"
+            data-portrait-primary="assets/img/products/dhk/campaign-1/studio-shots/portrait/grey-crown-portrait.jpeg"
+            data-portrait-secondary="assets/img/products/dhk/campaign-1/studio-shots/grey-crown-1.jpeg"
+            data-lightbox-one="assets/img/products/dhk/campaign-1/studio-shots/grey-crown-1.jpeg"
+            data-lightbox-two="assets/img/products/dhk/campaign-1/studio-shots/grey-crown-2.jpeg"
+          >
+            <div class="lookbook-frame">
+              <img
+                class="img-primary"
+                src="assets/img/products/dhk/campaign-1/studio-shots/portrait/grey-crown-portrait.jpeg"
+                alt="DHK grey crown portrait display image"
+              />
+              <img
+                class="img-secondary"
+                src="assets/img/products/dhk/campaign-1/studio-shots/grey-crown-1.jpeg"
+                alt="DHK grey crown alternate display image"
+              />
+            </div>
+          </article>
 
-              <article
-  class="lookbook-item"
-  data-portrait-primary="assets/img/products/dhk/campaign-1/studio-shots/portrait/black-portrait.jpeg"
-  data-portrait-secondary="assets/img/products/dhk/campaign-1/studio-shots/close-up/black-close.jpeg"
-  data-lightbox-one="assets/img/products/dhk/campaign-1/studio-shots/black-1.jpeg"
-  data-lightbox-two="assets/img/products/dhk/campaign-1/studio-shots/black-2.jpeg"
->
-  <div class="lookbook-frame">
-    <img
-      class="img-primary"
-      src="assets/img/products/dhk/campaign-1/studio-shots/portrait/black-portrait.jpeg"
-      alt="DHK grey portrait display image"
-    />
-    <img
-      class="img-secondary"
-      src=""
-      alt=""
-    />
-  </div>
-</article>
+          <article
+            class="lookbook-item"
+            data-portrait-primary="assets/img/products/dhk/campaign-1/studio-shots/portrait/black-portrait.jpeg"
+            data-portrait-secondary="assets/img/products/dhk/campaign-1/studio-shots/black-1.jpeg"
+            data-lightbox-one="assets/img/products/dhk/campaign-1/studio-shots/black-1.jpeg"
+            data-lightbox-two="assets/img/products/dhk/campaign-1/studio-shots/black-2.jpeg"
+          >
+            <div class="lookbook-frame">
+              <img
+                class="img-primary"
+                src="assets/img/products/dhk/campaign-1/studio-shots/portrait/black-portrait.jpeg"
+                alt="DHK black portrait display image"
+              />
+              <img
+                class="img-secondary"
+                src="assets/img/products/dhk/campaign-1/studio-shots/black-1.jpeg"
+                alt="DHK black alternate display image"
+              />
+            </div>
+          </article>
 
-             <article
-  class="lookbook-item"
-  data-portrait-primary="assets/img/products/dhk/campaign-1/studio-shots/portrait/black-crown-portrait.jpeg"
-  data-portrait-secondary="assets/img/products/dhk/campaign-1/studio-shots/close-up/black-crown-close.jpeg"
-  data-lightbox-one="assets/img/products/dhk/campaign-1/studio-shots/black-crown-1.jpeg"
-  data-lightbox-two="assets/img/products/dhk/campaign-1/studio-shots/black-crown-2.jpeg"
->
-  <div class="lookbook-frame">
-    <img
-      class="img-primary"
-      src="assets/img/products/dhk/campaign-1/studio-shots/portrait/black-crown-portrait.jpeg"
-      alt="DHK grey portrait display image"
-    />
-    <img
-      class="img-secondary"
-      src=""
-      alt=""
-    />
-  </div>
-</article>
+          <article
+            class="lookbook-item"
+            data-portrait-primary="assets/img/products/dhk/campaign-1/studio-shots/portrait/black-crown-portrait.jpeg"
+            data-portrait-secondary="assets/img/products/dhk/campaign-1/studio-shots/black-crown-1.jpeg"
+            data-lightbox-one="assets/img/products/dhk/campaign-1/studio-shots/black-crown-1.jpeg"
+            data-lightbox-two="assets/img/products/dhk/campaign-1/studio-shots/black-crown-2.jpeg"
+          >
+            <div class="lookbook-frame">
+              <img
+                class="img-primary"
+                src="assets/img/products/dhk/campaign-1/studio-shots/portrait/black-crown-portrait.jpeg"
+                alt="DHK black crown portrait display image"
+              />
+              <img
+                class="img-secondary"
+                src="assets/img/products/dhk/campaign-1/studio-shots/black-crown-1.jpeg"
+                alt="DHK black crown alternate display image"
+              />
+            </div>
+          </article>
 
-             <article
-  class="lookbook-item"
-  data-portrait-primary="assets/img/products/dhk/campaign-1/studio-shots/portrait/white-portrait.jpeg"
-  data-portrait-secondary="assets/img/products/dhk/campaign-1/studio-shots/close-up/white-close.jpeg"
-  data-lightbox-one="assets/img/products/dhk/campaign-1/studio-shots/white-1.jpeg"
-  data-lightbox-two="assets/img/products/dhk/campaign-1/studio-shots/white-2.jpeg"
->
-  <div class="lookbook-frame">
-    <img
-      class="img-primary"
-      src="assets/img/products/dhk/campaign-1/studio-shots/portrait/white-portrait.jpeg"
-      alt="DHK grey portrait display image"
-    />
-    <img
-      class="img-secondary"
-      src=""
-      alt=""
-    />
-  </div>
-</article>
+          <article
+            class="lookbook-item"
+            data-portrait-primary="assets/img/products/dhk/campaign-1/studio-shots/portrait/white-portrait.jpeg"
+            data-portrait-secondary="assets/img/products/dhk/campaign-1/studio-shots/white-1.jpeg"
+            data-lightbox-one="assets/img/products/dhk/campaign-1/studio-shots/white-1.jpeg"
+            data-lightbox-two="assets/img/products/dhk/campaign-1/studio-shots/white-2.jpeg"
+          >
+            <div class="lookbook-frame">
+              <img
+                class="img-primary"
+                src="assets/img/products/dhk/campaign-1/studio-shots/portrait/white-portrait.jpeg"
+                alt="DHK white portrait display image"
+              />
+              <img
+                class="img-secondary"
+                src="assets/img/products/dhk/campaign-1/studio-shots/white-1.jpeg"
+                alt="DHK white alternate display image"
+              />
+            </div>
+          </article>
 
-              <article
-  class="lookbook-item"
-  data-portrait-primary="assets/img/products/dhk/campaign-1/studio-shots/portrait/white-crown-portrait.png"
-  data-portrait-secondary="assets/img/products/dhk/campaign-1/studio-shots/close-up/white-crown-close-1.png"
-  data-lightbox-one="assets/img/products/dhk/campaign-1/studio-shots/white-crown-2.png"
-  data-lightbox-two="assets/img/products/dhk/campaign-1/studio-shots/white-crown-extra-2.png"
->
-  <div class="lookbook-frame">
-    <img
-      class="img-primary"
-      src="assets/img/products/dhk/campaign-1/studio-shots/portrait/white-crown-portrait.jpeg"
-      alt="DHK grey portrait display image"
-    />
-    <img
-      class="img-secondary"
-      src=""
-      alt=""
-    />
-  </div>
-</article>
+          <article
+            class="lookbook-item"
+            data-portrait-primary="assets/img/products/dhk/campaign-1/studio-shots/portrait/white-crown-portrait.png"
+            data-portrait-secondary="assets/img/products/dhk/campaign-1/studio-shots/white-crown-2.png"
+            data-lightbox-one="assets/img/products/dhk/campaign-1/studio-shots/white-crown-2.png"
+            data-lightbox-two="assets/img/products/dhk/campaign-1/studio-shots/white-crown-extra-2.png"
+          >
+            <div class="lookbook-frame">
+              <img
+                class="img-primary"
+                src="assets/img/products/dhk/campaign-1/studio-shots/portrait/white-crown-portrait.png"
+                alt="DHK white crown portrait display image"
+              />
+              <img
+                class="img-secondary"
+                src="assets/img/products/dhk/campaign-1/studio-shots/white-crown-2.png"
+                alt="DHK white crown alternate display image"
+              />
+            </div>
+          </article>
         </div>
       </section>
     </main>
@@ -941,13 +945,24 @@
 
           const primaryImg = item.querySelector(".img-primary");
           const secondaryImg = item.querySelector(".img-secondary");
+          const hasSwap = Boolean(portraitSecondary);
 
           if (primaryImg && portraitPrimary) {
             primaryImg.src = portraitPrimary;
           }
 
-          if (secondaryImg && portraitSecondary) {
-            secondaryImg.src = portraitSecondary;
+          if (secondaryImg) {
+            if (portraitSecondary) {
+              secondaryImg.src = portraitSecondary;
+              secondaryImg.alt = (primaryImg?.alt || "Lookbook alternate image").replace("display", "alternate");
+              secondaryImg.classList.remove("is-empty");
+              item.classList.add("has-swap");
+            } else {
+              secondaryImg.removeAttribute("src");
+              secondaryImg.alt = "";
+              secondaryImg.classList.add("is-empty");
+              item.classList.remove("has-swap");
+            }
           }
 
           item.addEventListener("click", (e) => {
@@ -963,7 +978,7 @@
               return;
             }
 
-            if (!item.classList.contains("is-revealed")) {
+            if (hasSwap && !item.classList.contains("is-revealed")) {
               clearRevealed(item);
               item.classList.add("is-revealed");
               return;
