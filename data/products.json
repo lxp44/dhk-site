@@ -281,8 +281,8 @@
     "title": "Dark Harlem Nylon Knight Windbreaker",
      "displayTitle": "Nylon Knight Windbreaker",
     "price": 22500,
-    "thumbnail": "assets/img/products/dhk/detail-shots/joggers/white/shot-1.png",
-    "hoverImage": "assets/img/products/dhk/portrait/joggers/white/white-jogger-1.png",
+    "thumbnail": "assets/img/products/dhk/detail-shots/nylon-crown/shot-1.png",
+    "hoverImage": "assets/img/products/dhk/portrait/nylon-crown/nylon-crown-1.png",
     "images": [
       "assets/img/products/dhk/portrait/joggers/white/white-jogger-1.png",
       "assets/img/products/dhk/portrait/joggers/white/white-jogger-2.png",
@@ -299,8 +299,8 @@
     "title": "Dark Harlem Nylon Knight flare",
      "displayTitle": "Nylon Knight flare",
     "price": 15000,
-    "thumbnail": "assets/img/products/dhk/detail-shots/nylon-crown/shot-1.png",
-    "hoverImage": "assets/img/products/dhk/portrait/joggers/white/white-jogger-1.png",
+    "thumbnail": "assets/img/products/dhk/detail-shots/nylon-jogger/nylon-joggers-1.png",
+    "hoverImage": "assets/img/products/dhk/portrait/nylon-jogger/nylon-joggers-1.png",
     "images": [
       "assets/img/products/dhk/portrait/joggers/white/white-jogger-1.png",
       "assets/img/products/dhk/portrait/joggers/white/white-jogger-2.png",
