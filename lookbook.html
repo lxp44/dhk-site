@@ -980,144 +980,193 @@
     <script src="js/storm_shopify_style.js"></script>
 
     <script>
-      document.getElementById("year").textContent = new Date().getFullYear();
+  document.getElementById("year").textContent = new Date().getFullYear();
 
-      (function () {
-        const isTouchDevice = window.matchMedia("(hover: none), (pointer: coarse)").matches;
-        const items = document.querySelectorAll(".lookbook-item");
-        const lightbox = document.getElementById("lookbookLightbox");
-        const lightboxImageOne = document.getElementById("lightboxImageOne");
-        const lightboxImageTwo = document.getElementById("lightboxImageTwo");
-        const lightboxClose = document.getElementById("lightboxClose");
+  (function () {
+    const isTouchDevice = window.matchMedia("(hover: none), (pointer: coarse)").matches;
+    const items = document.querySelectorAll(".lookbook-item");
+    const lightbox = document.getElementById("lookbookLightbox");
+    const lightboxImageOne = document.getElementById("lightboxImageOne");
+    const lightboxImageTwo = document.getElementById("lightboxImageTwo");
+    const lightboxClose = document.getElementById("lightboxClose");
 
-        if (!lightbox || !lightboxImageOne || !lightboxImageTwo || !lightboxClose || !items.length) {
+    if (!lightbox || !lightboxImageOne || !lightboxImageTwo || !lightboxClose || !items.length) {
+      return;
+    }
+
+    function cleanPath(path) {
+      if (!path) return "";
+      return encodeURI(path.trim());
+    }
+
+    function setImgSource(imgEl, rawPath, altText = "", hideIfMissing = false) {
+      if (!imgEl) return;
+
+      const path = cleanPath(rawPath);
+
+      if (!path) {
+        imgEl.removeAttribute("src");
+        imgEl.alt = "";
+        if (hideIfMissing) {
+          imgEl.style.display = "none";
+          imgEl.classList.add("is-empty");
+        }
+        return;
+      }
+
+      imgEl.style.display = "block";
+      imgEl.classList.remove("is-empty");
+      imgEl.alt = altText || "";
+
+      imgEl.onerror = function () {
+        console.warn("Image failed to load:", rawPath);
+        imgEl.removeAttribute("src");
+        if (hideIfMissing) {
+          imgEl.style.display = "none";
+          imgEl.classList.add("is-empty");
+        }
+      };
+
+      imgEl.onload = function () {
+        imgEl.style.display = "block";
+        imgEl.classList.remove("is-empty");
+      };
+
+      imgEl.src = path;
+    }
+
+    function clearRevealed(exceptItem = null) {
+      document.querySelectorAll(".lookbook-item.is-revealed").forEach((item) => {
+        if (item !== exceptItem) {
+          item.classList.remove("is-revealed");
+        }
+      });
+    }
+
+    function openLightbox(srcOne, srcTwo, altOne = "Expanded lookbook image one", altTwo = "Expanded lookbook image two") {
+      const pathOne = cleanPath(srcOne);
+      const pathTwo = cleanPath(srcTwo);
+
+      if (!pathOne) return;
+
+      setImgSource(lightboxImageOne, pathOne, altOne, false);
+
+      if (pathTwo) {
+        setImgSource(lightboxImageTwo, pathTwo, altTwo, true);
+      } else {
+        lightboxImageTwo.removeAttribute("src");
+        lightboxImageTwo.alt = "";
+        lightboxImageTwo.style.display = "none";
+        lightboxImageTwo.classList.add("is-empty");
+      }
+
+      lightbox.classList.add("is-open");
+      lightbox.setAttribute("aria-hidden", "false");
+      lightbox.scrollTop = 0;
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeLightbox() {
+      lightbox.classList.remove("is-open");
+      lightbox.setAttribute("aria-hidden", "true");
+
+      lightboxImageOne.removeAttribute("src");
+      lightboxImageOne.alt = "";
+      lightboxImageOne.style.display = "block";
+      lightboxImageOne.classList.remove("is-empty");
+
+      lightboxImageTwo.removeAttribute("src");
+      lightboxImageTwo.alt = "";
+      lightboxImageTwo.style.display = "none";
+      lightboxImageTwo.classList.add("is-empty");
+
+      document.body.style.overflow = "";
+    }
+
+    items.forEach((item) => {
+      const portraitPrimary = item.dataset.portraitPrimary || "";
+      const portraitSecondary = item.dataset.portraitSecondary || "";
+      const lightboxOne = item.dataset.lightboxOne || "";
+      const lightboxTwo = item.dataset.lightboxTwo || "";
+
+      const primaryImg = item.querySelector(".img-primary");
+      const secondaryImg = item.querySelector(".img-secondary");
+
+      const primaryAlt =
+        primaryImg?.getAttribute("alt") || "Lookbook primary image";
+      const secondaryAlt =
+        secondaryImg?.getAttribute("alt") || "Lookbook alternate image";
+
+      const hasSwap = Boolean(portraitSecondary && portraitSecondary.trim());
+
+      setImgSource(primaryImg, portraitPrimary, primaryAlt, false);
+
+      if (hasSwap) {
+        setImgSource(secondaryImg, portraitSecondary, secondaryAlt, true);
+        item.classList.add("has-swap");
+      } else {
+        if (secondaryImg) {
+          secondaryImg.removeAttribute("src");
+          secondaryImg.alt = "";
+          secondaryImg.style.display = "none";
+          secondaryImg.classList.add("is-empty");
+        }
+        item.classList.remove("has-swap");
+      }
+
+      item.addEventListener("click", (e) => {
+        e.preventDefault();
+
+        if (!isTouchDevice) {
+          openLightbox(
+            lightboxOne,
+            lightboxTwo,
+            primaryAlt,
+            secondaryAlt
+          );
           return;
         }
 
-        function clearRevealed(exceptItem = null) {
-          document.querySelectorAll(".lookbook-item.is-revealed").forEach((item) => {
-            if (item !== exceptItem) {
-              item.classList.remove("is-revealed");
-            }
-          });
+        if (hasSwap && !item.classList.contains("is-revealed")) {
+          clearRevealed(item);
+          item.classList.add("is-revealed");
+          return;
         }
 
-        function openLightbox(srcOne, srcTwo, altOne = "Expanded lookbook image one", altTwo = "Expanded lookbook image two") {
-          if (!srcOne) return;
+        openLightbox(
+          lightboxOne,
+          lightboxTwo,
+          primaryAlt,
+          secondaryAlt
+        );
+      });
+    });
 
-          lightboxImageOne.src = srcOne;
-          lightboxImageOne.alt = altOne;
+    lightboxClose.addEventListener("click", closeLightbox);
 
-          if (srcTwo) {
-            lightboxImageTwo.src = srcTwo;
-            lightboxImageTwo.alt = altTwo;
-            lightboxImageTwo.style.display = "block";
-          } else {
-            lightboxImageTwo.removeAttribute("src");
-            lightboxImageTwo.alt = "";
-            lightboxImageTwo.style.display = "none";
-          }
+    lightbox.addEventListener("click", (e) => {
+      if (e.target === lightbox) {
+        closeLightbox();
+      }
+    });
 
-          lightbox.classList.add("is-open");
-          lightbox.setAttribute("aria-hidden", "false");
-          document.body.style.overflow = "hidden";
-        }
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && lightbox.classList.contains("is-open")) {
+        closeLightbox();
+      }
+    });
 
-        function closeLightbox() {
-          lightbox.classList.remove("is-open");
-          lightbox.setAttribute("aria-hidden", "true");
-
-          lightboxImageOne.removeAttribute("src");
-          lightboxImageOne.alt = "";
-
-          lightboxImageTwo.removeAttribute("src");
-          lightboxImageTwo.alt = "";
-          lightboxImageTwo.style.display = "none";
-
-          document.body.style.overflow = "";
-        }
-
-        items.forEach((item) => {
-          const portraitPrimary = item.dataset.portraitPrimary || "";
-          const portraitSecondary = item.dataset.portraitSecondary || "";
-          const lightboxOne = item.dataset.lightboxOne || "";
-          const lightboxTwo = item.dataset.lightboxTwo || "";
-
-          const primaryImg = item.querySelector(".img-primary");
-          const secondaryImg = item.querySelector(".img-secondary");
-          const hasSwap = Boolean(portraitSecondary);
-
-          if (primaryImg && portraitPrimary) {
-            primaryImg.src = portraitPrimary;
-          }
-
-          if (secondaryImg) {
-            if (portraitSecondary) {
-              secondaryImg.src = portraitSecondary;
-              secondaryImg.alt = (primaryImg?.alt || "Lookbook alternate image").replace("display", "alternate");
-              secondaryImg.classList.remove("is-empty");
-              item.classList.add("has-swap");
-            } else {
-              secondaryImg.removeAttribute("src");
-              secondaryImg.alt = "";
-              secondaryImg.classList.add("is-empty");
-              item.classList.remove("has-swap");
-            }
-          }
-
-          item.addEventListener("click", (e) => {
-            e.preventDefault();
-
-            if (!isTouchDevice) {
-              openLightbox(
-                lightboxOne,
-                lightboxTwo,
-                primaryImg?.alt || "Expanded lookbook image one",
-                secondaryImg?.alt || "Expanded lookbook image two"
-              );
-              return;
-            }
-
-            if (hasSwap && !item.classList.contains("is-revealed")) {
-              clearRevealed(item);
-              item.classList.add("is-revealed");
-              return;
-            }
-
-            openLightbox(
-              lightboxOne,
-              lightboxTwo,
-              primaryImg?.alt || "Expanded lookbook image one",
-              secondaryImg?.alt || "Expanded lookbook image two"
-            );
-          });
-        });
-
-        lightboxClose.addEventListener("click", closeLightbox);
-
-        lightbox.addEventListener("click", (e) => {
-          if (e.target === lightbox) {
-            closeLightbox();
-          }
-        });
-
-        document.addEventListener("keydown", (e) => {
-          if (e.key === "Escape" && lightbox.classList.contains("is-open")) {
-            closeLightbox();
-          }
-        });
-
-        document.addEventListener("click", (e) => {
-          if (
-            isTouchDevice &&
-            !e.target.closest(".lookbook-item") &&
-            !e.target.closest(".lookbook-lightbox")
-          ) {
-            clearRevealed();
-          }
-        });
-      })();
-    </script>
+    document.addEventListener("click", (e) => {
+      if (
+        isTouchDevice &&
+        !e.target.closest(".lookbook-item") &&
+        !e.target.closest(".lookbook-lightbox")
+      ) {
+        clearRevealed();
+      }
+    });
+  })();
+</script>
 
     <div id="cart-drawer" class="cart-drawer" aria-hidden="true">
       <div class="cart-drawer__overlay" data-cart-close></div>
