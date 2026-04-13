@@ -321,6 +321,7 @@
         cursor: pointer;
         overflow: hidden;
         background: #dfdfda;
+        user-select: none;
       }
 
       .lookbook-frame {
@@ -430,6 +431,10 @@
         height: auto;
         object-fit: contain;
         background: transparent;
+      }
+
+      .lookbook-lightbox__image.is-hidden {
+        display: none;
       }
 
       @media (hover: none) {
@@ -714,6 +719,7 @@
               />
             </div>
           </article>
+
           <article
             class="lookbook-item"
             data-portrait-primary="assets/img/products/dhk/campaign-1/studio-shots/portrait/white-portrait.jpeg"
@@ -755,7 +761,8 @@
               />
             </div>
           </article>
-           <article
+
+          <article
             class="lookbook-item"
             data-portrait-primary="assets/img/products/dhk/campaign-1/studio-shots/portrait/nylon-crown-portrait.png"
             data-portrait-secondary="assets/img/products/dhk/campaign-1/studio-shots/portrait/nylon-crown-portrait-fullbody.png"
@@ -775,67 +782,90 @@
               />
             </div>
           </article>
- <article
+
+          <article
             class="lookbook-item"
-            data-portrait-primary="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/Mens/Grey/grey-shoot-1.png"
-            data-portrait-secondary="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/Mens/Grey/grey-shoot-detail-2.png"
-            data-lightbox-one="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/Mens/Grey/grey-shoot-2.png"
-            data-lightbox-two="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/Mens/Grey/grey-shoot-3.png"
+            data-portrait-primary="assets/img/products/dhk/campaign-1/studio-shots/close-up/nylon-crown-close.png"
+            data-portrait-secondary=""
+            data-lightbox-one="assets/img/products/dhk/campaign-1/studio-shots/nylon-crown-1.png"
+            data-lightbox-two="assets/img/products/dhk/campaign-1/studio-shots/nylon-crown-2.png"
           >
             <div class="lookbook-frame">
               <img
                 class="img-primary"
-                src="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/Mens/Grey/grey-shoot-1.png"
+                src="assets/img/products/dhk/campaign-1/studio-shots/close-up/nylon-crown-close.png"
+                alt="DHK nylon crown close-up display image"
+              />
+              <img
+                class="img-secondary"
+                src=""
+                alt=""
+              />
+            </div>
+          </article>
+
+          <article
+            class="lookbook-item"
+            data-portrait-primary="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/Grey/grey-shoot-1.png"
+            data-portrait-secondary="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/Grey/grey-shoot-detail-2.png"
+            data-lightbox-one="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/Grey/grey-shoot-2.png"
+            data-lightbox-two="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/Grey/grey-shoot-3.png"
+          >
+            <div class="lookbook-frame">
+              <img
+                class="img-primary"
+                src="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/Grey/grey-shoot-1.png"
                 alt="DHK grey shirt portrait display image"
               />
               <img
                 class="img-secondary"
-                src="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/Mens/Grey/grey-shoot-detail-2.png"
+                src="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/Grey/grey-shoot-detail-2.png"
                 alt="DHK grey shirt alternate display image"
               />
             </div>
           </article>
- <article
+
+          <article
             class="lookbook-item"
-            data-portrait-primary="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/Mens/Black/black-shoot-1 .png"
-            data-portrait-secondary="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/Mens/Black/black-shoot-detail-2.png"
-            data-lightbox-one="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/Mens/Black/black-shoot-2.png"
-            data-lightbox-two="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/Mens/Black/black-shoot-4.png"
+            data-portrait-primary="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/Black/black-shoot-1.png"
+            data-portrait-secondary="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/Black/black-shoot-detail-2.png"
+            data-lightbox-one="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/Black/black-shoot-2.png"
+            data-lightbox-two="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/Black/black-shoot-4.png"
           >
             <div class="lookbook-frame">
               <img
                 class="img-primary"
-                src="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/Mens/Black/black-shoot-1.png"
+                src="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/Black/black-shoot-1.png"
                 alt="DHK black shirt portrait display image"
               />
               <img
                 class="img-secondary"
-                src="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/Mens/Black/black-shoot-detail-2.png"
-                alt="DHK grey shirt alternate display image"
+                src="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/Black/black-shoot-detail-2.png"
+                alt="DHK black shirt alternate display image"
               />
             </div>
           </article>
+
           <article
             class="lookbook-item"
-            data-portrait-primary="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/Mens/White/white-shoot-1.png"
-            data-portrait-secondary="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/Mens/White/white-shoot-detail-2.png"
-            data-lightbox-one="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/Mens/White/white-shoot-2.png"
-            data-lightbox-two="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/Mens/White/white-shoot-4.png"
+            data-portrait-primary="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/White/white-shoot-1.png"
+            data-portrait-secondary="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/White/white-shoot-detail-2.png"
+            data-lightbox-one="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/White/white-shoot-2.png"
+            data-lightbox-two="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/White/white-shoot-4.png"
           >
             <div class="lookbook-frame">
               <img
                 class="img-primary"
-                src="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/Mens/White/white-shoot-1.png"
+                src="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/White/white-shoot-1.png"
                 alt="DHK white shirt portrait display image"
               />
               <img
                 class="img-secondary"
-                src="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/Mens/White/white-shoot-detail-2.png"
+                src="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/White/white-shoot-detail-2.png"
                 alt="DHK white shirt alternate display image"
               />
             </div>
           </article>
-          
         </div>
       </section>
     </main>
@@ -960,193 +990,214 @@
     <script src="js/storm_shopify_style.js"></script>
 
     <script>
-  document.getElementById("year").textContent = new Date().getFullYear();
+      document.getElementById("year").textContent = new Date().getFullYear();
 
-  (function () {
-    const isTouchDevice = window.matchMedia("(hover: none), (pointer: coarse)").matches;
-    const items = document.querySelectorAll(".lookbook-item");
-    const lightbox = document.getElementById("lookbookLightbox");
-    const lightboxImageOne = document.getElementById("lightboxImageOne");
-    const lightboxImageTwo = document.getElementById("lightboxImageTwo");
-    const lightboxClose = document.getElementById("lightboxClose");
+      (function () {
+        const isTouchDevice = window.matchMedia("(hover: none), (pointer: coarse)").matches;
+        const items = document.querySelectorAll(".lookbook-item");
+        const lightbox = document.getElementById("lookbookLightbox");
+        const lightboxImageOne = document.getElementById("lightboxImageOne");
+        const lightboxImageTwo = document.getElementById("lightboxImageTwo");
+        const lightboxClose = document.getElementById("lightboxClose");
 
-    if (!lightbox || !lightboxImageOne || !lightboxImageTwo || !lightboxClose || !items.length) {
-      return;
-    }
-
-    function cleanPath(path) {
-      if (!path) return "";
-      return encodeURI(path.trim());
-    }
-
-    function setImgSource(imgEl, rawPath, altText = "", hideIfMissing = false) {
-      if (!imgEl) return;
-
-      const path = cleanPath(rawPath);
-
-      if (!path) {
-        imgEl.removeAttribute("src");
-        imgEl.alt = "";
-        if (hideIfMissing) {
-          imgEl.style.display = "none";
-          imgEl.classList.add("is-empty");
+        if (!lightbox || !lightboxImageOne || !lightboxImageTwo || !lightboxClose || !items.length) {
+          return;
         }
-        return;
-      }
 
-      imgEl.style.display = "block";
-      imgEl.classList.remove("is-empty");
-      imgEl.alt = altText || "";
-
-      imgEl.onerror = function () {
-        console.warn("Image failed to load:", rawPath);
-        imgEl.removeAttribute("src");
-        if (hideIfMissing) {
-          imgEl.style.display = "none";
-          imgEl.classList.add("is-empty");
+        function encodeAssetPath(path) {
+          if (!path) return "";
+          return encodeURI(path.trim());
         }
-      };
 
-      imgEl.onload = function () {
-        imgEl.style.display = "block";
-        imgEl.classList.remove("is-empty");
-      };
-
-      imgEl.src = path;
-    }
-
-    function clearRevealed(exceptItem = null) {
-      document.querySelectorAll(".lookbook-item.is-revealed").forEach((item) => {
-        if (item !== exceptItem) {
-          item.classList.remove("is-revealed");
+        function clearRevealed(exceptItem = null) {
+          document.querySelectorAll(".lookbook-item.is-revealed").forEach((item) => {
+            if (item !== exceptItem) {
+              item.classList.remove("is-revealed");
+            }
+          });
         }
-      });
-    }
 
-    function openLightbox(srcOne, srcTwo, altOne = "Expanded lookbook image one", altTwo = "Expanded lookbook image two") {
-      const pathOne = cleanPath(srcOne);
-      const pathTwo = cleanPath(srcTwo);
+        function prepareImage(img, path, fallbackAlt = "", hideWhenMissing = false) {
+          if (!img) return;
 
-      if (!pathOne) return;
+          const encodedPath = encodeAssetPath(path);
 
-      setImgSource(lightboxImageOne, pathOne, altOne, false);
+          if (!encodedPath) {
+            img.removeAttribute("src");
+            img.alt = "";
+            if (hideWhenMissing) {
+              img.classList.add("is-empty");
+              img.style.display = "none";
+            }
+            return;
+          }
 
-      if (pathTwo) {
-        setImgSource(lightboxImageTwo, pathTwo, altTwo, true);
-      } else {
-        lightboxImageTwo.removeAttribute("src");
-        lightboxImageTwo.alt = "";
-        lightboxImageTwo.style.display = "none";
-        lightboxImageTwo.classList.add("is-empty");
-      }
+          img.alt = fallbackAlt || img.alt || "";
 
-      lightbox.classList.add("is-open");
-      lightbox.setAttribute("aria-hidden", "false");
-      lightbox.scrollTop = 0;
-      document.body.style.overflow = "hidden";
-    }
+          img.onerror = function () {
+            console.warn("Failed to load image:", path);
+            if (hideWhenMissing) {
+              img.classList.add("is-empty");
+              img.style.display = "none";
+            }
+          };
 
-    function closeLightbox() {
-      lightbox.classList.remove("is-open");
-      lightbox.setAttribute("aria-hidden", "true");
+          img.onload = function () {
+            img.classList.remove("is-empty");
+            img.style.display = "block";
+          };
 
-      lightboxImageOne.removeAttribute("src");
-      lightboxImageOne.alt = "";
-      lightboxImageOne.style.display = "block";
-      lightboxImageOne.classList.remove("is-empty");
-
-      lightboxImageTwo.removeAttribute("src");
-      lightboxImageTwo.alt = "";
-      lightboxImageTwo.style.display = "none";
-      lightboxImageTwo.classList.add("is-empty");
-
-      document.body.style.overflow = "";
-    }
-
-    items.forEach((item) => {
-      const portraitPrimary = item.dataset.portraitPrimary || "";
-      const portraitSecondary = item.dataset.portraitSecondary || "";
-      const lightboxOne = item.dataset.lightboxOne || "";
-      const lightboxTwo = item.dataset.lightboxTwo || "";
-
-      const primaryImg = item.querySelector(".img-primary");
-      const secondaryImg = item.querySelector(".img-secondary");
-
-      const primaryAlt =
-        primaryImg?.getAttribute("alt") || "Lookbook primary image";
-      const secondaryAlt =
-        secondaryImg?.getAttribute("alt") || "Lookbook alternate image";
-
-      const hasSwap = Boolean(portraitSecondary && portraitSecondary.trim());
-
-      setImgSource(primaryImg, portraitPrimary, primaryAlt, false);
-
-      if (hasSwap) {
-        setImgSource(secondaryImg, portraitSecondary, secondaryAlt, true);
-        item.classList.add("has-swap");
-      } else {
-        if (secondaryImg) {
-          secondaryImg.removeAttribute("src");
-          secondaryImg.alt = "";
-          secondaryImg.style.display = "none";
-          secondaryImg.classList.add("is-empty");
+          img.src = encodedPath;
         }
-        item.classList.remove("has-swap");
-      }
 
-      item.addEventListener("click", (e) => {
-        e.preventDefault();
+        function openLightbox(srcOne, srcTwo, altOne = "Expanded lookbook image one", altTwo = "Expanded lookbook image two") {
+          const encodedOne = encodeAssetPath(srcOne);
+          const encodedTwo = encodeAssetPath(srcTwo);
 
-        if (!isTouchDevice) {
-          openLightbox(
-            lightboxOne,
-            lightboxTwo,
-            primaryAlt,
-            secondaryAlt
+          if (!encodedOne) return;
+
+          lightboxImageOne.classList.remove("is-hidden");
+          lightboxImageOne.style.display = "block";
+          lightboxImageOne.alt = altOne;
+          lightboxImageOne.src = encodedOne;
+
+          if (encodedTwo) {
+            lightboxImageTwo.classList.remove("is-hidden");
+            lightboxImageTwo.style.display = "block";
+            lightboxImageTwo.alt = altTwo;
+            lightboxImageTwo.src = encodedTwo;
+          } else {
+            lightboxImageTwo.removeAttribute("src");
+            lightboxImageTwo.alt = "";
+            lightboxImageTwo.classList.add("is-hidden");
+            lightboxImageTwo.style.display = "none";
+          }
+
+          lightbox.classList.add("is-open");
+          lightbox.setAttribute("aria-hidden", "false");
+          lightbox.scrollTop = 0;
+          document.body.style.overflow = "hidden";
+        }
+
+        function closeLightbox() {
+          lightbox.classList.remove("is-open");
+          lightbox.setAttribute("aria-hidden", "true");
+
+          lightboxImageOne.removeAttribute("src");
+          lightboxImageOne.alt = "";
+          lightboxImageOne.classList.remove("is-hidden");
+
+          lightboxImageTwo.removeAttribute("src");
+          lightboxImageTwo.alt = "";
+          lightboxImageTwo.classList.add("is-hidden");
+          lightboxImageTwo.style.display = "none";
+
+          document.body.style.overflow = "";
+        }
+
+        items.forEach((item) => {
+          const portraitPrimary = item.dataset.portraitPrimary || "";
+          const portraitSecondary = item.dataset.portraitSecondary || "";
+          const lightboxOne = item.dataset.lightboxOne || "";
+          const lightboxTwo = item.dataset.lightboxTwo || "";
+
+          const primaryImg = item.querySelector(".img-primary");
+          const secondaryImg = item.querySelector(".img-secondary");
+          const hasSwap = Boolean(portraitSecondary && portraitSecondary.trim());
+
+          prepareImage(
+            primaryImg,
+            portraitPrimary,
+            primaryImg?.getAttribute("alt") || "Lookbook primary image",
+            false
           );
-          return;
-        }
 
-        if (hasSwap && !item.classList.contains("is-revealed")) {
-          clearRevealed(item);
-          item.classList.add("is-revealed");
-          return;
-        }
+          if (hasSwap) {
+            item.classList.add("has-swap");
+            prepareImage(
+              secondaryImg,
+              portraitSecondary,
+              secondaryImg?.getAttribute("alt") || "Lookbook alternate image",
+              true
+            );
+          } else if (secondaryImg) {
+            item.classList.remove("has-swap");
+            secondaryImg.removeAttribute("src");
+            secondaryImg.alt = "";
+            secondaryImg.classList.add("is-empty");
+            secondaryImg.style.display = "none";
+          }
 
-        openLightbox(
-          lightboxOne,
-          lightboxTwo,
-          primaryAlt,
-          secondaryAlt
-        );
-      });
-    });
+          if (!isTouchDevice) {
+            item.addEventListener("dblclick", (e) => {
+              e.preventDefault();
+              openLightbox(
+                lightboxOne,
+                lightboxTwo,
+                primaryImg?.alt || "Expanded lookbook image one",
+                secondaryImg?.alt || "Expanded lookbook image two"
+              );
+            });
+          }
 
-    lightboxClose.addEventListener("click", closeLightbox);
+          item.addEventListener("click", (e) => {
+            if (!isTouchDevice) {
+              return;
+            }
 
-    lightbox.addEventListener("click", (e) => {
-      if (e.target === lightbox) {
-        closeLightbox();
-      }
-    });
+            e.preventDefault();
 
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" && lightbox.classList.contains("is-open")) {
-        closeLightbox();
-      }
-    });
+            if (hasSwap && !item.classList.contains("is-revealed")) {
+              clearRevealed(item);
+              item.classList.add("is-revealed");
+              return;
+            }
 
-    document.addEventListener("click", (e) => {
-      if (
-        isTouchDevice &&
-        !e.target.closest(".lookbook-item") &&
-        !e.target.closest(".lookbook-lightbox")
-      ) {
-        clearRevealed();
-      }
-    });
-  })();
-</script>
+            openLightbox(
+              lightboxOne,
+              lightboxTwo,
+              primaryImg?.alt || "Expanded lookbook image one",
+              secondaryImg?.alt || "Expanded lookbook image two"
+            );
+          });
+        });
+
+        lightboxImageTwo.addEventListener("error", function () {
+          console.warn("Failed to load lightbox image two:", lightboxImageTwo.src);
+          lightboxImageTwo.classList.add("is-hidden");
+          lightboxImageTwo.style.display = "none";
+        });
+
+        lightboxImageTwo.addEventListener("load", function () {
+          lightboxImageTwo.classList.remove("is-hidden");
+          lightboxImageTwo.style.display = "block";
+        });
+
+        lightboxClose.addEventListener("click", closeLightbox);
+
+        lightbox.addEventListener("click", (e) => {
+          if (e.target === lightbox) {
+            closeLightbox();
+          }
+        });
+
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Escape" && lightbox.classList.contains("is-open")) {
+            closeLightbox();
+          }
+        });
+
+        document.addEventListener("click", (e) => {
+          if (
+            isTouchDevice &&
+            !e.target.closest(".lookbook-item") &&
+            !e.target.closest(".lookbook-lightbox")
+          ) {
+            clearRevealed();
+          }
+        });
+      })();
+    </script>
 
     <div id="cart-drawer" class="cart-drawer" aria-hidden="true">
       <div class="cart-drawer__overlay" data-cart-close></div>
