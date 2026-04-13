@@ -4,8 +4,8 @@
     "title": "Dark Harlem Black Knight Heavy Box Shirt",
     "displayTitle": "Black Knight Heavy Box Shirt",
     "price": 8000,
-    "thumbnail": "assets/img/products/dhk/detail-shots/t-shirt/black/shot-1.png",
-    "hoverImage": "assets/img/products/dhk/portrait/shirt/black/black-shirt-1.png",
+    "thumbnail": "assets/img/products/dhk/portrait/shirt/black/black-shirt-1.png",
+    "hoverImage": "assets/img/products/dhk/detail-shots/t-shirt/black/shot-1.png",
     "images": [
       "assets/img/products/dhk/portrait/shirt/black/black-shirt-1.png",
       "assets/img/products/dhk/portrait/shirt/black/black-shirt-2.png",
@@ -39,8 +39,8 @@
     "title": "Dark Harlem White Knight Heavy Box Shirt",
     "displayTitle": "White Knight Heavy Box Shirt",
     "price": 8000,
-    "thumbnail": "assets/img/products/dhk/detail-shots/t-shirt/white/shot-1.png",
-    "hoverImage": "assets/img/products/dhk/portrait/shirt/white/white-shirt-1.png",
+    "thumbnail": "assets/img/products/dhk/portrait/shirt/white/white-shirt-1.png",
+    "hoverImage": "assets/img/products/dhk/detail-shots/t-shirt/white/shot-1.png",
     "images": [
       "assets/img/products/dhk/portrait/shirt/white/white-shirt-1.png",
       "assets/img/products/dhk/portrait/shirt/white/white-shirt-2.png",
@@ -96,8 +96,8 @@
     "title": "The Dark Harlem White Knight Hoodie",
      "displayTitle": "White Knight Hoodie",
     "price": 12500,
-    "thumbnail": "assets/img/products/dhk/detail-shots/hoodie/white/shot-1.png",
-    "hoverImage": "assets/img/products/dhk/portrait/hoodie/white/white-hoodie-1.png",
+    "thumbnail": "assets/img/products/dhk/portrait/hoodie/white/white-hoodie-1.png",
+    "hoverImage": "assets/img/products/dhk/detail-shots/hoodie/white/shot-1.png",
     "images": [
       "assets/img/products/dhk/campaign-1/studio-shots/portrait/white-portrait.jpeg",
       "assets/img/products/dhk/portrait/hoodie/white/white-hoodie-1.png",
@@ -153,8 +153,8 @@
     "title": "Dark Harlem White Knight Crown Hoodie",
      "displayTitle": "White Knight Crown",
     "price": 20000,
-    "thumbnail": "assets/img/products/dhk/detail-shots/crown/white/shot-1.png",
-    "hoverImage": "assets/img/products/dhk/portrait/crown-hoodie/white/white-crown-1.png",
+    "thumbnail": "assets/img/products/dhk/portrait/crown-hoodie/white/white-crown-1.png",
+    "hoverImage": "assets/img/products/dhk/detail-shots/crown/white/shot-1.png",
     "images": [
       "assets/img/products/dhk/detail-shots/crown/white/shot-1.png",
       "assets/img/products/dhk/campaign-1/studio-shots/portrait/white-crown-portrait.jpeg",
@@ -172,7 +172,7 @@
     "title": "Dark Harlem Black Knight Flare",
      "displayTitle": "Black Knight Flare",
     "price": 10000,
-    "thumbnail": "assets/img/products/dhk/portrait/flare/black/black-flare-1.png",
+    "thumbnail": "assets/img/products/dhk/detail-shots/flare/black/shot-1.png",
     "hoverImage": "assets/img/products/dhk/gif/flare-black.gif",
     "images": [
       "assets/img/products/dhk/gif/flare-black.gif",
@@ -263,8 +263,8 @@
     "title": "Dark Harlem White Knight Joggers",
      "displayTitle": "White Knight Joggers",
     "price": 10000,
-    "thumbnail": "assets/img/products/dhk/detail-shots/joggers/white/shot-1.png",
-    "hoverImage": "assets/img/products/dhk/portrait/joggers/white/white-jogger-1.png",
+    "thumbnail": "assets/img/products/dhk/portrait/joggers/white/white-jogger-1.png",
+    "hoverImage": "assets/img/products/dhk/detail-shots/joggers/white/shot-1.png",
     "images": [
       "assets/img/products/dhk/detail-shots/joggers/white/shot-1.png",
       "assets/img/products/dhk/portrait/joggers/white/white-jogger-2.png",
