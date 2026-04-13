@@ -230,16 +230,19 @@
         justify-self: start;
       }
 
-      .lookbook-page {
-        background: #e9e9e6;
-        color: #111;
-      }
+     .lookbook-page {
+  background:
+    radial-gradient(circle at 50% 18%, rgba(70, 70, 70, 0.22) 0%, rgba(28, 28, 28, 0.08) 26%, rgba(10, 10, 10, 0) 52%),
+    linear-gradient(to bottom, #2a2a2a 0%, #1a1a1a 34%, #101010 68%, #0a0a0a 100%);
+  color: #f1f1f1;
+  min-height: 100vh;
+}
 
-      .lookbook-page .footer,
-      .lookbook-page .utility-bar,
-      .lookbook-page .section-header {
-        background: #000;
-      }
+.lookbook-page .footer,
+.lookbook-page .utility-bar,
+.lookbook-page .section-header {
+  background: #000;
+}
 
       .lookbook-shell {
         max-width: 1280px;
@@ -266,46 +269,48 @@
       }
 
       .lookbook-title {
-        margin: 0 0 26px;
-        color: #111;
-        text-shadow: none;
-        font-family: "Cinzel", serif;
-        font-weight: 400;
-        text-transform: uppercase;
-        letter-spacing: 0.02em;
-        line-height: 0.96;
-        font-size: clamp(34px, 5vw, 76px);
-      }
+  margin: 0 0 26px;
+  color: #f5f5f5;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.08);
+  font-family: "Cinzel", serif;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  line-height: 0.96;
+  font-size: clamp(34px, 5vw, 76px);
+}
 
-      .lookbook-copy {
-        margin: 0 auto 34px;
-        max-width: 980px;
-        color: #202020;
-        font-family: Georgia, "Times New Roman", serif;
-        font-size: clamp(20px, 2vw, 28px);
-        line-height: 1.68;
-      }
+.lookbook-copy {
+  margin: 0 auto 34px;
+  max-width: 980px;
+  color: rgba(255, 255, 255, 0.78);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(20px, 2vw, 28px);
+  line-height: 1.68;
+}
 
-      .lookbook-shop-btn {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        min-width: min(500px, 86vw);
-        min-height: 88px;
-        padding: 0 28px;
-        border: 2px solid #151515;
-        color: #111;
-        text-decoration: none;
-        background: transparent;
-        font-family: "Roboto", sans-serif;
-        text-transform: uppercase;
-        letter-spacing: 0.12em;
-        font-size: clamp(18px, 1.4vw, 22px);
-      }
+.lookbook-shop-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: min(500px, 86vw);
+  min-height: 88px;
+  padding: 0 28px;
+  border: 1.5px solid rgba(255, 255, 255, 0.82);
+  color: #f3f3f3;
+  text-decoration: none;
+  background: rgba(255, 255, 255, 0.03);
+  font-family: "Roboto", sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: clamp(18px, 1.4vw, 22px);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
 
-      .lookbook-shop-btn:hover {
-        background: rgba(0, 0, 0, 0.035);
-      }
+.lookbook-shop-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
 
       .lookbook-grid {
         display: grid;
@@ -313,24 +318,23 @@
         gap: 22px;
       }
 
-      .lookbook-item {
-        position: relative;
-        display: block;
-        text-decoration: none;
-        color: inherit;
-        cursor: pointer;
-        overflow: hidden;
-        background: #dfdfda;
-        user-select: none;
-      }
+     .lookbook-item {
+  position: relative;
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.03);
+}
 
-      .lookbook-frame {
-        position: relative;
-        width: 100%;
-        aspect-ratio: 0.78 / 1;
-        overflow: hidden;
-        background: #ddd8d2;
-      }
+.lookbook-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 0.78 / 1;
+  overflow: hidden;
+  background: #141414;
+}
 
       .lookbook-frame img {
         position: absolute;
@@ -640,7 +644,7 @@
             class="lookbook-item"
             data-portrait-primary="assets/img/products/dhk/campaign-1/studio-shots/portrait/grey-portrait.jpeg"
             data-portrait-secondary="assets/img/products/dhk/campaign-1/studio-shots/portrait/grey-portrait-fullbody.png"
-            data-lightbox-one="assets/img/products/dhk/campaign-1/studio-shots/grey-1.jpg"
+            data-lightbox-one="assets/img/products/dhk/campaign-1/studio-shots/grey-1.jpeg"
             data-lightbox-two="assets/img/products/dhk/campaign-1/studio-shots/grey-2.jpeg"
           >
             <div class="lookbook-frame">
@@ -662,7 +666,7 @@
             data-portrait-primary="assets/img/products/dhk/campaign-1/studio-shots/portrait/grey-crown-portrait.jpeg"
             data-portrait-secondary="assets/img/products/dhk/campaign-1/studio-shots/portrait/grey-crown-portrait-fullbody.png"
             data-lightbox-one="assets/img/products/dhk/campaign-1/studio-shots/grey-crown-1.jpeg"
-            data-lightbox-two="assets/img/products/dhk/campaign-1/studio-shots/grey-crown-2.jpg"
+            data-lightbox-two="assets/img/products/dhk/campaign-1/studio-shots/grey-crown-2.jpeg"
           >
             <div class="lookbook-frame">
               <img
@@ -683,7 +687,7 @@
             data-portrait-primary="assets/img/products/dhk/campaign-1/studio-shots/portrait/black-portrait.jpeg"
             data-portrait-secondary="assets/img/products/dhk/campaign-1/studio-shots/portrait/black-portrait-fullbody.png"
             data-lightbox-one="assets/img/products/dhk/campaign-1/studio-shots/black-1.jpeg"
-            data-lightbox-two="assets/img/products/dhk/campaign-1/studio-shots/black-2.jpg"
+            data-lightbox-two="assets/img/products/dhk/campaign-1/studio-shots/black-2.jpeg"
           >
             <div class="lookbook-frame">
               <img
@@ -704,7 +708,7 @@
             data-portrait-primary="assets/img/products/dhk/campaign-1/studio-shots/portrait/black-crown-portrait.jpeg"
             data-portrait-secondary="assets/img/products/dhk/campaign-1/studio-shots/portrait/black-crown-portrait-fullbody.png"
             data-lightbox-one="assets/img/products/dhk/campaign-1/studio-shots/black-crown-1.jpeg"
-            data-lightbox-two="assets/img/products/dhk/campaign-1/studio-shots/black-crown-2.jpg"
+            data-lightbox-two="assets/img/products/dhk/campaign-1/studio-shots/black-crown-2.jpeg"
           >
             <div class="lookbook-frame">
               <img
@@ -725,7 +729,7 @@
             data-portrait-primary="assets/img/products/dhk/campaign-1/studio-shots/portrait/white-portrait.jpeg"
             data-portrait-secondary="assets/img/products/dhk/campaign-1/studio-shots/portrait/white-portrait-fullbody.png"
             data-lightbox-one="assets/img/products/dhk/campaign-1/studio-shots/white-1.jpeg"
-            data-lightbox-two="assets/img/products/dhk/campaign-1/studio-shots/white-2.jpg"
+            data-lightbox-two="assets/img/products/dhk/campaign-1/studio-shots/white-2.jpeg"
           >
             <div class="lookbook-frame">
               <img
@@ -761,11 +765,32 @@
               />
             </div>
           </article>
-          
+
           <article
             class="lookbook-item"
             data-portrait-primary="assets/img/products/dhk/campaign-1/studio-shots/portrait/nylon-crown-portrait.png"
             data-portrait-secondary="assets/img/products/dhk/campaign-1/studio-shots/portrait/nylon-crown-portrait-fullbody.png"
+            data-lightbox-one="assets/img/products/dhk/campaign-1/studio-shots/nylon-crown-1.png"
+            data-lightbox-two="assets/img/products/dhk/campaign-1/studio-shots/nylon-crown-2.png"
+          >
+            <div class="lookbook-frame">
+              <img
+                class="img-primary"
+                src="assets/img/products/dhk/campaign-1/studio-shots/portrait/nylon-crown-portrait.png"
+                alt="DHK nylon crown portrait display image"
+              />
+              <img
+                class="img-secondary"
+                src="assets/img/products/dhk/campaign-1/studio-shots/portrait/nylon-crown-portrait-fullbody.png"
+                alt="DHK nylon crown alternate display image"
+              />
+            </div>
+          </article>
+
+          <article
+            class="lookbook-item"
+            data-portrait-primary="assets/img/products/dhk/campaign-1/studio-shots/close-up/nylon-crown-close.png"
+            data-portrait-secondary=""
             data-lightbox-one="assets/img/products/dhk/campaign-1/studio-shots/nylon-crown-1.png"
             data-lightbox-two="assets/img/products/dhk/campaign-1/studio-shots/nylon-crown-2.png"
           >
@@ -777,28 +802,28 @@
               />
               <img
                 class="img-secondary"
-                src="assets/img/products/dhk/campaign-1/studio-shots/portrait/nylon-crown-portrait-fullbody.png"
-                alt="DHK nylon crown close-up display image"
+                src=""
+                alt=""
               />
             </div>
           </article>
 
           <article
             class="lookbook-item"
-            data-portrait-primary="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/Mens/Grey/grey-shoot-1.png"
-            data-portrait-secondary="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/Mens/Grey/grey-shoot-detail-2.png"
-            data-lightbox-one="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/Mens/Grey/grey-shoot-2.png"
-            data-lightbox-two="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/Mens/Grey/grey-shoot-3.png"
+            data-portrait-primary="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/Grey/grey-shoot-1.png"
+            data-portrait-secondary="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/Grey/grey-shoot-detail-2.png"
+            data-lightbox-one="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/Grey/grey-shoot-2.png"
+            data-lightbox-two="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/Grey/grey-shoot-3.png"
           >
             <div class="lookbook-frame">
               <img
                 class="img-primary"
-                src="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/Mens/Grey/grey-shoot-1.png"
+                src="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/Grey/grey-shoot-1.png"
                 alt="DHK grey shirt portrait display image"
               />
               <img
                 class="img-secondary"
-                src="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/Mens/Grey/grey-shoot-detail-2.png"
+                src="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/Grey/grey-shoot-detail-2.png"
                 alt="DHK grey shirt alternate display image"
               />
             </div>
@@ -806,20 +831,20 @@
 
           <article
             class="lookbook-item"
-            data-portrait-primary="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/Mens/Black/black-shoot-1 .png"
-            data-portrait-secondary="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/Mens/Black/black-shoot-detail-2.png"
-            data-lightbox-one="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/Mens/Black/black-shoot-2.png"
-            data-lightbox-two="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/Mens/Black/black-shoot-4.png"
+            data-portrait-primary="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/Black/black-shoot-1.png"
+            data-portrait-secondary="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/Black/black-shoot-detail-2.png"
+            data-lightbox-one="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/Black/black-shoot-2.png"
+            data-lightbox-two="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/Black/black-shoot-4.png"
           >
             <div class="lookbook-frame">
               <img
                 class="img-primary"
-                src="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/Mens/Black/black-shoot-1 .png"
+                src="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/Black/black-shoot-1.png"
                 alt="DHK black shirt portrait display image"
               />
               <img
                 class="img-secondary"
-                src="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/Mens/Black/black-shoot-detail-2.png"
+                src="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/Black/black-shoot-detail-2.png"
                 alt="DHK black shirt alternate display image"
               />
             </div>
@@ -827,20 +852,20 @@
 
           <article
             class="lookbook-item"
-            data-portrait-primary="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/Mens/White/white-shoot-1.png"
-            data-portrait-secondary="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/Mens/White/white-shoot-detail-2.png"
-            data-lightbox-one="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/Mens/White/white-shoot-2.png"
-            data-lightbox-two="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/Mens/White/white-shoot-4.png"
+            data-portrait-primary="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/White/white-shoot-1.png"
+            data-portrait-secondary="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/White/white-shoot-detail-2.png"
+            data-lightbox-one="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/White/white-shoot-2.png"
+            data-lightbox-two="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/White/white-shoot-4.png"
           >
             <div class="lookbook-frame">
               <img
                 class="img-primary"
-                src="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/Mens/White/white-shoot-1.png"
+                src="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/White/white-shoot-1.png"
                 alt="DHK white shirt portrait display image"
               />
               <img
                 class="img-secondary"
-                src="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/Mens/White/white-shoot-detail-2.png"
+                src="assets/img/products/dhk/campaign-1/campaign-shots/T shirts/White/white-shoot-detail-2.png"
                 alt="DHK white shirt alternate display image"
               />
             </div>
