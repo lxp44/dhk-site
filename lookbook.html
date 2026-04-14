@@ -230,35 +230,48 @@
         justify-self: start;
       }
 
-     .lookbook-page {
+ html,
+body.lookbook-page {
+  min-height: 100%;
   background:
     radial-gradient(circle at 50% 16%, rgba(95, 95, 95, 0.16) 0%, rgba(45, 45, 45, 0.10) 18%, rgba(15, 15, 15, 0) 42%),
-    linear-gradient(to bottom, #2b2b2b 0%, #1b1b1b 30%, #111111 62%, #0a0a0a 100%);
+    linear-gradient(to bottom, #2b2b2b 0%, #1b1b1b 30%, #111111 62%, #0a0a0a 100%) !important;
   color: #f1f1f1;
-  min-height: 100vh;
 }
 
-.lookbook-page .footer,
-.lookbook-page .utility-bar,
-.lookbook-page .section-header {
-  background: #000;
+body.template-page.lookbook-page {
+  background:
+    radial-gradient(circle at 50% 16%, rgba(95, 95, 95, 0.16) 0%, rgba(45, 45, 45, 0.10) 18%, rgba(15, 15, 15, 0) 42%),
+    linear-gradient(to bottom, #2b2b2b 0%, #1b1b1b 30%, #111111 62%, #0a0a0a 100%) !important;
+  color: #f1f1f1 !important;
 }
 
-.lookbook-shell {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 70px 22px 90px;
-  position: relative;
-  background: transparent;
+body.lookbook-page #MainContent,
+body.lookbook-page .lookbook-shell,
+body.lookbook-page .lookbook-editorial,
+body.lookbook-page .lookbook-grid {
+  background: transparent !important;
 }
 
-.lookbook-editorial {
-  max-width: 1020px;
-  margin: 0 auto 56px;
-  text-align: center;
-  background: transparent;
+body.lookbook-page .footer,
+body.lookbook-page .utility-bar,
+body.lookbook-page .section-header {
+  background: #000 !important;
+}
+body.lookbook-page .lookbook-title {
+  color: #f5f5f5 !important;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.06) !important;
 }
 
+body.lookbook-page .lookbook-copy {
+  color: rgba(255, 255, 255, 0.80) !important;
+}
+
+body.lookbook-page .lookbook-shop-btn {
+  color: #f2f2f2 !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.72) !important;
+  background: rgba(255, 255, 255, 0.025) !important;
+}
       .lookbook-title {
   margin: 0 0 26px;
   color: #f5f5f5;
