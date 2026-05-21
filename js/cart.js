@@ -538,15 +538,18 @@
       const res = await fetch("/.netlify/functions/create-checkout-session", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          items: lineItems,
-          discountCode: discount ? discount.code : null,
-          discountType: discount ? discount.type : null,
-          discountAmountCents: discount ? discount.amountCents : 0,
-          success_url: window.location.origin + "/success.html",
-          cancel_url: window.location.origin + "/cart.html",
-        }),
-      });
+const activeDiscountCode =
+  localStorage.getItem("dhk_discount_code") ||
+  document.getElementById("discount-code-drawer")?.value ||
+  document.getElementById("discount-code-page")?.value ||
+  "";
+
+body: JSON.stringify({
+  items: lineItems,
+  discountCode: activeDiscountCode,
+  success_url: window.location.origin + "/success.html",
+  cancel_url: window.location.origin + "/cart.html",
+}),
 
       if (!res.ok) throw new Error("Checkout request failed");
       const data = await res.json();
