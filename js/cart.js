@@ -3,9 +3,6 @@
   if (window.__DHK_CART_LOADED__) return;
   window.__DHK_CART_LOADED__ = true;
 
-  // ===========================
-  //  CONFIG
-  // ===========================
   const STRIPE_PUBLISHABLE_KEY = "";
   const STORAGE_KEY = "dhk_cart_v1";
   const DISCOUNT_STORAGE_KEY = "dhk_cart_discount_v1";
@@ -34,8 +31,7 @@
       const clean = v.replace(/[$,\s]/g, "");
       if (!clean) return 0;
       const n = Number(clean);
-      if (!Number.isFinite(n)) return 0;
-      return Math.round(n * 100);
+      return Number.isFinite(n) ? Math.round(n * 100) : 0;
     }
     const n = Number(v);
     return Number.isFinite(n) ? Math.round(n * 100) : 0;
@@ -44,10 +40,7 @@
   function centsFromElement(el) {
     if (!el) return 0;
     const pc = el.getAttribute("data-price-cents");
-    if (pc != null) {
-      const n = Number(pc);
-      return Number.isFinite(n) ? Math.round(n) : 0;
-    }
+    if (pc != null) return Math.round(Number(pc)) || 0;
     const pd = el.getAttribute("data-price");
     if (pd != null) return toCents(pd);
     return 0;
@@ -71,12 +64,8 @@
       out.qty = Math.max(1, Math.round(Number(out.qty) || 1));
 
       if (out.priceCents == null) {
-        if (out.price != null) {
-          out.priceCents = toCents(out.price);
-          delete out.price;
-        } else {
-          out.priceCents = 0;
-        }
+        out.priceCents = out.price != null ? toCents(out.price) : 0;
+        delete out.price;
       } else {
         out.priceCents = Math.round(Number(out.priceCents)) || 0;
       }
@@ -91,9 +80,7 @@
       const raw = localStorage.getItem(STORAGE_KEY);
       const parsed = raw ? JSON.parse(raw) : [];
       const items = migrateItems(parsed);
-      if (JSON.stringify(parsed) !== JSON.stringify(items)) {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
-      }
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
       return items;
     } catch {
       localStorage.removeItem(STORAGE_KEY);
@@ -147,10 +134,7 @@
     (items || []).forEach((it) => {
       const qty = Math.max(1, Number(it.qty) || 1);
       const price = Number(it.priceCents) || 0;
-
-      for (let i = 0; i < qty; i += 1) {
-        units.push(price);
-      }
+      for (let i = 0; i < qty; i++) units.push(price);
     });
 
     if (units.length < 2) return 0;
@@ -170,11 +154,10 @@
     if (subCents <= 0) return null;
 
     if (SITE_WIDE_DISCOUNT_ENABLED && SITE_WIDE_PERCENT_OFF > 0) {
-      const amountCents = Math.round(subCents * (SITE_WIDE_PERCENT_OFF / 100));
       return {
         code: `${SITE_WIDE_PERCENT_OFF}% OFF`,
         type: "SITE_WIDE_PERCENT",
-        amountCents,
+        amountCents: Math.round(subCents * (SITE_WIDE_PERCENT_OFF / 100)),
         percent: SITE_WIDE_PERCENT_OFF,
       };
     }
@@ -185,11 +168,10 @@
     if (!code) return null;
 
     if (PLUS_CODE_ENABLED && code === normalizeCode(PLUS_CODE)) {
-      const amountCents = Math.round(subCents * (PLUS_PERCENT_OFF / 100));
       return {
         code: PLUS_CODE,
         type: "PERCENT",
-        amountCents,
+        amountCents: Math.round(subCents * (PLUS_PERCENT_OFF / 100)),
         percent: PLUS_PERCENT_OFF,
       };
     }
@@ -210,25 +192,22 @@
 
   function getDiscountMessage(code, items) {
     const clean = normalizeCode(code);
-
     if (!clean) return "";
 
     if (SITE_WIDE_DISCOUNT_ENABLED) {
       return "A site-wide discount is already active. Discounts cannot be combined.";
     }
 
-    if (!DISCOUNT_CODES_ENABLED) {
-      return "Discount codes are currently turned off.";
-    }
+    if (!DISCOUNT_CODES_ENABLED) return "Discount codes are currently turned off.";
 
     if (PLUS_CODE_ENABLED && clean === normalizeCode(PLUS_CODE)) {
-      return `${PLUS_CODE} applied — ${PLUS_PERCENT_OFF}% off.`;
+      return `${PLUS_CODE} applied — ${PLUS_PERCENT_OFF}% off. Discounts cannot be combined.`;
     }
 
     if (LXP_CODE_ENABLED && clean === normalizeCode(LXP_CODE)) {
       const qty = (items || []).reduce((n, it) => n + (Number(it.qty) || 1), 0);
       if (qty < 2) return `${LXP_CODE} requires at least 2 items.`;
-      return `${LXP_CODE} applied — buy one, get one free equal or less value.`;
+      return `${LXP_CODE} applied — buy one, get one free equal or less value. Discounts cannot be combined.`;
     }
 
     return "Invalid discount code.";
@@ -240,20 +219,14 @@
     const i = items.findIndex((it) => it.key === key);
 
     let priceCents = 0;
-    if (item.priceCents != null) {
-      priceCents = Math.round(Number(item.priceCents)) || 0;
-    } else if (item.price != null) {
-      priceCents = toCents(item.price);
-    } else if (item.el) {
-      priceCents = centsFromElement(item.el);
-    }
+    if (item.priceCents != null) priceCents = Math.round(Number(item.priceCents)) || 0;
+    else if (item.price != null) priceCents = toCents(item.price);
+    else if (item.el) priceCents = centsFromElement(item.el);
 
     if (i >= 0) {
       items[i].qty = (Number(items[i].qty) || 1) + 1;
       if (!items[i].priceCents && priceCents) items[i].priceCents = priceCents;
-      if (!items[i].stripePriceId && item.stripePriceId) {
-        items[i].stripePriceId = item.stripePriceId;
-      }
+      if (!items[i].stripePriceId && item.stripePriceId) items[i].stripePriceId = item.stripePriceId;
     } else {
       items.push({
         key,
@@ -273,8 +246,7 @@
   }
 
   function remove(key) {
-    const items = read().filter((it) => it.key !== key);
-    write(items);
+    write(read().filter((it) => it.key !== key));
   }
 
   const drawerEls = () => ({
@@ -373,27 +345,26 @@
       ctx.discountInput.value = code;
     }
 
-    if (ctx.discountMessage) {
-      if (discount) {
-        ctx.discountMessage.textContent =
-          discount.type === "PERCENT"
-            ? `${discount.code} applied — ${discount.percent}% off. Discounts cannot be combined.`
-            : discount.type === "BOGO_EQUAL_OR_LESS"
-            ? `${discount.code} applied — buy one, get one free equal or less value. Discounts cannot be combined.`
-            : `${discount.code} applied. Discounts cannot be combined.`;
-      } else if (code) {
-        ctx.discountMessage.textContent = getDiscountMessage(code, items);
-      } else {
-        ctx.discountMessage.textContent = "";
-      }
+    if (!ctx.discountMessage) return;
+
+    if (discount) {
+      ctx.discountMessage.textContent =
+        discount.type === "PERCENT"
+          ? `${discount.code} applied — ${discount.percent}% off. Discounts cannot be combined.`
+          : discount.type === "BOGO_EQUAL_OR_LESS"
+          ? `${discount.code} applied — buy one, get one free equal or less value. Discounts cannot be combined.`
+          : `${discount.code} applied. Discounts cannot be combined.`;
+    } else if (code) {
+      ctx.discountMessage.textContent = getDiscountMessage(code, items);
+    } else {
+      ctx.discountMessage.textContent = "";
     }
   }
 
   function renderTotals(ctx, items) {
     const subCents = subtotalCents(items);
     const discount = getActiveDiscount(items);
-    const discountCents = discount ? discount.amountCents : 0;
-    const totalCents = Math.max(0, subCents - discountCents);
+    const totalCents = Math.max(0, subCents - (discount ? discount.amountCents : 0));
 
     ctx.subtotal.textContent = fmt(totalCents / 100);
     updateDiscountUI(ctx, items, discount);
@@ -445,7 +416,7 @@
     }
 
     if (ctx.type === "drawer") renderDrawer(ctx, items);
-    else if (ctx.type === "page") renderPage(ctx, items);
+    if (ctx.type === "page") renderPage(ctx, items);
   }
 
   function updateHeaderCount() {
@@ -490,7 +461,9 @@
     if (e.target.matches("[data-incr]")) {
       items[idx].qty = (Number(items[idx].qty) || 1) + 1;
       write(items);
-    } else if (e.target.matches("[data-decr]")) {
+    }
+
+    if (e.target.matches("[data-decr]")) {
       const next = Math.max(0, (Number(items[idx].qty) || 1) - 1);
       if (next === 0) items.splice(idx, 1);
       else items[idx].qty = next;
@@ -501,7 +474,6 @@
   function applyDiscountFromContext(ctx) {
     if (!ctx || !ctx.discountInput) return;
 
-    const items = read();
     const code = normalizeCode(ctx.discountInput.value);
 
     if (!code) {
@@ -512,16 +484,11 @@
 
     saveDiscountCode(code);
     render();
-
-    if (ctx.discountMessage) {
-      ctx.discountMessage.textContent = getDiscountMessage(code, items);
-    }
   }
 
   async function startCheckout() {
     try {
       const items = read();
-      const discount = getActiveDiscount(items);
 
       const lineItems = items
         .filter((it) => it.stripePriceId)
@@ -535,23 +502,21 @@
         return;
       }
 
+      const activeDiscountCode = readDiscountCode();
+
       const res = await fetch("/.netlify/functions/create-checkout-session", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-const activeDiscountCode =
-  localStorage.getItem("dhk_discount_code") ||
-  document.getElementById("discount-code-drawer")?.value ||
-  document.getElementById("discount-code-page")?.value ||
-  "";
+        body: JSON.stringify({
+          items: lineItems,
+          discountCode: activeDiscountCode,
+          success_url: window.location.origin + "/success.html",
+          cancel_url: window.location.origin + "/cart.html",
+        }),
+      });
 
-body: JSON.stringify({
-  items: lineItems,
-  discountCode: activeDiscountCode,
-  success_url: window.location.origin + "/success.html",
-  cancel_url: window.location.origin + "/cart.html",
-}),
+      if (!res.ok) throw new Error(await res.text());
 
-      if (!res.ok) throw new Error("Checkout request failed");
       const data = await res.json();
 
       if (data.url) {
@@ -623,9 +588,7 @@ body: JSON.stringify({
         }
 
         const { type, overlay } = getContext();
-        if (type === "drawer" && overlay && e.target === overlay) {
-          closeDrawer();
-        }
+        if (type === "drawer" && overlay && e.target === overlay) closeDrawer();
       },
       { passive: false }
     );
@@ -644,6 +607,7 @@ body: JSON.stringify({
       }
 
       bindDiscountControls();
+      bindCheckoutButtons();
     };
 
     attach();
