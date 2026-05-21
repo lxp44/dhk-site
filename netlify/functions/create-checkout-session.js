@@ -2,11 +2,14 @@
 const Stripe = require("stripe");
 
 const stripeSecret = process.env.STRIPE_SECRET_KEY;
+
 if (!stripeSecret) {
   console.error("Missing STRIPE_SECRET_KEY env var");
 }
 
-const stripe = new Stripe(stripeSecret || "", { apiVersion: "2024-06-20" });
+const stripe = new Stripe(stripeSecret || "", {
+  apiVersion: "2024-06-20",
+});
 
 const CORS = {
   "Access-Control-Allow-Origin": "*",
@@ -47,6 +50,7 @@ async function buildExpandedUnits(lineItems) {
     const itemCurrency = String(priceObj.currency || "usd").toLowerCase();
 
     if (!currency) currency = itemCurrency;
+
     if (currency !== itemCurrency) {
       throw new Error("Discounts require all cart items to use the same currency.");
     }
@@ -56,7 +60,10 @@ async function buildExpandedUnits(lineItems) {
     }
   }
 
-  return { units, currency: currency || "usd" };
+  return {
+    units,
+    currency: currency || "usd",
+  };
 }
 
 function calculateBogoEqualOrLess(units) {
@@ -65,6 +72,7 @@ function calculateBogoEqualOrLess(units) {
   const sorted = [...units].sort((a, b) => b - a);
 
   let discountAmount = 0;
+
   for (let i = 1; i < sorted.length; i += 2) {
     discountAmount += sorted[i];
   }
@@ -75,6 +83,7 @@ function calculateBogoEqualOrLess(units) {
 async function buildDiscounts(payload, lineItems) {
   const discounts = [];
 
+  // Site-wide discount overrides codes. No combining.
   if (ENABLE_SITE_WIDE_DISCOUNT && SITE_WIDE_PERCENT_OFF > 0) {
     const coupon = await stripe.coupons.create({
       name: `Site-wide ${SITE_WIDE_PERCENT_OFF}% OFF`,
@@ -89,6 +98,8 @@ async function buildDiscounts(payload, lineItems) {
   if (!ENABLE_DISCOUNT_CODES) return discounts;
 
   const code = normalizeCode(payload.discountCode);
+
+  if (!code) return discounts;
 
   if (PLUS_CODE_ENABLED && code === normalizeCode(PLUS_CODE)) {
     const coupon = await stripe.coupons.create({
@@ -125,11 +136,19 @@ async function buildDiscounts(payload, lineItems) {
 exports.handler = async (event) => {
   try {
     if (event.httpMethod === "OPTIONS") {
-      return { statusCode: 200, headers: CORS, body: "ok" };
+      return {
+        statusCode: 200,
+        headers: CORS,
+        body: "ok",
+      };
     }
 
     if (event.httpMethod !== "POST") {
-      return { statusCode: 405, headers: CORS, body: "Method Not Allowed" };
+      return {
+        statusCode: 405,
+        headers: CORS,
+        body: "Method Not Allowed",
+      };
     }
 
     if (!stripeSecret) {
@@ -144,7 +163,11 @@ exports.handler = async (event) => {
     const items = Array.isArray(payload.items) ? payload.items : [];
 
     if (items.length === 0) {
-      return { statusCode: 400, headers: CORS, body: "No items in cart." };
+      return {
+        statusCode: 400,
+        headers: CORS,
+        body: "No items in cart.",
+      };
     }
 
     const line_items = items.map((it, i) => {
@@ -163,7 +186,10 @@ exports.handler = async (event) => {
         throw new Error(`Missing/invalid quantity at index ${i}`);
       }
 
-      return { price, quantity };
+      return {
+        price,
+        quantity,
+      };
     });
 
     const originHeader = event.headers.origin || event.headers.Origin;
@@ -185,8 +211,12 @@ exports.handler = async (event) => {
       line_items,
       success_url: successURL,
       cancel_url: cancelURL,
-      shipping_address_collection: { allowed_countries: ["US", "CA"] },
-      automatic_tax: { enabled: true },
+      shipping_address_collection: {
+        allowed_countries: ["US", "CA"],
+      },
+      automatic_tax: {
+        enabled: true,
+      },
     };
 
     if (discounts.length > 0) {
@@ -197,8 +227,13 @@ exports.handler = async (event) => {
 
     return {
       statusCode: 200,
-      headers: { ...CORS, "Content-Type": "application/json" },
-      body: JSON.stringify({ url: session.url }),
+      headers: {
+        ...CORS,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        url: session.url,
+      }),
     };
   } catch (err) {
     console.error("[create-checkout-session] Error:", err);
