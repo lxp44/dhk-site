@@ -56,11 +56,11 @@
   "title": "Dark Harlem Black Dame Crop Shirt",
   "displayTitle": "Black Dame Crop Shirt",
   "price": 8000,
-  "thumbnail": "assets/img/products/dhk/portrait/dame-crop/black/black-dame-crop-1.png",
-  "hoverImage": "assets/img/products/dhk/detail-shots/dame-crop/black/shot-1.png",
+  "thumbnail": "assets/img/products/dhk/portrait/shirt/black/black-shirt-1.png",
+  "hoverImage": "assets/img/products/dhk/detail-shots/t-shirt/black/shot-1.png",
   "images": [
-    "assets/img/products/dhk/portrait/dame-crop/black/black-dame-crop-1.png",
-    "assets/img/products/dhk/portrait/dame-crop/black/black-dame-crop-2.png",
+      "assets/img/products/dhk/portrait/shirt/black/black-shirt-1.png",
+      "assets/img/products/dhk/portrait/shirt/black/black-shirt-2.png",
     "assets/img/products/dhk/portrait/dame-crop/black/black-dame-crop-3.png"
   ],
   "options": ["S", "M", "L", "XL", "2XL", "3XL"],
@@ -73,11 +73,11 @@
   "title": "Dark Harlem Grey Dame Crop Shirt",
   "displayTitle": "Grey Dame Crop Shirt",
   "price": 8000,
-  "thumbnail": "assets/img/products/dhk/portrait/dame-crop/grey/grey-dame-crop-1.png",
+  "thumbnail": "assets/img/products/dhk/portrait/shirt//grey/grey-shirt-1.png",
   "hoverImage": "assets/img/products/dhk/detail-shots/dame-crop/grey/shot-1.png",
   "images": [
-    "assets/img/products/dhk/portrait/dame-crop/grey/grey-dame-crop-1.png",
-    "assets/img/products/dhk/portrait/dame-crop/grey/grey-dame-crop-2.png",
+    "assets/img/products/dhk/portrait/shirt/grey/grey-shirt-1.png",
+      "assets/img/products/dhk/portrait/shirt/grey/grey-shirt-2.png",
     "assets/img/products/dhk/portrait/dame-crop/grey/grey-dame-crop-3.png"
   ],
   "options": ["S", "M", "L", "XL", "2XL", "3XL"],
@@ -90,11 +90,11 @@
   "title": "Dark Harlem White Dame Crop Shirt",
   "displayTitle": "White Dame Crop Shirt",
   "price": 8000,
-  "thumbnail": "assets/img/products/dhk/portrait/dame-crop/white/white-dame-crop-1.png",
-  "hoverImage": "assets/img/products/dhk/detail-shots/dame-crop/white/shot-1.png",
+  "thumbnail": "assets/img/products/dhk/portrait/shirt/white/white-shirt-1.png",
+  "hoverImage": "assets/img/products/dhk/detail-shots/t-shirt/white/shot-1.png",
   "images": [
-    "assets/img/products/dhk/portrait/dame-crop/white/white-dame-crop-1.png",
-    "assets/img/products/dhk/portrait/dame-crop/white/white-dame-crop-2.png",
+    "assets/img/products/dhk/portrait/shirt/white/white-shirt-1.png",
+    "assets/img/products/dhk/portrait/shirt/white/white-shirt-2.png",
     "assets/img/products/dhk/portrait/dame-crop/white/white-dame-crop-3.png"
   ],
   "options": ["S", "M", "L", "XL", "2XL", "3XL"],
