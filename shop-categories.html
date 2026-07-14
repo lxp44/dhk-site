@@ -1,470 +1,1628 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <link rel="icon" href="assets/img/DHK_transparent.gif" type="image/gif" sizes="any">
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>DHK — Shop</title>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <title>DHK — Shop Collections</title>
 
-  <link rel="stylesheet" href="css/styles.css"/>
+    <meta
+      name="description"
+      content="Explore the DHK Collection, Comic Book Collection, DHK Blanks Collection, and every available Dark Harlem Knight product."
+    />
 
-  <style>
-    .utility-bar .page-width {
-      max-width: none;
-      padding: 0;
-    }
+    <link
+      rel="icon"
+      href="assets/img/DHK_transparent.gif"
+      type="image/gif"
+      sizes="any"
+    />
 
-    .utility-bar .utility-bar__grid {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0;
-    }
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
 
-    .utility-bar .list-social,
-    .utility-bar .localization-wrapper {
-      display: none !important;
-    }
+    <link
+      rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin
+    />
 
-    .announcement-bar {
-      width: 100%;
-      display: flex;
-      justify-content: center;
-    }
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet"
+    />
 
-    .announcement-track {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 24px;
-    }
+    <link rel="stylesheet" href="css/styles.css" />
 
-    .announcement-bar__message {
-      margin: 0;
-      padding: 10px 0;
-    }
+    <style>
+      /* ========================================
+         ANNOUNCEMENT BAR
+      ======================================== */
 
-    .announcement-bar__message span {
-      font-family: 'Cinzel', serif;
-      font-weight: 700;
-      font-size: 13px;
-      letter-spacing: .18em;
-      text-transform: uppercase;
-      color: #e5e5e5;
-      text-shadow: 0 0 6px rgba(255,255,255,.12);
-    }
+      .utility-bar .page-width {
+        max-width: none;
+        padding: 0;
+      }
 
-    /* Full-screen drawer for both mobile + desktop */
-    #menu-drawer {
-      position: fixed;
-      inset: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(5, 5, 7, 0.97);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      box-shadow: none;
-      z-index: 2147483646;
-      padding: 34px 28px 40px;
-      overflow-y: auto;
-      border: 0;
-    }
+      .utility-bar .utility-bar__grid {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0;
+      }
 
-    .menu-drawer__inner-container,
-    .menu-drawer__navigation-container,
-    .menu-drawer__navigation {
-      height: 100%;
-    }
+      .utility-bar .list-social,
+      .utility-bar .localization-wrapper {
+        display: none !important;
+      }
 
-    .menu-drawer__menu {
-      list-style: none;
-      padding: 72px 0 0;
-      margin: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-    }
+      .announcement-bar {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+      }
 
-    .menu-drawer__menu-item,
-    .menu-drawer__menu .list-menu__item.link,
-    .menu-drawer__menu button {
-      font-family: 'Cinzel', serif;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: .16em;
-      font-size: clamp(24px, 2.2vw, 34px);
-      color: #f1f1f1;
-      text-decoration: none;
-      text-shadow: 0 0 10px rgba(255,255,255,.08);
-      background: transparent;
-      border: 0;
-      padding: 0;
-      cursor: pointer;
-      text-align: left;
-    }
+      .announcement-track {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 24px;
+      }
 
-    .menu-drawer__menu-item:hover,
-    .menu-drawer__menu .list-menu__item.link:hover,
-    .menu-drawer__menu-item:focus-visible,
-    .menu-drawer__menu button:hover {
-      color: #fff;
-      text-shadow: 0 0 14px rgba(255,255,255,.18);
-    }
+      .announcement-bar__message {
+        margin: 0;
+        padding: 10px 0;
+      }
 
-    .menu-drawer__menu .list-menu__item + .list-menu__item {
-      border-top: 0;
-    }
+      .announcement-bar__message span {
+        color: #e5e5e5;
+        font-family: "Cinzel", serif;
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        text-shadow: 0 0 6px rgba(255, 255, 255, 0.12);
+      }
 
-    .header__icon--menu {
-      z-index: 2147483647;
-    }
+      /* ========================================
+         HEADER
+      ======================================== */
 
-    .header__icon--menu svg {
-      filter: drop-shadow(0 0 6px rgba(255,255,255,.28));
-    }
+      .header-grid {
+        position: relative;
+        display: grid !important;
+        grid-template-columns: 48px 1fr 48px !important;
+        align-items: center;
+        min-height: 64px;
+      }
 
-    .header__icon--summary {
-      list-style: none;
-    }
+      .nav-left,
+      .nav-right {
+        display: none !important;
+      }
 
-    .header__icon--summary::-webkit-details-marker {
-      display: none;
-    }
+      header-drawer {
+        grid-column: 1;
+        justify-self: start;
+      }
 
-    .header__icon--summary span {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 32px;
-      height: 32px;
-      position: relative;
-    }
+      .header__logo {
+        position: static !important;
+        grid-column: 2;
+        justify-self: center;
+        display: inline-flex !important;
+        align-items: center;
+        justify-content: center;
+        margin: 0 !important;
+        transform: none !important;
+      }
 
-    .header__icon--summary svg:first-child {
-      display: block;
-    }
+      .header__heading-logo {
+        display: block;
+        width: auto;
+        height: 34px !important;
+        max-width: none !important;
+        margin: 0 auto !important;
+      }
 
-    .header__icon--summary svg:last-child {
-      display: none;
-    }
+      .header__icon--menu {
+        z-index: 2147483647;
+      }
 
-    details[open] .header__icon--summary svg:first-child {
-      display: none;
-    }
+      .header__icon--menu svg {
+        filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.28));
+      }
 
-    details[open] .header__icon--summary svg:last-child {
-      display: block;
-    }
+      .header__icon--summary {
+        list-style: none;
+      }
 
-    details[open] ~ .menu-drawer,
-    details[open] #menu-drawer {
-      z-index: 2147483646;
-    }
+      .header__icon--summary::-webkit-details-marker {
+        display: none;
+      }
 
-    details[open] ~ #storm-overlay,
-    details[open] #storm-overlay {
-      opacity: 0 !important;
-      pointer-events: none !important;
-      transition: opacity .15s ease;
-    }
+      .header__icon--summary span {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+      }
 
-    #search-modal {
-      z-index: 2147483647;
-    }
+      .header__icon--summary svg:first-child {
+        display: block;
+      }
 
-    body.search-open #storm-overlay {
-      opacity: 0 !important;
-      pointer-events: none !important;
-      transition: opacity .15s ease;
-    }
+      .header__icon--summary svg:last-child {
+        display: none;
+      }
 
-    /* Same centered header system on mobile + desktop */
-    .header-grid {
-      display: grid !important;
-      grid-template-columns: 48px 1fr 48px !important;
-      align-items: center;
-      min-height: 64px;
-      position: relative;
-    }
+      details[open] .header__icon--summary svg:first-child {
+        display: none;
+      }
 
-    .nav-left,
-    .nav-right {
-      display: none !important;
-    }
+      details[open] .header__icon--summary svg:last-child {
+        display: block;
+      }
 
-    .header__logo {
-      grid-column: 2;
-      justify-self: center;
-      display: inline-flex !important;
-      align-items: center;
-      justify-content: center;
-      position: static !important;
-      transform: none !important;
-      margin: 0 !important;
-    }
+      /* ========================================
+         FULL-SCREEN MENU DRAWER
+      ======================================== */
 
-    .header__heading-logo {
-      display: block;
-      height: 34px !important;
-      width: auto;
-      max-width: none !important;
-      margin: 0 auto !important;
-    }
+      #menu-drawer {
+        position: fixed;
+        inset: 0;
+        z-index: 2147483646;
+        width: 100vw;
+        height: 100vh;
+        padding: 34px 28px 40px;
+        overflow-y: auto;
+        border: 0;
+        background: rgba(5, 5, 7, 0.97);
+        box-shadow: none;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+      }
 
-    header-drawer {
-      grid-column: 1;
-      justify-self: start;
-    }
+      .menu-drawer__inner-container,
+      .menu-drawer__navigation-container,
+      .menu-drawer__navigation {
+        min-height: 100%;
+      }
 
-    @media (max-width: 900px) {
       .menu-drawer__menu {
-        padding-top: 56px;
-        gap: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+        margin: 0;
+        padding: 72px 0 0;
+        list-style: none;
       }
 
       .menu-drawer__menu-item,
       .menu-drawer__menu .list-menu__item.link,
       .menu-drawer__menu button {
-        font-size: 26px;
+        padding: 0;
+        border: 0;
+        color: #f1f1f1;
+        background: transparent;
+        font-family: "Cinzel", serif;
+        font-size: clamp(24px, 2.2vw, 34px);
+        font-weight: 700;
+        letter-spacing: 0.16em;
+        text-align: left;
+        text-decoration: none;
+        text-transform: uppercase;
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.08);
+        cursor: pointer;
       }
 
-      .header__heading-logo {
-        height: 30px !important;
+      .menu-drawer__menu-item:hover,
+      .menu-drawer__menu .list-menu__item.link:hover,
+      .menu-drawer__menu-item:focus-visible,
+      .menu-drawer__menu button:hover {
+        color: #ffffff;
+        text-shadow: 0 0 14px rgba(255, 255, 255, 0.18);
       }
-    }
-  </style>
-</head>
 
-<body class="template-page">
+      .menu-drawer__menu .list-menu__item + .list-menu__item {
+        border-top: 0;
+      }
 
-  <div class="lightning-flash"></div>
-  <div id="storm-overlay"><canvas id="rain-canvas"></canvas></div>
+      /* ========================================
+         SHOP ALL DROPDOWN
+      ======================================== */
 
-  <div class="utility-bar color-scheme-4 gradient utility-bar--bottom-border">
-    <div class="page-width utility-bar__grid">
-      <div class="announcement-bar" role="region" aria-label="Site announcements">
-        <button type="button" class="slider-button slider-button--prev" aria-label="Previous" hidden>‹</button>
-        <div class="announcement-track" id="AnnouncementTrack" data-autoplay="true" data-speed="5000">
-          <p class="announcement-bar__message h5"><span>WELCOME TO THE STORM</span></p>
+      .menu-shop-group {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .menu-shop-toggle {
+        display: inline-flex !important;
+        align-items: center;
+        gap: 14px;
+      }
+
+      .menu-shop-toggle__icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 24px;
+        font-family: "Roboto", sans-serif;
+        font-size: 28px;
+        font-weight: 300;
+        line-height: 1;
+        transition: transform 0.25s ease;
+      }
+
+      .menu-shop-group.is-open .menu-shop-toggle__icon {
+        transform: rotate(45deg);
+      }
+
+      .menu-shop-submenu {
+        display: grid;
+        grid-template-rows: 0fr;
+        width: 100%;
+        transition:
+          grid-template-rows 0.3s ease,
+          margin-top 0.3s ease;
+      }
+
+      .menu-shop-group.is-open .menu-shop-submenu {
+        grid-template-rows: 1fr;
+        margin-top: 18px;
+      }
+
+      .menu-shop-submenu__inner {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+        min-height: 0;
+        padding-left: 18px;
+        overflow: hidden;
+        border-left: 1px solid rgba(255, 255, 255, 0.16);
+      }
+
+      .menu-shop-submenu a {
+        color: rgba(255, 255, 255, 0.68);
+        font-family: "Roboto", sans-serif;
+        font-size: clamp(15px, 1.15vw, 18px);
+        font-weight: 400;
+        letter-spacing: 0.12em;
+        line-height: 1.5;
+        text-decoration: none;
+        text-transform: uppercase;
+        transition:
+          color 0.2s ease,
+          padding-left 0.2s ease;
+      }
+
+      .menu-shop-submenu a:hover,
+      .menu-shop-submenu a:focus-visible {
+        padding-left: 5px;
+        color: #ffffff;
+      }
+
+      /* ========================================
+         STORM AND SEARCH LAYERS
+      ======================================== */
+
+      #storm-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 1;
+        pointer-events: none;
+      }
+
+      .section-header {
+        position: relative;
+        z-index: 20;
+      }
+
+      #search-modal {
+        z-index: 2147483647;
+      }
+
+      body.search-open #storm-overlay {
+        opacity: 0 !important;
+        pointer-events: none !important;
+        transition: opacity 0.15s ease;
+      }
+
+      /* ========================================
+         PAGE BACKGROUND
+      ======================================== */
+
+      html {
+        background: #020203;
+      }
+
+      body.shop-categories-page {
+        min-height: 100vh;
+        color: #f4f4f4;
+        background:
+          radial-gradient(
+            circle at 50% 5%,
+            rgba(75, 75, 84, 0.18),
+            transparent 30%
+          ),
+          linear-gradient(
+            180deg,
+            #111216 0%,
+            #07080a 56%,
+            #020203 100%
+          );
+      }
+
+      .shop-categories-page .utility-bar,
+      .shop-categories-page .section-header,
+      .shop-categories-page .footer {
+        background: #000000;
+      }
+
+      /* ========================================
+         COLLECTION HUB
+      ======================================== */
+
+      .collection-hub {
+        position: relative;
+        z-index: 2;
+        padding:
+          clamp(48px, 7vw, 96px)
+          0
+          clamp(72px, 9vw, 130px);
+        overflow: hidden;
+      }
+
+      .collection-hub::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background:
+          linear-gradient(
+            90deg,
+            transparent 0%,
+            rgba(255, 255, 255, 0.018) 50%,
+            transparent 100%
+          );
+      }
+
+      .collection-hub__inner {
+        position: relative;
+        z-index: 1;
+        width: min(1500px, calc(100% - 44px));
+        margin: 0 auto;
+      }
+
+      .collection-hub__header {
+        max-width: 900px;
+        margin: 0 auto clamp(38px, 5vw, 68px);
+        text-align: center;
+      }
+
+      .collection-hub__eyebrow {
+        display: block;
+        margin-bottom: 15px;
+        color: rgba(255, 255, 255, 0.58);
+        font-family: "Roboto", sans-serif;
+        font-size: 12px;
+        font-weight: 500;
+        letter-spacing: 0.28em;
+        text-transform: uppercase;
+      }
+
+      .collection-hub__title {
+        margin: 0;
+        color: #f5f5f5;
+        font-family: "Cinzel", serif;
+        font-size: clamp(38px, 6vw, 86px);
+        font-weight: 500;
+        letter-spacing: 0.035em;
+        line-height: 0.98;
+        text-transform: uppercase;
+        text-shadow: 0 0 18px rgba(255, 255, 255, 0.055);
+      }
+
+      .collection-hub__copy {
+        max-width: 690px;
+        margin: 24px auto 0;
+        color: rgba(255, 255, 255, 0.67);
+        font-family: "Roboto", sans-serif;
+        font-size: clamp(15px, 1.25vw, 18px);
+        font-weight: 300;
+        letter-spacing: 0.035em;
+        line-height: 1.8;
+      }
+
+      /* ========================================
+         FOUR COLLECTION BANNERS
+      ======================================== */
+
+      .collection-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: clamp(14px, 2vw, 26px);
+      }
+
+      .collection-card {
+        position: relative;
+        isolation: isolate;
+        display: block;
+        min-height: clamp(420px, 48vw, 690px);
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.09);
+        color: #ffffff;
+        background: #101114;
+        text-decoration: none;
+      }
+
+      .collection-card__image {
+        position: absolute;
+        inset: 0;
+        z-index: -3;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        filter:
+          saturate(0.86)
+          contrast(1.05)
+          brightness(0.76);
+        transform: scale(1.001);
+        transition:
+          transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1),
+          filter 0.6s ease;
+      }
+
+      .collection-card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: -2;
+        background:
+          linear-gradient(
+            180deg,
+            rgba(0, 0, 0, 0.05) 10%,
+            rgba(0, 0, 0, 0.22) 52%,
+            rgba(0, 0, 0, 0.88) 100%
+          );
+      }
+
+      .collection-card::after {
+        content: "";
+        position: absolute;
+        inset: 14px;
+        z-index: 2;
+        border: 1px solid rgba(255, 255, 255, 0.11);
+        opacity: 0;
+        pointer-events: none;
+        transform: scale(0.985);
+        transition:
+          opacity 0.35s ease,
+          transform 0.35s ease;
+      }
+
+      .collection-card:hover .collection-card__image,
+      .collection-card:focus-visible .collection-card__image {
+        filter:
+          saturate(0.94)
+          contrast(1.07)
+          brightness(0.82);
+        transform: scale(1.045);
+      }
+
+      .collection-card:hover::after,
+      .collection-card:focus-visible::after {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      .collection-card:focus-visible {
+        outline: 2px solid rgba(255, 255, 255, 0.85);
+        outline-offset: 4px;
+      }
+
+      .collection-card__content {
+        position: absolute;
+        right: clamp(24px, 3.3vw, 52px);
+        bottom: clamp(28px, 4vw, 58px);
+        left: clamp(24px, 3.3vw, 52px);
+        z-index: 3;
+      }
+
+      .collection-card__number {
+        display: block;
+        margin-bottom: 14px;
+        color: rgba(255, 255, 255, 0.55);
+        font-family: "Roboto", sans-serif;
+        font-size: 11px;
+        font-weight: 500;
+        letter-spacing: 0.24em;
+        text-transform: uppercase;
+      }
+
+      .collection-card__title {
+        max-width: 760px;
+        margin: 0;
+        color: #ffffff;
+        font-family: "Cinzel", serif;
+        font-size: clamp(28px, 4vw, 61px);
+        font-weight: 500;
+        letter-spacing: 0.02em;
+        line-height: 1.02;
+        text-transform: uppercase;
+      }
+
+      .collection-card__subtitle {
+        max-width: 580px;
+        margin: 15px 0 0;
+        color: rgba(255, 255, 255, 0.72);
+        font-family: "Roboto", sans-serif;
+        font-size: clamp(13px, 1.1vw, 16px);
+        font-weight: 300;
+        letter-spacing: 0.035em;
+        line-height: 1.65;
+      }
+
+      .collection-card__action {
+        display: inline-flex;
+        align-items: center;
+        gap: 13px;
+        margin-top: 23px;
+        color: #ffffff;
+        font-family: "Roboto", sans-serif;
+        font-size: 12px;
+        font-weight: 500;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+      }
+
+      .collection-card__arrow {
+        display: inline-block;
+        font-size: 19px;
+        line-height: 1;
+        transition: transform 0.25s ease;
+      }
+
+      .collection-card:hover .collection-card__arrow,
+      .collection-card:focus-visible .collection-card__arrow {
+        transform: translateX(6px);
+      }
+
+      .collection-card--all .collection-card__image {
+        filter:
+          grayscale(0.18)
+          saturate(0.7)
+          contrast(1.08)
+          brightness(0.65);
+      }
+
+      /* ========================================
+         RESPONSIVE
+      ======================================== */
+
+      @media (max-width: 900px) {
+        .menu-drawer__menu {
+          gap: 20px;
+          padding-top: 56px;
+        }
+
+        .menu-drawer__menu-item,
+        .menu-drawer__menu .list-menu__item.link,
+        .menu-drawer__menu button {
+          font-size: 26px;
+        }
+
+        .header__heading-logo {
+          height: 30px !important;
+        }
+
+        .collection-hub__inner {
+          width: min(100% - 28px, 1500px);
+        }
+
+        .collection-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .collection-card {
+          min-height: clamp(460px, 120vw, 680px);
+        }
+      }
+
+      @media (max-width: 560px) {
+        #menu-drawer {
+          padding-right: 20px;
+          padding-left: 20px;
+        }
+
+        .menu-drawer__menu-item,
+        .menu-drawer__menu .list-menu__item.link,
+        .menu-drawer__menu button {
+          font-size: 22px;
+          letter-spacing: 0.12em;
+        }
+
+        .collection-hub {
+          padding-top: 42px;
+        }
+
+        .collection-hub__title {
+          font-size: clamp(34px, 12vw, 52px);
+        }
+
+        .collection-hub__copy {
+          font-size: 15px;
+          line-height: 1.7;
+        }
+
+        .collection-card {
+          min-height: 500px;
+        }
+
+        .collection-card__content {
+          right: 22px;
+          bottom: 28px;
+          left: 22px;
+        }
+
+        .collection-card__title {
+          font-size: clamp(27px, 9vw, 42px);
+        }
+
+        .collection-card__subtitle {
+          font-size: 14px;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .collection-card__image,
+        .collection-card::after,
+        .collection-card__arrow,
+        .menu-shop-toggle__icon,
+        .menu-shop-submenu {
+          transition: none;
+        }
+      }
+    </style>
+  </head>
+
+  <body class="template-page shop-categories-page">
+    <div class="lightning-flash"></div>
+
+    <div id="storm-overlay">
+      <canvas id="rain-canvas"></canvas>
+    </div>
+
+    <!-- ========================================
+         ANNOUNCEMENT BAR
+    ========================================= -->
+
+    <div
+      class="utility-bar color-scheme-4 gradient utility-bar--bottom-border"
+    >
+      <div class="page-width utility-bar__grid">
+        <div
+          class="announcement-bar"
+          role="region"
+          aria-label="Site announcements"
+        >
+          <button
+            type="button"
+            class="slider-button slider-button--prev"
+            aria-label="Previous"
+            hidden
+          >
+            ‹
+          </button>
+
+          <div
+            class="announcement-track"
+            id="AnnouncementTrack"
+            data-autoplay="true"
+            data-speed="5000"
+          >
+            <p class="announcement-bar__message h5">
+              <span>WELCOME TO THE STORM</span>
+            </p>
+          </div>
+
+          <button
+            type="button"
+            class="slider-button slider-button--next"
+            aria-label="Next"
+            hidden
+          >
+            ›
+          </button>
         </div>
-        <button type="button" class="slider-button slider-button--next" aria-label="Next" hidden>›</button>
       </div>
     </div>
-  </div>
 
-  <div class="section-header header-wrapper color-scheme-4 gradient" data-sticky-type="on-scroll-up">
-    <header class="site-header header header--middle-left header--mobile-center">
-      <div class="page-width header-grid">
+    <!-- ========================================
+         HEADER AND HAMBURGER MENU
+    ========================================= -->
 
-        <header-drawer data-breakpoint="all">
-          <details id="Details-menu-drawer-container" class="menu-drawer-container">
-            <summary class="header__icon header__icon--menu header__icon--summary link focus-inset" aria-label="Menu">
-              <span aria-hidden="true">
-                <svg width="22" height="22" viewBox="0 0 24 24">
-                  <path d="M3 6h18v2H3zM3 11h18v2H3zM3 16h18v2H3z" fill="currentColor"/>
-                </svg>
-                <svg width="22" height="22" viewBox="0 0 24 24">
-                  <path d="M18.3 5.7 12 12l6.3 6.3-1.4 1.4L10.6 13.4 4.3 19.7 2.9 18.3 9.2 12 2.9 5.7 4.3 4.3 10.6 10.6 16.9 4.3z" fill="currentColor"/>
-                </svg>
-              </span>
-            </summary>
+    <div
+      class="section-header header-wrapper color-scheme-4 gradient"
+      data-sticky-type="on-scroll-up"
+    >
+      <header
+        class="site-header header header--middle-left header--mobile-center"
+      >
+        <div class="page-width header-grid">
+          <header-drawer data-breakpoint="all">
+            <details
+              id="Details-menu-drawer-container"
+              class="menu-drawer-container"
+            >
+              <summary
+                class="header__icon header__icon--menu header__icon--summary link focus-inset"
+                aria-label="Menu"
+              >
+                <span aria-hidden="true">
+                  <svg width="22" height="22" viewBox="0 0 24 24">
+                    <path
+                      d="M3 6h18v2H3zM3 11h18v2H3zM3 16h18v2H3z"
+                      fill="currentColor"
+                    />
+                  </svg>
 
-            <div id="menu-drawer" class="gradient menu-drawer motion-reduce color-scheme-4">
-              <div class="menu-drawer__inner-container">
-                <div class="menu-drawer__navigation-container">
-                  <nav class="menu-drawer__navigation" aria-label="Site navigation">
-                    <ul class="menu-drawer__menu has-submenu list-menu" role="list">
-                      <li><a href="index.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">Home</a></li>
-                      <li><a href="shop.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">Shop All</a></li>
-                      <li><a href="g4llery.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">G4LLERY</a></li>
-                      <li><a href="collections.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">Collections</a></li>
-                      <li><a href="try-on.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">TRY ON</a></li>
-                      <li><a href="4bout-us.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">4bout us</a></li>
-                      <li><a href="contact.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">Contact</a></li>
-                      <li>
-                        <a href="cart.html"
-                           class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
-                           data-loud="heavy"
-                           data-cart-open>
-                          Cart <span class="cart-count-bubble" data-cart-count></span>
-                        </a>
-                      </li>
-                      <li>
-                        <button id="search-open-mobile" type="button" class="menu-drawer__menu-item link link--text list-menu__item focus-inset">
-                          Search
-                        </button>
-                      </li>
-                    </ul>
-                  </nav>
+                  <svg width="22" height="22" viewBox="0 0 24 24">
+                    <path
+                      d="M18.3 5.7 12 12l6.3 6.3-1.4 1.4L10.6 13.4 4.3 19.7 2.9 18.3 9.2 12 2.9 5.7 4.3 4.3 10.6 10.6 16.9 4.3z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </span>
+              </summary>
+
+              <div
+                id="menu-drawer"
+                class="gradient menu-drawer motion-reduce color-scheme-4"
+              >
+                <div class="menu-drawer__inner-container">
+                  <div class="menu-drawer__navigation-container">
+                    <nav
+                      class="menu-drawer__navigation"
+                      aria-label="Site navigation"
+                    >
+                      <ul
+                        class="menu-drawer__menu has-submenu list-menu"
+                        role="list"
+                      >
+                        <li>
+                          <a
+                            href="index.html"
+                            class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
+                          >
+                            Home
+                          </a>
+                        </li>
+
+                        <!-- Expandable Shop All section -->
+                        <li
+                          class="menu-shop-group"
+                          id="menuShopGroup"
+                        >
+                          <button
+                            type="button"
+                            class="menu-drawer__menu-item menu-shop-toggle"
+                            id="menuShopToggle"
+                            aria-expanded="false"
+                            aria-controls="menuShopSubmenu"
+                          >
+                            <span>Shop All</span>
+
+                            <span
+                              class="menu-shop-toggle__icon"
+                              aria-hidden="true"
+                            >
+                              +
+                            </span>
+                          </button>
+
+                          <div
+                            class="menu-shop-submenu"
+                            id="menuShopSubmenu"
+                          >
+                            <div class="menu-shop-submenu__inner">
+                              <a href="dhk-collection.html">
+                                DHK Collection
+                              </a>
+
+                              <a href="comic-collection.html">
+                                Comic Book Collection
+                              </a>
+
+                              <a href="blanks-collection.html">
+                                DHK Blanks
+                              </a>
+
+                              <a href="shop.html">
+                                View All
+                              </a>
+                            </div>
+                          </div>
+                        </li>
+
+                        <li>
+                          <a
+                            href="g4llery.html"
+                            class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
+                          >
+                            G4LLERY
+                          </a>
+                        </li>
+
+                        <li>
+                          <a
+                            href="collections.html"
+                            class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
+                          >
+                            Collections
+                          </a>
+                        </li>
+
+                        <li>
+                          <a
+                            href="try-on.html"
+                            class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
+                          >
+                            TRY ON
+                          </a>
+                        </li>
+
+                        <li>
+                          <a
+                            href="4bout-us.html"
+                            class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
+                          >
+                            4bout us
+                          </a>
+                        </li>
+
+                        <li>
+                          <a
+                            href="contact.html"
+                            class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
+                          >
+                            Contact
+                          </a>
+                        </li>
+
+                        <li>
+                          <a
+                            href="cart.html"
+                            class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
+                            data-loud="heavy"
+                            data-cart-open
+                          >
+                            Cart
+                            <span
+                              class="cart-count-bubble"
+                              data-cart-count
+                            ></span>
+                          </a>
+                        </li>
+
+                        <li>
+                          <button
+                            id="search-open-mobile"
+                            type="button"
+                            class="menu-drawer__menu-item link link--text list-menu__item focus-inset"
+                          >
+                            Search
+                          </button>
+                        </li>
+                      </ul>
+                    </nav>
+                  </div>
                 </div>
               </div>
-            </div>
-          </details>
-        </header-drawer>
+            </details>
+          </header-drawer>
 
-        <a class="header__logo" href="index.html" aria-label="DarkHarlemKnight">
-          <img
-            src="assets/img/DHK_transparent.gif"
-            alt="DarkHarlemKnight"
-            width="190"
-            height="190"
-            class="header__heading-logo"
-            loading="eager"
-          />
-        </a>
+          <a
+            class="header__logo"
+            href="index.html"
+            aria-label="Dark Harlem Knight"
+          >
+            <img
+              src="assets/img/DHK_transparent.gif"
+              alt="Dark Harlem Knight"
+              width="190"
+              height="190"
+              class="header__heading-logo"
+              loading="eager"
+            />
+          </a>
 
-        <div></div>
-      </div>
-    </header>
-  </div>
-
-  <main id="MainContent" class="section">
-    <div class="page-width">
-      <header class="fc__header">
-        <h1 class="fc__title h2">Shop All</h1>
+          <div aria-hidden="true"></div>
+        </div>
       </header>
-
-      <div id="shop-grid" class="product-grid" aria-live="polite"></div>
     </div>
-  </main>
 
-  <footer class="footer color-scheme-4 gradient section footer--static">
-    <div class="footer__content-top page-width">
-      <div class="footer__blocks-wrapper grid grid--1-col grid--2-col grid--4-col-tablet">
-        <div class="footer-block footer-block--menu grid__item">
-          <h2 class="footer-block__heading inline-richtext">Shop</h2>
-          <ul class="footer-block__details-content list-unstyled">
-            <li><a class="link link--text list-menu__item list-menu__item--link" href="collections.html">Collections</a></li>
-            <li><a class="link link--text list-menu__item list-menu__item--link" href="shop.html">All Products</a></li>
-            <li><a class="link link--text list-menu__item list-menu__item--link" href="g4llery.html">G4LLERY</a></li>
-            <li><a class="link link--text list-menu__item list-menu__item--link" href="try-on.html">TRY ON</a></li>
-            <li><a class="link link--text list-menu__item list-menu__item--link" href="4bout-us.html">4bout us</a></li>
-            <li><a class="link link--text list-menu__item list-menu__item--link" href="contact.html">Contact</a></li>
-          </ul>
-        </div>
+    <!-- ========================================
+         COLLECTION CATEGORY LANDING PAGE
+    ========================================= -->
 
-        <div class="footer-block grid__item">
-          <h2 class="footer-block__heading inline-richtext">Dark Harlem Knight</h2>
-          <div class="footer-block__details-content rte">
-            <p>Forged in the storm. Streetwear with thunder in its veins.</p>
-          </div>
-          <ul class="footer__list-social">
-            <li><a aria-label="Instagram" class="social-link" href="https://www.instagram.com/darkharlemknight/" target="_blank" rel="noopener">Instagram</a></li>
-            <li><a aria-label="TikTok" class="social-link" href="https://www.tiktok.com/@darkharlemknight" target="_blank" rel="noopener">TikTok</a></li>
-          </ul>
-        </div>
+    <main id="MainContent">
+      <section
+        class="collection-hub"
+        aria-labelledby="collection-hub-title"
+      >
+        <div class="collection-hub__inner">
+          <header class="collection-hub__header">
+            <span class="collection-hub__eyebrow">
+              Enter the Storm
+            </span>
 
-        <div class="footer-block footer-block--newsletter grid__item">
-          <h2 class="footer-block__heading inline-richtext">Join the storm</h2>
-          <form class="footer__newsletter newsletter-form" action="#" method="post" onsubmit="return false;">
-            <div class="newsletter-form__field-wrapper">
-              <div class="field">
-                <input class="field__input" type="email" placeholder="Email address" required>
-                <button class="newsletter-form__button field__button" type="submit" aria-label="Subscribe">→</button>
+            <h1
+              class="collection-hub__title"
+              id="collection-hub-title"
+            >
+              Choose Your Collection
+            </h1>
+
+            <p class="collection-hub__copy">
+              Enter each division of Dark Harlem Knight. Explore the original
+              DHK uniform, the Comic Book Collection, comfort-driven DHK
+              Blanks, or view the complete catalog.
+            </p>
+          </header>
+
+          <div class="collection-grid">
+            <!-- DHK COLLECTION -->
+            <a
+              href="dhk-collection.html"
+              class="collection-card"
+              aria-label="Shop the DHK Collection"
+            >
+              <img
+                class="collection-card__image"
+                src="assets/img/products/dhk/campaign-1/campaign-shots/Grey/grey-shoot-6.png"
+                alt="Dark Harlem Knight collection"
+                loading="eager"
+              />
+
+              <div class="collection-card__content">
+                <span class="collection-card__number">
+                  Collection 01
+                </span>
+
+                <h2 class="collection-card__title">
+                  DHK Collection
+                </h2>
+
+                <p class="collection-card__subtitle">
+                  The original Dark Harlem Knight uniform. Heavyweight
+                  silhouettes, Swarovski® crystal emblems and storm-forged
+                  luxury.
+                </p>
+
+                <span class="collection-card__action">
+                  Enter Collection
+
+                  <span
+                    class="collection-card__arrow"
+                    aria-hidden="true"
+                  >
+                    →
+                  </span>
+                </span>
               </div>
-            </div>
-          </form>
-        </div>
+            </a>
 
-        <div class="footer-block footer-block-image grid__item center">
-          <img src="assets/img/DHK_transparent.gif" alt="DarkHarlemKnight" width="120" height="120" loading="lazy">
+            <!-- COMIC BOOK COLLECTION -->
+            <a
+              href="comic-collection.html"
+              class="collection-card"
+              aria-label="Shop the Comic Book Collection"
+            >
+              <img
+                class="collection-card__image"
+                src="assets/img/products/dhk/campaign-1/studio-shots/portrait/black-crown-portrait.jpeg"
+                alt="Dark Harlem Knight Comic Book Collection"
+                loading="lazy"
+              />
+
+              <div class="collection-card__content">
+                <span class="collection-card__number">
+                  Collection 02
+                </span>
+
+                <h2 class="collection-card__title">
+                  Comic Book Collection
+                </h2>
+
+                <p class="collection-card__subtitle">
+                  Graphic storytelling translated into wearable armor.
+                  Familiar comic energy rebuilt through the Dark Harlem Knight
+                  universe.
+                </p>
+
+                <span class="collection-card__action">
+                  Enter Collection
+
+                  <span
+                    class="collection-card__arrow"
+                    aria-hidden="true"
+                  >
+                    →
+                  </span>
+                </span>
+              </div>
+            </a>
+
+            <!-- DHK BLANKS -->
+            <a
+              href="blanks-collection.html"
+              class="collection-card"
+              aria-label="Shop the DHK Blanks Collection"
+            >
+              <img
+                class="collection-card__image"
+                src="assets/img/products/dhk/campaign-1/studio-shots/portrait/grey-portrait.jpeg"
+                alt="DHK Blanks comfort collection"
+                loading="lazy"
+              />
+
+              <div class="collection-card__content">
+                <span class="collection-card__number">
+                  Collection 03
+                </span>
+
+                <h2 class="collection-card__title">
+                  DHK Blanks
+                </h2>
+
+                <p class="collection-card__subtitle">
+                  Where comfort becomes the product. Premium weights, carefully
+                  structured fits and elevated everyday essentials.
+                </p>
+
+                <span class="collection-card__action">
+                  Enter Collection
+
+                  <span
+                    class="collection-card__arrow"
+                    aria-hidden="true"
+                  >
+                    →
+                  </span>
+                </span>
+              </div>
+            </a>
+
+            <!-- VIEW ALL -->
+            <a
+              href="shop.html"
+              class="collection-card collection-card--all"
+              aria-label="View every Dark Harlem Knight product"
+            >
+              <img
+                class="collection-card__image"
+                src="assets/img/products/dhk/campaign-1/studio-shots/portrait/white-portrait.jpeg"
+                alt="View all Dark Harlem Knight products"
+                loading="lazy"
+              />
+
+              <div class="collection-card__content">
+                <span class="collection-card__number">
+                  Complete Catalog
+                </span>
+
+                <h2 class="collection-card__title">
+                  View All
+                </h2>
+
+                <p class="collection-card__subtitle">
+                  Enter the complete shop and explore every available Dark
+                  Harlem Knight product in one place.
+                </p>
+
+                <span class="collection-card__action">
+                  Shop All Products
+
+                  <span
+                    class="collection-card__arrow"
+                    aria-hidden="true"
+                  >
+                    →
+                  </span>
+                </span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- ========================================
+         FOOTER
+    ========================================= -->
+
+    <footer
+      class="footer color-scheme-4 gradient section footer--static"
+    >
+      <div class="footer__content-top page-width">
+        <div
+          class="footer__blocks-wrapper grid grid--1-col grid--2-col grid--4-col-tablet"
+        >
+          <div class="footer-block footer-block--menu grid__item">
+            <h2 class="footer-block__heading inline-richtext">
+              Shop
+            </h2>
+
+            <ul class="footer-block__details-content list-unstyled">
+              <li>
+                <a
+                  class="link link--text list-menu__item list-menu__item--link"
+                  href="shop-categories.html"
+                >
+                  Shop Collections
+                </a>
+              </li>
+
+              <li>
+                <a
+                  class="link link--text list-menu__item list-menu__item--link"
+                  href="dhk-collection.html"
+                >
+                  DHK Collection
+                </a>
+              </li>
+
+              <li>
+                <a
+                  class="link link--text list-menu__item list-menu__item--link"
+                  href="comic-collection.html"
+                >
+                  Comic Book Collection
+                </a>
+              </li>
+
+              <li>
+                <a
+                  class="link link--text list-menu__item list-menu__item--link"
+                  href="blanks-collection.html"
+                >
+                  DHK Blanks
+                </a>
+              </li>
+
+              <li>
+                <a
+                  class="link link--text list-menu__item list-menu__item--link"
+                  href="shop.html"
+                >
+                  View All Products
+                </a>
+              </li>
+
+              <li>
+                <a
+                  class="link link--text list-menu__item list-menu__item--link"
+                  href="collections.html"
+                >
+                  Collection Archive
+                </a>
+              </li>
+
+              <li>
+                <a
+                  class="link link--text list-menu__item list-menu__item--link"
+                  href="g4llery.html"
+                >
+                  G4LLERY
+                </a>
+              </li>
+
+              <li>
+                <a
+                  class="link link--text list-menu__item list-menu__item--link"
+                  href="try-on.html"
+                >
+                  TRY ON
+                </a>
+              </li>
+
+              <li>
+                <a
+                  class="link link--text list-menu__item list-menu__item--link"
+                  href="4bout-us.html"
+                >
+                  4bout us
+                </a>
+              </li>
+
+              <li>
+                <a
+                  class="link link--text list-menu__item list-menu__item--link"
+                  href="contact.html"
+                >
+                  Contact
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="footer-block grid__item">
+            <h2 class="footer-block__heading inline-richtext">
+              Dark Harlem Knight
+            </h2>
+
+            <div class="footer-block__details-content rte">
+              <p>
+                Forged in the storm. Streetwear with thunder in its veins.
+              </p>
+            </div>
+
+            <ul class="footer__list-social">
+              <li>
+                <a
+                  aria-label="Instagram"
+                  class="social-link"
+                  href="https://www.instagram.com/darkharlemknight/"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  Instagram
+                </a>
+              </li>
+
+              <li>
+                <a
+                  aria-label="TikTok"
+                  class="social-link"
+                  href="https://www.tiktok.com/@darkharlemknight"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  TikTok
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div
+            class="footer-block footer-block--newsletter grid__item"
+          >
+            <h2 class="footer-block__heading inline-richtext">
+              Join the storm
+            </h2>
+
+            <form
+              class="footer__newsletter newsletter-form"
+              action="#"
+              method="post"
+              onsubmit="return false;"
+            >
+              <div class="newsletter-form__field-wrapper">
+                <div class="field">
+                  <input
+                    class="field__input"
+                    type="email"
+                    placeholder="Email address"
+                    required
+                  />
+
+                  <button
+                    class="newsletter-form__button field__button"
+                    type="submit"
+                    aria-label="Subscribe"
+                  >
+                    →
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+
+          <div
+            class="footer-block footer-block-image grid__item center"
+          >
+            <img
+              src="assets/img/DHK_transparent.gif"
+              alt="Dark Harlem Knight"
+              width="120"
+              height="120"
+              loading="lazy"
+            />
+          </div>
         </div>
       </div>
-    </div>
 
-    <div class="footer__content-bottom">
-      <div class="footer__content-bottom-wrapper page-width">
-        <div class="footer__column footer__column--info">
-          <div class="footer__payment">
-            <ul class="list list-payment" role="list">
-              <li class="list-payment__item">Visa</li>
-              <li class="list-payment__item">Mastercard</li>
-              <li class="list-payment__item">Amex</li>
-              <li class="list-payment__item">PayPal</li>
+      <div class="footer__content-bottom">
+        <div class="footer__content-bottom-wrapper page-width">
+          <div class="footer__column footer__column--info">
+            <div class="footer__payment">
+              <ul class="list list-payment" role="list">
+                <li class="list-payment__item">Visa</li>
+                <li class="list-payment__item">Mastercard</li>
+                <li class="list-payment__item">Amex</li>
+                <li class="list-payment__item">PayPal</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="footer__content-bottom-wrapper page-width footer__content-bottom-wrapper--center"
+        >
+          <div class="footer__copyright caption">
+            <small class="copyright__content">
+              © <span id="year"></span>, Dark Harlem Knight
+            </small>
+
+            <small class="copyright__content">
+              Powered by the Storm
+            </small>
+
+            <ul class="policies list-unstyled">
+              <li>
+                <small class="copyright__content">
+                  <a href="#">Privacy Policy</a>
+                </small>
+              </li>
+
+              <li>
+                <small class="copyright__content">
+                  <a href="#">Terms of Service</a>
+                </small>
+              </li>
             </ul>
           </div>
         </div>
       </div>
+    </footer>
 
-      <div class="footer__content-bottom-wrapper page-width footer__content-bottom-wrapper--center">
-        <div class="footer__copyright caption">
-          <small class="copyright__content">© <span id="year"></span>, Dark Harlem Knight</small>
-          <small class="copyright__content">Powered by the Storm</small>
-          <ul class="policies list-unstyled">
-            <li><small class="copyright__content"><a href="#">Privacy Policy</a></small></li>
-            <li><small class="copyright__content"><a href="#">Terms of Service</a></small></li>
-          </ul>
+    <!-- ========================================
+         SEARCH MODAL
+    ========================================= -->
+
+    <div
+      id="search-modal"
+      class="search-modal"
+      aria-hidden="true"
+    >
+      <div
+        class="search-modal__overlay"
+        data-close-search
+      ></div>
+
+      <div
+        class="search-modal__dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="search-title"
+      >
+        <header class="search-modal__header">
+          <h2 id="search-title">Search</h2>
+
+          <button
+            id="search-close"
+            class="search-modal__close"
+            type="button"
+            aria-label="Close search"
+          >
+            ×
+          </button>
+        </header>
+
+        <div class="search-modal__field">
+          <input
+            id="search-input"
+            type="search"
+            placeholder="Search products…  ( /  or  ⌘/Ctrl+K )"
+            autocomplete="off"
+          />
         </div>
+
+        <div
+          id="search-results"
+          class="search-modal__results"
+          aria-live="polite"
+        ></div>
       </div>
     </div>
-  </footer>
 
-  <div id="search-modal" class="search-modal" aria-hidden="true">
-    <div class="search-modal__overlay" data-close-search></div>
-    <div class="search-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="search-title">
-      <header class="search-modal__header">
-        <h2 id="search-title">Search</h2>
-        <button id="search-close" class="search-modal__close" aria-label="Close search">×</button>
-      </header>
-      <div class="search-modal__field">
-        <input id="search-input" type="search" placeholder="Search products…  ( /  or  ⌘/Ctrl+K )" autocomplete="off" />
-      </div>
-      <div id="search-results" class="search-modal__results" aria-live="polite"></div>
-    </div>
-  </div>
+    <!-- ========================================
+         STORM AUDIO
+    ========================================= -->
 
-  <audio id="rain-light" src="assets/audio/light-rain.mp3" loop preload="auto" hidden></audio>
-  <audio id="rain-med" src="assets/audio/med-rain.mp3" loop preload="auto" hidden></audio>
-  <audio id="rain-heavy" src="assets/audio/heavy-rain.mp3" loop preload="auto" hidden></audio>
-  <audio id="thunder-light" src="assets/audio/light-thunder.mp3" loop preload="auto" hidden></audio>
-  <audio id="thunder-med" src="assets/audio/med-thunder.mp3" loop preload="auto" hidden></audio>
-  <audio id="thunder-heavy" src="assets/audio/heavy-thunder.mp3" loop preload="auto" hidden></audio>
+    <audio
+      id="rain-light"
+      src="assets/audio/light-rain.mp3"
+      loop
+      preload="auto"
+      hidden
+    ></audio>
 
-  <script src="js/nav.js"></script>
-  <script src="js/announce.js"></script>
-  <script src="js/cart.js"></script>
-  <script src="js/search.js"></script>
-  <script src="js/shop.js"></script>
-  <script src="js/newsletter.js"></script>
-  <script src="js/storm_shopify_style.js"></script>
-  <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
-  </script>
+    <audio
+      id="rain-med"
+      src="assets/audio/med-rain.mp3"
+      loop
+      preload="auto"
+      hidden
+    ></audio>
 
-  <div id="cart-drawer" class="cart-drawer" aria-hidden="true">
-    <div class="cart-drawer__overlay" data-cart-close></div>
-    <aside class="cart-drawer__panel" tabindex="-1">
-      <div class="cart-header">
-        <h2>Your Cart</h2>
-        <button type="button" title="Close" data-cart-close>✕</button>
-      </div>
+    <audio
+      id="rain-heavy"
+      src="assets/audio/heavy-rain.mp3"
+      loop
+      preload="auto"
+      hidden
+    ></audio>
 
-      <div class="cart-list" id="cart-items"></div>
-      <div id="cart-empty" class="cart-empty" hidden style="padding:16px;color:#9a9a9a">
-        Your cart is empty.
-      </div>
+    <audio
+      id="thunder-light"
+      src="assets/audio/light-thunder.mp3"
+      loop
+      preload="auto"
+      hidden
+    ></audio>
 
-      <div class="cart-footer">
-        <div class="cart-discount cart-discount--drawer">
-          <label for="discount-code-drawer" class="cart-discount__label">ADD DISCOUNT</label>
-          <div class="cart-discount__row">
-            <input id="discount-code-drawer" class="cart-discount__input" type="text" placeholder="Enter code" autocomplete="off" />
-            <button id="discount-apply-drawer" class="cart-discount__button" type="button">APPLY</button>
+    <audio
+      id="thunder-med"
+      src="assets/audio/med-thunder.mp3"
+      loop
+      preload="auto"
+      hidden
+    ></audio>
+
+    <audio
+      id="thunder-heavy"
+      src="assets/audio/heavy-thunder.mp3"
+      loop
+      preload="auto"
+      hidden
+    ></audio>
+
+    <!-- ========================================
+         CART DRAWER
+    ========================================= -->
+
+    <div
+      id="cart-drawer"
+      class="cart-drawer"
+      aria-hidden="true"
+    >
+      <div
+        class="cart-drawer__overlay"
+        data-cart-close
+      ></div>
+
+      <aside
+        class="cart-drawer__panel"
+        tabindex="-1"
+      >
+        <div class="cart-header">
+          <h2>Your Cart</h2>
+
+          <button
+            type="button"
+            title="Close"
+            data-cart-close
+          >
+            ✕
+          </button>
+        </div>
+
+        <div
+          class="cart-list"
+          id="cart-items"
+        ></div>
+
+        <div
+          id="cart-empty"
+          class="cart-empty"
+          hidden
+          style="padding: 16px; color: #9a9a9a;"
+        >
+          Your cart is empty.
+        </div>
+
+        <div class="cart-footer">
+          <div class="cart-discount cart-discount--drawer">
+            <label
+              for="discount-code-drawer"
+              class="cart-discount__label"
+            >
+              ADD DISCOUNT
+            </label>
+
+            <div class="cart-discount__row">
+              <input
+                id="discount-code-drawer"
+                class="cart-discount__input"
+                type="text"
+                placeholder="Enter code"
+                autocomplete="off"
+              />
+
+              <button
+                id="discount-apply-drawer"
+                class="cart-discount__button"
+                type="button"
+              >
+                APPLY
+              </button>
+            </div>
+
+            <p
+              id="discount-message-drawer"
+              class="cart-discount__message"
+              aria-live="polite"
+            ></p>
           </div>
-          <p id="discount-message-drawer" class="cart-discount__message" aria-live="polite"></p>
-        </div>
 
-        <div class="cart-row">
-          <div class="label">Subtotal</div>
-          <div class="value" id="cart-subtotal">$0.00</div>
+          <div class="cart-row">
+            <div class="label">Subtotal</div>
+
+            <div
+              class="value"
+              id="cart-subtotal"
+            >
+              $0.00
+            </div>
+          </div>
+
+          <button
+            id="cart-checkout"
+            type="button"
+            disabled
+          >
+            Checkout
+          </button>
         </div>
-        <button id="cart-checkout" type="button" disabled>Checkout</button>
-      </div>
-    </aside>
-  </div>
-</body>
+      </aside>
+    </div>
+
+    <!-- ========================================
+         EXISTING SITE SCRIPTS
+    ========================================= -->
+
+    <script src="js/nav.js"></script>
+    <script src="js/announce.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/search.js"></script>
+    <script src="js/newsletter.js"></script>
+    <script src="js/storm_shopify_style.js"></script>
+
+    <!-- shop.js intentionally removed.
+         This page is a category landing page,
+         not the full product grid. -->
+
+    <script>
+      document.getElementById("year").textContent =
+        new Date().getFullYear();
+
+      (function () {
+        const shopGroup =
+          document.getElementById("menuShopGroup");
+
+        const shopToggle =
+          document.getElementById("menuShopToggle");
+
+        if (!shopGroup || !shopToggle) {
+          return;
+        }
+
+        shopToggle.addEventListener("click", function () {
+          const isOpen =
+            shopGroup.classList.toggle("is-open");
+
+          shopToggle.setAttribute(
+            "aria-expanded",
+            String(isOpen)
+          );
+        });
+      })();
+    </script>
+  </body>
 </html>
