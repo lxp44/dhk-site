@@ -305,7 +305,88 @@
     }
     .gif-caption { display: none; }
     .gif-link { display:block; color:inherit; text-decoration:none; }
-  </style>
+ /* =========================================
+   SHOP ALL EXPANDABLE MENU
+========================================= */
+
+.menu-drawer__shop-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.menu-drawer__shop-toggle {
+  width: 100%;
+  display: flex !important;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 14px;
+}
+
+.menu-drawer__shop-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: Roboto, Arial, sans-serif;
+  font-size: 22px;
+  font-weight: 300;
+  line-height: 1;
+  transition: transform 0.25s ease;
+}
+
+.menu-drawer__shop-toggle[aria-expanded="true"]
+  .menu-drawer__shop-arrow {
+  transform: rotate(180deg);
+}
+
+.menu-drawer__shop-submenu {
+  display: none;
+  list-style: none;
+  margin: 18px 0 0;
+  padding: 0 0 0 24px;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.menu-drawer__shop-submenu.is-open {
+  display: flex;
+}
+
+.menu-drawer__shop-submenu a {
+  display: inline-block;
+  color: rgba(241, 241, 241, 0.72);
+  font-family: "Roboto", Arial, sans-serif;
+  font-size: clamp(14px, 1.2vw, 18px);
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  line-height: 1.35;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease,
+    text-shadow 0.2s ease;
+}
+
+.menu-drawer__shop-submenu a:hover,
+.menu-drawer__shop-submenu a:focus-visible {
+  color: #ffffff;
+  transform: translateX(5px);
+  text-shadow: 0 0 12px rgba(255, 255, 255, 0.16);
+}
+
+@media (max-width: 900px) {
+  .menu-drawer__shop-submenu {
+    padding-left: 18px;
+    margin-top: 14px;
+    gap: 12px;
+  }
+
+  .menu-drawer__shop-submenu a {
+    font-size: 14px;
+  }
+}
+   </style>
 </head>
 
 <body class="template-page">
@@ -346,27 +427,128 @@
                 <div class="menu-drawer__navigation-container">
                   <nav class="menu-drawer__navigation" aria-label="Site navigation">
                     <ul class="menu-drawer__menu list-menu" role="list">
-                      <li><a href="index.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">Home</a></li>
-                      <li><a href="shop.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">Shop All</a></li>
-                      <li><a href="g4llery.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">G4LLERY</a></li>
-                      <li><a href="collections.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">Collections</a></li>
-                      <li><a href="try-on.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">TRY ON</a></li>
-                      <li><a href="4bout-us.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">4bout us</a></li>
-                      <li><a href="contact.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">Contact</a></li>
-                      <li>
-                        <a href="#"
-                           class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
-                           data-loud="heavy"
-                           data-cart-open>
-                          Cart <span class="cart-count-bubble" data-cart-count></span>
-                        </a>
-                      </li>
-                      <li>
-                        <button id="search-open-mobile" type="button" class="menu-drawer__menu-item link link--text list-menu__item focus-inset">
-                          Search
-                        </button>
-                      </li>
-                    </ul>
+  <li>
+    <a
+      href="index.html"
+      class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
+    >
+      Home
+    </a>
+  </li>
+
+  <li>
+    <a
+      href="lookbook.html"
+      class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
+    >
+      Lookbook
+    </a>
+  </li>
+
+  <li class="menu-drawer__shop-group">
+    <button
+      id="shop-menu-toggle"
+      class="menu-drawer__menu-item menu-drawer__shop-toggle list-menu__item link link--text focus-inset"
+      type="button"
+      aria-expanded="false"
+      aria-controls="shop-menu-submenu"
+    >
+      <span>Shop All</span>
+      <span class="menu-drawer__shop-arrow" aria-hidden="true">⌄</span>
+    </button>
+
+    <ul
+      id="shop-menu-submenu"
+      class="menu-drawer__shop-submenu"
+      role="list"
+      aria-hidden="true"
+    >
+      <li>
+        <a href="dhk-collection.html">DHK Collection</a>
+      </li>
+
+      <li>
+        <a href="comic-collection.html">Comic Book Collection</a>
+      </li>
+
+      <li>
+        <a href="blanks-collection.html">DHK Blanks</a>
+      </li>
+
+      <li>
+        <a href="shop.html">View All</a>
+      </li>
+    </ul>
+  </li>
+
+  <li>
+    <a
+      href="g4llery.html"
+      class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
+    >
+      G4LLERY
+    </a>
+  </li>
+
+  <li>
+    <a
+      href="try-on.html"
+      class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
+    >
+      TRY ON
+    </a>
+  </li>
+
+  <li>
+    <a
+      href="collections.html"
+      class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
+      aria-current="page"
+    >
+      Collections
+    </a>
+  </li>
+
+  <li>
+    <a
+      href="4bout-us.html"
+      class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
+    >
+      4bout us
+    </a>
+  </li>
+
+  <li>
+    <a
+      href="contact.html"
+      class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
+    >
+      Contact
+    </a>
+  </li>
+
+  <li>
+    <a
+      href="cart.html"
+      class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
+      data-loud="heavy"
+      data-cart-open
+    >
+      Cart
+      <span class="cart-count-bubble" data-cart-count></span>
+    </a>
+  </li>
+
+  <li>
+    <button
+      id="search-open-mobile"
+      type="button"
+      class="menu-drawer__menu-item link link--text list-menu__item focus-inset"
+    >
+      Search
+    </button>
+  </li>
+</ul>
                   </nav>
                 </div>
               </div>
@@ -663,6 +845,46 @@
       card.addEventListener('mouseenter', () => card.classList.add('is-zooming'));
       card.addEventListener('mouseleave', () => card.classList.remove('is-zooming'));
     });
-  </script>
+<script>
+  (() => {
+    const shopToggle = document.getElementById("shop-menu-toggle");
+    const shopSubmenu = document.getElementById("shop-menu-submenu");
+    const menuContainer = document.getElementById(
+      "Details-menu-drawer-container"
+    );
+
+    if (!shopToggle || !shopSubmenu) return;
+
+    function setShopMenu(open) {
+      shopToggle.setAttribute("aria-expanded", String(open));
+      shopSubmenu.setAttribute("aria-hidden", String(!open));
+      shopSubmenu.classList.toggle("is-open", open);
+    }
+
+    shopToggle.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+
+      const isOpen =
+        shopToggle.getAttribute("aria-expanded") === "true";
+
+      setShopMenu(!isOpen);
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        setShopMenu(false);
+      }
+    });
+
+    if (menuContainer) {
+      menuContainer.addEventListener("toggle", () => {
+        if (!menuContainer.open) {
+          setShopMenu(false);
+        }
+      });
+    }
+  })();
+</script>
 </body>
 </html>
