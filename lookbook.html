@@ -1391,7 +1391,47 @@ body.lookbook-page .lookbook-shop-btn {
         });
       })();
     </script>
+    <script>
+  (() => {
+    const shopToggle = document.getElementById("shop-menu-toggle");
+    const shopSubmenu = document.getElementById("shop-menu-submenu");
+    const menuContainer = document.getElementById(
+      "Details-menu-drawer-container"
+    );
 
+    if (!shopToggle || !shopSubmenu) return;
+
+    function setShopMenu(open) {
+      shopToggle.setAttribute("aria-expanded", String(open));
+      shopSubmenu.setAttribute("aria-hidden", String(!open));
+      shopSubmenu.classList.toggle("is-open", open);
+    }
+
+    shopToggle.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+
+      const isOpen =
+        shopToggle.getAttribute("aria-expanded") === "true";
+
+      setShopMenu(!isOpen);
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        setShopMenu(false);
+      }
+    });
+
+    if (menuContainer) {
+      menuContainer.addEventListener("toggle", () => {
+        if (!menuContainer.open) {
+          setShopMenu(false);
+        }
+      });
+    }
+  })();
+</script>
     <div id="cart-drawer" class="cart-drawer" aria-hidden="true">
       <div class="cart-drawer__overlay" data-cart-close></div>
       <aside class="cart-drawer__panel" tabindex="-1">
