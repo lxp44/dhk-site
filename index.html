@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+
     <script>
       document.addEventListener("DOMContentLoaded", () => {
         if (
@@ -35,19 +36,24 @@
       type="image/gif"
       sizes="any"
     />
+
     <meta charset="utf-8" />
+
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1"
     />
+
     <title>DHK — Home</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
+
     <link
       rel="preconnect"
       href="https://fonts.gstatic.com"
       crossorigin
     />
+
     <link
       href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Roboto:wght@300;400;500;700&display=swap"
       rel="stylesheet"
@@ -60,31 +66,37 @@
         max-width: none;
         padding: 0;
       }
+
       .utility-bar .utility-bar__grid {
         display: flex;
         align-items: center;
         justify-content: center;
         gap: 0;
       }
+
       .utility-bar .list-social,
       .utility-bar .localization-wrapper {
         display: none !important;
       }
+
       .announcement-bar {
         width: 100%;
         display: flex;
         justify-content: center;
       }
+
       .announcement-track {
         display: flex;
         align-items: center;
         justify-content: center;
         gap: 24px;
       }
+
       .announcement-bar__message {
         margin: 0;
         padding: 10px 0;
       }
+
       .announcement-bar__message span {
         font-family: "Cinzel", serif;
         font-weight: 700;
@@ -95,7 +107,10 @@
         text-shadow: 0 0 6px rgba(255, 255, 255, 0.12);
       }
 
-      /* Universal drawer styling */
+      /* ===========================
+         FULL-SCREEN MENU DRAWER
+      =========================== */
+
       #menu-drawer {
         position: fixed;
         inset: 0;
@@ -113,7 +128,7 @@
       .menu-drawer__inner-container,
       .menu-drawer__navigation-container,
       .menu-drawer__navigation {
-        height: 100%;
+        min-height: 100%;
       }
 
       .menu-drawer__menu {
@@ -123,6 +138,11 @@
         display: flex;
         flex-direction: column;
         gap: 24px;
+      }
+
+      .menu-drawer__menu > li {
+        margin: 0;
+        padding: 0;
       }
 
       .menu-drawer__menu-item,
@@ -146,7 +166,8 @@
       .menu-drawer__menu-item:hover,
       .menu-drawer__menu .list-menu__item.link:hover,
       .menu-drawer__menu-item:focus-visible,
-      .menu-drawer__menu button:hover {
+      .menu-drawer__menu button:hover,
+      .menu-drawer__menu button:focus-visible {
         color: #fff;
         text-shadow: 0 0 14px rgba(255, 255, 255, 0.18);
       }
@@ -154,6 +175,135 @@
       .menu-drawer__menu .list-menu__item + .list-menu__item {
         border-top: 0;
       }
+
+      /* ===========================
+         SHOP ALL EXPANDABLE MENU
+      =========================== */
+
+      .shop-menu-group {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .shop-menu-toggle {
+        display: inline-flex !important;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 14px;
+        width: auto;
+      }
+
+      .shop-menu-toggle__icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 18px;
+        height: 18px;
+        flex: 0 0 18px;
+        position: relative;
+      }
+
+      .shop-menu-toggle__icon::before,
+      .shop-menu-toggle__icon::after {
+        content: "";
+        position: absolute;
+        width: 14px;
+        height: 1px;
+        background: currentColor;
+        transition:
+          transform 0.25s ease,
+          opacity 0.25s ease;
+      }
+
+      .shop-menu-toggle__icon::after {
+        transform: rotate(90deg);
+      }
+
+      .shop-menu-toggle[aria-expanded="true"]
+        .shop-menu-toggle__icon::after {
+        transform: rotate(0deg);
+        opacity: 0;
+      }
+
+      .shop-submenu {
+        list-style: none;
+        width: 100%;
+        max-height: 0;
+        overflow: hidden;
+        visibility: hidden;
+        opacity: 0;
+        margin: 0;
+        padding: 0 0 0 26px;
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        transition:
+          max-height 0.35s ease,
+          opacity 0.25s ease,
+          visibility 0.25s ease,
+          padding-top 0.35s ease;
+      }
+
+      .shop-submenu.is-open {
+        max-height: 420px;
+        visibility: visible;
+        opacity: 1;
+        padding-top: 18px;
+      }
+
+      .shop-submenu li {
+        margin: 0;
+        padding: 0;
+      }
+
+      .shop-submenu__link {
+        display: inline-flex;
+        align-items: center;
+        min-height: 38px;
+        padding: 6px 0;
+        color: rgba(238, 238, 238, 0.7);
+        text-decoration: none;
+        font-family: "Roboto", sans-serif;
+        font-size: clamp(14px, 1.1vw, 17px);
+        font-weight: 400;
+        line-height: 1.3;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        transition:
+          color 0.2s ease,
+          transform 0.2s ease,
+          text-shadow 0.2s ease;
+      }
+
+      .shop-submenu__link::before {
+        content: "";
+        display: inline-block;
+        width: 16px;
+        height: 1px;
+        margin-right: 12px;
+        background: rgba(255, 255, 255, 0.38);
+        transition:
+          width 0.2s ease,
+          background 0.2s ease;
+      }
+
+      .shop-submenu__link:hover,
+      .shop-submenu__link:focus-visible {
+        color: #fff;
+        transform: translateX(4px);
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.14);
+      }
+
+      .shop-submenu__link:hover::before,
+      .shop-submenu__link:focus-visible::before {
+        width: 24px;
+        background: rgba(255, 255, 255, 0.85);
+      }
+
+      /* ===========================
+         HEADER ICON
+      =========================== */
 
       .header__icon--menu {
         z-index: 2147483647;
@@ -166,6 +316,7 @@
       .header__icon--summary {
         list-style: none;
       }
+
       .header__icon--summary::-webkit-details-marker {
         display: none;
       }
@@ -182,6 +333,7 @@
       .header__icon--summary svg:first-child {
         display: block;
       }
+
       .header__icon--summary svg:last-child {
         display: none;
       }
@@ -189,9 +341,14 @@
       details[open] .header__icon--summary svg:first-child {
         display: none;
       }
+
       details[open] .header__icon--summary svg:last-child {
         display: block;
       }
+
+      /* ===========================
+         STORM + MODAL LAYERS
+      =========================== */
 
       details[open] ~ #storm-overlay,
       details[open] #storm-overlay {
@@ -222,24 +379,34 @@
         transition: opacity 0.15s ease;
       }
 
+      /* ===========================
+         LEGACY CART DISCOUNT
+      =========================== */
+
       .cart-discount-input-wrap {
         display: flex;
         gap: 8px;
       }
+
       #cart-discount-input {
         flex: 1;
         padding: 6px 8px;
       }
+
       #cart-discount-apply {
         padding: 6px 12px;
         text-transform: uppercase;
         font-size: 11px;
       }
+
       #cart-discount-input.error {
         border: 1px solid #b04141;
       }
 
-      /* Header layout for both mobile + desktop */
+      /* ===========================
+         HEADER LAYOUT
+      =========================== */
+
       .header-grid {
         display: grid !important;
         grid-template-columns: 48px 1fr 48px !important;
@@ -277,7 +444,10 @@
         justify-self: start;
       }
 
-      /* HERO CTA STACK — MOBILE + DESKTOP */
+      /* ===========================
+         HERO CTA STACK
+      =========================== */
+
       #hero-dhk .banner__content {
         display: flex;
         align-items: flex-end;
@@ -337,6 +507,10 @@
         transform: none;
       }
 
+      /* ===========================
+         MOBILE
+      =========================== */
+
       @media (max-width: 900px) {
         #storm-popup {
           display: flex;
@@ -356,8 +530,11 @@
           background: #000;
           color: #fff;
           z-index: 9999;
-          transition: opacity 0.5s ease, visibility 0.5s ease;
+          transition:
+            opacity 0.5s ease,
+            visibility 0.5s ease;
         }
+
         #storm-popup.hidden {
           opacity: 0;
           visibility: hidden;
@@ -372,6 +549,26 @@
         .menu-drawer__menu .list-menu__item.link,
         .menu-drawer__menu button {
           font-size: 26px;
+        }
+
+        .shop-submenu {
+          padding-left: 18px;
+        }
+
+        .shop-submenu.is-open {
+          padding-top: 14px;
+        }
+
+        .shop-submenu__link {
+          min-height: 34px;
+          padding: 5px 0;
+          font-size: 13px;
+          letter-spacing: 0.12em;
+        }
+
+        .shop-submenu__link::before {
+          width: 12px;
+          margin-right: 10px;
         }
 
         .header__heading-logo {
@@ -395,6 +592,7 @@
 
   <body class="template-page">
     <div id="storm-popup">ENTER THE STORM</div>
+
     <div class="lightning-flash"></div>
 
     <audio
@@ -404,6 +602,7 @@
       preload="auto"
       hidden
     ></audio>
+
     <audio
       id="rain-med"
       src="assets/audio/med-rain.mp3"
@@ -411,6 +610,7 @@
       preload="auto"
       hidden
     ></audio>
+
     <audio
       id="rain-heavy"
       src="assets/audio/heavy-rain.mp3"
@@ -418,6 +618,7 @@
       preload="auto"
       hidden
     ></audio>
+
     <audio
       id="thunder-light"
       src="assets/audio/light-thunder.mp3"
@@ -425,6 +626,7 @@
       preload="auto"
       hidden
     ></audio>
+
     <audio
       id="thunder-med"
       src="assets/audio/med-thunder.mp3"
@@ -432,9 +634,10 @@
       preload="auto"
       hidden
     ></audio>
+
     <audio
       id="thunder-heavy"
-      src="assets/audio/thunder-heavy.mp3"
+      src="assets/audio/heavy-thunder.mp3"
       loop
       preload="auto"
       hidden
@@ -461,6 +664,7 @@
           >
             ‹
           </button>
+
           <div
             class="announcement-track"
             id="AnnouncementTrack"
@@ -471,6 +675,7 @@
               <span>WELCOME TO THE STORM</span>
             </p>
           </div>
+
           <button
             type="button"
             class="slider-button slider-button--next"
@@ -511,6 +716,7 @@
                       fill="currentColor"
                     />
                   </svg>
+
                   <svg
                     width="22"
                     height="22"
@@ -542,58 +748,125 @@
                           <a
                             href="index.html"
                             class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
-                            >Home</a
                           >
+                            Home
+                          </a>
                         </li>
+
                         <li>
                           <a
                             href="lookbook.html"
                             class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
-                            >Lookbook</a
                           >
+                            Lookbook
+                          </a>
                         </li>
-                        <li>
-                          <a
-                            href="shop.html"
-                            class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
-                            >Shop All</a
+
+                        <li class="shop-menu-group">
+                          <button
+                            id="shop-menu-toggle"
+                            class="menu-drawer__menu-item shop-menu-toggle list-menu__item link link--text focus-inset"
+                            type="button"
+                            aria-expanded="false"
+                            aria-controls="shop-menu-submenu"
                           >
+                            <span>Shop All</span>
+
+                            <span
+                              class="shop-menu-toggle__icon"
+                              aria-hidden="true"
+                            ></span>
+                          </button>
+
+                          <ul
+                            id="shop-menu-submenu"
+                            class="shop-submenu"
+                            role="list"
+                            aria-hidden="true"
+                          >
+                            <li>
+                              <a
+                                class="shop-submenu__link"
+                                href="dhk-collection.html"
+                              >
+                                DHK Collection
+                              </a>
+                            </li>
+
+                            <li>
+                              <a
+                                class="shop-submenu__link"
+                                href="comic-collection.html"
+                              >
+                                Comic Book Collection
+                              </a>
+                            </li>
+
+                            <li>
+                              <a
+                                class="shop-submenu__link"
+                                href="blanks-collection.html"
+                              >
+                                DHK Blanks
+                              </a>
+                            </li>
+
+                            <li>
+                              <a
+                                class="shop-submenu__link"
+                                href="shop.html"
+                              >
+                                View All
+                              </a>
+                            </li>
+                          </ul>
                         </li>
+
                         <li>
                           <a
                             href="g4llery.html"
                             class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
-                            >G4LLERY</a
                           >
+                            G4LLERY
+                          </a>
                         </li>
+
                         <li>
                           <a
                             href="try-on.html"
                             class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
-                            >TRY ON</a
                           >
+                            TRY ON
+                          </a>
                         </li>
+
                         <li>
                           <a
                             href="collections.html"
                             class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
-                            >Collections</a
                           >
+                            Collections
+                          </a>
                         </li>
+
                         <li>
                           <a
                             href="4bout-us.html"
                             class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
-                            >4bout us</a
                           >
+                            4bout us
+                          </a>
                         </li>
+
                         <li>
                           <a
                             href="contact.html"
                             class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
-                            >Contact</a
                           >
+                            Contact
+                          </a>
                         </li>
+
                         <li>
                           <a
                             href="cart.html"
@@ -602,12 +875,14 @@
                             data-cart-open
                           >
                             Cart
+
                             <span
                               class="cart-count-bubble"
                               data-cart-count
                             ></span>
                           </a>
                         </li>
+
                         <li>
                           <button
                             id="search-open-mobile"
@@ -640,7 +915,7 @@
             />
           </a>
 
-          <div></div>
+          <div aria-hidden="true"></div>
         </div>
       </header>
     </div>
@@ -656,84 +931,206 @@
               media="(max-width: 900px)"
               srcset="assets/img/products/dhk/campaign-1/campaign-shots/Grey/grey-shoot-8.png"
             />
+
             <img
               src="assets/img/products/dhk/campaign-1/campaign-shots/Grey/grey-shoot-8.png"
-              alt=""
+              alt="Dark Harlem Knight campaign"
               sizes="90vw"
               fetchpriority="high"
               class="banner__img"
             />
           </picture>
         </div>
+
         <div
           class="banner__content banner__content--bottom-center page-width"
         >
-      <div
-  class="banner__box content-container content-container--full-width-mobile color-scheme-3 gradient"
->
-  <div class="banner__buttons hero-cta-stack">
-    <a
-      href="lookbook.html"
-      class="button button--secondary hero-lookbook-btn"
-      >Lookbook</a
-    >
-    <a
-      href="shop.html"
-      class="button button--secondary hero-shop-btn"
-      >Shop all</a
-    >
-  </div>
-</div>
+          <div
+            class="banner__box content-container content-container--full-width-mobile color-scheme-3 gradient"
+          >
+            <div class="banner__buttons hero-cta-stack">
+              <a
+                href="lookbook.html"
+                class="button button--secondary hero-lookbook-btn"
+              >
+                Lookbook
+              </a>
+
+              <a
+                href="shop-categories.html"
+                class="button button--secondary hero-shop-btn"
+              >
+                Shop All
+              </a>
+            </div>
+          </div>
         </div>
       </section>
     </main>
 
     <footer class="footer color-scheme-4 gradient section footer--static">
       <div class="footer__content-top page-width">
-        <div class="footer__blocks-wrapper grid grid--1-col grid--2-col grid--4-col-tablet">
+        <div
+          class="footer__blocks-wrapper grid grid--1-col grid--2-col grid--4-col-tablet"
+        >
           <div class="footer-block footer-block--menu grid__item">
             <h2 class="footer-block__heading inline-richtext">Shop</h2>
+
             <ul class="footer-block__details-content list-unstyled">
-              <li><a class="link link--text list-menu__item list-menu__item--link" href="lookbook.html">Lookbook</a></li>
-              <li><a class="link link--text list-menu__item list-menu__item--link" href="collections.html">Collections</a></li>
-              <li><a class="link link--text list-menu__item list-menu__item--link" href="shop.html">All Products</a></li>
-              <li><a class="link link--text list-menu__item list-menu__item--link" href="g4llery.html">G4LLERY</a></li>
-              <li><a class="link link--text list-menu__item list-menu__item--link" href="try-on.html">TRY ON</a></li>
-              <li><a class="link link--text list-menu__item list-menu__item--link" href="4bout-us.html">4bout us</a></li>
-              <li><a class="link link--text list-menu__item list-menu__item--link" href="contact.html">Contact</a></li>
+              <li>
+                <a
+                  class="link link--text list-menu__item list-menu__item--link"
+                  href="lookbook.html"
+                >
+                  Lookbook
+                </a>
+              </li>
+
+              <li>
+                <a
+                  class="link link--text list-menu__item list-menu__item--link"
+                  href="collections.html"
+                >
+                  Collections
+                </a>
+              </li>
+
+              <li>
+                <a
+                  class="link link--text list-menu__item list-menu__item--link"
+                  href="shop-categories.html"
+                >
+                  Shop
+                </a>
+              </li>
+
+              <li>
+                <a
+                  class="link link--text list-menu__item list-menu__item--link"
+                  href="shop.html"
+                >
+                  All Products
+                </a>
+              </li>
+
+              <li>
+                <a
+                  class="link link--text list-menu__item list-menu__item--link"
+                  href="g4llery.html"
+                >
+                  G4LLERY
+                </a>
+              </li>
+
+              <li>
+                <a
+                  class="link link--text list-menu__item list-menu__item--link"
+                  href="try-on.html"
+                >
+                  TRY ON
+                </a>
+              </li>
+
+              <li>
+                <a
+                  class="link link--text list-menu__item list-menu__item--link"
+                  href="4bout-us.html"
+                >
+                  4bout us
+                </a>
+              </li>
+
+              <li>
+                <a
+                  class="link link--text list-menu__item list-menu__item--link"
+                  href="contact.html"
+                >
+                  Contact
+                </a>
+              </li>
             </ul>
           </div>
 
           <div class="footer-block grid__item">
-            <h2 class="footer-block__heading inline-richtext">Dark Harlem Knight</h2>
+            <h2 class="footer-block__heading inline-richtext">
+              Dark Harlem Knight
+            </h2>
+
             <div class="footer-block__details-content rte">
-              <p>Forged in the storm. Streetwear with thunder in its veins.</p>
+              <p>
+                Forged in the storm. Streetwear with thunder in its veins.
+              </p>
             </div>
+
             <ul class="footer__list-social">
               <li>
-                <a aria-label="Instagram" class="social-link" href="https://www.instagram.com/darkharlemknight/" target="_blank" rel="noopener">Instagram</a>
+                <a
+                  aria-label="Instagram"
+                  class="social-link"
+                  href="https://www.instagram.com/darkharlemknight/"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  Instagram
+                </a>
               </li>
+
               <li>
-                <a aria-label="TikTok" class="social-link" href="https://www.tiktok.com/@darkharlemknight" target="_blank" rel="noopener">TikTok</a>
+                <a
+                  aria-label="TikTok"
+                  class="social-link"
+                  href="https://www.tiktok.com/@darkharlemknight"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  TikTok
+                </a>
               </li>
             </ul>
           </div>
 
-          <div class="footer-block footer-block--newsletter grid__item">
-            <h2 class="footer-block__heading inline-richtext">Join the storm</h2>
-            <form class="footer__newsletter newsletter-form" action="#" method="post" onsubmit="return false;">
+          <div
+            class="footer-block footer-block--newsletter grid__item"
+          >
+            <h2 class="footer-block__heading inline-richtext">
+              Join the storm
+            </h2>
+
+            <form
+              class="footer__newsletter newsletter-form"
+              action="#"
+              method="post"
+              onsubmit="return false;"
+            >
               <div class="newsletter-form__field-wrapper">
                 <div class="field">
-                  <input class="field__input" type="email" placeholder="Email address" required>
-                  <button class="newsletter-form__button field__button" type="submit" aria-label="Subscribe">→</button>
+                  <input
+                    class="field__input"
+                    type="email"
+                    placeholder="Email address"
+                    required
+                  />
+
+                  <button
+                    class="newsletter-form__button field__button"
+                    type="submit"
+                    aria-label="Subscribe"
+                  >
+                    →
+                  </button>
                 </div>
               </div>
             </form>
           </div>
 
           <div class="footer-block footer-block-image grid__item center">
-            <img src="assets/img/DHK_transparent.gif"
-                 alt="DarkHarlemKnight" width="120" height="120" loading="lazy">
+            <img
+              src="assets/img/DHK_transparent.gif"
+              alt="DarkHarlemKnight"
+              width="120"
+              height="120"
+              loading="lazy"
+            />
           </div>
         </div>
       </div>
@@ -752,66 +1149,130 @@
           </div>
         </div>
 
-        <div class="footer__content-bottom-wrapper page-width footer__content-bottom-wrapper--center">
+        <div
+          class="footer__content-bottom-wrapper page-width footer__content-bottom-wrapper--center"
+        >
           <div class="footer__copyright caption">
-            <small class="copyright__content">© <span id="year"></span>, Dark Harlem Knight</small>
-            <small class="copyright__content">Powered by the Storm</small>
+            <small class="copyright__content">
+              © <span id="year"></span>, Dark Harlem Knight
+            </small>
+
+            <small class="copyright__content">
+              Powered by the Storm
+            </small>
+
             <ul class="policies list-unstyled">
-              <li><small class="copyright__content"><a href="#">Privacy Policy</a></small></li>
-              <li><small class="copyright__content"><a href="#">Terms of Service</a></small></li>
+              <li>
+                <small class="copyright__content">
+                  <a href="#">Privacy Policy</a>
+                </small>
+              </li>
+
+              <li>
+                <small class="copyright__content">
+                  <a href="#">Terms of Service</a>
+                </small>
+              </li>
             </ul>
           </div>
         </div>
       </div>
     </footer>
-    <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
 
-    <div id="search-modal" class="search-modal" aria-hidden="true">
-      <div class="search-modal__overlay" data-close-search></div>
-      <div class="search-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="search-title">
+    <div
+      id="search-modal"
+      class="search-modal"
+      aria-hidden="true"
+    >
+      <div
+        class="search-modal__overlay"
+        data-close-search
+      ></div>
+
+      <div
+        class="search-modal__dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="search-title"
+      >
         <header class="search-modal__header">
           <h2 id="search-title">Search</h2>
-          <button id="search-close" class="search-modal__close" aria-label="Close search">×</button>
+
+          <button
+            id="search-close"
+            class="search-modal__close"
+            aria-label="Close search"
+          >
+            ×
+          </button>
         </header>
+
         <div class="search-modal__field">
-          <input id="search-input" type="search" placeholder="Search products…  ( /  or  ⌘/Ctrl+K )" autocomplete="off" />
+          <input
+            id="search-input"
+            type="search"
+            placeholder="Search products…  ( /  or  ⌘/Ctrl+K )"
+            autocomplete="off"
+          />
         </div>
-        <div id="search-results" class="search-modal__results" aria-live="polite"></div>
+
+        <div
+          id="search-results"
+          class="search-modal__results"
+          aria-live="polite"
+        ></div>
       </div>
     </div>
-  
-    <audio id="rain-light"   src="assets/audio/light-rain.mp3"   loop preload="auto" hidden></audio>
-    <audio id="rain-med"     src="assets/audio/med-rain.mp3"     loop preload="auto" hidden></audio>
-    <audio id="rain-heavy"   src="assets/audio/heavy-rain.mp3"   loop preload="auto" hidden></audio>
-    <audio id="thunder-light" src="assets/audio/light-thunder.mp3" loop preload="auto" hidden></audio>
-    <audio id="thunder-med"   src="assets/audio/med-thunder.mp3"   loop preload="auto" hidden></audio>
-    <audio id="thunder-heavy" src="assets/audio/heavy-thunder.mp3" loop preload="auto" hidden></audio>
 
-    <script src="js/nav.js"></script>
-    <script src="js/announce.js"></script>
-    <script src="js/cart.js"></script>
-    <script src="js/search.js"></script>
-    <script src="js/shop.js"></script>
-    <script src="js/newsletter.js"></script>
-    <script src="js/storm_shopify_style.js"></script>
-    <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+    <div
+      id="cart-drawer"
+      class="cart-drawer"
+      aria-hidden="true"
+    >
+      <div
+        class="cart-drawer__overlay"
+        data-cart-close
+      ></div>
 
-    <div id="cart-drawer" class="cart-drawer" aria-hidden="true">
-      <div class="cart-drawer__overlay" data-cart-close></div>
-      <aside class="cart-drawer__panel" tabindex="-1">
+      <aside
+        class="cart-drawer__panel"
+        tabindex="-1"
+      >
         <div class="cart-header">
           <h2>Your Cart</h2>
-          <button type="button" title="Close" data-cart-close>✕</button>
+
+          <button
+            type="button"
+            title="Close"
+            data-cart-close
+          >
+            ✕
+          </button>
         </div>
 
-        <div class="cart-list" id="cart-items"></div>
-        <div id="cart-empty" class="cart-empty" hidden style="padding:16px;color:#9a9a9a">
+        <div
+          class="cart-list"
+          id="cart-items"
+        ></div>
+
+        <div
+          id="cart-empty"
+          class="cart-empty"
+          hidden
+          style="padding: 16px; color: #9a9a9a"
+        >
           Your cart is empty.
         </div>
 
         <div class="cart-footer">
           <div class="cart-discount cart-discount--drawer">
-            <label for="discount-code-drawer" class="cart-discount__label">ADD DISCOUNT</label>
+            <label
+              for="discount-code-drawer"
+              class="cart-discount__label"
+            >
+              ADD DISCOUNT
+            </label>
+
             <div class="cart-discount__row">
               <input
                 id="discount-code-drawer"
@@ -820,6 +1281,7 @@
                 placeholder="Enter code"
                 autocomplete="off"
               />
+
               <button
                 id="discount-apply-drawer"
                 class="cart-discount__button"
@@ -828,6 +1290,7 @@
                 APPLY
               </button>
             </div>
+
             <p
               id="discount-message-drawer"
               class="cart-discount__message"
@@ -837,11 +1300,130 @@
 
           <div class="cart-row">
             <div class="label">Subtotal</div>
-            <div class="value" id="cart-subtotal">$0.00</div>
+
+            <div
+              class="value"
+              id="cart-subtotal"
+            >
+              $0.00
+            </div>
           </div>
-          <button id="cart-checkout" type="button" disabled>Checkout</button>
+
+          <button
+            id="cart-checkout"
+            type="button"
+            disabled
+          >
+            Checkout
+          </button>
         </div>
       </aside>
     </div>
+
+    <script src="js/nav.js"></script>
+    <script src="js/announce.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/search.js"></script>
+    <script src="js/shop.js"></script>
+    <script src="js/newsletter.js"></script>
+    <script src="js/storm_shopify_style.js"></script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const yearElement = document.getElementById("year");
+
+        if (yearElement) {
+          yearElement.textContent = new Date().getFullYear();
+        }
+
+        const shopMenuToggle =
+          document.getElementById("shop-menu-toggle");
+
+        const shopMenuSubmenu =
+          document.getElementById("shop-menu-submenu");
+
+        if (shopMenuToggle && shopMenuSubmenu) {
+          const setShopMenuState = (isOpen) => {
+            shopMenuToggle.setAttribute(
+              "aria-expanded",
+              String(isOpen)
+            );
+
+            shopMenuSubmenu.setAttribute(
+              "aria-hidden",
+              String(!isOpen)
+            );
+
+            shopMenuSubmenu.classList.toggle(
+              "is-open",
+              isOpen
+            );
+          };
+
+          shopMenuToggle.addEventListener("click", (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+
+            const isCurrentlyOpen =
+              shopMenuToggle.getAttribute("aria-expanded") ===
+              "true";
+
+            setShopMenuState(!isCurrentlyOpen);
+          });
+
+          shopMenuToggle.addEventListener("keydown", (event) => {
+            if (
+              event.key === "ArrowDown" &&
+              shopMenuToggle.getAttribute("aria-expanded") !==
+                "true"
+            ) {
+              event.preventDefault();
+              setShopMenuState(true);
+
+              const firstSubmenuLink =
+                shopMenuSubmenu.querySelector("a");
+
+              firstSubmenuLink?.focus();
+            }
+
+            if (
+              event.key === "Escape" &&
+              shopMenuToggle.getAttribute("aria-expanded") ===
+                "true"
+            ) {
+              event.preventDefault();
+              setShopMenuState(false);
+              shopMenuToggle.focus();
+            }
+          });
+
+          shopMenuSubmenu.addEventListener(
+            "keydown",
+            (event) => {
+              if (event.key === "Escape") {
+                event.preventDefault();
+                setShopMenuState(false);
+                shopMenuToggle.focus();
+              }
+            }
+          );
+
+          const mainDrawerDetails = document.getElementById(
+            "Details-menu-drawer-container"
+          );
+
+          if (mainDrawerDetails) {
+            mainDrawerDetails.addEventListener(
+              "toggle",
+              () => {
+                if (!mainDrawerDetails.open) {
+                  setShopMenuState(false);
+                }
+              }
+            );
+          }
+        }
+      });
+    </script>
   </body>
 </html>
