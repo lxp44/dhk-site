@@ -1,29 +1,48 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <title>Your Cart — DHK</title>
 
-  <!-- Favicon -->
-  <link rel="icon" href="assets/img/DHK_transparent.gif" type="image/gif" sizes="any">
+  <link
+    rel="icon"
+    href="assets/img/DHK_transparent.gif"
+    type="image/gif"
+    sizes="any"
+  />
 
-  <!-- Styles -->
-  <link rel="stylesheet" href="css/styles.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Roboto:wght@300;400;500;700&display=swap"
+    rel="stylesheet"
+  />
 
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css" />
 
   <style>
-    .utility-bar .page-width { max-width: none; padding: 0; }
+    /* =========================================
+       ANNOUNCEMENT BAR
+    ========================================= */
+
+    .utility-bar .page-width {
+      max-width: none;
+      padding: 0;
+    }
+
     .utility-bar .utility-bar__grid {
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 0;
     }
+
     .utility-bar .list-social,
     .utility-bar .localization-wrapper {
       display: none !important;
@@ -42,19 +61,25 @@
       gap: 24px;
     }
 
-    .announcement-bar__message { margin: 0; padding: 10px 0; }
-
-    .announcement-bar__message span {
-      font-family: 'Cinzel', serif;
-      font-weight: 700;
-      font-size: 13px;
-      letter-spacing: .18em;
-      text-transform: uppercase;
-      color: #e5e5e5;
-      text-shadow: 0 0 6px rgba(255,255,255,.12);
+    .announcement-bar__message {
+      margin: 0;
+      padding: 10px 0;
     }
 
-    /* Full-screen DHK menu for mobile + desktop */
+    .announcement-bar__message span {
+      font-family: "Cinzel", serif;
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #e5e5e5;
+      text-shadow: 0 0 6px rgba(255, 255, 255, 0.12);
+    }
+
+    /* =========================================
+       FULL-SCREEN MENU DRAWER
+    ========================================= */
+
     #menu-drawer {
       position: fixed;
       inset: 0;
@@ -73,7 +98,7 @@
     .menu-drawer__inner-container,
     .menu-drawer__navigation-container,
     .menu-drawer__navigation {
-      height: 100%;
+      min-height: 100%;
     }
 
     .menu-drawer__menu {
@@ -85,17 +110,22 @@
       gap: 24px;
     }
 
+    .menu-drawer__menu > li {
+      margin: 0;
+      padding: 0;
+    }
+
     .menu-drawer__menu-item,
     .menu-drawer__menu .list-menu__item.link,
     .menu-drawer__menu button {
-      font-family: 'Cinzel', serif;
+      font-family: "Cinzel", serif;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: .16em;
+      letter-spacing: 0.16em;
       font-size: clamp(24px, 2.2vw, 34px);
       color: #f1f1f1;
       text-decoration: none;
-      text-shadow: 0 0 10px rgba(255,255,255,.08);
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.08);
       background: transparent;
       border: 0;
       padding: 0;
@@ -108,19 +138,108 @@
     .menu-drawer__menu-item:focus-visible,
     .menu-drawer__menu button:hover {
       color: #ffffff;
-      text-shadow: 0 0 14px rgba(255,255,255,.18);
+      text-shadow: 0 0 14px rgba(255, 255, 255, 0.18);
     }
 
     .menu-drawer__menu .list-menu__item + .list-menu__item {
       border-top: 0;
     }
 
+    /* =========================================
+       SHOP ALL EXPANDABLE MENU
+    ========================================= */
+
+    .shop-menu-parent {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .shop-menu-toggle {
+      display: inline-flex !important;
+      align-items: center;
+      gap: 14px;
+      width: auto;
+    }
+
+    .shop-menu-toggle__icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-family: "Roboto", sans-serif;
+      font-size: 24px;
+      font-weight: 300;
+      line-height: 1;
+      transition: transform 0.25s ease;
+    }
+
+    .shop-menu-toggle[aria-expanded="true"] .shop-menu-toggle__icon {
+      transform: rotate(45deg);
+    }
+
+    .shop-submenu {
+      list-style: none;
+      display: grid;
+      gap: 12px;
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      visibility: hidden;
+      margin: 0;
+      padding: 0 0 0 22px;
+      transition:
+        max-height 0.35s ease,
+        opacity 0.25s ease,
+        margin 0.35s ease,
+        visibility 0.25s ease;
+    }
+
+    .shop-submenu.is-open {
+      max-height: 420px;
+      opacity: 1;
+      visibility: visible;
+      margin-top: 18px;
+      margin-bottom: 4px;
+    }
+
+    .shop-submenu__link {
+      display: inline-block;
+      color: rgba(255, 255, 255, 0.7);
+      font-family: "Roboto", sans-serif;
+      font-size: clamp(14px, 1.15vw, 17px);
+      font-weight: 400;
+      letter-spacing: 0.16em;
+      line-height: 1.4;
+      text-decoration: none;
+      text-transform: uppercase;
+      transition:
+        color 0.2s ease,
+        transform 0.2s ease,
+        text-shadow 0.2s ease;
+    }
+
+    .shop-submenu__link:hover,
+    .shop-submenu__link:focus-visible {
+      color: #ffffff;
+      transform: translateX(4px);
+      text-shadow: 0 0 12px rgba(255, 255, 255, 0.2);
+    }
+
+    .shop-submenu__link--view-all {
+      color: #ffffff;
+      font-weight: 500;
+    }
+
+    /* =========================================
+       HEADER ICON + LOGO
+    ========================================= */
+
     .header__icon--menu {
       z-index: 2147483647;
     }
 
     .header__icon--menu svg {
-      filter: drop-shadow(0 0 6px rgba(255,255,255,.28));
+      filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.28));
     }
 
     .header__icon--summary {
@@ -156,26 +275,33 @@
       display: block;
     }
 
-    details[open] ~ .menu-drawer,
     details[open] #menu-drawer {
       z-index: 2147483646;
     }
 
-    details[open] ~ #storm-overlay,
-    details[open] #storm-overlay {
-      opacity: 0 !important;
-      pointer-events: none !important;
-      transition: opacity .15s ease;
+    #storm-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
     }
 
-    #search-modal { z-index: 2147483647; }
+    .section-header {
+      position: relative;
+      z-index: 20;
+    }
+
+    body.menu-open #storm-overlay,
     body.search-open #storm-overlay {
       opacity: 0 !important;
       pointer-events: none !important;
-      transition: opacity .15s ease;
+      transition: opacity 0.15s ease;
     }
 
-    /* Unified centered header for desktop + mobile */
+    #search-modal {
+      z-index: 2147483647;
+    }
+
     .header-grid {
       display: grid !important;
       grid-template-columns: 48px 1fr 48px !important;
@@ -213,6 +339,288 @@
       justify-self: start;
     }
 
+    /* =========================================
+       CART PAGE
+    ========================================= */
+
+    #cart-page {
+      position: relative;
+      z-index: 2;
+      padding-top: 42px;
+      padding-bottom: 72px;
+    }
+
+    .cart-page__header {
+      margin-bottom: 28px;
+    }
+
+    .cart-page__title {
+      margin: 0;
+      font-family: "Cinzel", serif;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #ffffff;
+      text-shadow: 0 0 12px rgba(255, 255, 255, 0.15);
+    }
+
+    .cart-items .cart-item {
+      display: grid;
+      grid-template-columns: 96px minmax(0, 1fr) auto;
+      gap: 16px;
+      padding: 18px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .cart-items .ci__media {
+      min-width: 0;
+    }
+
+    .cart-items .ci__media img {
+      display: block;
+      width: 96px;
+      height: 96px;
+      object-fit: cover;
+      border-radius: 10px;
+      box-shadow: 0 0 14px rgba(255, 255, 255, 0.08);
+      background: #0e0e0e;
+    }
+
+    .cart-items .ci__info {
+      min-width: 0;
+    }
+
+    .cart-items .ci__title {
+      display: inline-block;
+      font-family: "Cinzel", serif;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-size: 14px;
+      line-height: 1.5;
+      color: #eaeaea;
+      text-decoration: none;
+      text-shadow: 0 0 8px rgba(255, 255, 255, 0.18);
+    }
+
+    .cart-items .ci__title:hover {
+      color: #ffffff;
+    }
+
+    .cart-items .ci__variant {
+      margin-top: 3px;
+      font: 500 12px/1.35 "Roboto", system-ui, Arial, sans-serif;
+      color: #c9c9c9;
+      opacity: 0.85;
+    }
+
+    .cart-items .ci__price-each,
+    .cart-items .ci__line {
+      font: 600 13px/1.2 "Roboto", system-ui, Arial, sans-serif;
+      color: #dddddd;
+    }
+
+    .cart-items .ci__price-each {
+      margin-top: 5px;
+    }
+
+    .cart-items .ci__line {
+      align-self: center;
+      white-space: nowrap;
+      text-shadow: 0 0 8px rgba(255, 255, 255, 0.12);
+    }
+
+    .cart-items .ci__controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+
+    .cart-items .ci__qty-btn {
+      width: 30px;
+      height: 30px;
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: #151515;
+      color: #ffffff;
+      cursor: pointer;
+    }
+
+    .cart-items .ci__qty-btn:hover {
+      background: #222222;
+    }
+
+    .cart-items .ci__qty {
+      min-width: 18px;
+      text-align: center;
+      color: #ffffff;
+      font-family: "Roboto", sans-serif;
+      font-size: 13px;
+    }
+
+    .cart-items .ci__remove {
+      background: none;
+      border: 0;
+      color: #bfbfbf;
+      text-decoration: underline;
+      font: 500 12px/1 "Roboto", system-ui, Arial, sans-serif;
+      cursor: pointer;
+    }
+
+    .cart-items .ci__remove:hover {
+      color: #ffffff;
+    }
+
+    .cart-empty {
+      padding: 34px 0;
+      color: #d8d8d8;
+      font-family: "Roboto", sans-serif;
+    }
+
+    .cart-empty p {
+      margin: 0 0 18px;
+    }
+
+    .cart-totals {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 12px;
+      margin-top: 20px;
+      font-family: "Cinzel", serif;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.18);
+    }
+
+    .cart-totals__label {
+      color: #d9d9d9;
+      font-size: 12px;
+    }
+
+    .cart-totals__value {
+      color: #ffffff;
+      font-size: 14px;
+    }
+
+    .cart-ctas {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 14px;
+    }
+
+    #cartp-checkout {
+      min-width: 220px;
+    }
+
+    .cart-note {
+      display: block;
+      margin-top: 12px;
+      text-align: right;
+      color: #9d9d9d;
+      font-family: "Roboto", sans-serif;
+    }
+
+    /* =========================================
+       DISCOUNT AREA
+    ========================================= */
+
+    .cart-discount--page {
+      width: min(540px, 100%);
+      margin: 0 0 28px;
+      padding: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.025);
+    }
+
+    .cart-discount__label {
+      display: block;
+      margin-bottom: 8px;
+      font-family: "Cinzel", serif;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      font-size: 12px;
+      color: #e5e5e5;
+    }
+
+    .cart-discount__row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .cart-discount__input {
+      flex: 1;
+      min-width: 0;
+      padding: 11px 13px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.26);
+      background: #050505;
+      color: #ffffff;
+      font-family: "Roboto", sans-serif;
+      font-size: 13px;
+      outline: none;
+    }
+
+    .cart-discount__input:focus {
+      border-color: rgba(255, 255, 255, 0.65);
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.08);
+    }
+
+    .cart-discount__input::placeholder {
+      color: #777777;
+    }
+
+    .cart-discount__button {
+      padding: 10px 18px;
+      border-radius: 999px;
+      border: none;
+      background: #f5f5f5;
+      color: #000000;
+      font-family: "Cinzel", serif;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      font-size: 11px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .cart-discount__button:hover {
+      background: #ffffff;
+    }
+
+    .cart-discount__message {
+      min-height: 18px;
+      margin: 8px 0 0;
+      font-family: "Roboto", system-ui, Arial, sans-serif;
+      font-size: 12px;
+      line-height: 1.5;
+      color: #c4ffc4;
+    }
+
+    .cart-discount__message--error {
+      color: #ffbcbc;
+    }
+
+    /* =========================================
+       RESPONSIVE
+    ========================================= */
+
+    @media (min-width: 768px) {
+      .cart-items .cart-item {
+        grid-template-columns: 120px minmax(0, 1fr) auto;
+      }
+
+      .cart-items .ci__media img {
+        width: 120px;
+        height: 120px;
+      }
+    }
+
     @media (max-width: 900px) {
       .menu-drawer__menu {
         padding-top: 56px;
@@ -225,223 +633,294 @@
         font-size: 26px;
       }
 
+      .shop-submenu {
+        padding-left: 18px;
+        gap: 11px;
+      }
+
+      .shop-submenu__link {
+        font-size: 14px;
+      }
+
       .header__heading-logo {
         height: 30px !important;
       }
+
+      #cart-page {
+        padding-top: 30px;
+        padding-bottom: 58px;
+      }
     }
 
-    /* Cart visuals + discount */
-    .cart-items .cart-item {
-      display: grid;
-      grid-template-columns: 96px 1fr auto;
-      gap: 16px;
-      padding: 14px 0;
-      border-bottom: 1px solid rgba(255,255,255,.06);
-    }
+    @media (max-width: 620px) {
+      .cart-items .cart-item {
+        grid-template-columns: 82px minmax(0, 1fr);
+        gap: 12px;
+      }
 
-    .cart-items .ci__media img {
-      width: 96px;
-      height: 96px;
-      object-fit: cover;
-      border-radius: 10px;
-      box-shadow: 0 0 14px rgba(255,255,255,.08);
-      background: #0e0e0e;
-    }
+      .cart-items .ci__media img {
+        width: 82px;
+        height: 82px;
+      }
 
-    @media (min-width: 768px){
-      .cart-items .cart-item { grid-template-columns: 120px 1fr auto; }
-      .cart-items .ci__media img { width: 120px; height: 120px; }
-    }
+      .cart-items .ci__line {
+        grid-column: 2;
+        align-self: start;
+        margin-top: 4px;
+      }
 
-    .cart-items .ci__title {
-      font-family: 'Cinzel', serif;
-      font-weight: 700;
-      letter-spacing: .18em;
-      text-transform: uppercase;
-      font-size: 14px;
-      color: #eaeaea;
-      text-shadow: 0 0 8px rgba(255,255,255,.18);
-    }
+      .cart-items .ci__title {
+        font-size: 12px;
+        letter-spacing: 0.1em;
+      }
 
-    .cart-items .ci__variant {
-      margin-top: 2px;
-      font: 500 12px/1.35 Roboto, system-ui, Arial, sans-serif;
-      color: #c9c9c9;
-      opacity: .85;
-    }
+      .cart-discount__row {
+        flex-direction: column;
+      }
 
-    .cart-items .ci__price-each,
-    .cart-items .ci__line {
-      font: 600 13px/1.2 Roboto, system-ui, Arial, sans-serif;
-      color: #ddd;
-    }
+      .cart-discount__button {
+        min-height: 42px;
+      }
 
-    .cart-items .ci__line {
-      align-self: center;
-      white-space: nowrap;
-      text-shadow: 0 0 8px rgba(255,255,255,.12);
-    }
+      .cart-totals,
+      .cart-ctas {
+        justify-content: space-between;
+      }
 
-    .cart-items .ci__controls {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-top: 8px;
-      flex-wrap: wrap;
-    }
+      #cartp-checkout {
+        width: 100%;
+      }
 
-    .cart-items .ci__qty-btn {
-      width: 28px;
-      height: 28px;
-      border-radius: 6px;
-      border: 1px solid rgba(255,255,255,.18);
-      background: #151515;
-      color: #fff;
-      cursor: pointer;
-    }
-
-    .cart-items .ci__remove {
-      background: none;
-      border: 0;
-      color: #bfbfbf;
-      text-decoration: underline;
-      font: 500 12px/1 Roboto, system-ui, Arial, sans-serif;
-      cursor: pointer;
-    }
-
-    .cart-items .ci__remove:hover { color: #fff; }
-
-    .cart-totals {
-      display: flex;
-      justify-content: flex-end;
-      gap: 12px;
-      font-family: 'Cinzel', serif;
-      font-weight: 700;
-      letter-spacing: .16em;
-      text-transform: uppercase;
-      text-shadow: 0 0 10px rgba(255,255,255,.18);
-    }
-
-    .cart-totals__label { color: #d9d9d9; font-size: 12px; }
-    .cart-totals__value { color: #fff; font-size: 14px; }
-
-    .cart-discount {
-      margin: 16px 0 10px;
-    }
-
-    .cart-discount__label {
-      display: block;
-      font-family: 'Cinzel', serif;
-      font-weight: 700;
-      letter-spacing: .18em;
-      text-transform: uppercase;
-      font-size: 12px;
-      color: #e5e5e5;
-      margin-bottom: 6px;
-    }
-
-    .cart-discount__row {
-      display: flex;
-      gap: 8px;
-    }
-
-    .cart-discount__input {
-      flex: 1;
-      padding: 10px 12px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.26);
-      background: #050505;
-      color: #fff;
-      font-size: 13px;
-      outline: none;
-    }
-
-    .cart-discount__input::placeholder {
-      color: #777;
-    }
-
-    .cart-discount__button {
-      padding: 10px 18px;
-      border-radius: 999px;
-      border: none;
-      background: #f5f5f5;
-      color: #000;
-      font-family: 'Cinzel', serif;
-      font-weight: 700;
-      letter-spacing: .16em;
-      text-transform: uppercase;
-      font-size: 11px;
-      cursor: pointer;
-      white-space: nowrap;
-    }
-
-    .cart-discount__message {
-      margin-top: 6px;
-      font-size: 12px;
-      font-family: Roboto, system-ui, Arial, sans-serif;
-      color: #c4ffc4;
-    }
-
-    .cart-discount__message--error {
-      color: #ffbcbc;
+      .cart-note {
+        text-align: left;
+      }
     }
   </style>
 </head>
 
 <body class="template-page template-cart">
   <div class="lightning-flash"></div>
-  <div id="storm-overlay"><canvas id="rain-canvas"></canvas></div>
+
+  <div id="storm-overlay">
+    <canvas id="rain-canvas"></canvas>
+  </div>
 
   <div class="utility-bar color-scheme-4 gradient utility-bar--bottom-border">
     <div class="page-width utility-bar__grid">
-      <div class="announcement-bar" role="region" aria-label="Site announcements">
-        <button type="button" class="slider-button slider-button--prev" aria-label="Previous" hidden>‹</button>
-        <div class="announcement-track" id="AnnouncementTrack" data-autoplay="true" data-speed="5000">
-          <p class="announcement-bar__message h5"><span>WELCOME TO THE STORM</span></p>
+      <div
+        class="announcement-bar"
+        role="region"
+        aria-label="Site announcements"
+      >
+        <button
+          type="button"
+          class="slider-button slider-button--prev"
+          aria-label="Previous"
+          hidden
+        >
+          ‹
+        </button>
+
+        <div
+          class="announcement-track"
+          id="AnnouncementTrack"
+          data-autoplay="true"
+          data-speed="5000"
+        >
+          <p class="announcement-bar__message h5">
+            <span>WELCOME TO THE STORM</span>
+          </p>
         </div>
-        <button type="button" class="slider-button slider-button--next" aria-label="Next" hidden>›</button>
+
+        <button
+          type="button"
+          class="slider-button slider-button--next"
+          aria-label="Next"
+          hidden
+        >
+          ›
+        </button>
       </div>
     </div>
   </div>
 
-  <div class="section-header header-wrapper color-scheme-4 gradient" data-sticky-type="on-scroll-up">
+  <div
+    class="section-header header-wrapper color-scheme-4 gradient"
+    data-sticky-type="on-scroll-up"
+  >
     <header class="site-header header header--middle-left header--mobile-center">
       <div class="page-width header-grid">
-
         <header-drawer data-breakpoint="all">
-          <details id="Details-menu-drawer-container" class="menu-drawer-container">
-            <summary class="header__icon header__icon--menu header__icon--summary link focus-inset" aria-label="Menu">
+          <details
+            id="Details-menu-drawer-container"
+            class="menu-drawer-container"
+          >
+            <summary
+              class="header__icon header__icon--menu header__icon--summary link focus-inset"
+              aria-label="Menu"
+            >
               <span aria-hidden="true">
                 <svg width="22" height="22" viewBox="0 0 24 24">
-                  <path d="M3 6h18v2H3zM3 11h18v2H3zM3 16h18v2H3z" fill="currentColor"/>
+                  <path
+                    d="M3 6h18v2H3zM3 11h18v2H3zM3 16h18v2H3z"
+                    fill="currentColor"
+                  />
                 </svg>
+
                 <svg width="22" height="22" viewBox="0 0 24 24">
-                  <path d="M18.3 5.7 12 12l6.3 6.3-1.4 1.4L10.6 13.4 4.3 19.7 2.9 18.3 9.2 12 2.9 5.7 4.3 4.3 10.6 10.6 16.9 4.3z" fill="currentColor"/>
+                  <path
+                    d="M18.3 5.7 12 12l6.3 6.3-1.4 1.4L10.6 13.4 4.3 19.7 2.9 18.3 9.2 12 2.9 5.7 4.3 4.3 10.6 10.6 16.9 4.3z"
+                    fill="currentColor"
+                  />
                 </svg>
               </span>
             </summary>
 
-            <div id="menu-drawer" class="gradient menu-drawer motion-reduce color-scheme-4">
+            <div
+              id="menu-drawer"
+              class="gradient menu-drawer motion-reduce color-scheme-4"
+            >
               <div class="menu-drawer__inner-container">
                 <div class="menu-drawer__navigation-container">
-                  <nav class="menu-drawer__navigation" aria-label="Site navigation">
+                  <nav
+                    class="menu-drawer__navigation"
+                    aria-label="Site navigation"
+                  >
                     <ul class="menu-drawer__menu list-menu" role="list">
-                      <li><a href="index.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">Home</a></li>
-                      <li><a href="shop.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">Shop All</a></li>
-                      <li><a href="g4llery.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">G4LLERY</a></li>
-                      <li><a href="collections.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">Collections</a></li>
-                      <li><a href="try-on.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">TRY ON</a></li>
-                      <li><a href="4bout-us.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">4bout us</a></li>
-                      <li><a href="contact.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">Contact</a></li>
                       <li>
-                        <a href="cart.html"
-                           class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
-                           data-loud="heavy">
-                          Cart <span class="cart-count-bubble" data-cart-count></span>
+                        <a
+                          href="index.html"
+                          class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
+                        >
+                          Home
                         </a>
                       </li>
+
+                      <li class="shop-menu-parent">
+                        <button
+                          id="shop-menu-toggle"
+                          class="menu-drawer__menu-item shop-menu-toggle list-menu__item link link--text focus-inset"
+                          type="button"
+                          aria-expanded="false"
+                          aria-controls="shop-submenu"
+                        >
+                          <span>Shop All</span>
+                          <span
+                            class="shop-menu-toggle__icon"
+                            aria-hidden="true"
+                          >
+                            +
+                          </span>
+                        </button>
+
+                        <ul
+                          id="shop-submenu"
+                          class="shop-submenu"
+                          aria-hidden="true"
+                        >
+                          <li>
+                            <a
+                              href="dhk-collection.html"
+                              class="shop-submenu__link"
+                            >
+                              DHK Collection
+                            </a>
+                          </li>
+
+                          <li>
+                            <a
+                              href="comic-collection.html"
+                              class="shop-submenu__link"
+                            >
+                              Comic Book Collection
+                            </a>
+                          </li>
+
+                          <li>
+                            <a
+                              href="blanks-collection.html"
+                              class="shop-submenu__link"
+                            >
+                              DHK Blanks
+                            </a>
+                          </li>
+
+                          <li>
+                            <a
+                              href="shop.html"
+                              class="shop-submenu__link shop-submenu__link--view-all"
+                            >
+                              View All
+                            </a>
+                          </li>
+                        </ul>
+                      </li>
+
                       <li>
-                        <button id="search-open-mobile" type="button" class="menu-drawer__menu-item link link--text list-menu__item focus-inset">
+                        <a
+                          href="g4llery.html"
+                          class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
+                        >
+                          G4LLERY
+                        </a>
+                      </li>
+
+                      <li>
+                        <a
+                          href="collections.html"
+                          class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
+                        >
+                          Collections
+                        </a>
+                      </li>
+
+                      <li>
+                        <a
+                          href="try-on.html"
+                          class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
+                        >
+                          TRY ON
+                        </a>
+                      </li>
+
+                      <li>
+                        <a
+                          href="4bout-us.html"
+                          class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
+                        >
+                          4bout us
+                        </a>
+                      </li>
+
+                      <li>
+                        <a
+                          href="contact.html"
+                          class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
+                        >
+                          Contact
+                        </a>
+                      </li>
+
+                      <li>
+                        <a
+                          href="cart.html"
+                          class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
+                          data-loud="heavy"
+                        >
+                          Cart
+                          <span
+                            class="cart-count-bubble"
+                            data-cart-count
+                          ></span>
+                        </a>
+                      </li>
+
+                      <li>
+                        <button
+                          id="search-open-mobile"
+                          type="button"
+                          class="menu-drawer__menu-item link link--text list-menu__item focus-inset"
+                        >
                           Search
                         </button>
                       </li>
@@ -453,105 +932,295 @@
           </details>
         </header-drawer>
 
-        <a class="header__logo" href="index.html" aria-label="DarkHarlemKnight">
+        <a
+          class="header__logo"
+          href="index.html"
+          aria-label="DarkHarlemKnight"
+        >
           <img
             src="assets/img/DHK_transparent.gif"
             alt="DarkHarlemKnight"
-            width="190" height="190"
+            width="190"
+            height="190"
             class="header__heading-logo"
             loading="eager"
           />
         </a>
 
-        <div></div>
+        <div aria-hidden="true"></div>
       </div>
     </header>
   </div>
 
   <main id="MainContent" class="section">
     <div class="page-width" id="cart-page">
-      <header><h1 class="h2">Your Cart</h1></header>
+      <header class="cart-page__header">
+        <h1 class="cart-page__title h2">Your Cart</h1>
+      </header>
 
-      <div class="cart-discount">
-        <label for="discount-code" class="cart-discount__label">ADD DISCOUNT</label>
+      <div class="cart-discount cart-discount--page">
+        <label
+          for="discount-code-page"
+          class="cart-discount__label"
+        >
+          Add Discount
+        </label>
+
         <div class="cart-discount__row">
-          <input id="discount-code"
-                 class="cart-discount__input"
-                 type="text"
-                 placeholder="Enter code (e.g. PLUS)"
-                 autocomplete="off" />
-          <button id="discount-apply" class="cart-discount__button" type="button">
-            APPLY
+          <input
+            id="discount-code-page"
+            class="cart-discount__input"
+            type="text"
+            placeholder="Enter discount code"
+            autocomplete="off"
+            autocapitalize="characters"
+            spellcheck="false"
+          />
+
+          <button
+            id="discount-apply-page"
+            class="cart-discount__button"
+            type="button"
+          >
+            Apply
           </button>
         </div>
-        <p id="discount-message" class="cart-discount__message" aria-live="polite"></p>
+
+        <p
+          id="discount-message-page"
+          class="cart-discount__message"
+          aria-live="polite"
+        ></p>
       </div>
 
       <div id="cartp-empty" class="cart-empty" hidden>
         <p>Your cart is empty.</p>
-        <a href="shop.html" class="button button--secondary">Continue shopping</a>
+
+        <a
+          href="shop-categories.html"
+          class="button button--secondary"
+        >
+          Continue Shopping
+        </a>
       </div>
 
-      <div id="cartp-items" class="cart-items" aria-live="polite"></div>
+      <div
+        id="cartp-items"
+        class="cart-items"
+        aria-live="polite"
+      ></div>
 
-      <div class="cart-totals" style="margin-top:16px">
-        <span class="cart-totals__label">ESTIMATED TOTAL</span>
-        <span id="cartp-subtotal" class="cart-totals__value">$0.00</span>
+      <div class="cart-totals">
+        <span class="cart-totals__label">
+          Estimated Total
+        </span>
+
+        <span
+          id="cartp-subtotal"
+          class="cart-totals__value"
+        >
+          $0.00
+        </span>
       </div>
 
-      <div class="cart-ctas" style="margin-top:12px">
-        <button class="button" type="button" id="cartp-checkout" disabled>Checkout</button>
+      <div class="cart-ctas">
+        <button
+          class="button"
+          type="button"
+          id="cartp-checkout"
+          disabled
+        >
+          Checkout
+        </button>
       </div>
 
-      <small class="cart-note">Taxes &amp; shipping calculated at checkout.</small>
+      <small class="cart-note">
+        Taxes and shipping calculated at checkout.
+      </small>
     </div>
   </main>
 
   <footer class="footer color-scheme-4 gradient section footer--static">
     <div class="footer__content-top page-width">
-      <div class="footer__blocks-wrapper grid grid--1-col grid--2-col grid--4-col-tablet">
+      <div
+        class="footer__blocks-wrapper grid grid--1-col grid--2-col grid--4-col-tablet"
+      >
         <div class="footer-block footer-block--menu grid__item">
-          <h2 class="footer-block__heading inline-richtext">Shop</h2>
+          <h2 class="footer-block__heading inline-richtext">
+            Shop
+          </h2>
+
           <ul class="footer-block__details-content list-unstyled">
-            <li><a class="link link--text list-menu__item list-menu__item--link" href="collections.html">Collections</a></li>
-            <li><a class="link link--text list-menu__item list-menu__item--link" href="shop.html">All Products</a></li>
-            <li><a class="link link--text list-menu__item list-menu__item--link" href="g4llery.html">G4LLERY</a></li>
-            <li><a class="link link--text list-menu__item list-menu__item--link" href="try-on.html">TRY ON</a></li>
-            <li><a class="link link--text list-menu__item list-menu__item--link" href="4bout-us.html">4bout us</a></li>
-            <li><a class="link link--text list-menu__item list-menu__item--link" href="contact.html">Contact</a></li>
+            <li>
+              <a
+                class="link link--text list-menu__item list-menu__item--link"
+                href="shop-categories.html"
+              >
+                Shop Collections
+              </a>
+            </li>
+
+            <li>
+              <a
+                class="link link--text list-menu__item list-menu__item--link"
+                href="dhk-collection.html"
+              >
+                DHK Collection
+              </a>
+            </li>
+
+            <li>
+              <a
+                class="link link--text list-menu__item list-menu__item--link"
+                href="comic-collection.html"
+              >
+                Comic Book Collection
+              </a>
+            </li>
+
+            <li>
+              <a
+                class="link link--text list-menu__item list-menu__item--link"
+                href="blanks-collection.html"
+              >
+                DHK Blanks
+              </a>
+            </li>
+
+            <li>
+              <a
+                class="link link--text list-menu__item list-menu__item--link"
+                href="shop.html"
+              >
+                View All Products
+              </a>
+            </li>
+
+            <li>
+              <a
+                class="link link--text list-menu__item list-menu__item--link"
+                href="collections.html"
+              >
+                Collection Archive
+              </a>
+            </li>
+
+            <li>
+              <a
+                class="link link--text list-menu__item list-menu__item--link"
+                href="g4llery.html"
+              >
+                G4LLERY
+              </a>
+            </li>
+
+            <li>
+              <a
+                class="link link--text list-menu__item list-menu__item--link"
+                href="try-on.html"
+              >
+                TRY ON
+              </a>
+            </li>
+
+            <li>
+              <a
+                class="link link--text list-menu__item list-menu__item--link"
+                href="4bout-us.html"
+              >
+                4bout us
+              </a>
+            </li>
+
+            <li>
+              <a
+                class="link link--text list-menu__item list-menu__item--link"
+                href="contact.html"
+              >
+                Contact
+              </a>
+            </li>
           </ul>
         </div>
 
         <div class="footer-block grid__item">
-          <h2 class="footer-block__heading inline-richtext">Dark Harlem Knight</h2>
+          <h2 class="footer-block__heading inline-richtext">
+            Dark Harlem Knight
+          </h2>
+
           <div class="footer-block__details-content rte">
-            <p>Forged in the storm. Streetwear with thunder in its veins.</p>
+            <p>
+              Forged in the storm. Streetwear with thunder in its veins.
+            </p>
           </div>
+
           <ul class="footer__list-social">
             <li>
-              <a aria-label="Instagram" class="social-link" href="https://www.instagram.com/darkharlemknight/" target="_blank" rel="noopener">Instagram</a>
+              <a
+                aria-label="Instagram"
+                class="social-link"
+                href="https://www.instagram.com/darkharlemknight/"
+                target="_blank"
+                rel="noopener"
+              >
+                Instagram
+              </a>
             </li>
+
             <li>
-              <a aria-label="TikTok" class="social-link" href="https://www.tiktok.com/@darkharlemknight" target="_blank" rel="noopener">TikTok</a>
+              <a
+                aria-label="TikTok"
+                class="social-link"
+                href="https://www.tiktok.com/@darkharlemknight"
+                target="_blank"
+                rel="noopener"
+              >
+                TikTok
+              </a>
             </li>
           </ul>
         </div>
 
         <div class="footer-block footer-block--newsletter grid__item">
-          <h2 class="footer-block__heading inline-richtext">Join the storm</h2>
-          <form class="footer__newsletter newsletter-form" action="#" method="post" onsubmit="return false;">
+          <h2 class="footer-block__heading inline-richtext">
+            Join the Storm
+          </h2>
+
+          <form
+            class="footer__newsletter newsletter-form"
+            action="#"
+            method="post"
+            onsubmit="return false;"
+          >
             <div class="newsletter-form__field-wrapper">
               <div class="field">
-                <input class="field__input" type="email" placeholder="Email address" required>
-                <button class="newsletter-form__button field__button" type="submit" aria-label="Subscribe">→</button>
+                <input
+                  class="field__input"
+                  type="email"
+                  placeholder="Email address"
+                  required
+                />
+
+                <button
+                  class="newsletter-form__button field__button"
+                  type="submit"
+                  aria-label="Subscribe"
+                >
+                  →
+                </button>
               </div>
             </div>
           </form>
         </div>
 
         <div class="footer-block footer-block-image grid__item center">
-          <img src="assets/img/DHK_transparent.gif"
-               alt="DarkHarlemKnight" width="120" height="120" loading="lazy">
+          <img
+            src="assets/img/DHK_transparent.gif"
+            alt="DarkHarlemKnight"
+            width="120"
+            height="120"
+            loading="lazy"
+          />
         </div>
       </div>
     </div>
@@ -570,40 +1239,129 @@
         </div>
       </div>
 
-      <div class="footer__content-bottom-wrapper page-width footer__content-bottom-wrapper--center">
+      <div
+        class="footer__content-bottom-wrapper page-width footer__content-bottom-wrapper--center"
+      >
         <div class="footer__copyright caption">
-          <small class="copyright__content">© <span id="year"></span>, Dark Harlem Knight</small>
-          <small class="copyright__content">Powered by the Storm</small>
+          <small class="copyright__content">
+            © <span id="year"></span>, Dark Harlem Knight
+          </small>
+
+          <small class="copyright__content">
+            Powered by the Storm
+          </small>
+
           <ul class="policies list-unstyled">
-            <li><small class="copyright__content"><a href="#">Privacy Policy</a></small></li>
-            <li><small class="copyright__content"><a href="#">Terms of Service</a></small></li>
+            <li>
+              <small class="copyright__content">
+                <a href="#">Privacy Policy</a>
+              </small>
+            </li>
+
+            <li>
+              <small class="copyright__content">
+                <a href="#">Terms of Service</a>
+              </small>
+            </li>
           </ul>
         </div>
       </div>
     </div>
   </footer>
-  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
 
-  <div id="search-modal" class="search-modal" aria-hidden="true">
-    <div class="search-modal__overlay" data-close-search></div>
-    <div class="search-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="search-title">
+  <div
+    id="search-modal"
+    class="search-modal"
+    aria-hidden="true"
+  >
+    <div
+      class="search-modal__overlay"
+      data-close-search
+    ></div>
+
+    <div
+      class="search-modal__dialog"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="search-title"
+    >
       <header class="search-modal__header">
         <h2 id="search-title">Search</h2>
-        <button id="search-close" class="search-modal__close" aria-label="Close search">×</button>
+
+        <button
+          id="search-close"
+          class="search-modal__close"
+          aria-label="Close search"
+          type="button"
+        >
+          ×
+        </button>
       </header>
+
       <div class="search-modal__field">
-        <input id="search-input" type="search" placeholder="Search products…  ( /  or  ⌘/Ctrl+K )" autocomplete="off" />
+        <input
+          id="search-input"
+          type="search"
+          placeholder="Search products…  ( /  or  ⌘/Ctrl+K )"
+          autocomplete="off"
+        />
       </div>
-      <div id="search-results" class="search-modal__results" aria-live="polite"></div>
+
+      <div
+        id="search-results"
+        class="search-modal__results"
+        aria-live="polite"
+      ></div>
     </div>
   </div>
 
-  <audio id="rain-light" src="assets/audio/light-rain.mp3" loop preload="auto" hidden></audio>
-  <audio id="rain-med" src="assets/audio/med-rain.mp3" loop preload="auto" hidden></audio>
-  <audio id="rain-heavy" src="assets/audio/heavy-rain.mp3" loop preload="auto" hidden></audio>
-  <audio id="thunder-light" src="assets/audio/light-thunder.mp3" loop preload="auto" hidden></audio>
-  <audio id="thunder-med" src="assets/audio/med-thunder.mp3" loop preload="auto" hidden></audio>
-  <audio id="thunder-heavy" src="assets/audio/heavy-thunder.mp3" loop preload="auto" hidden></audio>
+  <audio
+    id="rain-light"
+    src="assets/audio/light-rain.mp3"
+    loop
+    preload="auto"
+    hidden
+  ></audio>
+
+  <audio
+    id="rain-med"
+    src="assets/audio/med-rain.mp3"
+    loop
+    preload="auto"
+    hidden
+  ></audio>
+
+  <audio
+    id="rain-heavy"
+    src="assets/audio/heavy-rain.mp3"
+    loop
+    preload="auto"
+    hidden
+  ></audio>
+
+  <audio
+    id="thunder-light"
+    src="assets/audio/light-thunder.mp3"
+    loop
+    preload="auto"
+    hidden
+  ></audio>
+
+  <audio
+    id="thunder-med"
+    src="assets/audio/med-thunder.mp3"
+    loop
+    preload="auto"
+    hidden
+  ></audio>
+
+  <audio
+    id="thunder-heavy"
+    src="assets/audio/heavy-thunder.mp3"
+    loop
+    preload="auto"
+    hidden
+  ></audio>
 
   <script src="js/nav.js"></script>
   <script src="js/announce.js"></script>
@@ -613,52 +1371,55 @@
   <script src="js/newsletter.js"></script>
   <script src="js/storm_shopify_style.js"></script>
 
-  <div id="cart-drawer" class="cart-drawer" aria-hidden="true">
-    <div class="cart-drawer__overlay" data-cart-close></div>
-    <aside class="cart-drawer__panel" tabindex="-1">
-      <div class="cart-header">
-        <h2>Your Cart</h2>
-        <button type="button" title="Close" data-cart-close>✕</button>
-      </div>
+  <script>
+    document.getElementById("year").textContent =
+      new Date().getFullYear();
 
-      <div class="cart-list" id="cart-items"></div>
-      <div id="cart-empty" class="cart-empty" hidden style="padding:16px;color:#9a9a9a">
-        Your cart is empty.
-      </div>
+    (function () {
+      const drawerDetails = document.getElementById(
+        "Details-menu-drawer-container"
+      );
 
-      <div class="cart-footer">
-        <div class="cart-discount cart-discount--drawer">
-          <label for="discount-code-drawer" class="cart-discount__label">ADD DISCOUNT</label>
-          <div class="cart-discount__row">
-            <input
-              id="discount-code-drawer"
-              class="cart-discount__input"
-              type="text"
-              placeholder="Enter code (e.g. PLUS)"
-              autocomplete="off"
-            />
-            <button
-              id="discount-apply-drawer"
-              class="cart-discount__button"
-              type="button"
-            >
-              APPLY
-            </button>
-          </div>
-          <p
-            id="discount-message-drawer"
-            class="cart-discount__message"
-            aria-live="polite"
-          ></p>
-        </div>
+      const shopToggle =
+        document.getElementById("shop-menu-toggle");
 
-        <div class="cart-row">
-          <div class="label">Subtotal</div>
-          <div class="value" id="cart-subtotal">$0.00</div>
-        </div>
-        <button id="cart-checkout" type="button" disabled>Checkout</button>
-      </div>
-    </aside>
-  </div>
+      const shopSubmenu =
+        document.getElementById("shop-submenu");
+
+      if (drawerDetails) {
+        drawerDetails.addEventListener("toggle", () => {
+          document.body.classList.toggle(
+            "menu-open",
+            drawerDetails.open
+          );
+
+          if (!drawerDetails.open && shopToggle && shopSubmenu) {
+            shopToggle.setAttribute("aria-expanded", "false");
+            shopSubmenu.setAttribute("aria-hidden", "true");
+            shopSubmenu.classList.remove("is-open");
+          }
+        });
+      }
+
+      if (shopToggle && shopSubmenu) {
+        shopToggle.addEventListener("click", () => {
+          const isOpen =
+            shopToggle.getAttribute("aria-expanded") === "true";
+
+          shopToggle.setAttribute(
+            "aria-expanded",
+            String(!isOpen)
+          );
+
+          shopSubmenu.setAttribute(
+            "aria-hidden",
+            String(isOpen)
+          );
+
+          shopSubmenu.classList.toggle("is-open", !isOpen);
+        });
+      }
+    })();
+  </script>
 </body>
 </html>
