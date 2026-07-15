@@ -1,18 +1,88 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <link rel="icon" href="assets/img/DHK_transparent.gif" type="image/gif" sizes="any">
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>DHK — Shop</title>
+  <link
+    rel="icon"
+    href="assets/img/DHK_transparent.gif"
+    type="image/gif"
+    sizes="any"
+  />
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <meta charset="utf-8" />
 
-  <link rel="stylesheet" href="css/styles.css"/>
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  />
+
+  <title>DHK — Comic Book Collection</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  />
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <link rel="stylesheet" href="css/styles.css" />
 
   <style>
+    /* =========================================================
+       FOUNDATION
+    ========================================================= */
+
+    :root {
+      --comic-black: #050505;
+      --comic-ink: #0c0c0c;
+      --comic-charcoal: #171717;
+      --comic-paper: #f1eee8;
+      --comic-cream: #e8e1d4;
+      --comic-gold: #b9995b;
+      --comic-gold-soft: rgba(185, 153, 91, 0.34);
+      --comic-oxblood: #521616;
+      --comic-line: rgba(255, 255, 255, 0.14);
+      --comic-dark-line: rgba(17, 17, 17, 0.12);
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      background: var(--comic-black);
+      color: #f2f2f2;
+    }
+
+    body.comic-collection-page {
+      overflow-x: hidden;
+      background:
+        radial-gradient(
+          circle at 50% 10%,
+          rgba(95, 26, 26, 0.17),
+          transparent 32%
+        ),
+        linear-gradient(
+          to bottom,
+          #181313 0%,
+          #0d0c0c 34%,
+          #050505 100%
+        );
+    }
+
+    body.comic-collection-page #MainContent {
+      position: relative;
+      z-index: 2;
+    }
+
+    /* =========================================================
+       ANNOUNCEMENT BAR
+    ========================================================= */
+
     .utility-bar .page-width {
       max-width: none;
       padding: 0;
@@ -49,82 +119,116 @@
     }
 
     .announcement-bar__message span {
-      font-family: 'Cinzel', serif;
+      font-family: "Cinzel", serif;
       font-weight: 700;
       font-size: 13px;
-      letter-spacing: .18em;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
       color: #e5e5e5;
-      text-shadow: 0 0 6px rgba(255,255,255,.12);
+      text-shadow: 0 0 6px rgba(255, 255, 255, 0.12);
     }
 
-    /* Full-screen drawer for both mobile + desktop */
-    #menu-drawer {
-      position: fixed;
-      inset: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(5, 5, 7, 0.97);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      box-shadow: none;
-      z-index: 2147483646;
-      padding: 34px 28px 40px;
-      overflow-y: auto;
-      border: 0;
+    /* =========================================================
+       HEADER
+    ========================================================= */
+
+    .section-header {
+      position: relative;
+      z-index: 50;
+      background: rgba(0, 0, 0, 0.94) !important;
+      border-bottom: 1px solid rgba(185, 153, 91, 0.18);
     }
 
-    .menu-drawer__inner-container,
-    .menu-drawer__navigation-container,
-    .menu-drawer__navigation {
-      height: 100%;
+    .header-grid {
+      display: grid !important;
+      grid-template-columns: 48px 1fr 48px !important;
+      align-items: center;
+      min-height: 64px;
+      position: relative;
     }
 
-    .menu-drawer__menu {
-      list-style: none;
-      padding: 72px 0 0;
-      margin: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
+    .nav-left,
+    .nav-right {
+      display: none !important;
     }
 
-    .menu-drawer__menu-item,
-    .menu-drawer__menu .list-menu__item.link,
-    .menu-drawer__menu button {
-      font-family: 'Cinzel', serif;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: .16em;
-      font-size: clamp(24px, 2.2vw, 34px);
-      color: #f1f1f1;
+    header-drawer {
+      grid-column: 1;
+      justify-self: start;
+    }
+
+    .header__logo {
+      grid-column: 2;
+      justify-self: center;
+      display: inline-flex !important;
+      align-items: center;
+      justify-content: center;
+      position: static !important;
+      transform: none !important;
+      margin: 0 !important;
+    }
+
+    .header__heading-logo {
+      display: block;
+      height: 34px !important;
+      width: auto;
+      max-width: none !important;
+      margin: 0 auto !important;
+    }
+
+    .header-cart-link {
+      grid-column: 3;
+      justify-self: end;
+      position: relative;
+      width: 36px;
+      height: 36px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
       text-decoration: none;
-      text-shadow: 0 0 10px rgba(255,255,255,.08);
-      background: transparent;
-      border: 0;
-      padding: 0;
-      cursor: pointer;
-      text-align: left;
+      z-index: 60;
     }
 
-    .menu-drawer__menu-item:hover,
-    .menu-drawer__menu .list-menu__item.link:hover,
-    .menu-drawer__menu-item:focus-visible,
-    .menu-drawer__menu button:hover {
-      color: #fff;
-      text-shadow: 0 0 14px rgba(255,255,255,.18);
+    .header-cart-link svg {
+      width: 25px;
+      height: 25px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.5;
     }
 
-    .menu-drawer__menu .list-menu__item + .list-menu__item {
-      border-top: 0;
+    .header-cart-link .cart-count-bubble {
+      position: absolute;
+      top: -3px;
+      right: -5px;
+      min-width: 17px;
+      height: 17px;
+      padding: 0 4px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--comic-gold);
+      color: #070707;
+      font: 700 10px/1 Roboto, Arial, sans-serif;
     }
+
+    .header-cart-link .cart-count-bubble:empty {
+      display: none;
+    }
+
+    /* =========================================================
+       HAMBURGER
+    ========================================================= */
 
     .header__icon--menu {
+      position: relative;
       z-index: 2147483647;
     }
 
     .header__icon--menu svg {
-      filter: drop-shadow(0 0 6px rgba(255,255,255,.28));
+      filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.28));
     }
 
     .header__icon--summary {
@@ -160,16 +264,195 @@
       display: block;
     }
 
-    details[open] ~ .menu-drawer,
-    details[open] #menu-drawer {
+    /* =========================================================
+       FULL-SCREEN MENU
+    ========================================================= */
+
+    #menu-drawer {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      box-sizing: border-box;
+      background:
+        linear-gradient(
+          rgba(4, 4, 5, 0.985),
+          rgba(4, 4, 5, 0.985)
+        ),
+        radial-gradient(
+          circle at 82% 20%,
+          rgba(94, 18, 18, 0.28),
+          transparent 30%
+        );
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 0;
+      box-shadow: none;
       z-index: 2147483646;
+      padding: 34px 28px 40px;
+      overflow-y: auto;
     }
 
-    details[open] ~ #storm-overlay,
-    details[open] #storm-overlay {
+    #menu-drawer::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.11;
+      background-image:
+        radial-gradient(
+          circle,
+          rgba(255, 255, 255, 0.42) 0 0.7px,
+          transparent 0.9px
+        );
+      background-size: 7px 7px;
+    }
+
+    .menu-drawer__inner-container,
+    .menu-drawer__navigation-container,
+    .menu-drawer__navigation {
+      min-height: 100%;
+    }
+
+    .menu-drawer__menu {
+      position: relative;
+      z-index: 2;
+      list-style: none;
+      padding: 72px 0 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+
+    .menu-drawer__menu-item,
+    .menu-drawer__menu .list-menu__item.link,
+    .menu-drawer__menu button {
+      font-family: "Cinzel", serif;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      font-size: clamp(24px, 2.2vw, 34px);
+      color: #f1f1f1;
+      text-decoration: none;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.08);
+      background: transparent;
+      border: 0;
+      padding: 0;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .menu-drawer__menu-item:hover,
+    .menu-drawer__menu .list-menu__item.link:hover,
+    .menu-drawer__menu-item:focus-visible,
+    .menu-drawer__menu button:hover {
+      color: #ffffff;
+      text-shadow:
+        0 0 14px rgba(255, 255, 255, 0.18),
+        0 0 26px rgba(185, 153, 91, 0.12);
+    }
+
+    .menu-drawer__menu .list-menu__item + .list-menu__item {
+      border-top: 0;
+    }
+
+    body.menu-open {
+      overflow: hidden;
+    }
+
+    body.menu-open #storm-overlay {
       opacity: 0 !important;
       pointer-events: none !important;
-      transition: opacity .15s ease;
+    }
+
+    /* =========================================================
+       SHOP ALL SUBMENU
+    ========================================================= */
+
+    .shop-menu-parent {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .shop-menu-toggle {
+      width: 100%;
+      display: flex !important;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 14px;
+    }
+
+    .shop-menu-toggle__icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      font-family: Roboto, Arial, sans-serif;
+      font-size: 24px;
+      line-height: 1;
+      font-weight: 300;
+      transform: translateY(-1px);
+      transition: transform 0.2s ease;
+    }
+
+    .shop-menu-toggle[aria-expanded="true"]
+      .shop-menu-toggle__icon {
+      transform: rotate(45deg);
+    }
+
+    .shop-submenu {
+      list-style: none;
+      margin: 0;
+      padding: 0 0 0 18px;
+      max-height: 0;
+      opacity: 0;
+      visibility: hidden;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      gap: 13px;
+      transition:
+        max-height 0.28s ease,
+        opacity 0.2s ease,
+        padding-top 0.28s ease,
+        visibility 0.2s ease;
+    }
+
+    .shop-submenu.is-open {
+      max-height: 360px;
+      opacity: 1;
+      visibility: visible;
+      padding-top: 18px;
+    }
+
+    .shop-submenu a {
+      font-family: "Roboto", sans-serif !important;
+      font-size: 14px !important;
+      font-weight: 400 !important;
+      letter-spacing: 0.18em !important;
+      line-height: 1.4;
+      color: rgba(255, 255, 255, 0.7) !important;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+    .shop-submenu a:hover,
+    .shop-submenu a[aria-current="page"] {
+      color: var(--comic-gold) !important;
+    }
+
+    /* =========================================================
+       STORM
+    ========================================================= */
+
+    #storm-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
     }
 
     #search-modal {
@@ -179,45 +462,695 @@
     body.search-open #storm-overlay {
       opacity: 0 !important;
       pointer-events: none !important;
-      transition: opacity .15s ease;
     }
 
-    /* Same centered header system on mobile + desktop */
-    .header-grid {
-      display: grid !important;
-      grid-template-columns: 48px 1fr 48px !important;
-      align-items: center;
-      min-height: 64px;
+    /* =========================================================
+       COMIC HERO
+    ========================================================= */
+
+    .comic-hero {
       position: relative;
+      width: 100%;
+      min-height: calc(100svh - 102px);
+      overflow: hidden;
+      background: #090808;
+      isolation: isolate;
     }
 
-    .nav-left,
-    .nav-right {
-      display: none !important;
+    .comic-hero__media {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
     }
 
-    .header__logo {
-      grid-column: 2;
-      justify-self: center;
-      display: inline-flex !important;
+    .comic-hero__media picture,
+    .comic-hero__media img {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .comic-hero__media img {
+      object-fit: cover;
+      object-position: center;
+      filter:
+        contrast(1.04)
+        saturate(0.88)
+        brightness(0.86);
+      transform: scale(1.002);
+    }
+
+    .comic-hero__media::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+      opacity: 0.22;
+      background-image:
+        radial-gradient(
+          circle,
+          rgba(255, 255, 255, 0.32) 0 0.7px,
+          transparent 0.9px
+        );
+      background-size: 7px 7px;
+      mix-blend-mode: soft-light;
+    }
+
+    .comic-hero__media::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 3;
+      background:
+        linear-gradient(
+          108deg,
+          rgba(0, 0, 0, 0.74) 0%,
+          rgba(0, 0, 0, 0.28) 44%,
+          rgba(0, 0, 0, 0.12) 66%,
+          rgba(0, 0, 0, 0.4) 100%
+        ),
+        linear-gradient(
+          to top,
+          rgba(0, 0, 0, 0.8) 0%,
+          transparent 50%
+        );
+    }
+
+    /* luxury comic border */
+
+    .comic-hero__frame {
+      position: absolute;
+      inset:
+        clamp(14px, 2vw, 28px);
+      z-index: 4;
+      pointer-events: none;
+      border: 1px solid rgba(232, 225, 212, 0.48);
+      box-shadow:
+        inset 0 0 0 5px rgba(0, 0, 0, 0.23),
+        inset 0 0 0 6px rgba(185, 153, 91, 0.18);
+    }
+
+    .comic-hero__frame::before,
+    .comic-hero__frame::after {
+      content: "";
+      position: absolute;
+      background: var(--comic-gold);
+      opacity: 0.72;
+    }
+
+    .comic-hero__frame::before {
+      width: 76px;
+      height: 2px;
+      top: -1px;
+      left: 28px;
+    }
+
+    .comic-hero__frame::after {
+      width: 2px;
+      height: 76px;
+      right: -1px;
+      bottom: 28px;
+    }
+
+    /* diagonal comic cut */
+
+    .comic-hero__slash {
+      position: absolute;
+      z-index: 4;
+      top: -22%;
+      right: 10%;
+      width: 1px;
+      height: 145%;
+      background: rgba(255, 255, 255, 0.34);
+      transform: rotate(16deg);
+      box-shadow:
+        8px 0 0 rgba(185, 153, 91, 0.18),
+        17px 0 0 rgba(255, 255, 255, 0.08);
+      pointer-events: none;
+    }
+
+    /* moving ink sheen */
+
+    .comic-hero__ink-sweep {
+      position: absolute;
+      z-index: 4;
+      inset: -30% auto -30% -45%;
+      width: 34%;
+      transform: rotate(14deg);
+      pointer-events: none;
+      background:
+        linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.045),
+          rgba(185, 153, 91, 0.055),
+          transparent
+        );
+      animation: comicInkSweep 9s ease-in-out infinite;
+    }
+
+    @keyframes comicInkSweep {
+      0%,
+      25% {
+        left: -45%;
+        opacity: 0;
+      }
+
+      38% {
+        opacity: 1;
+      }
+
+      65% {
+        left: 122%;
+        opacity: 0.65;
+      }
+
+      100% {
+        left: 122%;
+        opacity: 0;
+      }
+    }
+
+    .comic-hero__content {
+      position: relative;
+      z-index: 5;
+      min-height: calc(100svh - 102px);
+      padding:
+        clamp(52px, 8vw, 112px)
+        clamp(28px, 6vw, 88px)
+        clamp(64px, 9vw, 112px);
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: flex-start;
+    }
+
+    .comic-hero__copy {
+      width: min(760px, 82vw);
+    }
+
+    .comic-issue {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      margin: 0 0 15px;
+      font-family: "Roboto", sans-serif;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.3em;
+      line-height: 1.4;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.78);
+    }
+
+    .comic-issue::before {
+      content: "";
+      width: 38px;
+      height: 1px;
+      background: var(--comic-gold);
+    }
+
+    .comic-hero__title {
+      margin: 0;
+      max-width: 720px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(47px, 7vw, 100px);
+      font-weight: 400;
+      letter-spacing: -0.028em;
+      line-height: 0.87;
+      color: #f4f0e8;
+      text-shadow:
+        0 3px 24px rgba(0, 0, 0, 0.46),
+        2px 2px 0 rgba(185, 153, 91, 0.22);
+    }
+
+    .comic-hero__title span {
+      display: block;
+      margin-top: 8px;
+      font-family: "Cinzel", serif;
+      font-size: 0.34em;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      line-height: 1.25;
+      text-transform: uppercase;
+      color: var(--comic-gold);
+      text-shadow: none;
+    }
+
+    .comic-hero__description {
+      max-width: 650px;
+      margin: 22px 0 0;
+      font-family: "Roboto", sans-serif;
+      font-size: clamp(15px, 1.35vw, 19px);
+      font-weight: 300;
+      letter-spacing: 0.035em;
+      line-height: 1.7;
+      color: rgba(255, 255, 255, 0.88);
+      text-shadow: 0 2px 15px rgba(0, 0, 0, 0.42);
+    }
+
+    .comic-hero__chapter {
+      position: absolute;
+      z-index: 6;
+      top: clamp(42px, 7vw, 88px);
+      right: clamp(36px, 6vw, 88px);
+      width: 90px;
+      height: 90px;
+      display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      position: static !important;
-      transform: none !important;
-      margin: 0 !important;
+      border: 1px solid rgba(232, 225, 212, 0.52);
+      background: rgba(8, 8, 8, 0.56);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      transform: rotate(3deg);
     }
 
-    .header__heading-logo {
+    .comic-hero__chapter small {
+      font-family: "Roboto", sans-serif;
+      font-size: 8px;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.64);
+    }
+
+    .comic-hero__chapter strong {
+      margin-top: 6px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 31px;
+      font-weight: 400;
+      line-height: 1;
+      color: var(--comic-gold);
+    }
+
+    .comic-scroll-cue {
+      position: absolute;
+      right: clamp(28px, 5vw, 72px);
+      bottom: clamp(42px, 7vw, 82px);
+      z-index: 6;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-family: "Roboto", sans-serif;
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.66);
+    }
+
+    .comic-scroll-cue::after {
+      content: "";
+      width: 44px;
+      height: 1px;
+      background: rgba(185, 153, 91, 0.8);
+    }
+
+    /* =========================================================
+       CHAPTER TRANSITION
+    ========================================================= */
+
+    .comic-chapter-strip {
+      position: relative;
+      z-index: 4;
+      overflow: hidden;
+      background: #080808;
+      border-top: 1px solid rgba(185, 153, 91, 0.24);
+      border-bottom: 1px solid rgba(185, 153, 91, 0.2);
+    }
+
+    .comic-chapter-strip::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      opacity: 0.11;
+      background-image:
+        radial-gradient(
+          circle,
+          rgba(255, 255, 255, 0.62) 0 0.65px,
+          transparent 0.85px
+        );
+      background-size: 6px 6px;
+    }
+
+    .comic-chapter-strip__track {
+      position: relative;
+      z-index: 2;
+      min-width: max-content;
+      display: flex;
+      align-items: center;
+      gap: 34px;
+      padding: 15px 0;
+      animation: chapterMove 26s linear infinite;
+    }
+
+    .comic-chapter-strip__track span {
+      font-family: "Cinzel", serif;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: rgba(232, 225, 212, 0.72);
+      white-space: nowrap;
+    }
+
+    .comic-chapter-strip__track i {
+      width: 5px;
+      height: 5px;
       display: block;
-      height: 34px !important;
-      width: auto;
-      max-width: none !important;
-      margin: 0 auto !important;
+      border: 1px solid var(--comic-gold);
+      transform: rotate(45deg);
     }
 
-    header-drawer {
-      grid-column: 1;
-      justify-self: start;
+    @keyframes chapterMove {
+      from {
+        transform: translateX(0);
+      }
+
+      to {
+        transform: translateX(-50%);
+      }
+    }
+
+    /* =========================================================
+       PRODUCT SECTION
+    ========================================================= */
+
+    .comic-products {
+      position: relative;
+      z-index: 3;
+      background: var(--comic-paper);
+      color: #111111;
+      padding: 0 0 clamp(68px, 9vw, 120px);
+      overflow: hidden;
+    }
+
+    .comic-products::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.22;
+      background-image:
+        radial-gradient(
+          circle,
+          rgba(17, 17, 17, 0.28) 0 0.55px,
+          transparent 0.75px
+        );
+      background-size: 8px 8px;
+    }
+
+    .comic-products::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 8%;
+      width: 1px;
+      height: 100%;
+      background: rgba(82, 22, 22, 0.12);
+      transform: rotate(8deg);
+      pointer-events: none;
+    }
+
+    .comic-products__header {
+      position: relative;
+      z-index: 2;
+      padding:
+        clamp(40px, 5vw, 72px)
+        clamp(18px, 3.4vw, 54px)
+        clamp(26px, 3vw, 42px);
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: end;
+      gap: 24px;
+    }
+
+    .comic-products__heading-wrap {
+      min-width: 0;
+    }
+
+    .comic-products__chapter {
+      margin: 0 0 10px;
+      font-family: "Roboto", sans-serif;
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--comic-oxblood);
+    }
+
+    .comic-products__heading {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(34px, 4vw, 58px);
+      font-weight: 400;
+      line-height: 0.98;
+      letter-spacing: -0.02em;
+      color: #121212;
+    }
+
+    .comic-products__count {
+      margin: 0;
+      padding-bottom: 6px;
+      font-family: "Roboto", sans-serif;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.19em;
+      text-transform: uppercase;
+      color: rgba(17, 17, 17, 0.58);
+    }
+
+    .comic-products__rule {
+      position: relative;
+      z-index: 2;
+      height: 1px;
+      margin: 0 clamp(18px, 3.4vw, 54px) 34px;
+      background:
+        linear-gradient(
+          to right,
+          var(--comic-oxblood) 0 85px,
+          rgba(17, 17, 17, 0.16) 85px 100%
+        );
+    }
+
+    /* =========================================================
+       PRODUCT GRID
+    ========================================================= */
+
+    .comic-products #shop-grid,
+    .comic-products .product-grid {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      box-sizing: border-box;
+      display: grid !important;
+      grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+      gap:
+        clamp(34px, 4vw, 58px)
+        clamp(14px, 2vw, 30px) !important;
+      padding: 0 clamp(18px, 3.4vw, 54px) !important;
+      margin: 0 !important;
+      list-style: none;
+    }
+
+    .comic-products #shop-grid > *,
+    .comic-products .product-grid > * {
+      position: relative;
+      width: 100% !important;
+      max-width: none !important;
+      margin: 0 !important;
+      background: transparent !important;
+      border: 0 !important;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+      color: #111111 !important;
+    }
+
+    .comic-products .product-card,
+    .comic-products .card-wrapper,
+    .comic-products .grid__item,
+    .comic-products .shop-card {
+      width: 100% !important;
+      min-width: 0 !important;
+    }
+
+    .comic-products .product-card a,
+    .comic-products .card-wrapper a,
+    .comic-products .shop-card a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .comic-products .product-card__image,
+    .comic-products .card__media,
+    .comic-products .card-media,
+    .comic-products .shop-card__media,
+    .comic-products .product-image-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 0.92 / 1;
+      overflow: hidden;
+      background: #e5e0d7 !important;
+      border: 1px solid rgba(17, 17, 17, 0.12) !important;
+      border-radius: 0 !important;
+      box-shadow:
+        7px 7px 0 rgba(82, 22, 22, 0.07) !important;
+    }
+
+    .comic-products .product-card__image::after,
+    .comic-products .card__media::after,
+    .comic-products .card-media::after,
+    .comic-products .shop-card__media::after,
+    .comic-products .product-image-wrap::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.1;
+      background-image:
+        radial-gradient(
+          circle,
+          rgba(17, 17, 17, 0.42) 0 0.6px,
+          transparent 0.8px
+        );
+      background-size: 7px 7px;
+      mix-blend-mode: multiply;
+    }
+
+    .comic-products #shop-grid img,
+    .comic-products .product-grid img {
+      display: block;
+      width: 100% !important;
+      max-width: 100%;
+    }
+
+    .comic-products .product-card__image img,
+    .comic-products .card__media img,
+    .comic-products .card-media img,
+    .comic-products .shop-card__media img,
+    .comic-products .product-image-wrap img {
+      width: 100% !important;
+      height: 100% !important;
+      object-fit: cover !important;
+      object-position: center !important;
+      transition:
+        transform 0.42s ease,
+        filter 0.35s ease;
+    }
+
+    .comic-products .product-card:hover img,
+    .comic-products .card-wrapper:hover img,
+    .comic-products .shop-card:hover img {
+      transform: scale(1.018);
+      filter: contrast(1.025);
+    }
+
+    .comic-products .product-card__info,
+    .comic-products .card__content,
+    .comic-products .card-information,
+    .comic-products .shop-card__info {
+      position: relative;
+      padding: 17px 0 0 !important;
+      text-align: left !important;
+      background: transparent !important;
+    }
+
+    .comic-products .product-card__info::before,
+    .comic-products .card__content::before,
+    .comic-products .card-information::before,
+    .comic-products .shop-card__info::before {
+      content: "DHK / COMIC";
+      display: block;
+      margin-bottom: 7px;
+      font-family: "Roboto", sans-serif;
+      font-size: 8px;
+      font-weight: 600;
+      letter-spacing: 0.21em;
+      text-transform: uppercase;
+      color: var(--comic-oxblood);
+    }
+
+    .comic-products .product-card__title,
+    .comic-products .card__heading,
+    .comic-products .card-information__text,
+    .comic-products .shop-card__title,
+    .comic-products .product-title {
+      margin: 0 0 7px !important;
+      font-family: Georgia, "Times New Roman", serif !important;
+      font-size: clamp(17px, 1.55vw, 23px) !important;
+      font-weight: 400 !important;
+      line-height: 1.24 !important;
+      letter-spacing: 0 !important;
+      text-transform: none !important;
+      color: #171717 !important;
+      text-shadow: none !important;
+    }
+
+    .comic-products .price,
+    .comic-products .product-card__price,
+    .comic-products .shop-card__price,
+    .comic-products .product-price {
+      margin: 0 !important;
+      font-family: "Roboto", sans-serif !important;
+      font-size: 14px !important;
+      font-weight: 400 !important;
+      line-height: 1.4 !important;
+      letter-spacing: 0.01em !important;
+      color: rgba(17, 17, 17, 0.66) !important;
+      text-shadow: none !important;
+    }
+
+    .comic-products .button,
+    .comic-products button {
+      font-family: "Roboto", sans-serif;
+    }
+
+    .comic-products__empty {
+      position: relative;
+      z-index: 2;
+      display: none;
+      margin: 0;
+      padding: 44px 22px 78px;
+      text-align: center;
+      font-family: "Roboto", sans-serif;
+      color: rgba(17, 17, 17, 0.64);
+    }
+
+    .comic-products__empty.is-visible {
+      display: block;
+    }
+
+    /* =========================================================
+       FOOTER
+    ========================================================= */
+
+    .comic-collection-page .footer {
+      position: relative;
+      z-index: 4;
+      background: #000000 !important;
+      border-top: 1px solid rgba(185, 153, 91, 0.14);
+    }
+
+    /* =========================================================
+       RESPONSIVE
+    ========================================================= */
+
+    @media (min-width: 760px) {
+      .comic-products #shop-grid,
+      .comic-products .product-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+      }
+    }
+
+    @media (min-width: 1100px) {
+      .comic-products #shop-grid,
+      .comic-products .product-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+      }
     }
 
     @media (max-width: 900px) {
@@ -235,66 +1168,421 @@
       .header__heading-logo {
         height: 30px !important;
       }
+
+      .comic-hero {
+        min-height: calc(100svh - 100px);
+      }
+
+      .comic-hero__content {
+        min-height: calc(100svh - 100px);
+        align-items: center;
+        justify-content: flex-end;
+        text-align: center;
+        padding: 60px 25px 70px;
+      }
+
+      .comic-hero__copy {
+        width: min(620px, 90vw);
+      }
+
+      .comic-issue {
+        justify-content: center;
+      }
+
+      .comic-hero__title {
+        max-width: 620px;
+        margin: 0 auto;
+        font-size: clamp(45px, 13vw, 72px);
+        line-height: 0.9;
+      }
+
+      .comic-hero__title span {
+        margin-top: 12px;
+        font-size: 0.3em;
+        line-height: 1.35;
+      }
+
+      .comic-hero__description {
+        max-width: 570px;
+        margin: 20px auto 0;
+        font-size: 15px;
+        line-height: 1.65;
+      }
+
+      .comic-hero__chapter {
+        top: 30px;
+        right: 30px;
+        width: 72px;
+        height: 72px;
+      }
+
+      .comic-hero__chapter strong {
+        font-size: 25px;
+      }
+
+      .comic-scroll-cue,
+      .comic-hero__slash {
+        display: none;
+      }
+
+      .comic-products__header {
+        padding-top: 38px;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .header-grid {
+        grid-template-columns: 42px 1fr 42px !important;
+      }
+
+      .comic-hero__frame {
+        inset: 10px;
+      }
+
+      .comic-hero__media img {
+        object-position: center center;
+      }
+
+      .comic-hero__chapter {
+        width: 64px;
+        height: 64px;
+        top: 24px;
+        right: 24px;
+      }
+
+      .comic-hero__chapter small {
+        font-size: 7px;
+      }
+
+      .comic-hero__chapter strong {
+        font-size: 23px;
+      }
+
+      .comic-issue {
+        font-size: 8px;
+      }
+
+      .comic-products__header {
+        padding:
+          34px
+          18px
+          24px;
+      }
+
+      .comic-products__heading {
+        font-size: 33px;
+      }
+
+      .comic-products__count {
+        font-size: 8px;
+      }
+
+      .comic-products__rule {
+        margin:
+          0
+          18px
+          30px;
+      }
+
+      .comic-products #shop-grid,
+      .comic-products .product-grid {
+        gap: 38px 15px !important;
+        padding: 0 18px !important;
+      }
+
+      .comic-products .product-card__image,
+      .comic-products .card__media,
+      .comic-products .card-media,
+      .comic-products .shop-card__media,
+      .comic-products .product-image-wrap {
+        box-shadow:
+          5px 5px 0 rgba(82, 22, 22, 0.065) !important;
+      }
+
+      .comic-products .product-card__info,
+      .comic-products .card__content,
+      .comic-products .card-information,
+      .comic-products .shop-card__info {
+        padding-top: 13px !important;
+      }
+
+      .comic-products .product-card__title,
+      .comic-products .card__heading,
+      .comic-products .card-information__text,
+      .comic-products .shop-card__title,
+      .comic-products .product-title {
+        font-size: 17px !important;
+      }
+
+      .comic-products .price,
+      .comic-products .product-card__price,
+      .comic-products .shop-card__price,
+      .comic-products .product-price {
+        font-size: 13px !important;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .comic-hero__ink-sweep,
+      .comic-chapter-strip__track {
+        animation: none !important;
+      }
     }
   </style>
 </head>
 
-<body class="template-page">
+<body class="template-page comic-collection-page">
 
   <div class="lightning-flash"></div>
-  <div id="storm-overlay"><canvas id="rain-canvas"></canvas></div>
 
-  <div class="utility-bar color-scheme-4 gradient utility-bar--bottom-border">
+  <div id="storm-overlay">
+    <canvas id="rain-canvas"></canvas>
+  </div>
+
+  <!-- =======================================================
+       ANNOUNCEMENT BAR
+  ======================================================== -->
+
+  <div
+    class="utility-bar color-scheme-4 gradient utility-bar--bottom-border"
+  >
     <div class="page-width utility-bar__grid">
-      <div class="announcement-bar" role="region" aria-label="Site announcements">
-        <button type="button" class="slider-button slider-button--prev" aria-label="Previous" hidden>‹</button>
-        <div class="announcement-track" id="AnnouncementTrack" data-autoplay="true" data-speed="5000">
-          <p class="announcement-bar__message h5"><span>WELCOME TO THE STORM</span></p>
+      <div
+        class="announcement-bar"
+        role="region"
+        aria-label="Site announcements"
+      >
+        <button
+          type="button"
+          class="slider-button slider-button--prev"
+          aria-label="Previous"
+          hidden
+        >
+          ‹
+        </button>
+
+        <div
+          class="announcement-track"
+          id="AnnouncementTrack"
+          data-autoplay="true"
+          data-speed="5000"
+        >
+          <p class="announcement-bar__message h5">
+            <span>WELCOME TO THE STORM</span>
+          </p>
         </div>
-        <button type="button" class="slider-button slider-button--next" aria-label="Next" hidden>›</button>
+
+        <button
+          type="button"
+          class="slider-button slider-button--next"
+          aria-label="Next"
+          hidden
+        >
+          ›
+        </button>
       </div>
     </div>
   </div>
 
-  <div class="section-header header-wrapper color-scheme-4 gradient" data-sticky-type="on-scroll-up">
-    <header class="site-header header header--middle-left header--mobile-center">
+  <!-- =======================================================
+       HEADER
+  ======================================================== -->
+
+  <div
+    class="section-header header-wrapper color-scheme-4 gradient"
+    data-sticky-type="on-scroll-up"
+  >
+    <header
+      class="site-header header header--middle-left header--mobile-center"
+    >
       <div class="page-width header-grid">
 
         <header-drawer data-breakpoint="all">
-          <details id="Details-menu-drawer-container" class="menu-drawer-container">
-            <summary class="header__icon header__icon--menu header__icon--summary link focus-inset" aria-label="Menu">
+          <details
+            id="Details-menu-drawer-container"
+            class="menu-drawer-container"
+          >
+            <summary
+              class="header__icon header__icon--menu header__icon--summary link focus-inset"
+              aria-label="Open menu"
+              aria-expanded="false"
+            >
               <span aria-hidden="true">
-                <svg width="22" height="22" viewBox="0 0 24 24">
-                  <path d="M3 6h18v2H3zM3 11h18v2H3zM3 16h18v2H3z" fill="currentColor"/>
+                <svg
+                  width="22"
+                  height="22"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M3 6h18v2H3zM3 11h18v2H3zM3 16h18v2H3z"
+                    fill="currentColor"
+                  />
                 </svg>
-                <svg width="22" height="22" viewBox="0 0 24 24">
-                  <path d="M18.3 5.7 12 12l6.3 6.3-1.4 1.4L10.6 13.4 4.3 19.7 2.9 18.3 9.2 12 2.9 5.7 4.3 4.3 10.6 10.6 16.9 4.3z" fill="currentColor"/>
+
+                <svg
+                  width="22"
+                  height="22"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M18.3 5.7 12 12l6.3 6.3-1.4 1.4L10.6 13.4 4.3 19.7 2.9 18.3 9.2 12 2.9 5.7 4.3 4.3 10.6 10.6 16.9 4.3z"
+                    fill="currentColor"
+                  />
                 </svg>
               </span>
             </summary>
 
-            <div id="menu-drawer" class="gradient menu-drawer motion-reduce color-scheme-4">
+            <div
+              id="menu-drawer"
+              class="gradient menu-drawer motion-reduce color-scheme-4"
+            >
               <div class="menu-drawer__inner-container">
                 <div class="menu-drawer__navigation-container">
-                  <nav class="menu-drawer__navigation" aria-label="Site navigation">
-                    <ul class="menu-drawer__menu has-submenu list-menu" role="list">
-                      <li><a href="index.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">Home</a></li>
-                      <li><a href="shop.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">Shop All</a></li>
-                      <li><a href="g4llery.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">G4LLERY</a></li>
-                      <li><a href="collections.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">Collections</a></li>
-                      <li><a href="try-on.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">TRY ON</a></li>
-                      <li><a href="4bout-us.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">4bout us</a></li>
-                      <li><a href="contact.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">Contact</a></li>
+                  <nav
+                    class="menu-drawer__navigation"
+                    aria-label="Site navigation"
+                  >
+                    <ul
+                      class="menu-drawer__menu has-submenu list-menu"
+                      role="list"
+                    >
                       <li>
-                        <a href="cart.html"
-                           class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
-                           data-loud="heavy"
-                           data-cart-open>
-                          Cart <span class="cart-count-bubble" data-cart-count></span>
+                        <a
+                          href="index.html"
+                          class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
+                        >
+                          Home
                         </a>
                       </li>
+
                       <li>
-                        <button id="search-open-mobile" type="button" class="menu-drawer__menu-item link link--text list-menu__item focus-inset">
+                        <a
+                          href="lookbook.html"
+                          class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
+                        >
+                          Lookbook
+                        </a>
+                      </li>
+
+                      <li class="shop-menu-parent">
+                        <button
+                          id="shop-menu-toggle"
+                          class="menu-drawer__menu-item shop-menu-toggle"
+                          type="button"
+                          aria-expanded="false"
+                          aria-controls="shop-submenu"
+                        >
+                          <span>Shop All</span>
+
+                          <span
+                            class="shop-menu-toggle__icon"
+                            aria-hidden="true"
+                          >
+                            +
+                          </span>
+                        </button>
+
+                        <ul
+                          id="shop-submenu"
+                          class="shop-submenu"
+                          role="list"
+                        >
+                          <li>
+                            <a href="dhk-collection.html">
+                              DHK Collection
+                            </a>
+                          </li>
+
+                          <li>
+                            <a
+                              href="comic-collection.html"
+                              aria-current="page"
+                            >
+                              Comic Book Collection
+                            </a>
+                          </li>
+
+                          <li>
+                            <a href="blanks-collection.html">
+                              DHK Blanks
+                            </a>
+                          </li>
+
+                          <li>
+                            <a href="shop.html">
+                              View All
+                            </a>
+                          </li>
+                        </ul>
+                      </li>
+
+                      <li>
+                        <a
+                          href="g4llery.html"
+                          class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
+                        >
+                          G4LLERY
+                        </a>
+                      </li>
+
+                      <li>
+                        <a
+                          href="try-on.html"
+                          class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
+                        >
+                          TRY ON
+                        </a>
+                      </li>
+
+                      <li>
+                        <a
+                          href="collections.html"
+                          class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
+                        >
+                          Collections
+                        </a>
+                      </li>
+
+                      <li>
+                        <a
+                          href="4bout-us.html"
+                          class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
+                        >
+                          4bout us
+                        </a>
+                      </li>
+
+                      <li>
+                        <a
+                          href="contact.html"
+                          class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
+                        >
+                          Contact
+                        </a>
+                      </li>
+
+                      <li>
+                        <a
+                          href="cart.html"
+                          class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
+                          data-loud="heavy"
+                          data-cart-open
+                        >
+                          Cart
+
+                          <span
+                            class="cart-count-bubble"
+                            data-cart-count
+                          ></span>
+                        </a>
+                      </li>
+
+                      <li>
+                        <button
+                          id="search-open-mobile"
+                          type="button"
+                          class="menu-drawer__menu-item link link--text list-menu__item focus-inset"
+                        >
                           Search
                         </button>
                       </li>
@@ -306,10 +1594,14 @@
           </details>
         </header-drawer>
 
-        <a class="header__logo" href="index.html" aria-label="DarkHarlemKnight">
+        <a
+          class="header__logo"
+          href="index.html"
+          aria-label="Dark Harlem Knight"
+        >
           <img
             src="assets/img/DHK_transparent.gif"
-            alt="DarkHarlemKnight"
+            alt="Dark Harlem Knight"
             width="190"
             height="190"
             class="header__heading-logo"
@@ -317,61 +1609,362 @@
           />
         </a>
 
-        <div></div>
+        <a
+          class="header-cart-link"
+          href="cart.html"
+          aria-label="View cart"
+          data-cart-open
+        >
+          <svg
+            viewBox="0 0 32 32"
+            aria-hidden="true"
+          >
+            <path d="M7.5 10.5h17l1.7 17h-20.4l1.7-17Z"></path>
+            <path d="M11.5 11V8.4a4.5 4.5 0 0 1 9 0V11"></path>
+          </svg>
+
+          <span
+            class="cart-count-bubble"
+            data-cart-count
+          ></span>
+        </a>
       </div>
     </header>
   </div>
 
-  <main id="MainContent" class="section">
-    <div class="page-width">
-      <header class="fc__header">
-        <h1 class="fc__title h2">Shop All</h1>
+  <!-- =======================================================
+       MAIN
+  ======================================================== -->
+
+  <main id="MainContent">
+
+    <!-- HERO -->
+
+    <section
+      class="comic-hero"
+      aria-labelledby="comic-hero-title"
+    >
+      <div class="comic-hero__media">
+
+        <!--
+          TEMPORARY HERO IMAGE
+
+          Replace both paths below with the official
+          Comic Book Collection campaign image.
+
+          Desktop and mobile can use separate images later.
+        -->
+
+        <picture>
+          <source
+            media="(max-width: 900px)"
+            srcset="assets/img/products/dhk/campaign-1/campaign-shots/Grey/grey-shoot-8.png"
+          />
+
+          <img
+            src="assets/img/products/dhk/campaign-1/campaign-shots/Grey/grey-shoot-8.png"
+            alt="DHK Comic Book Collection"
+            fetchpriority="high"
+          />
+        </picture>
+      </div>
+
+      <div
+        class="comic-hero__frame"
+        aria-hidden="true"
+      ></div>
+
+      <div
+        class="comic-hero__slash"
+        aria-hidden="true"
+      ></div>
+
+      <div
+        class="comic-hero__ink-sweep"
+        aria-hidden="true"
+      ></div>
+
+      <div
+        class="comic-hero__chapter"
+        aria-hidden="true"
+      >
+        <small>Issue</small>
+        <strong>001</strong>
+      </div>
+
+      <div class="comic-hero__content">
+        <div class="comic-hero__copy">
+
+          <p class="comic-issue">
+            Dark Harlem Archives
+          </p>
+
+          <h1
+            id="comic-hero-title"
+            class="comic-hero__title"
+          >
+            Comic Book
+
+            <span>
+              Summer Collection
+            </span>
+          </h1>
+
+          <p class="comic-hero__description">
+            Iconic characters reinterpreted through heavyweight
+            silhouettes, distressed construction, luxury materials,
+            and the darkness of the DHK universe.
+          </p>
+        </div>
+      </div>
+
+      <div
+        class="comic-scroll-cue"
+        aria-hidden="true"
+      >
+        Enter the Issue
+      </div>
+    </section>
+
+    <!-- MOVING CHAPTER STRIP -->
+
+    <div
+      class="comic-chapter-strip"
+      aria-hidden="true"
+    >
+      <div class="comic-chapter-strip__track">
+        <span>Dark Harlem Knight</span>
+        <i></i>
+        <span>Comic Book Summer</span>
+        <i></i>
+        <span>Issue 001</span>
+        <i></i>
+        <span>Built in the Storm</span>
+        <i></i>
+        <span>Dark Harlem Knight</span>
+        <i></i>
+        <span>Comic Book Summer</span>
+        <i></i>
+        <span>Issue 001</span>
+        <i></i>
+        <span>Built in the Storm</span>
+        <i></i>
+      </div>
+    </div>
+
+    <!-- PRODUCT GRID -->
+
+    <section
+      class="comic-products"
+      aria-labelledby="comic-products-title"
+    >
+      <header class="comic-products__header">
+        <div class="comic-products__heading-wrap">
+          <p class="comic-products__chapter">
+            Chapter One
+          </p>
+
+          <h2
+            id="comic-products-title"
+            class="comic-products__heading"
+          >
+            The Collection
+          </h2>
+        </div>
+
+        <p
+          id="comic-product-count"
+          class="comic-products__count"
+          aria-live="polite"
+        >
+          Loading
+        </p>
       </header>
 
-      <div id="shop-grid" class="product-grid" aria-live="polite"></div>
-    </div>
+      <div
+        class="comic-products__rule"
+        aria-hidden="true"
+      ></div>
+
+      <div
+        id="shop-grid"
+        class="product-grid"
+        aria-live="polite"
+      ></div>
+
+      <p
+        id="comic-products-empty"
+        class="comic-products__empty"
+      >
+        The next issue is being prepared inside the storm.
+      </p>
+    </section>
   </main>
 
-  <footer class="footer color-scheme-4 gradient section footer--static">
+  <!-- =======================================================
+       FOOTER
+  ======================================================== -->
+
+  <footer
+    class="footer color-scheme-4 gradient section footer--static"
+  >
     <div class="footer__content-top page-width">
-      <div class="footer__blocks-wrapper grid grid--1-col grid--2-col grid--4-col-tablet">
+      <div
+        class="footer__blocks-wrapper grid grid--1-col grid--2-col grid--4-col-tablet"
+      >
         <div class="footer-block footer-block--menu grid__item">
-          <h2 class="footer-block__heading inline-richtext">Shop</h2>
+          <h2 class="footer-block__heading inline-richtext">
+            Shop
+          </h2>
+
           <ul class="footer-block__details-content list-unstyled">
-            <li><a class="link link--text list-menu__item list-menu__item--link" href="collections.html">Collections</a></li>
-            <li><a class="link link--text list-menu__item list-menu__item--link" href="shop.html">All Products</a></li>
-            <li><a class="link link--text list-menu__item list-menu__item--link" href="g4llery.html">G4LLERY</a></li>
-            <li><a class="link link--text list-menu__item list-menu__item--link" href="try-on.html">TRY ON</a></li>
-            <li><a class="link link--text list-menu__item list-menu__item--link" href="4bout-us.html">4bout us</a></li>
-            <li><a class="link link--text list-menu__item list-menu__item--link" href="contact.html">Contact</a></li>
+            <li>
+              <a
+                class="link link--text list-menu__item list-menu__item--link"
+                href="shop-categories.html"
+              >
+                Shop Categories
+              </a>
+            </li>
+
+            <li>
+              <a
+                class="link link--text list-menu__item list-menu__item--link"
+                href="dhk-collection.html"
+              >
+                DHK Collection
+              </a>
+            </li>
+
+            <li>
+              <a
+                class="link link--text list-menu__item list-menu__item--link"
+                href="comic-collection.html"
+              >
+                Comic Book Collection
+              </a>
+            </li>
+
+            <li>
+              <a
+                class="link link--text list-menu__item list-menu__item--link"
+                href="blanks-collection.html"
+              >
+                DHK Blanks
+              </a>
+            </li>
+
+            <li>
+              <a
+                class="link link--text list-menu__item list-menu__item--link"
+                href="shop.html"
+              >
+                View All Products
+              </a>
+            </li>
+
+            <li>
+              <a
+                class="link link--text list-menu__item list-menu__item--link"
+                href="lookbook.html"
+              >
+                Lookbook
+              </a>
+            </li>
+
+            <li>
+              <a
+                class="link link--text list-menu__item list-menu__item--link"
+                href="collections.html"
+              >
+                Collections Museum
+              </a>
+            </li>
           </ul>
         </div>
 
         <div class="footer-block grid__item">
-          <h2 class="footer-block__heading inline-richtext">Dark Harlem Knight</h2>
+          <h2 class="footer-block__heading inline-richtext">
+            Dark Harlem Knight
+          </h2>
+
           <div class="footer-block__details-content rte">
-            <p>Forged in the storm. Streetwear with thunder in its veins.</p>
+            <p>
+              Forged in the storm. Streetwear with thunder in its veins.
+            </p>
           </div>
+
           <ul class="footer__list-social">
-            <li><a aria-label="Instagram" class="social-link" href="https://www.instagram.com/darkharlemknight/" target="_blank" rel="noopener">Instagram</a></li>
-            <li><a aria-label="TikTok" class="social-link" href="https://www.tiktok.com/@darkharlemknight" target="_blank" rel="noopener">TikTok</a></li>
+            <li>
+              <a
+                aria-label="Instagram"
+                class="social-link"
+                href="https://www.instagram.com/darkharlemknight/"
+                target="_blank"
+                rel="noopener"
+              >
+                Instagram
+              </a>
+            </li>
+
+            <li>
+              <a
+                aria-label="TikTok"
+                class="social-link"
+                href="https://www.tiktok.com/@darkharlemknight"
+                target="_blank"
+                rel="noopener"
+              >
+                TikTok
+              </a>
+            </li>
           </ul>
         </div>
 
-        <div class="footer-block footer-block--newsletter grid__item">
-          <h2 class="footer-block__heading inline-richtext">Join the storm</h2>
-          <form class="footer__newsletter newsletter-form" action="#" method="post" onsubmit="return false;">
+        <div
+          class="footer-block footer-block--newsletter grid__item"
+        >
+          <h2 class="footer-block__heading inline-richtext">
+            Join the storm
+          </h2>
+
+          <form
+            class="footer__newsletter newsletter-form"
+            action="#"
+            method="post"
+            onsubmit="return false;"
+          >
             <div class="newsletter-form__field-wrapper">
               <div class="field">
-                <input class="field__input" type="email" placeholder="Email address" required>
-                <button class="newsletter-form__button field__button" type="submit" aria-label="Subscribe">→</button>
+                <input
+                  class="field__input"
+                  type="email"
+                  placeholder="Email address"
+                  required
+                />
+
+                <button
+                  class="newsletter-form__button field__button"
+                  type="submit"
+                  aria-label="Subscribe"
+                >
+                  →
+                </button>
               </div>
             </div>
           </form>
         </div>
 
-        <div class="footer-block footer-block-image grid__item center">
-          <img src="assets/img/DHK_transparent.gif" alt="DarkHarlemKnight" width="120" height="120" loading="lazy">
+        <div
+          class="footer-block footer-block-image grid__item center"
+        >
+          <img
+            src="assets/img/DHK_transparent.gif"
+            alt="Dark Harlem Knight"
+            width="120"
+            height="120"
+            loading="lazy"
+          />
         </div>
       </div>
     </div>
@@ -380,7 +1973,10 @@
       <div class="footer__content-bottom-wrapper page-width">
         <div class="footer__column footer__column--info">
           <div class="footer__payment">
-            <ul class="list list-payment" role="list">
+            <ul
+              class="list list-payment"
+              role="list"
+            >
               <li class="list-payment__item">Visa</li>
               <li class="list-payment__item">Mastercard</li>
               <li class="list-payment__item">Amex</li>
@@ -390,39 +1986,142 @@
         </div>
       </div>
 
-      <div class="footer__content-bottom-wrapper page-width footer__content-bottom-wrapper--center">
+      <div
+        class="footer__content-bottom-wrapper page-width footer__content-bottom-wrapper--center"
+      >
         <div class="footer__copyright caption">
-          <small class="copyright__content">© <span id="year"></span>, Dark Harlem Knight</small>
-          <small class="copyright__content">Powered by the Storm</small>
+          <small class="copyright__content">
+            ©
+            <span id="year"></span>,
+            Dark Harlem Knight
+          </small>
+
+          <small class="copyright__content">
+            Powered by the Storm
+          </small>
+
           <ul class="policies list-unstyled">
-            <li><small class="copyright__content"><a href="#">Privacy Policy</a></small></li>
-            <li><small class="copyright__content"><a href="#">Terms of Service</a></small></li>
+            <li>
+              <small class="copyright__content">
+                <a href="#">Privacy Policy</a>
+              </small>
+            </li>
+
+            <li>
+              <small class="copyright__content">
+                <a href="#">Terms of Service</a>
+              </small>
+            </li>
           </ul>
         </div>
       </div>
     </div>
   </footer>
 
-  <div id="search-modal" class="search-modal" aria-hidden="true">
-    <div class="search-modal__overlay" data-close-search></div>
-    <div class="search-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="search-title">
+  <!-- =======================================================
+       SEARCH MODAL
+  ======================================================== -->
+
+  <div
+    id="search-modal"
+    class="search-modal"
+    aria-hidden="true"
+  >
+    <div
+      class="search-modal__overlay"
+      data-close-search
+    ></div>
+
+    <div
+      class="search-modal__dialog"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="search-title"
+    >
       <header class="search-modal__header">
         <h2 id="search-title">Search</h2>
-        <button id="search-close" class="search-modal__close" aria-label="Close search">×</button>
+
+        <button
+          id="search-close"
+          class="search-modal__close"
+          aria-label="Close search"
+        >
+          ×
+        </button>
       </header>
+
       <div class="search-modal__field">
-        <input id="search-input" type="search" placeholder="Search products…  ( /  or  ⌘/Ctrl+K )" autocomplete="off" />
+        <input
+          id="search-input"
+          type="search"
+          placeholder="Search products…  ( /  or  ⌘/Ctrl+K )"
+          autocomplete="off"
+        />
       </div>
-      <div id="search-results" class="search-modal__results" aria-live="polite"></div>
+
+      <div
+        id="search-results"
+        class="search-modal__results"
+        aria-live="polite"
+      ></div>
     </div>
   </div>
 
-  <audio id="rain-light" src="assets/audio/light-rain.mp3" loop preload="auto" hidden></audio>
-  <audio id="rain-med" src="assets/audio/med-rain.mp3" loop preload="auto" hidden></audio>
-  <audio id="rain-heavy" src="assets/audio/heavy-rain.mp3" loop preload="auto" hidden></audio>
-  <audio id="thunder-light" src="assets/audio/light-thunder.mp3" loop preload="auto" hidden></audio>
-  <audio id="thunder-med" src="assets/audio/med-thunder.mp3" loop preload="auto" hidden></audio>
-  <audio id="thunder-heavy" src="assets/audio/heavy-thunder.mp3" loop preload="auto" hidden></audio>
+  <!-- =======================================================
+       STORM AUDIO
+  ======================================================== -->
+
+  <audio
+    id="rain-light"
+    src="assets/audio/light-rain.mp3"
+    loop
+    preload="auto"
+    hidden
+  ></audio>
+
+  <audio
+    id="rain-med"
+    src="assets/audio/med-rain.mp3"
+    loop
+    preload="auto"
+    hidden
+  ></audio>
+
+  <audio
+    id="rain-heavy"
+    src="assets/audio/heavy-rain.mp3"
+    loop
+    preload="auto"
+    hidden
+  ></audio>
+
+  <audio
+    id="thunder-light"
+    src="assets/audio/light-thunder.mp3"
+    loop
+    preload="auto"
+    hidden
+  ></audio>
+
+  <audio
+    id="thunder-med"
+    src="assets/audio/med-thunder.mp3"
+    loop
+    preload="auto"
+    hidden
+  ></audio>
+
+  <audio
+    id="thunder-heavy"
+    src="assets/audio/heavy-thunder.mp3"
+    loop
+    preload="auto"
+    hidden
+  ></audio>
+
+  <!-- =======================================================
+       SITE SCRIPTS
+  ======================================================== -->
 
   <script src="js/nav.js"></script>
   <script src="js/announce.js"></script>
@@ -431,38 +2130,464 @@
   <script src="js/shop.js"></script>
   <script src="js/newsletter.js"></script>
   <script src="js/storm_shopify_style.js"></script>
+
+  <!-- =======================================================
+       COMIC COLLECTION CONTROLS
+  ======================================================== -->
+
   <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
+    (() => {
+      "use strict";
+
+      /* =====================================================
+         YEAR
+      ===================================================== */
+
+      const yearElement = document.getElementById("year");
+
+      if (yearElement) {
+        yearElement.textContent = new Date().getFullYear();
+      }
+
+      /* =====================================================
+         HAMBURGER OPEN + CLOSE
+      ===================================================== */
+
+      const menuDetails = document.getElementById(
+        "Details-menu-drawer-container"
+      );
+
+      const menuSummary = menuDetails
+        ? menuDetails.querySelector("summary")
+        : null;
+
+      function syncMenuState() {
+        if (!menuDetails || !menuSummary) return;
+
+        const isOpen = menuDetails.open;
+
+        menuSummary.setAttribute(
+          "aria-expanded",
+          isOpen ? "true" : "false"
+        );
+
+        menuSummary.setAttribute(
+          "aria-label",
+          isOpen ? "Close menu" : "Open menu"
+        );
+
+        document.body.classList.toggle(
+          "menu-open",
+          isOpen
+        );
+      }
+
+      if (menuDetails) {
+        menuDetails.addEventListener(
+          "toggle",
+          syncMenuState
+        );
+
+        syncMenuState();
+      }
+
+      if (menuSummary && menuDetails) {
+        menuSummary.addEventListener(
+          "click",
+          () => {
+            window.setTimeout(syncMenuState, 0);
+          }
+        );
+      }
+
+      /* =====================================================
+         SHOP ALL SUBMENU
+      ===================================================== */
+
+      const shopMenuToggle = document.getElementById(
+        "shop-menu-toggle"
+      );
+
+      const shopSubmenu = document.getElementById(
+        "shop-submenu"
+      );
+
+      if (shopMenuToggle && shopSubmenu) {
+        shopMenuToggle.addEventListener(
+          "click",
+          () => {
+            const isOpen =
+              shopMenuToggle.getAttribute(
+                "aria-expanded"
+              ) === "true";
+
+            shopMenuToggle.setAttribute(
+              "aria-expanded",
+              isOpen ? "false" : "true"
+            );
+
+            shopSubmenu.classList.toggle(
+              "is-open",
+              !isOpen
+            );
+          }
+        );
+      }
+
+      /* =====================================================
+         CLOSE MENU AFTER LINK CLICK
+      ===================================================== */
+
+      document
+        .querySelectorAll("#menu-drawer a")
+        .forEach((link) => {
+          link.addEventListener(
+            "click",
+            () => {
+              if (!menuDetails) return;
+
+              menuDetails.open = false;
+              syncMenuState();
+            }
+          );
+        });
+
+      /* =====================================================
+         COMIC PRODUCT FILTER
+      ===================================================== */
+
+      /*
+        Add the exact product IDs here after we enter the
+        Comic Book Collection products into products.json.
+
+        Example:
+
+        "joker-sleeveless-tank",
+        "batman-beyond-sleeveless-tank",
+        "spawn-sleeveless-tank"
+      */
+
+      const COMIC_PRODUCT_IDS = [
+        /*
+        "your-first-comic-product-id",
+        "your-second-comic-product-id",
+        "your-third-comic-product-id"
+        */
+      ];
+
+      /*
+        Temporary keyword filter.
+
+        Until exact IDs are entered above, these keywords help
+        identify products connected to the comic collection.
+      */
+
+      const COMIC_FALLBACK_KEYWORDS = [
+        "comic",
+        "joker",
+        "batman",
+        "batman beyond",
+        "spawn",
+        "chaos",
+        "dark knight tank",
+        "sleeveless",
+        "tank top",
+        "raw armhole",
+        "comic book summer"
+      ];
+
+      const shopGrid = document.getElementById(
+        "shop-grid"
+      );
+
+      const productCount = document.getElementById(
+        "comic-product-count"
+      );
+
+      const emptyMessage = document.getElementById(
+        "comic-products-empty"
+      );
+
+      let filteringScheduled = false;
+      let filteringComplete = false;
+
+      function normalize(value) {
+        return String(value || "")
+          .trim()
+          .toLowerCase();
+      }
+
+      function getProductCardId(card) {
+        if (!card) return "";
+
+        const directId =
+          card.getAttribute("data-product-id") ||
+          card.dataset.productId ||
+          "";
+
+        if (directId) {
+          return normalize(directId);
+        }
+
+        const productLink = card.querySelector(
+          'a[href*="product.html?id="]'
+        );
+
+        if (!productLink) return "";
+
+        try {
+          const url = new URL(
+            productLink.href,
+            window.location.href
+          );
+
+          return normalize(
+            url.searchParams.get("id")
+          );
+        } catch {
+          const href =
+            productLink.getAttribute("href") || "";
+
+          const match = href.match(
+            /[?&]id=([^&#]+)/
+          );
+
+          return match
+            ? normalize(
+                decodeURIComponent(match[1])
+              )
+            : "";
+        }
+      }
+
+      function cardMatchesComicCollection(card) {
+        const exactIds = COMIC_PRODUCT_IDS
+          .map(normalize)
+          .filter(Boolean);
+
+        const cardId = getProductCardId(card);
+
+        /*
+          Exact ID filtering takes over once product IDs
+          have been entered above.
+        */
+
+        if (exactIds.length > 0) {
+          return exactIds.includes(cardId);
+        }
+
+        const searchableText = normalize(
+          [
+            cardId,
+            card.textContent || "",
+            card.innerHTML || ""
+          ].join(" ")
+        );
+
+        return COMIC_FALLBACK_KEYWORDS.some(
+          (keyword) =>
+            searchableText.includes(
+              normalize(keyword)
+            )
+        );
+      }
+
+      function updateProductCount(count) {
+        if (!productCount) return;
+
+        productCount.textContent =
+          count === 1
+            ? "1 Piece"
+            : `${count} Pieces`;
+      }
+
+      function filterComicProducts() {
+        filteringScheduled = false;
+
+        if (!shopGrid) return;
+
+        const cards = Array.from(
+          shopGrid.children
+        );
+
+        if (cards.length === 0) {
+          if (!filteringComplete && productCount) {
+            productCount.textContent = "Loading";
+          }
+
+          return;
+        }
+
+        let visibleCount = 0;
+
+        cards.forEach((card) => {
+          const shouldShow =
+            cardMatchesComicCollection(card);
+
+          card.hidden = !shouldShow;
+
+          card.style.display = shouldShow
+            ? ""
+            : "none";
+
+          if (shouldShow) {
+            visibleCount += 1;
+          }
+        });
+
+        filteringComplete = true;
+
+        updateProductCount(visibleCount);
+
+        if (emptyMessage) {
+          emptyMessage.classList.toggle(
+            "is-visible",
+            visibleCount === 0
+          );
+        }
+      }
+
+      function scheduleFiltering() {
+        if (filteringScheduled) return;
+
+        filteringScheduled = true;
+
+        window.requestAnimationFrame(
+          filterComicProducts
+        );
+      }
+
+      if (shopGrid) {
+        const gridObserver = new MutationObserver(
+          scheduleFiltering
+        );
+
+        gridObserver.observe(shopGrid, {
+          childList: true,
+          subtree: true
+        });
+
+        scheduleFiltering();
+
+        window.setTimeout(
+          scheduleFiltering,
+          250
+        );
+
+        window.setTimeout(
+          scheduleFiltering,
+          750
+        );
+
+        window.setTimeout(
+          scheduleFiltering,
+          1500
+        );
+      }
+    })();
   </script>
 
-  <div id="cart-drawer" class="cart-drawer" aria-hidden="true">
-    <div class="cart-drawer__overlay" data-cart-close></div>
-    <aside class="cart-drawer__panel" tabindex="-1">
+  <!-- =======================================================
+       CART DRAWER
+  ======================================================== -->
+
+  <div
+    id="cart-drawer"
+    class="cart-drawer"
+    aria-hidden="true"
+  >
+    <div
+      class="cart-drawer__overlay"
+      data-cart-close
+    ></div>
+
+    <aside
+      class="cart-drawer__panel"
+      tabindex="-1"
+    >
       <div class="cart-header">
         <h2>Your Cart</h2>
-        <button type="button" title="Close" data-cart-close>✕</button>
+
+        <button
+          type="button"
+          title="Close"
+          aria-label="Close cart"
+          data-cart-close
+        >
+          ✕
+        </button>
       </div>
 
-      <div class="cart-list" id="cart-items"></div>
-      <div id="cart-empty" class="cart-empty" hidden style="padding:16px;color:#9a9a9a">
+      <div
+        class="cart-list"
+        id="cart-items"
+      ></div>
+
+      <div
+        id="cart-empty"
+        class="cart-empty"
+        hidden
+        style="padding: 16px; color: #9a9a9a;"
+      >
         Your cart is empty.
       </div>
 
       <div class="cart-footer">
-        <div class="cart-discount cart-discount--drawer">
-          <label for="discount-code-drawer" class="cart-discount__label">ADD DISCOUNT</label>
+        <div
+          class="cart-discount cart-discount--drawer"
+        >
+          <label
+            for="discount-code-drawer"
+            class="cart-discount__label"
+          >
+            ADD DISCOUNT
+          </label>
+
           <div class="cart-discount__row">
-            <input id="discount-code-drawer" class="cart-discount__input" type="text" placeholder="Enter code" autocomplete="off" />
-            <button id="discount-apply-drawer" class="cart-discount__button" type="button">APPLY</button>
+            <input
+              id="discount-code-drawer"
+              class="cart-discount__input"
+              type="text"
+              placeholder="Enter code"
+              autocomplete="off"
+            />
+
+            <button
+              id="discount-apply-drawer"
+              class="cart-discount__button"
+              type="button"
+            >
+              APPLY
+            </button>
           </div>
-          <p id="discount-message-drawer" class="cart-discount__message" aria-live="polite"></p>
+
+          <p
+            id="discount-message-drawer"
+            class="cart-discount__message"
+            aria-live="polite"
+          ></p>
         </div>
 
         <div class="cart-row">
-          <div class="label">Subtotal</div>
-          <div class="value" id="cart-subtotal">$0.00</div>
+          <div class="label">
+            Subtotal
+          </div>
+
+          <div
+            class="value"
+            id="cart-subtotal"
+          >
+            $0.00
+          </div>
         </div>
-        <button id="cart-checkout" type="button" disabled>Checkout</button>
+
+        <button
+          id="cart-checkout"
+          type="button"
+          disabled
+        >
+          Checkout
+        </button>
       </div>
     </aside>
   </div>
