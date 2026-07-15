@@ -1,18 +1,48 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <link rel="icon" href="assets/img/DHK_transparent.gif" type="image/gif" sizes="any">
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>DHK — Shop</title>
+  <meta charset="utf-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  />
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <title>DHK — Shop All</title>
 
-  <link rel="stylesheet" href="css/styles.css"/>
+  <link
+    rel="icon"
+    href="assets/img/DHK_transparent.gif"
+    type="image/gif"
+    sizes="any"
+  />
+
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  />
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  />
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Roboto:wght@300;400;500;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <link
+    rel="stylesheet"
+    href="css/styles.css"
+  />
 
   <style>
+    html.no-scroll,
+    body.no-scroll {
+      overflow: hidden !important;
+    }
+
     .utility-bar .page-width {
       max-width: none;
       padding: 0;
@@ -49,16 +79,20 @@
     }
 
     .announcement-bar__message span {
-      font-family: 'Cinzel', serif;
+      font-family: "Cinzel", serif;
       font-weight: 700;
       font-size: 13px;
-      letter-spacing: .18em;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
       color: #e5e5e5;
-      text-shadow: 0 0 6px rgba(255,255,255,.12);
+      text-shadow:
+        0 0 6px rgba(255, 255, 255, 0.12);
     }
 
-    /* Full-screen drawer for both mobile + desktop */
+    /* =========================================
+       FULL-SCREEN MENU
+    ========================================= */
+
     #menu-drawer {
       position: fixed;
       inset: 0;
@@ -67,17 +101,18 @@
       background: rgba(5, 5, 7, 0.97);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
+      border: 0;
       box-shadow: none;
       z-index: 2147483646;
       padding: 34px 28px 40px;
       overflow-y: auto;
-      border: 0;
+      -webkit-overflow-scrolling: touch;
     }
 
     .menu-drawer__inner-container,
     .menu-drawer__navigation-container,
     .menu-drawer__navigation {
-      height: 100%;
+      min-height: 100%;
     }
 
     .menu-drawer__menu {
@@ -89,17 +124,24 @@
       gap: 24px;
     }
 
+    .menu-drawer__menu > li {
+      margin: 0;
+      padding: 0;
+    }
+
     .menu-drawer__menu-item,
     .menu-drawer__menu .list-menu__item.link,
     .menu-drawer__menu button {
-      font-family: 'Cinzel', serif;
+      font-family: "Cinzel", serif;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: .16em;
+      letter-spacing: 0.16em;
       font-size: clamp(24px, 2.2vw, 34px);
+      line-height: 1.2;
       color: #f1f1f1;
       text-decoration: none;
-      text-shadow: 0 0 10px rgba(255,255,255,.08);
+      text-shadow:
+        0 0 10px rgba(255, 255, 255, 0.08);
       background: transparent;
       border: 0;
       padding: 0;
@@ -110,21 +152,184 @@
     .menu-drawer__menu-item:hover,
     .menu-drawer__menu .list-menu__item.link:hover,
     .menu-drawer__menu-item:focus-visible,
-    .menu-drawer__menu button:hover {
+    .menu-drawer__menu button:hover,
+    .menu-drawer__menu button:focus-visible {
       color: #fff;
-      text-shadow: 0 0 14px rgba(255,255,255,.18);
+      text-shadow:
+        0 0 14px rgba(255, 255, 255, 0.18);
     }
 
-    .menu-drawer__menu .list-menu__item + .list-menu__item {
+    .menu-drawer__menu-item[aria-current="page"] {
+      color: #fff;
+      text-shadow:
+        0 0 8px rgba(255, 255, 255, 0.28),
+        0 0 20px rgba(255, 255, 255, 0.12);
+    }
+
+    .menu-drawer__menu .list-menu__item +
+    .list-menu__item {
       border-top: 0;
     }
 
+    /* =========================================
+       SHOP ALL SUBMENU
+    ========================================= */
+
+    .menu-drawer__shop-group {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .menu-drawer__shop-toggle {
+      width: 100%;
+      display: flex !important;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 14px;
+    }
+
+    .menu-drawer__shop-arrow {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      position: relative;
+      flex: 0 0 18px;
+    }
+
+    .menu-drawer__shop-arrow::before,
+    .menu-drawer__shop-arrow::after {
+      content: "";
+      position: absolute;
+      width: 14px;
+      height: 1px;
+      background: currentColor;
+      transition:
+        transform 0.25s ease,
+        opacity 0.25s ease;
+    }
+
+    .menu-drawer__shop-arrow::after {
+      transform: rotate(90deg);
+    }
+
+    .menu-drawer__shop-toggle[aria-expanded="true"]
+      .menu-drawer__shop-arrow::after {
+      transform: rotate(0deg);
+      opacity: 0;
+    }
+
+    .menu-drawer__shop-submenu {
+      list-style: none;
+      width: 100%;
+      max-height: 0;
+      overflow: hidden;
+      visibility: hidden;
+      opacity: 0;
+      margin: 0;
+      padding: 0 0 0 26px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      transition:
+        max-height 0.35s ease,
+        opacity 0.25s ease,
+        visibility 0.25s ease,
+        padding-top 0.35s ease;
+    }
+
+    .menu-drawer__shop-submenu.is-open {
+      max-height: 420px;
+      visibility: visible;
+      opacity: 1;
+      padding-top: 18px;
+    }
+
+    .menu-drawer__shop-submenu li {
+      margin: 0;
+      padding: 0;
+    }
+
+    .menu-drawer__shop-submenu a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 38px;
+      padding: 6px 0;
+      color: rgba(238, 238, 238, 0.7);
+      text-decoration: none;
+      font-family: "Roboto", sans-serif;
+      font-size: clamp(14px, 1.1vw, 17px);
+      font-weight: 400;
+      line-height: 1.3;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      transition:
+        color 0.2s ease,
+        transform 0.2s ease,
+        text-shadow 0.2s ease;
+    }
+
+    .menu-drawer__shop-submenu a::before {
+      content: "";
+      display: inline-block;
+      width: 16px;
+      height: 1px;
+      margin-right: 12px;
+      background: rgba(255, 255, 255, 0.38);
+      transition:
+        width 0.2s ease,
+        background 0.2s ease;
+    }
+
+    .menu-drawer__shop-submenu a:hover,
+    .menu-drawer__shop-submenu a:focus-visible {
+      color: #fff;
+      transform: translateX(4px);
+      text-shadow:
+        0 0 10px rgba(255, 255, 255, 0.14);
+    }
+
+    .menu-drawer__shop-submenu a:hover::before,
+    .menu-drawer__shop-submenu a:focus-visible::before {
+      width: 24px;
+      background: rgba(255, 255, 255, 0.85);
+    }
+
+    /* =========================================
+       HAMBURGER / CLOSE BUTTON
+    ========================================= */
+
+    header-drawer {
+      grid-column: 1;
+      justify-self: start;
+      position: relative;
+      z-index: 2147483647;
+    }
+
+    .menu-drawer-container {
+      position: relative;
+    }
+
     .header__icon--menu {
+      position: relative;
+      z-index: 2147483647;
+    }
+
+    .menu-drawer-container[open]
+      > .header__icon--menu {
+      position: fixed;
+      top: 48px;
+      left: 16px;
       z-index: 2147483647;
     }
 
     .header__icon--menu svg {
-      filter: drop-shadow(0 0 6px rgba(255,255,255,.28));
+      filter:
+        drop-shadow(
+          0 0 6px rgba(255, 255, 255, 0.28)
+        );
     }
 
     .header__icon--summary {
@@ -152,24 +357,39 @@
       display: none;
     }
 
-    details[open] .header__icon--summary svg:first-child {
+    details[open]
+      .header__icon--summary
+      svg:first-child {
       display: none;
     }
 
-    details[open] .header__icon--summary svg:last-child {
+    details[open]
+      .header__icon--summary
+      svg:last-child {
       display: block;
     }
 
-    details[open] ~ .menu-drawer,
-    details[open] #menu-drawer {
-      z-index: 2147483646;
-    }
+    /* =========================================
+       STORM + LAYERS
+    ========================================= */
 
     details[open] ~ #storm-overlay,
     details[open] #storm-overlay {
       opacity: 0 !important;
       pointer-events: none !important;
-      transition: opacity .15s ease;
+      transition: opacity 0.15s ease;
+    }
+
+    #storm-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .section-header {
+      position: relative;
+      z-index: 20;
     }
 
     #search-modal {
@@ -179,10 +399,13 @@
     body.search-open #storm-overlay {
       opacity: 0 !important;
       pointer-events: none !important;
-      transition: opacity .15s ease;
+      transition: opacity 0.15s ease;
     }
 
-    /* Same centered header system on mobile + desktop */
+    /* =========================================
+       HEADER
+    ========================================= */
+
     .header-grid {
       display: grid !important;
       grid-template-columns: 48px 1fr 48px !important;
@@ -215,10 +438,104 @@
       margin: 0 auto !important;
     }
 
-    header-drawer {
-      grid-column: 1;
-      justify-self: start;
+    /* =========================================
+       UPPER-RIGHT CART
+    ========================================= */
+
+    .header-cart {
+      grid-column: 3;
+      justify-self: end;
+      position: relative;
+      z-index: 30;
     }
+
+    .header-cart__button {
+      position: relative;
+      width: 42px;
+      height: 42px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: #f4f4f4;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .header-cart__button svg {
+      display: block;
+      width: 22px;
+      height: 22px;
+      filter:
+        drop-shadow(
+          0 0 6px rgba(255, 255, 255, 0.24)
+        );
+    }
+
+    .header-cart__button:hover,
+    .header-cart__button:focus-visible {
+      color: #fff;
+    }
+
+    .header-cart__button .cart-count-bubble {
+      position: absolute;
+      top: 1px;
+      right: 0;
+      min-width: 17px;
+      height: 17px;
+      padding: 0 4px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #fff;
+      color: #000;
+      font-family: "Roboto", sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .header-cart__button
+      .cart-count-bubble:empty {
+      display: none;
+    }
+
+    /* =========================================
+       SHOP PAGE
+    ========================================= */
+
+    #MainContent {
+      position: relative;
+      z-index: 2;
+    }
+
+    .shop-page-wrap {
+      padding-top: 30px;
+      padding-bottom: 54px;
+    }
+
+    .fc__header {
+      margin-bottom: 24px;
+      text-align: center;
+    }
+
+    .fc__title {
+      margin: 0;
+      font-family: "Cinzel", serif;
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #f5f5f5;
+      text-shadow:
+        0 0 8px rgba(255, 255, 255, 0.08);
+    }
+
+    /* =========================================
+       MOBILE
+    ========================================= */
 
     @media (max-width: 900px) {
       .menu-drawer__menu {
@@ -232,69 +549,289 @@
         font-size: 26px;
       }
 
+      .menu-drawer__shop-submenu {
+        padding-left: 18px;
+      }
+
+      .menu-drawer__shop-submenu.is-open {
+        padding-top: 14px;
+      }
+
+      .menu-drawer__shop-submenu a {
+        min-height: 34px;
+        padding: 5px 0;
+        font-size: 13px;
+        letter-spacing: 0.12em;
+      }
+
+      .menu-drawer__shop-submenu a::before {
+        width: 12px;
+        margin-right: 10px;
+      }
+
       .header__heading-logo {
         height: 30px !important;
+      }
+
+      .header-cart__button {
+        width: 38px;
+        height: 38px;
+      }
+
+      .header-cart__button svg {
+        width: 21px;
+        height: 21px;
+      }
+
+      .shop-page-wrap {
+        padding-top: 22px;
+        padding-bottom: 42px;
       }
     }
   </style>
 </head>
 
-<body class="template-page">
-
+<body class="template-page template-shop">
   <div class="lightning-flash"></div>
-  <div id="storm-overlay"><canvas id="rain-canvas"></canvas></div>
 
-  <div class="utility-bar color-scheme-4 gradient utility-bar--bottom-border">
+  <div id="storm-overlay">
+    <canvas id="rain-canvas"></canvas>
+  </div>
+
+  <div
+    class="utility-bar color-scheme-4 gradient utility-bar--bottom-border"
+  >
     <div class="page-width utility-bar__grid">
-      <div class="announcement-bar" role="region" aria-label="Site announcements">
-        <button type="button" class="slider-button slider-button--prev" aria-label="Previous" hidden>‹</button>
-        <div class="announcement-track" id="AnnouncementTrack" data-autoplay="true" data-speed="5000">
-          <p class="announcement-bar__message h5"><span>WELCOME TO THE STORM</span></p>
+      <div
+        class="announcement-bar"
+        role="region"
+        aria-label="Site announcements"
+      >
+        <button
+          type="button"
+          class="slider-button slider-button--prev"
+          aria-label="Previous"
+          hidden
+        >
+          ‹
+        </button>
+
+        <div
+          class="announcement-track"
+          id="AnnouncementTrack"
+          data-autoplay="true"
+          data-speed="5000"
+        >
+          <p class="announcement-bar__message h5">
+            <span>WELCOME TO THE STORM</span>
+          </p>
         </div>
-        <button type="button" class="slider-button slider-button--next" aria-label="Next" hidden>›</button>
+
+        <button
+          type="button"
+          class="slider-button slider-button--next"
+          aria-label="Next"
+          hidden
+        >
+          ›
+        </button>
       </div>
     </div>
   </div>
 
-  <div class="section-header header-wrapper color-scheme-4 gradient" data-sticky-type="on-scroll-up">
-    <header class="site-header header header--middle-left header--mobile-center">
+  <div
+    class="section-header header-wrapper color-scheme-4 gradient"
+    data-sticky-type="on-scroll-up"
+  >
+    <header
+      class="site-header header header--middle-left header--mobile-center"
+    >
       <div class="page-width header-grid">
-
         <header-drawer data-breakpoint="all">
-          <details id="Details-menu-drawer-container" class="menu-drawer-container">
-            <summary class="header__icon header__icon--menu header__icon--summary link focus-inset" aria-label="Menu">
+          <details
+            id="Details-menu-drawer-container"
+            class="menu-drawer-container"
+          >
+            <summary
+              class="header__icon header__icon--menu header__icon--summary link focus-inset"
+              aria-label="Open menu"
+            >
               <span aria-hidden="true">
-                <svg width="22" height="22" viewBox="0 0 24 24">
-                  <path d="M3 6h18v2H3zM3 11h18v2H3zM3 16h18v2H3z" fill="currentColor"/>
+                <svg
+                  width="22"
+                  height="22"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M3 6h18v2H3zM3 11h18v2H3zM3 16h18v2H3z"
+                    fill="currentColor"
+                  />
                 </svg>
-                <svg width="22" height="22" viewBox="0 0 24 24">
-                  <path d="M18.3 5.7 12 12l6.3 6.3-1.4 1.4L10.6 13.4 4.3 19.7 2.9 18.3 9.2 12 2.9 5.7 4.3 4.3 10.6 10.6 16.9 4.3z" fill="currentColor"/>
+
+                <svg
+                  width="22"
+                  height="22"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M18.3 5.7 12 12l6.3 6.3-1.4 1.4L10.6 13.4 4.3 19.7 2.9 18.3 9.2 12 2.9 5.7 4.3 4.3 10.6 10.6 16.9 4.3z"
+                    fill="currentColor"
+                  />
                 </svg>
               </span>
             </summary>
 
-            <div id="menu-drawer" class="gradient menu-drawer motion-reduce color-scheme-4">
+            <div
+              id="menu-drawer"
+              class="gradient menu-drawer motion-reduce color-scheme-4"
+            >
               <div class="menu-drawer__inner-container">
                 <div class="menu-drawer__navigation-container">
-                  <nav class="menu-drawer__navigation" aria-label="Site navigation">
-                    <ul class="menu-drawer__menu has-submenu list-menu" role="list">
-                      <li><a href="index.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">Home</a></li>
-                      <li><a href="shop.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">Shop All</a></li>
-                      <li><a href="g4llery.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">G4LLERY</a></li>
-                      <li><a href="collections.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">Collections</a></li>
-                      <li><a href="try-on.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">TRY ON</a></li>
-                      <li><a href="4bout-us.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">4bout us</a></li>
-                      <li><a href="contact.html" class="menu-drawer__menu-item list-menu__item link link--text focus-inset">Contact</a></li>
+                  <nav
+                    class="menu-drawer__navigation"
+                    aria-label="Site navigation"
+                  >
+                    <ul
+                      class="menu-drawer__menu has-submenu list-menu"
+                      role="list"
+                    >
                       <li>
-                        <a href="cart.html"
-                           class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
-                           data-loud="heavy"
-                           data-cart-open>
-                          Cart <span class="cart-count-bubble" data-cart-count></span>
+                        <a
+                          href="index.html"
+                          class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
+                        >
+                          Home
                         </a>
                       </li>
+
                       <li>
-                        <button id="search-open-mobile" type="button" class="menu-drawer__menu-item link link--text list-menu__item focus-inset">
+                        <a
+                          href="lookbook.html"
+                          class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
+                        >
+                          Lookbook
+                        </a>
+                      </li>
+
+                      <li class="menu-drawer__shop-group">
+                        <button
+                          id="shop-menu-toggle"
+                          class="menu-drawer__menu-item menu-drawer__shop-toggle list-menu__item link link--text focus-inset"
+                          type="button"
+                          aria-expanded="false"
+                          aria-controls="shop-menu-submenu"
+                          aria-current="page"
+                        >
+                          <span>Shop All</span>
+
+                          <span
+                            class="menu-drawer__shop-arrow"
+                            aria-hidden="true"
+                          ></span>
+                        </button>
+
+                        <ul
+                          id="shop-menu-submenu"
+                          class="menu-drawer__shop-submenu"
+                          role="list"
+                          aria-hidden="true"
+                        >
+                          <li>
+                            <a href="dhk-collection.html">
+                              DHK Collection
+                            </a>
+                          </li>
+
+                          <li>
+                            <a href="comic-collection.html">
+                              Comic Book Collection
+                            </a>
+                          </li>
+
+                          <li>
+                            <a href="blanks-collection.html">
+                              DHK Blanks
+                            </a>
+                          </li>
+
+                          <li>
+                            <a
+                              href="shop.html"
+                              aria-current="page"
+                            >
+                              View All
+                            </a>
+                          </li>
+                        </ul>
+                      </li>
+
+                      <li>
+                        <a
+                          href="g4llery.html"
+                          class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
+                        >
+                          G4LLERY
+                        </a>
+                      </li>
+
+                      <li>
+                        <a
+                          href="try-on.html"
+                          class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
+                        >
+                          TRY ON
+                        </a>
+                      </li>
+
+                      <li>
+                        <a
+                          href="collections.html"
+                          class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
+                        >
+                          Collections
+                        </a>
+                      </li>
+
+                      <li>
+                        <a
+                          href="4bout-us.html"
+                          class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
+                        >
+                          4bout us
+                        </a>
+                      </li>
+
+                      <li>
+                        <a
+                          href="contact.html"
+                          class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
+                        >
+                          Contact
+                        </a>
+                      </li>
+
+                      <li>
+                        <a
+                          href="cart.html"
+                          class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
+                          data-loud="heavy"
+                          data-cart-open
+                        >
+                          Cart
+
+                          <span
+                            class="cart-count-bubble"
+                            data-cart-count
+                          ></span>
+                        </a>
+                      </li>
+
+                      <li>
+                        <button
+                          id="search-open-mobile"
+                          type="button"
+                          class="menu-drawer__menu-item link link--text list-menu__item focus-inset"
+                        >
                           Search
                         </button>
                       </li>
@@ -306,10 +843,14 @@
           </details>
         </header-drawer>
 
-        <a class="header__logo" href="index.html" aria-label="DarkHarlemKnight">
+        <a
+          class="header__logo"
+          href="index.html"
+          aria-label="Dark Harlem Knight home"
+        >
           <img
             src="assets/img/DHK_transparent.gif"
-            alt="DarkHarlemKnight"
+            alt="Dark Harlem Knight"
             width="190"
             height="190"
             class="header__heading-logo"
@@ -317,112 +858,502 @@
           />
         </a>
 
-        <div></div>
+        <div class="header-cart">
+          <button
+            type="button"
+            class="header-cart__button"
+            aria-label="Open cart"
+            data-cart-open
+          >
+            <svg
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path
+                d="M7 7V6a5 5 0 0 1 10 0v1h3l-1.1 14H5.1L4 7h3Zm2 0h6V6a3 3 0 0 0-6 0v1Zm-2.85 2 .79 10h10.12l.79-10H6.15Z"
+                fill="currentColor"
+              />
+            </svg>
+
+            <span
+              class="cart-count-bubble"
+              data-cart-count
+            ></span>
+          </button>
+        </div>
       </div>
     </header>
   </div>
 
-  <main id="MainContent" class="section">
-    <div class="page-width">
+  <main
+    id="MainContent"
+    class="section"
+  >
+    <div class="page-width shop-page-wrap">
       <header class="fc__header">
-        <h1 class="fc__title h2">Shop All</h1>
+        <h1 class="fc__title h2">
+          Shop All
+        </h1>
       </header>
 
-      <div id="shop-grid" class="product-grid" aria-live="polite"></div>
+      <div
+        id="shop-grid"
+        class="product-grid"
+        aria-live="polite"
+      ></div>
     </div>
   </main>
 
-  <footer class="footer color-scheme-4 gradient section footer--static">
+  <footer
+    class="footer color-scheme-4 gradient section footer--static"
+  >
     <div class="footer__content-top page-width">
-      <div class="footer__blocks-wrapper grid grid--1-col grid--2-col grid--4-col-tablet">
-        <div class="footer-block footer-block--menu grid__item">
-          <h2 class="footer-block__heading inline-richtext">Shop</h2>
-          <ul class="footer-block__details-content list-unstyled">
-            <li><a class="link link--text list-menu__item list-menu__item--link" href="collections.html">Collections</a></li>
-            <li><a class="link link--text list-menu__item list-menu__item--link" href="shop.html">All Products</a></li>
-            <li><a class="link link--text list-menu__item list-menu__item--link" href="g4llery.html">G4LLERY</a></li>
-            <li><a class="link link--text list-menu__item list-menu__item--link" href="try-on.html">TRY ON</a></li>
-            <li><a class="link link--text list-menu__item list-menu__item--link" href="4bout-us.html">4bout us</a></li>
-            <li><a class="link link--text list-menu__item list-menu__item--link" href="contact.html">Contact</a></li>
+      <div
+        class="footer__blocks-wrapper grid grid--1-col grid--2-col grid--4-col-tablet"
+      >
+        <div
+          class="footer-block footer-block--menu grid__item"
+        >
+          <h2
+            class="footer-block__heading inline-richtext"
+          >
+            Shop
+          </h2>
+
+          <ul
+            class="footer-block__details-content list-unstyled"
+          >
+            <li>
+              <a
+                class="link link--text list-menu__item list-menu__item--link"
+                href="lookbook.html"
+              >
+                Lookbook
+              </a>
+            </li>
+
+            <li>
+              <a
+                class="link link--text list-menu__item list-menu__item--link"
+                href="collections.html"
+              >
+                Collections
+              </a>
+            </li>
+
+            <li>
+              <a
+                class="link link--text list-menu__item list-menu__item--link"
+                href="shop-categories.html"
+              >
+                Shop
+              </a>
+            </li>
+
+            <li>
+              <a
+                class="link link--text list-menu__item list-menu__item--link"
+                href="shop.html"
+              >
+                All Products
+              </a>
+            </li>
+
+            <li>
+              <a
+                class="link link--text list-menu__item list-menu__item--link"
+                href="g4llery.html"
+              >
+                G4LLERY
+              </a>
+            </li>
+
+            <li>
+              <a
+                class="link link--text list-menu__item list-menu__item--link"
+                href="try-on.html"
+              >
+                TRY ON
+              </a>
+            </li>
+
+            <li>
+              <a
+                class="link link--text list-menu__item list-menu__item--link"
+                href="4bout-us.html"
+              >
+                4bout us
+              </a>
+            </li>
+
+            <li>
+              <a
+                class="link link--text list-menu__item list-menu__item--link"
+                href="contact.html"
+              >
+                Contact
+              </a>
+            </li>
           </ul>
         </div>
 
         <div class="footer-block grid__item">
-          <h2 class="footer-block__heading inline-richtext">Dark Harlem Knight</h2>
-          <div class="footer-block__details-content rte">
-            <p>Forged in the storm. Streetwear with thunder in its veins.</p>
+          <h2
+            class="footer-block__heading inline-richtext"
+          >
+            Dark Harlem Knight
+          </h2>
+
+          <div
+            class="footer-block__details-content rte"
+          >
+            <p>
+              Forged in the storm. Streetwear with
+              thunder in its veins.
+            </p>
           </div>
+
           <ul class="footer__list-social">
-            <li><a aria-label="Instagram" class="social-link" href="https://www.instagram.com/darkharlemknight/" target="_blank" rel="noopener">Instagram</a></li>
-            <li><a aria-label="TikTok" class="social-link" href="https://www.tiktok.com/@darkharlemknight" target="_blank" rel="noopener">TikTok</a></li>
+            <li>
+              <a
+                aria-label="Instagram"
+                class="social-link"
+                href="https://www.instagram.com/darkharlemknight/"
+                target="_blank"
+                rel="noopener"
+              >
+                Instagram
+              </a>
+            </li>
+
+            <li>
+              <a
+                aria-label="TikTok"
+                class="social-link"
+                href="https://www.tiktok.com/@darkharlemknight"
+                target="_blank"
+                rel="noopener"
+              >
+                TikTok
+              </a>
+            </li>
           </ul>
         </div>
 
-        <div class="footer-block footer-block--newsletter grid__item">
-          <h2 class="footer-block__heading inline-richtext">Join the storm</h2>
-          <form class="footer__newsletter newsletter-form" action="#" method="post" onsubmit="return false;">
+        <div
+          class="footer-block footer-block--newsletter grid__item"
+        >
+          <h2
+            class="footer-block__heading inline-richtext"
+          >
+            Join the storm
+          </h2>
+
+          <form
+            class="footer__newsletter newsletter-form"
+            action="#"
+            method="post"
+            onsubmit="return false;"
+          >
             <div class="newsletter-form__field-wrapper">
               <div class="field">
-                <input class="field__input" type="email" placeholder="Email address" required>
-                <button class="newsletter-form__button field__button" type="submit" aria-label="Subscribe">→</button>
+                <input
+                  class="field__input"
+                  type="email"
+                  placeholder="Email address"
+                  autocomplete="email"
+                  required
+                />
+
+                <button
+                  class="newsletter-form__button field__button"
+                  type="submit"
+                  aria-label="Subscribe"
+                >
+                  →
+                </button>
               </div>
             </div>
           </form>
         </div>
 
-        <div class="footer-block footer-block-image grid__item center">
-          <img src="assets/img/DHK_transparent.gif" alt="DarkHarlemKnight" width="120" height="120" loading="lazy">
+        <div
+          class="footer-block footer-block-image grid__item center"
+        >
+          <img
+            src="assets/img/DHK_transparent.gif"
+            alt="Dark Harlem Knight"
+            width="120"
+            height="120"
+            loading="lazy"
+          />
         </div>
       </div>
     </div>
 
     <div class="footer__content-bottom">
-      <div class="footer__content-bottom-wrapper page-width">
-        <div class="footer__column footer__column--info">
+      <div
+        class="footer__content-bottom-wrapper page-width"
+      >
+        <div
+          class="footer__column footer__column--info"
+        >
           <div class="footer__payment">
-            <ul class="list list-payment" role="list">
-              <li class="list-payment__item">Visa</li>
-              <li class="list-payment__item">Mastercard</li>
-              <li class="list-payment__item">Amex</li>
-              <li class="list-payment__item">PayPal</li>
+            <ul
+              class="list list-payment"
+              role="list"
+            >
+              <li class="list-payment__item">
+                Visa
+              </li>
+
+              <li class="list-payment__item">
+                Mastercard
+              </li>
+
+              <li class="list-payment__item">
+                Amex
+              </li>
+
+              <li class="list-payment__item">
+                PayPal
+              </li>
             </ul>
           </div>
         </div>
       </div>
 
-      <div class="footer__content-bottom-wrapper page-width footer__content-bottom-wrapper--center">
+      <div
+        class="footer__content-bottom-wrapper page-width footer__content-bottom-wrapper--center"
+      >
         <div class="footer__copyright caption">
-          <small class="copyright__content">© <span id="year"></span>, Dark Harlem Knight</small>
-          <small class="copyright__content">Powered by the Storm</small>
+          <small class="copyright__content">
+            © <span id="year"></span>,
+            Dark Harlem Knight
+          </small>
+
+          <small class="copyright__content">
+            Powered by the Storm
+          </small>
+
           <ul class="policies list-unstyled">
-            <li><small class="copyright__content"><a href="#">Privacy Policy</a></small></li>
-            <li><small class="copyright__content"><a href="#">Terms of Service</a></small></li>
+            <li>
+              <small class="copyright__content">
+                <a href="#">
+                  Privacy Policy
+                </a>
+              </small>
+            </li>
+
+            <li>
+              <small class="copyright__content">
+                <a href="#">
+                  Terms of Service
+                </a>
+              </small>
+            </li>
           </ul>
         </div>
       </div>
     </div>
   </footer>
 
-  <div id="search-modal" class="search-modal" aria-hidden="true">
-    <div class="search-modal__overlay" data-close-search></div>
-    <div class="search-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="search-title">
+  <div
+    id="search-modal"
+    class="search-modal"
+    aria-hidden="true"
+  >
+    <div
+      class="search-modal__overlay"
+      data-close-search
+    ></div>
+
+    <div
+      class="search-modal__dialog"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="search-title"
+    >
       <header class="search-modal__header">
-        <h2 id="search-title">Search</h2>
-        <button id="search-close" class="search-modal__close" aria-label="Close search">×</button>
+        <h2 id="search-title">
+          Search
+        </h2>
+
+        <button
+          id="search-close"
+          class="search-modal__close"
+          type="button"
+          aria-label="Close search"
+        >
+          ×
+        </button>
       </header>
+
       <div class="search-modal__field">
-        <input id="search-input" type="search" placeholder="Search products…  ( /  or  ⌘/Ctrl+K )" autocomplete="off" />
+        <input
+          id="search-input"
+          type="search"
+          placeholder="Search products…  ( /  or  ⌘/Ctrl+K )"
+          autocomplete="off"
+        />
       </div>
-      <div id="search-results" class="search-modal__results" aria-live="polite"></div>
+
+      <div
+        id="search-results"
+        class="search-modal__results"
+        aria-live="polite"
+      ></div>
     </div>
   </div>
 
-  <audio id="rain-light" src="assets/audio/light-rain.mp3" loop preload="auto" hidden></audio>
-  <audio id="rain-med" src="assets/audio/med-rain.mp3" loop preload="auto" hidden></audio>
-  <audio id="rain-heavy" src="assets/audio/heavy-rain.mp3" loop preload="auto" hidden></audio>
-  <audio id="thunder-light" src="assets/audio/light-thunder.mp3" loop preload="auto" hidden></audio>
-  <audio id="thunder-med" src="assets/audio/med-thunder.mp3" loop preload="auto" hidden></audio>
-  <audio id="thunder-heavy" src="assets/audio/heavy-thunder.mp3" loop preload="auto" hidden></audio>
+  <audio
+    id="rain-light"
+    src="assets/audio/light-rain.mp3"
+    loop
+    preload="auto"
+    hidden
+  ></audio>
+
+  <audio
+    id="rain-med"
+    src="assets/audio/med-rain.mp3"
+    loop
+    preload="auto"
+    hidden
+  ></audio>
+
+  <audio
+    id="rain-heavy"
+    src="assets/audio/heavy-rain.mp3"
+    loop
+    preload="auto"
+    hidden
+  ></audio>
+
+  <audio
+    id="thunder-light"
+    src="assets/audio/light-thunder.mp3"
+    loop
+    preload="auto"
+    hidden
+  ></audio>
+
+  <audio
+    id="thunder-med"
+    src="assets/audio/med-thunder.mp3"
+    loop
+    preload="auto"
+    hidden
+  ></audio>
+
+  <audio
+    id="thunder-heavy"
+    src="assets/audio/heavy-thunder.mp3"
+    loop
+    preload="auto"
+    hidden
+  ></audio>
+
+  <div
+    id="cart-drawer"
+    class="cart-drawer"
+    aria-hidden="true"
+  >
+    <div
+      class="cart-drawer__overlay"
+      data-cart-close
+    ></div>
+
+    <aside
+      class="cart-drawer__panel"
+      tabindex="-1"
+    >
+      <div class="cart-header">
+        <h2>Your Cart</h2>
+
+        <button
+          type="button"
+          title="Close"
+          aria-label="Close cart"
+          data-cart-close
+        >
+          ✕
+        </button>
+      </div>
+
+      <div
+        class="cart-list"
+        id="cart-items"
+      ></div>
+
+      <div
+        id="cart-empty"
+        class="cart-empty"
+        hidden
+        style="padding: 16px; color: #9a9a9a"
+      >
+        Your cart is empty.
+      </div>
+
+      <div class="cart-footer">
+        <div
+          class="cart-discount cart-discount--drawer"
+        >
+          <label
+            for="discount-code-drawer"
+            class="cart-discount__label"
+          >
+            ADD DISCOUNT
+          </label>
+
+          <div class="cart-discount__row">
+            <input
+              id="discount-code-drawer"
+              class="cart-discount__input"
+              type="text"
+              placeholder="Enter code"
+              autocomplete="off"
+            />
+
+            <button
+              id="discount-apply-drawer"
+              class="cart-discount__button"
+              type="button"
+            >
+              APPLY
+            </button>
+          </div>
+
+          <p
+            id="discount-message-drawer"
+            class="cart-discount__message"
+            aria-live="polite"
+          ></p>
+        </div>
+
+        <div class="cart-row">
+          <div class="label">
+            Subtotal
+          </div>
+
+          <div
+            class="value"
+            id="cart-subtotal"
+          >
+            $0.00
+          </div>
+        </div>
+
+        <button
+          id="cart-checkout"
+          type="button"
+          disabled
+        >
+          Checkout
+        </button>
+      </div>
+    </aside>
+  </div>
 
   <script src="js/nav.js"></script>
   <script src="js/announce.js"></script>
@@ -431,40 +1362,177 @@
   <script src="js/shop.js"></script>
   <script src="js/newsletter.js"></script>
   <script src="js/storm_shopify_style.js"></script>
+
   <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
+    document.addEventListener(
+      "DOMContentLoaded",
+      () => {
+        const yearElement =
+          document.getElementById("year");
+
+        if (yearElement) {
+          yearElement.textContent =
+            new Date().getFullYear();
+        }
+
+        const mainDrawerDetails =
+          document.getElementById(
+            "Details-menu-drawer-container"
+          );
+
+        const mainMenuSummary =
+          mainDrawerDetails?.querySelector(
+            ":scope > summary"
+          );
+
+        const shopToggle =
+          document.getElementById(
+            "shop-menu-toggle"
+          );
+
+        const shopSubmenu =
+          document.getElementById(
+            "shop-menu-submenu"
+          );
+
+        const setShopMenuState = (
+          isOpen
+        ) => {
+          if (
+            !shopToggle ||
+            !shopSubmenu
+          ) {
+            return;
+          }
+
+          shopToggle.setAttribute(
+            "aria-expanded",
+            String(isOpen)
+          );
+
+          shopSubmenu.setAttribute(
+            "aria-hidden",
+            String(!isOpen)
+          );
+
+          shopSubmenu.classList.toggle(
+            "is-open",
+            isOpen
+          );
+        };
+
+        const syncMainDrawerState = () => {
+          const isOpen =
+            Boolean(
+              mainDrawerDetails?.open
+            );
+
+          document.documentElement.classList.toggle(
+            "no-scroll",
+            isOpen
+          );
+
+          document.body.classList.toggle(
+            "no-scroll",
+            isOpen
+          );
+
+          if (mainMenuSummary) {
+            mainMenuSummary.setAttribute(
+              "aria-label",
+              isOpen
+                ? "Close menu"
+                : "Open menu"
+            );
+          }
+
+          if (!isOpen) {
+            setShopMenuState(false);
+          }
+        };
+
+        shopToggle?.addEventListener(
+          "click",
+          (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+
+            const isCurrentlyOpen =
+              shopToggle.getAttribute(
+                "aria-expanded"
+              ) === "true";
+
+            setShopMenuState(
+              !isCurrentlyOpen
+            );
+          }
+        );
+
+        shopToggle?.addEventListener(
+          "keydown",
+          (event) => {
+            if (
+              event.key === "ArrowDown" &&
+              shopToggle.getAttribute(
+                "aria-expanded"
+              ) !== "true"
+            ) {
+              event.preventDefault();
+
+              setShopMenuState(true);
+
+              shopSubmenu
+                ?.querySelector("a")
+                ?.focus();
+            }
+          }
+        );
+
+        mainDrawerDetails?.addEventListener(
+          "toggle",
+          syncMainDrawerState
+        );
+
+        document.addEventListener(
+          "keydown",
+          (event) => {
+            if (
+              event.key !== "Escape"
+            ) {
+              return;
+            }
+
+            if (
+              shopToggle?.getAttribute(
+                "aria-expanded"
+              ) === "true"
+            ) {
+              event.preventDefault();
+
+              setShopMenuState(false);
+              shopToggle.focus();
+
+              return;
+            }
+
+            if (
+              mainDrawerDetails?.open
+            ) {
+              event.preventDefault();
+
+              mainDrawerDetails.open =
+                false;
+
+              syncMainDrawerState();
+
+              mainMenuSummary?.focus();
+            }
+          }
+        );
+
+        syncMainDrawerState();
+      }
+    );
   </script>
-
-  <div id="cart-drawer" class="cart-drawer" aria-hidden="true">
-    <div class="cart-drawer__overlay" data-cart-close></div>
-    <aside class="cart-drawer__panel" tabindex="-1">
-      <div class="cart-header">
-        <h2>Your Cart</h2>
-        <button type="button" title="Close" data-cart-close>✕</button>
-      </div>
-
-      <div class="cart-list" id="cart-items"></div>
-      <div id="cart-empty" class="cart-empty" hidden style="padding:16px;color:#9a9a9a">
-        Your cart is empty.
-      </div>
-
-      <div class="cart-footer">
-        <div class="cart-discount cart-discount--drawer">
-          <label for="discount-code-drawer" class="cart-discount__label">ADD DISCOUNT</label>
-          <div class="cart-discount__row">
-            <input id="discount-code-drawer" class="cart-discount__input" type="text" placeholder="Enter code" autocomplete="off" />
-            <button id="discount-apply-drawer" class="cart-discount__button" type="button">APPLY</button>
-          </div>
-          <p id="discount-message-drawer" class="cart-discount__message" aria-live="polite"></p>
-        </div>
-
-        <div class="cart-row">
-          <div class="label">Subtotal</div>
-          <div class="value" id="cart-subtotal">$0.00</div>
-        </div>
-        <button id="cart-checkout" type="button" disabled>Checkout</button>
-      </div>
-    </aside>
-  </div>
 </body>
 </html>
