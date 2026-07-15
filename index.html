@@ -306,8 +306,25 @@
       =========================== */
 
       .header__icon--menu {
-        z-index: 2147483647;
-      }
+  position: relative;
+  z-index: 2147483647;
+}
+
+.menu-drawer-container[open] > .header__icon--menu {
+  position: fixed;
+  top: 50px;
+  left: max(
+    20px,
+    calc((100vw - var(--page-width, 1600px)) / 2 + 20px)
+  );
+  width: 42px;
+  height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  z-index: 2147483647;
+}
 
       .header__icon--menu svg {
         filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.28));
@@ -443,7 +460,64 @@
         grid-column: 1;
         justify-self: start;
       }
+.header-cart {
+  grid-column: 3;
+  justify-self: end;
+  position: relative;
+  z-index: 30;
+}
 
+.header-cart__button {
+  position: relative;
+  width: 42px;
+  height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #f4f4f4;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.header-cart__button svg {
+  display: block;
+  width: 22px;
+  height: 22px;
+  filter: drop-shadow(
+    0 0 6px rgba(255, 255, 255, 0.24)
+  );
+}
+
+.header-cart__button:hover,
+.header-cart__button:focus-visible {
+  color: #fff;
+}
+
+.header-cart__button .cart-count-bubble {
+  position: absolute;
+  top: 1px;
+  right: 0;
+  min-width: 17px;
+  height: 17px;
+  padding: 0 4px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  color: #000;
+  font-family: "Roboto", sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.header-cart__button .cart-count-bubble:empty {
+  display: none;
+}
       /* ===========================
          HERO CTA STACK
       =========================== */
@@ -574,7 +648,10 @@
         .header__heading-logo {
           height: 30px !important;
         }
-
+.menu-drawer-container[open] > .header__icon--menu {
+  top: 48px;
+  left: 16px;
+}
         #hero-dhk .banner__buttons.hero-cta-stack {
           gap: 12px;
           margin: 0 0 10vh;
@@ -915,7 +992,31 @@
             />
           </a>
 
-          <div aria-hidden="true"></div>
+          <div class="header-cart">
+  <a
+    href="cart.html"
+    class="header-cart__button"
+    aria-label="Open cart"
+    data-cart-open
+  >
+    <svg
+      width="22"
+      height="22"
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+    >
+      <path
+        d="M7 8V6a5 5 0 0 1 10 0v2h2.2l.8 13H4L4.8 8H7Zm2 0h6V6a3 3 0 0 0-6 0v2Zm-2.3 2-.55 9h11.7l-.55-9H6.7Z"
+        fill="currentColor"
+      />
+    </svg>
+
+    <span
+      class="cart-count-bubble"
+      data-cart-count
+    ></span>
+  </a>
+</div>
         </div>
       </header>
     </div>
@@ -1335,7 +1436,40 @@
         if (yearElement) {
           yearElement.textContent = new Date().getFullYear();
         }
+const mainDrawerDetails = document.getElementById(
+  "Details-menu-drawer-container"
+);
 
+const syncMainDrawerState = () => {
+  const isOpen = Boolean(mainDrawerDetails?.open);
+
+  document.documentElement.classList.toggle(
+    "no-scroll",
+    isOpen
+  );
+
+  document.body.classList.toggle(
+    "no-scroll",
+    isOpen
+  );
+};
+
+if (mainDrawerDetails) {
+  mainDrawerDetails.addEventListener(
+    "toggle",
+    syncMainDrawerState
+  );
+
+  document.addEventListener("keydown", (event) => {
+    if (
+      event.key === "Escape" &&
+      mainDrawerDetails.open
+    ) {
+      mainDrawerDetails.open = false;
+      syncMainDrawerState();
+    }
+  });
+}
         const shopMenuToggle =
           document.getElementById("shop-menu-toggle");
 
@@ -1408,9 +1542,16 @@
             }
           );
 
-          const mainDrawerDetails = document.getElementById(
-            "Details-menu-drawer-container"
-          );
+          if (mainDrawerDetails) {
+  mainDrawerDetails.addEventListener(
+    "toggle",
+    () => {
+      if (!mainDrawerDetails.open) {
+        setShopMenuState(false);
+      }
+    }
+  );
+}
 
           if (mainDrawerDetails) {
             mainDrawerDetails.addEventListener(
