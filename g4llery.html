@@ -5,38 +5,87 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>DHK — G4LLERY</title>
 
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link
+    rel="icon"
+    href="assets/img/DHK_transparent.gif"
+    type="image/gif"
+    sizes="any"
+  />
 
-  <!-- Global styles -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Roboto:wght@300;400;500;700&display=swap"
+    rel="stylesheet"
+  />
+
   <link rel="stylesheet" href="css/styles.css"/>
 
   <style>
-    .utility-bar .page-width { max-width: none; padding: 0; }
+    /* =========================================
+       GENERAL
+    ========================================= */
+
+    .utility-bar .page-width {
+      max-width: none;
+      padding: 0;
+    }
+
     .utility-bar .utility-bar__grid {
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 0;
     }
+
     .utility-bar .list-social,
-    .utility-bar .localization-wrapper { display: none !important; }
-    .announcement-bar { width: 100%; display: flex; justify-content: center; }
-    .announcement-track { display: flex; align-items: center; justify-content: center; gap: 24px; }
-    .announcement-bar__message { margin: 0; padding: 10px 0; }
-    .announcement-bar__message span {
-      font-family: 'Cinzel', serif;
-      font-weight: 700;
-      font-size: 13px;
-      letter-spacing: .18em;
-      text-transform: uppercase;
-      color: #e5e5e5;
-      text-shadow: 0 0 6px rgba(255,255,255,.12);
+    .utility-bar .localization-wrapper {
+      display: none !important;
     }
 
-    /* Universal full-screen menu for mobile + desktop */
+    .announcement-bar {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+
+    .announcement-track {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+    }
+
+    .announcement-bar__message {
+      margin: 0;
+      padding: 10px 0;
+    }
+
+    .announcement-bar__message span {
+      font-family: "Cinzel", serif;
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #e5e5e5;
+      text-shadow: 0 0 6px rgba(255, 255, 255, 0.12);
+    }
+
+    html,
+    body {
+      overflow-x: hidden;
+    }
+
+    html.no-scroll,
+    body.no-scroll {
+      overflow: hidden !important;
+    }
+
+    /* =========================================
+       FULL-SCREEN MENU
+    ========================================= */
+
     #menu-drawer {
       position: fixed;
       inset: 0;
@@ -50,34 +99,40 @@
       z-index: 2147483646;
       padding: 34px 28px 40px;
       overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
     }
 
     .menu-drawer__inner-container,
     .menu-drawer__navigation-container,
     .menu-drawer__navigation {
-      height: 100%;
+      min-height: 100%;
     }
 
     .menu-drawer__menu {
       list-style: none;
-      padding: 72px 0 0;
+      padding: 72px 0 40px;
       margin: 0;
       display: flex;
       flex-direction: column;
       gap: 24px;
     }
 
+    .menu-drawer__menu > li {
+      margin: 0;
+      padding: 0;
+    }
+
     .menu-drawer__menu-item,
     .menu-drawer__menu .list-menu__item.link,
     .menu-drawer__menu button {
-      font-family: 'Cinzel', serif;
+      font-family: "Cinzel", serif;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: .16em;
+      letter-spacing: 0.16em;
       font-size: clamp(24px, 2.2vw, 34px);
       color: #f1f1f1;
       text-decoration: none;
-      text-shadow: 0 0 10px rgba(255,255,255,.08);
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.08);
       background: transparent;
       border: 0;
       padding: 0;
@@ -88,21 +143,34 @@
     .menu-drawer__menu-item:hover,
     .menu-drawer__menu .list-menu__item.link:hover,
     .menu-drawer__menu-item:focus-visible,
-    .menu-drawer__menu button:hover {
+    .menu-drawer__menu button:hover,
+    .menu-drawer__menu button:focus-visible {
       color: #fff;
-      text-shadow: 0 0 14px rgba(255,255,255,.18);
+      text-shadow: 0 0 14px rgba(255, 255, 255, 0.18);
     }
 
     .menu-drawer__menu .list-menu__item + .list-menu__item {
       border-top: 0;
     }
 
+    .menu-drawer__menu-item[aria-current="page"] {
+      color: #fff;
+      text-shadow:
+        0 0 8px rgba(255, 255, 255, 0.22),
+        0 0 18px rgba(255, 255, 255, 0.1);
+    }
+
+    /* =========================================
+       HAMBURGER / X
+    ========================================= */
+
     .header__icon--menu {
+      position: relative;
       z-index: 2147483647;
     }
 
     .header__icon--menu svg {
-      filter: drop-shadow(0 0 6px rgba(255,255,255,.28));
+      filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.28));
     }
 
     .header__icon--summary {
@@ -130,32 +198,140 @@
       display: none;
     }
 
-    details[open] .header__icon--summary svg:first-child {
+    .menu-drawer-container[open]
+      > .header__icon--summary
+      svg:first-child {
       display: none;
     }
 
-    details[open] .header__icon--summary svg:last-child {
+    .menu-drawer-container[open]
+      > .header__icon--summary
+      svg:last-child {
       display: block;
     }
 
-    details[open] ~ .menu-drawer,
-    details[open] #menu-drawer { z-index: 2147483646; }
-
-    details[open] ~ #storm-overlay,
-    details[open] #storm-overlay {
-      opacity: 0 !important;
-      pointer-events: none !important;
-      transition: opacity .15s ease;
+    .menu-drawer-container[open] > .header__icon--menu {
+      position: fixed;
+      top: 48px;
+      left: 16px;
+      z-index: 2147483647;
     }
 
-    #search-modal { z-index: 2147483647; }
-    body.search-open #storm-overlay {
-      opacity: 0 !important;
-      pointer-events: none !important;
-      transition: opacity .15s ease;
+    /* =========================================
+       SHOP ALL SUBMENU
+    ========================================= */
+
+    .menu-drawer__shop-group {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
     }
 
-    /* Same centered header layout for both mobile + desktop */
+    .menu-drawer__shop-toggle {
+      width: auto;
+      display: inline-flex !important;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 14px;
+    }
+
+    .menu-drawer__shop-arrow {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      font-family: "Roboto", Arial, sans-serif;
+      font-size: 22px;
+      font-weight: 300;
+      line-height: 1;
+      transition: transform 0.25s ease;
+    }
+
+    .menu-drawer__shop-toggle[aria-expanded="true"]
+      .menu-drawer__shop-arrow {
+      transform: rotate(180deg);
+    }
+
+    .menu-drawer__shop-submenu {
+      list-style: none;
+      width: 100%;
+      max-height: 0;
+      overflow: hidden;
+      visibility: hidden;
+      opacity: 0;
+      margin: 0;
+      padding: 0 0 0 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      transition:
+        max-height 0.35s ease,
+        opacity 0.25s ease,
+        visibility 0.25s ease,
+        padding-top 0.35s ease;
+    }
+
+    .menu-drawer__shop-submenu.is-open {
+      max-height: 420px;
+      visibility: visible;
+      opacity: 1;
+      padding-top: 18px;
+    }
+
+    .menu-drawer__shop-submenu li {
+      margin: 0;
+      padding: 0;
+    }
+
+    .menu-drawer__shop-submenu a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 38px;
+      padding: 6px 0;
+      color: rgba(241, 241, 241, 0.72);
+      font-family: "Roboto", Arial, sans-serif;
+      font-size: clamp(14px, 1.2vw, 18px);
+      font-weight: 400;
+      letter-spacing: 0.14em;
+      line-height: 1.35;
+      text-decoration: none;
+      text-transform: uppercase;
+      transition:
+        color 0.2s ease,
+        transform 0.2s ease,
+        text-shadow 0.2s ease;
+    }
+
+    .menu-drawer__shop-submenu a::before {
+      content: "";
+      display: inline-block;
+      width: 16px;
+      height: 1px;
+      margin-right: 12px;
+      background: rgba(255, 255, 255, 0.38);
+      transition:
+        width 0.2s ease,
+        background 0.2s ease;
+    }
+
+    .menu-drawer__shop-submenu a:hover,
+    .menu-drawer__shop-submenu a:focus-visible {
+      color: #fff;
+      transform: translateX(5px);
+      text-shadow: 0 0 12px rgba(255, 255, 255, 0.16);
+    }
+
+    .menu-drawer__shop-submenu a:hover::before,
+    .menu-drawer__shop-submenu a:focus-visible::before {
+      width: 24px;
+      background: rgba(255, 255, 255, 0.85);
+    }
+
+    /* =========================================
+       HEADER
+    ========================================= */
+
     .header-grid {
       display: grid !important;
       grid-template-columns: 48px 1fr 48px !important;
@@ -167,6 +343,11 @@
     .nav-left,
     .nav-right {
       display: none !important;
+    }
+
+    header-drawer {
+      grid-column: 1;
+      justify-self: start;
     }
 
     .header__logo {
@@ -188,58 +369,141 @@
       margin: 0 auto !important;
     }
 
-    header-drawer {
-      grid-column: 1;
-      justify-self: start;
+    /* =========================================
+       UPPER-RIGHT CART
+    ========================================= */
+
+    .header-cart {
+      grid-column: 3;
+      justify-self: end;
+      position: relative;
+      z-index: 30;
     }
 
-    @media (max-width: 900px) {
-      .menu-drawer__menu {
-        padding-top: 56px;
-        gap: 20px;
-      }
-
-      .menu-drawer__menu-item,
-      .menu-drawer__menu .list-menu__item.link,
-      .menu-drawer__menu button {
-        font-size: 26px;
-      }
-
-      .header__heading-logo {
-        height: 30px !important;
-      }
+    .header-cart__button {
+      position: relative;
+      width: 42px;
+      height: 42px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: #f4f4f4;
+      text-decoration: none;
+      cursor: pointer;
     }
 
-    /* Page-scoped gallery styles */
+    .header-cart__button svg {
+      display: block;
+      width: 22px;
+      height: 22px;
+      filter: drop-shadow(
+        0 0 6px rgba(255, 255, 255, 0.24)
+      );
+    }
+
+    .header-cart__button:hover,
+    .header-cart__button:focus-visible {
+      color: #fff;
+    }
+
+    .header-cart__button .cart-count-bubble {
+      position: absolute;
+      top: 1px;
+      right: 0;
+      min-width: 17px;
+      height: 17px;
+      padding: 0 4px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #fff;
+      color: #000;
+      font-family: "Roboto", sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .header-cart__button .cart-count-bubble:empty {
+      display: none;
+    }
+
+    /* =========================================
+       LAYERS
+    ========================================= */
+
+    #storm-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .section-header {
+      position: relative;
+      z-index: 20;
+    }
+
+    .menu-drawer-container[open] #menu-drawer {
+      z-index: 2147483646;
+    }
+
+    #search-modal {
+      z-index: 2147483647;
+    }
+
+    body.search-open #storm-overlay,
+    body.menu-open #storm-overlay {
+      opacity: 0 !important;
+      pointer-events: none !important;
+      transition: opacity 0.15s ease;
+    }
+
+    /* =========================================
+       GALLERY
+    ========================================= */
+
     .g4llery-page #MainContent.section,
-    .g4llery-page .section.g4llery-full { padding: 0 !important; }
-    .g4llery-page .header-wrapper + .section { margin-top: 0 !important; }
-    html, body { overflow-x: hidden; }
+    .g4llery-page .section.g4llery-full {
+      padding: 0 !important;
+    }
+
+    .g4llery-page .header-wrapper + .section {
+      margin-top: 0 !important;
+    }
 
     .g4llery-bleed {
-      position: relative; left: 50%; right: 50%;
-      margin-left: -50vw; margin-right: -50vw;
-      width: 100vw; background: #000;
+      position: relative;
+      left: 50%;
+      right: 50%;
+      margin-left: -50vw;
+      margin-right: -50vw;
+      width: 100vw;
+      background: #000;
     }
 
-    .lxp-slideshow{
+    .lxp-slideshow {
       position: relative;
       width: 100%;
       height: 78vh;
       min-height: 520px;
       overflow: hidden;
-      background:#000;
+      background: #000;
     }
 
-    .lxp-slides{
-      display:flex;
-      width:100%;
-      height:100%;
-      transition: transform .45s ease;
+    .lxp-slides {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.45s ease;
       will-change: transform;
     }
 
-    .lxp-slide{
+    .lxp-slide {
       min-width: 100%;
       height: 100%;
       position: relative;
@@ -251,341 +515,443 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      object-position: center center;
+      object-position: center;
       transform-origin: center;
-      animation: g4-zoom-out var(--g4-zoom-dur, 14s)
-                 cubic-bezier(.2,.8,.2,1)
-                 infinite alternate;
+      animation:
+        g4-zoom-out
+        var(--g4-zoom-dur, 14s)
+        cubic-bezier(0.2, 0.8, 0.2, 1)
+        infinite alternate;
     }
 
     @keyframes g4-zoom-out {
-      from { transform: scale(var(--g4-zoom-start, 1.07)); }
-      to   { transform: scale(var(--g4-zoom-end, 1.00)); }
-    }
-
-    @media (min-width: 980px){
-      .lxp-slideshow{
-        height: calc(100vh - 230px);
-        min-height: 640px;
+      from {
+        transform: scale(
+          var(--g4-zoom-start, 1.07)
+        );
       }
 
-      .lxp-slide img{
-        object-fit: contain;
-        object-position: center center;
-        background: #000;
-        animation: g4-zoom-out var(--g4-zoom-dur, 16s)
-                   cubic-bezier(.2,.8,.2,1)
-                   infinite alternate;
+      to {
+        transform: scale(
+          var(--g4-zoom-end, 1)
+        );
       }
     }
 
-    @media (prefers-reduced-motion: reduce){
-      .lxp-slide img{ animation: none !important; transform: none !important; }
-      .lxp-slides{ transition: none !important; }
-    }
-
-    .lxp-nav{
-      position:absolute;
-      inset:0;
-      display:grid;
-      grid-template-columns:1fr auto 1fr;
-      align-items:center;
-      pointer-events:none;
+    .lxp-nav {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      pointer-events: none;
       z-index: 3;
     }
-    .lxp-btn{
-      pointer-events:all;
-      border:0;
-      cursor:pointer;
-      background:rgba(0,0,0,.45);
-      color:#fff;
-      font-size:2rem;
-      line-height:1;
-      padding:.45rem .8rem;
-      transition:background .2s ease;
-      border-radius:8px;
-    }
-    .lxp-btn:hover{ background:rgba(0,0,0,.75); }
-    #lxpPrev{ justify-self:start; margin-left:.5rem; }
-    #lxpNext{ justify-self:end; margin-right:.5rem; }
 
-    .lxp-visual{
-      position:absolute;
-      left:50%;
-      bottom:12px;
-      transform:translateX(-50%);
-      padding:4px 8px;
-      background:rgba(0,0,0,.45);
-      color:#fff;
-      border-radius:12px;
-      font:600 12px/1.2 Roboto, system-ui, -apple-system, Arial, sans-serif;
-      letter-spacing:.04em;
+    .lxp-btn {
+      pointer-events: all;
+      border: 0;
+      cursor: pointer;
+      background: rgba(0, 0, 0, 0.45);
+      color: #fff;
+      font-size: 2rem;
+      line-height: 1;
+      padding: 0.45rem 0.8rem;
+      transition: background 0.2s ease;
+      border-radius: 8px;
+    }
+
+    .lxp-btn:hover,
+    .lxp-btn:focus-visible {
+      background: rgba(0, 0, 0, 0.75);
+    }
+
+    #lxpPrev {
+      justify-self: start;
+      margin-left: 0.5rem;
+    }
+
+    #lxpNext {
+      justify-self: end;
+      margin-right: 0.5rem;
+    }
+
+    .lxp-visual {
+      position: absolute;
+      left: 50%;
+      bottom: 12px;
+      transform: translateX(-50%);
+      padding: 4px 8px;
+      background: rgba(0, 0, 0, 0.45);
+      color: #fff;
+      border-radius: 12px;
+      font:
+        600 12px/1.2
+        "Roboto",
+        system-ui,
+        -apple-system,
+        Arial,
+        sans-serif;
+      letter-spacing: 0.04em;
       z-index: 3;
     }
 
     .img-err {
-      position:absolute;
-      left:12px;
-      top:12px;
-      z-index:4;
-      padding:6px 10px;
-      border-radius:10px;
-      background:rgba(0,0,0,.55);
-      color:#fff;
-      font:600 12px/1.2 Roboto, system-ui, -apple-system, Arial, sans-serif;
-      display:none;
+      position: absolute;
+      left: 12px;
+      top: 12px;
+      z-index: 4;
+      padding: 6px 10px;
+      border-radius: 10px;
+      background: rgba(0, 0, 0, 0.55);
+      color: #fff;
+      font:
+        600 12px/1.2
+        "Roboto",
+        system-ui,
+        -apple-system,
+        Arial,
+        sans-serif;
+      display: none;
     }
+
+    @media (min-width: 980px) {
+      .lxp-slideshow {
+        height: calc(100vh - 230px);
+        min-height: 640px;
+      }
+
+      .lxp-slide img {
+        object-fit: contain;
+        object-position: center;
+        background: #000;
+        animation:
+          g4-zoom-out
+          var(--g4-zoom-dur, 16s)
+          cubic-bezier(0.2, 0.8, 0.2, 1)
+          infinite alternate;
+      }
+    }
+
     /* =========================================
-   SHOP ALL EXPANDABLE MENU
-========================================= */
+       MOBILE
+    ========================================= */
 
-.menu-drawer__shop-group {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
+    @media (max-width: 900px) {
+      #menu-drawer {
+        padding: 28px 20px 40px;
+      }
 
-.menu-drawer__shop-toggle {
-  width: 100%;
-  display: flex !important;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 14px;
-}
+      .menu-drawer-container[open] > .header__icon--menu {
+        top: 44px;
+        left: 12px;
+      }
 
-.menu-drawer__shop-arrow {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-family: "Roboto", Arial, sans-serif;
-  font-size: 22px;
-  font-weight: 300;
-  line-height: 1;
-  transition: transform 0.25s ease;
-}
+      .menu-drawer__menu {
+        padding-top: 56px;
+        gap: 20px;
+      }
 
-.menu-drawer__shop-toggle[aria-expanded="true"]
-  .menu-drawer__shop-arrow {
-  transform: rotate(180deg);
-}
+      .menu-drawer__menu-item,
+      .menu-drawer__menu .list-menu__item.link,
+      .menu-drawer__menu button {
+        font-size: 26px;
+      }
 
-.menu-drawer__shop-submenu {
-  display: none;
-  list-style: none;
-  margin: 18px 0 0;
-  padding: 0 0 0 24px;
-  flex-direction: column;
-  gap: 14px;
-}
+      .menu-drawer__shop-submenu {
+        padding-left: 18px;
+      }
 
-.menu-drawer__shop-submenu.is-open {
-  display: flex;
-}
+      .menu-drawer__shop-submenu.is-open {
+        padding-top: 14px;
+      }
 
-.menu-drawer__shop-submenu a {
-  display: inline-block;
-  color: rgba(241, 241, 241, 0.72);
-  font-family: "Roboto", Arial, sans-serif;
-  font-size: clamp(14px, 1.2vw, 18px);
-  font-weight: 400;
-  letter-spacing: 0.14em;
-  line-height: 1.35;
-  text-decoration: none;
-  text-transform: uppercase;
-  transition:
-    color 0.2s ease,
-    transform 0.2s ease,
-    text-shadow 0.2s ease;
-}
+      .menu-drawer__shop-submenu a {
+        min-height: 34px;
+        padding: 5px 0;
+        font-size: 13px;
+        letter-spacing: 0.12em;
+      }
 
-.menu-drawer__shop-submenu a:hover,
-.menu-drawer__shop-submenu a:focus-visible {
-  color: #ffffff;
-  transform: translateX(5px);
-  text-shadow: 0 0 12px rgba(255, 255, 255, 0.16);
-}
+      .menu-drawer__shop-submenu a::before {
+        width: 12px;
+        margin-right: 10px;
+      }
 
-.menu-drawer__menu-item[aria-current="page"] {
-  color: #ffffff;
-  text-shadow:
-    0 0 8px rgba(255, 255, 255, 0.22),
-    0 0 18px rgba(255, 255, 255, 0.1);
-}
+      .header__heading-logo {
+        height: 30px !important;
+      }
 
-@media (max-width: 900px) {
-  .menu-drawer__shop-submenu {
-    padding-left: 18px;
-    margin-top: 14px;
-    gap: 12px;
-  }
+      .header-cart__button {
+        width: 40px;
+        height: 40px;
+      }
 
-  .menu-drawer__shop-submenu a {
-    font-size: 14px;
-  }
-}
+      .header-cart__button svg {
+        width: 21px;
+        height: 21px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .lxp-slide img {
+        animation: none !important;
+        transform: none !important;
+      }
+
+      .lxp-slides,
+      .menu-drawer__shop-submenu,
+      .menu-drawer__shop-arrow,
+      .menu-drawer__shop-submenu a {
+        transition: none !important;
+      }
+    }
   </style>
 </head>
 
 <body class="template-page g4llery-page">
   <div class="lightning-flash"></div>
-  <div id="storm-overlay"><canvas id="rain-canvas"></canvas></div>
+
+  <div id="storm-overlay">
+    <canvas id="rain-canvas"></canvas>
+  </div>
 
   <div class="utility-bar color-scheme-4 gradient utility-bar--bottom-border">
     <div class="page-width utility-bar__grid">
-      <div class="announcement-bar" role="region" aria-label="Site announcements">
-        <button type="button" class="slider-button slider-button--prev" aria-label="Previous" hidden>‹</button>
-        <div class="announcement-track" id="AnnouncementTrack" data-autoplay="true" data-speed="5000">
-          <p class="announcement-bar__message h5"><span>WELCOME TO THE STORM</span></p>
+      <div
+        class="announcement-bar"
+        role="region"
+        aria-label="Site announcements"
+      >
+        <button
+          type="button"
+          class="slider-button slider-button--prev"
+          aria-label="Previous"
+          hidden
+        >
+          ‹
+        </button>
+
+        <div
+          class="announcement-track"
+          id="AnnouncementTrack"
+          data-autoplay="true"
+          data-speed="5000"
+        >
+          <p class="announcement-bar__message h5">
+            <span>WELCOME TO THE STORM</span>
+          </p>
         </div>
-        <button type="button" class="slider-button slider-button--next" aria-label="Next" hidden>›</button>
+
+        <button
+          type="button"
+          class="slider-button slider-button--next"
+          aria-label="Next"
+          hidden
+        >
+          ›
+        </button>
       </div>
     </div>
   </div>
 
-  <div class="section-header header-wrapper color-scheme-4 gradient" data-sticky-type="on-scroll-up">
-    <header class="site-header header header--middle-left header--mobile-center">
+  <div
+    class="section-header header-wrapper color-scheme-4 gradient"
+    data-sticky-type="on-scroll-up"
+  >
+    <header
+      class="site-header header header--middle-left header--mobile-center"
+    >
       <div class="page-width header-grid">
 
         <header-drawer data-breakpoint="all">
-          <details id="Details-menu-drawer-container" class="menu-drawer-container">
-            <summary class="header__icon header__icon--menu header__icon--summary link focus-inset" aria-label="Menu">
+          <details
+            id="Details-menu-drawer-container"
+            class="menu-drawer-container"
+          >
+            <summary
+              class="header__icon header__icon--menu header__icon--summary link focus-inset"
+              aria-label="Open or close menu"
+            >
               <span aria-hidden="true">
-                <svg width="22" height="22" viewBox="0 0 24 24">
-                  <path d="M3 6h18v2H3zM3 11h18v2H3zM3 16h18v2H3z" fill="currentColor"/>
+                <svg
+                  width="22"
+                  height="22"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M3 6h18v2H3zM3 11h18v2H3zM3 16h18v2H3z"
+                    fill="currentColor"
+                  />
                 </svg>
-                <svg width="22" height="22" viewBox="0 0 24 24">
-                  <path d="M18.3 5.7 12 12l6.3 6.3-1.4 1.4L10.6 13.4 4.3 19.7 2.9 18.3 9.2 12 2.9 5.7 4.3 4.3 10.6 10.6 16.9 4.3z" fill="currentColor"/>
+
+                <svg
+                  width="22"
+                  height="22"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M18.3 5.7 12 12l6.3 6.3-1.4 1.4L10.6 13.4 4.3 19.7 2.9 18.3 9.2 12 2.9 5.7 4.3 4.3 10.6 10.6 16.9 4.3z"
+                    fill="currentColor"
+                  />
                 </svg>
               </span>
             </summary>
 
-            <div id="menu-drawer" class="gradient menu-drawer motion-reduce color-scheme-4">
+            <div
+              id="menu-drawer"
+              class="gradient menu-drawer motion-reduce color-scheme-4"
+            >
               <div class="menu-drawer__inner-container">
                 <div class="menu-drawer__navigation-container">
-                  <nav class="menu-drawer__navigation" aria-label="Site navigation">
-                    <ul class="menu-drawer__menu has-submenu list-menu" role="list">
-  <li>
-    <a
-      href="index.html"
-      class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
-    >
-      Home
-    </a>
-  </li>
+                  <nav
+                    class="menu-drawer__navigation"
+                    aria-label="Site navigation"
+                  >
+                    <ul
+                      class="menu-drawer__menu has-submenu list-menu"
+                      role="list"
+                    >
+                      <li>
+                        <a
+                          href="index.html"
+                          class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
+                        >
+                          Home
+                        </a>
+                      </li>
 
-  <li>
-    <a
-      href="lookbook.html"
-      class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
-    >
-      Lookbook
-    </a>
-  </li>
+                      <li>
+                        <a
+                          href="lookbook.html"
+                          class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
+                        >
+                          Lookbook
+                        </a>
+                      </li>
 
-  <li class="menu-drawer__shop-group">
-    <button
-      id="shop-menu-toggle"
-      class="menu-drawer__menu-item menu-drawer__shop-toggle list-menu__item link link--text focus-inset"
-      type="button"
-      aria-expanded="false"
-      aria-controls="shop-menu-submenu"
-    >
-      <span>Shop All</span>
-      <span class="menu-drawer__shop-arrow" aria-hidden="true">⌄</span>
-    </button>
+                      <li class="menu-drawer__shop-group">
+                        <button
+                          id="shop-menu-toggle"
+                          class="menu-drawer__menu-item menu-drawer__shop-toggle list-menu__item link link--text focus-inset"
+                          type="button"
+                          aria-expanded="false"
+                          aria-controls="shop-menu-submenu"
+                        >
+                          <span>Shop All</span>
 
-    <ul
-      id="shop-menu-submenu"
-      class="menu-drawer__shop-submenu"
-      role="list"
-      aria-hidden="true"
-    >
-      <li>
-        <a href="dhk-collection.html">DHK Collection</a>
-      </li>
+                          <span
+                            class="menu-drawer__shop-arrow"
+                            aria-hidden="true"
+                          >
+                            ⌄
+                          </span>
+                        </button>
 
-      <li>
-        <a href="comic-collection.html">Comic Book Collection</a>
-      </li>
+                        <ul
+                          id="shop-menu-submenu"
+                          class="menu-drawer__shop-submenu"
+                          role="list"
+                          aria-hidden="true"
+                        >
+                          <li>
+                            <a href="dhk-collection.html">
+                              DHK Collection
+                            </a>
+                          </li>
 
-      <li>
-        <a href="blanks-collection.html">DHK Blanks</a>
-      </li>
+                          <li>
+                            <a href="comic-collection.html">
+                              Comic Book Collection
+                            </a>
+                          </li>
 
-      <li>
-        <a href="shop.html">View All</a>
-      </li>
-    </ul>
-  </li>
+                          <li>
+                            <a href="blanks-collection.html">
+                              DHK Blanks
+                            </a>
+                          </li>
 
-  <li>
-    <a
-      href="g4llery.html"
-      class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
-      aria-current="page"
-    >
-      G4LLERY
-    </a>
-  </li>
+                          <li>
+                            <a href="shop.html">
+                              View All
+                            </a>
+                          </li>
+                        </ul>
+                      </li>
 
-  <li>
-    <a
-      href="try-on.html"
-      class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
-    >
-      TRY ON
-    </a>
-  </li>
+                      <li>
+                        <a
+                          href="g4llery.html"
+                          class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
+                          aria-current="page"
+                        >
+                          G4LLERY
+                        </a>
+                      </li>
 
-  <li>
-    <a
-      href="collections.html"
-      class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
-    >
-      Collections
-    </a>
-  </li>
+                      <li>
+                        <a
+                          href="try-on.html"
+                          class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
+                        >
+                          TRY ON
+                        </a>
+                      </li>
 
-  <li>
-    <a
-      href="4bout-us.html"
-      class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
-    >
-      4bout us
-    </a>
-  </li>
+                      <li>
+                        <a
+                          href="collections.html"
+                          class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
+                        >
+                          Collections
+                        </a>
+                      </li>
 
-  <li>
-    <a
-      href="contact.html"
-      class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
-    >
-      Contact
-    </a>
-  </li>
+                      <li>
+                        <a
+                          href="4bout-us.html"
+                          class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
+                        >
+                          4bout us
+                        </a>
+                      </li>
 
-  <li>
-    <a
-      href="cart.html"
-      class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
-      data-loud="heavy"
-      data-cart-open
-    >
-      Cart
-      <span class="cart-count-bubble" data-cart-count></span>
-    </a>
-  </li>
+                      <li>
+                        <a
+                          href="contact.html"
+                          class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
+                        >
+                          Contact
+                        </a>
+                      </li>
 
-  <li>
-    <button
-      id="search-open-mobile"
-      type="button"
-      class="menu-drawer__menu-item link link--text list-menu__item focus-inset"
-    >
-      Search
-    </button>
-  </li>
-</ul>
+                      <li>
+                        <a
+                          href="cart.html"
+                          class="menu-drawer__menu-item list-menu__item link link--text focus-inset"
+                          data-loud="heavy"
+                          data-cart-open
+                        >
+                          Cart
+
+                          <span
+                            class="cart-count-bubble"
+                            data-cart-count
+                          ></span>
+                        </a>
+                      </li>
+
+                      <li>
+                        <button
+                          id="search-open-mobile"
+                          type="button"
+                          class="menu-drawer__menu-item link link--text list-menu__item focus-inset"
+                        >
+                          Search
+                        </button>
+                      </li>
+                    </ul>
                   </nav>
                 </div>
               </div>
@@ -593,27 +959,72 @@
           </details>
         </header-drawer>
 
-        <a class="header__logo" href="index.html" aria-label="DarkHarlemKnight">
+        <a
+          class="header__logo"
+          href="index.html"
+          aria-label="Dark Harlem Knight home"
+        >
           <img
             src="assets/img/DHK_transparent.gif"
-            alt="DarkHarlemKnight"
-            width="190" height="190"
+            alt="Dark Harlem Knight"
+            width="190"
+            height="190"
             class="header__heading-logo"
             loading="eager"
           />
         </a>
 
-        <div></div>
+        <div class="header-cart">
+          <a
+            href="cart.html"
+            class="header-cart__button"
+            aria-label="Cart"
+            data-cart-open
+          >
+            <svg
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path
+                d="M7 8V6a5 5 0 0 1 10 0v2h2.25L20.5 22h-17L4.75 8H7Zm2 0h6V6a3 3 0 0 0-6 0v2Zm-2.42 2-.91 10h12.66l-.91-10H6.58Z"
+                fill="currentColor"
+              />
+            </svg>
+
+            <span
+              class="cart-count-bubble"
+              data-cart-count
+            ></span>
+          </a>
+        </div>
       </div>
     </header>
   </div>
 
-  <main id="MainContent" class="section g4llery-full">
+  <main
+    id="MainContent"
+    class="section g4llery-full"
+  >
     <div class="g4llery-bleed">
-      <div class="lxp-slideshow" aria-roledescription="carousel">
-        <div class="img-err" id="imgErr">Image not found (check filename/path)</div>
+      <div
+        class="lxp-slideshow"
+        role="region"
+        aria-roledescription="carousel"
+        aria-label="Dark Harlem Knight gallery"
+      >
+        <div
+          class="img-err"
+          id="imgErr"
+          role="status"
+        >
+          Image not found. Check the filename or path.
+        </div>
 
-        <div class="lxp-slides" id="lxpSlides" style="transform:translateX(0%)">
+        <div
+          class="lxp-slides"
+          id="lxpSlides"
+          style="transform: translateX(0%)"
+        >
           <figure class="lxp-slide"><img src="assets/img/g4llery/VOL-1/DK%20EDIT/4304%20DK.png" alt="Gallery image 1"></figure>
           <figure class="lxp-slide"><img src="assets/img/g4llery/VOL-1/DK%20EDIT/4385%20DK.png" alt="Gallery image 2"></figure>
           <figure class="lxp-slide"><img src="assets/img/g4llery/VOL-1/DK%20EDIT/4387%20DK.png" alt="Gallery image 3"></figure>
@@ -671,71 +1082,260 @@
           <figure class="lxp-slide"><img src="assets/img/g4llery/VOL-1/DK%20EDIT/IMG_7089%20dk%20.jpg" alt="Gallery image 55"></figure>
         </div>
 
-        <script>
-          const G4_ZOOM = {
-            start: 1.07,
-            end: 1.00,
-            duration: 14
-          };
+        <div class="lxp-nav">
+          <button
+            class="lxp-btn"
+            type="button"
+            aria-label="Previous gallery image"
+            id="lxpPrev"
+          >
+            ‹
+          </button>
 
-          (function applyG4Zoom(){
-            const r = document.documentElement;
-            const isDesktop = window.matchMedia && window.matchMedia('(min-width: 980px)').matches;
-            const start = isDesktop ? 1.02 : G4_ZOOM.start;
-            const end   = 1.00;
-            const dur   = isDesktop ? 16 : G4_ZOOM.duration;
+          <div aria-hidden="true"></div>
 
-            r.style.setProperty('--g4-zoom-start', start);
-            r.style.setProperty('--g4-zoom-end', end);
-            r.style.setProperty('--g4-zoom-dur', dur + 's');
-          })();
-        </script>
-
-        <div class="lxp-nav" aria-hidden="true">
-          <button class="lxp-btn" type="button" aria-label="Previous slide" id="lxpPrev">‹</button>
-          <div></div>
-          <button class="lxp-btn" type="button" aria-label="Next slide" id="lxpNext">›</button>
+          <button
+            class="lxp-btn"
+            type="button"
+            aria-label="Next gallery image"
+            id="lxpNext"
+          >
+            ›
+          </button>
         </div>
 
-        <div class="lxp-visual" id="lxpCounter" aria-hidden="true">1/55</div>
+        <div
+          class="lxp-visual"
+          id="lxpCounter"
+          aria-live="polite"
+        >
+          1/55
+        </div>
       </div>
     </div>
   </main>
 
   <footer class="footer color-scheme-4 gradient section footer--static">
-    <div class="footer__content-bottom-wrapper page-width footer__content-bottom-wrapper--center">
+    <div
+      class="footer__content-bottom-wrapper page-width footer__content-bottom-wrapper--center"
+    >
       <div class="footer__copyright caption">
-        <small class="copyright__content">© <span id="year"></span>, Dark Harlem Knight</small>
-        <small class="copyright__content">Powered by the Storm</small>
+        <small class="copyright__content">
+          © <span id="year"></span>, Dark Harlem Knight
+        </small>
+
+        <small class="copyright__content">
+          Powered by the Storm
+        </small>
+
         <ul class="policies list-unstyled">
-          <li><small class="copyright__content"><a href="cart.html">Privacy Policy</a></small></li>
-          <li><small class="copyright__content"><a href="cart.html">Terms of Service</a></small></li>
+          <li>
+            <small class="copyright__content">
+              <a href="#">Privacy Policy</a>
+            </small>
+          </li>
+
+          <li>
+            <small class="copyright__content">
+              <a href="#">Terms of Service</a>
+            </small>
+          </li>
         </ul>
       </div>
     </div>
   </footer>
-  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
 
-  <div id="search-modal" class="search-modal" aria-hidden="true">
-    <div class="search-modal__overlay" data-close-search></div>
-    <div class="search-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="search-title">
+  <div
+    id="search-modal"
+    class="search-modal"
+    aria-hidden="true"
+  >
+    <div
+      class="search-modal__overlay"
+      data-close-search
+    ></div>
+
+    <div
+      class="search-modal__dialog"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="search-title"
+    >
       <header class="search-modal__header">
         <h2 id="search-title">Search</h2>
-        <button id="search-close" class="search-modal__close" aria-label="Close search">×</button>
+
+        <button
+          id="search-close"
+          class="search-modal__close"
+          type="button"
+          aria-label="Close search"
+        >
+          ×
+        </button>
       </header>
+
       <div class="search-modal__field">
-        <input id="search-input" type="search" placeholder="Search products…  ( /  or  ⌘/Ctrl+K )" autocomplete="off" />
+        <input
+          id="search-input"
+          type="search"
+          placeholder="Search products…  ( /  or  ⌘/Ctrl+K )"
+          autocomplete="off"
+        />
       </div>
-      <div id="search-results" class="search-modal__results" aria-live="polite"></div>
+
+      <div
+        id="search-results"
+        class="search-modal__results"
+        aria-live="polite"
+      ></div>
     </div>
   </div>
 
-  <audio id="rain-light" src="assets/audio/light-rain.mp3" loop preload="auto" hidden></audio>
-  <audio id="rain-med" src="assets/audio/med-rain.mp3" loop preload="auto" hidden></audio>
-  <audio id="rain-heavy" src="assets/audio/heavy-rain.mp3" loop preload="auto" hidden></audio>
-  <audio id="thunder-light" src="assets/audio/light-thunder.mp3" loop preload="auto" hidden></audio>
-  <audio id="thunder-med" src="assets/audio/med-thunder.mp3" loop preload="auto" hidden></audio>
-  <audio id="thunder-heavy" src="assets/audio/heavy-thunder.mp3" loop preload="auto" hidden></audio>
+  <audio
+    id="rain-light"
+    src="assets/audio/light-rain.mp3"
+    loop
+    preload="auto"
+    hidden
+  ></audio>
+
+  <audio
+    id="rain-med"
+    src="assets/audio/med-rain.mp3"
+    loop
+    preload="auto"
+    hidden
+  ></audio>
+
+  <audio
+    id="rain-heavy"
+    src="assets/audio/heavy-rain.mp3"
+    loop
+    preload="auto"
+    hidden
+  ></audio>
+
+  <audio
+    id="thunder-light"
+    src="assets/audio/light-thunder.mp3"
+    loop
+    preload="auto"
+    hidden
+  ></audio>
+
+  <audio
+    id="thunder-med"
+    src="assets/audio/med-thunder.mp3"
+    loop
+    preload="auto"
+    hidden
+  ></audio>
+
+  <audio
+    id="thunder-heavy"
+    src="assets/audio/heavy-thunder.mp3"
+    loop
+    preload="auto"
+    hidden
+  ></audio>
+
+  <div
+    id="cart-drawer"
+    class="cart-drawer"
+    aria-hidden="true"
+  >
+    <div
+      class="cart-drawer__overlay"
+      data-cart-close
+    ></div>
+
+    <aside
+      class="cart-drawer__panel"
+      tabindex="-1"
+      aria-label="Shopping cart"
+    >
+      <div class="cart-header">
+        <h2>Your Cart</h2>
+
+        <button
+          type="button"
+          title="Close"
+          aria-label="Close cart"
+          data-cart-close
+        >
+          ✕
+        </button>
+      </div>
+
+      <div
+        class="cart-list"
+        id="cart-items"
+      ></div>
+
+      <div
+        id="cart-empty"
+        class="cart-empty"
+        hidden
+        style="padding: 16px; color: #9a9a9a"
+      >
+        Your cart is empty.
+      </div>
+
+      <div class="cart-footer">
+        <div class="cart-discount cart-discount--drawer">
+          <label
+            for="discount-code-drawer"
+            class="cart-discount__label"
+          >
+            ADD DISCOUNT
+          </label>
+
+          <div class="cart-discount__row">
+            <input
+              id="discount-code-drawer"
+              class="cart-discount__input"
+              type="text"
+              placeholder="Enter code"
+              autocomplete="off"
+            />
+
+            <button
+              id="discount-apply-drawer"
+              class="cart-discount__button"
+              type="button"
+            >
+              APPLY
+            </button>
+          </div>
+
+          <p
+            id="discount-message-drawer"
+            class="cart-discount__message"
+            aria-live="polite"
+          ></p>
+        </div>
+
+        <div class="cart-row">
+          <div class="label">Subtotal</div>
+
+          <div
+            class="value"
+            id="cart-subtotal"
+          >
+            $0.00
+          </div>
+        </div>
+
+        <button
+          id="cart-checkout"
+          type="button"
+          disabled
+        >
+          Checkout
+        </button>
+      </div>
+    </aside>
+  </div>
 
   <script src="js/nav.js"></script>
   <script src="js/announce.js"></script>
@@ -744,117 +1344,350 @@
   <script src="js/storm_shopify_style.js"></script>
 
   <script>
-    (function () {
-      const track   = document.getElementById('lxpSlides');
-      if (!track) return;
+    document.addEventListener("DOMContentLoaded", () => {
+      const yearElement =
+        document.getElementById("year");
 
-      const slides  = Array.from(track.children);
-      const counter = document.getElementById('lxpCounter');
-      const err     = document.getElementById('imgErr');
-      const N       = slides.length;
-      let i = 0, timer = null;
+      const mainDrawerDetails =
+        document.getElementById(
+          "Details-menu-drawer-container"
+        );
 
-      slides.forEach(fig => {
-        const img = fig.querySelector('img');
-        if (!img) return;
-        img.addEventListener('error', () => { if (err) err.style.display = 'inline-block'; });
-        img.addEventListener('load',  () => { if (err) err.style.display = 'none'; });
-      });
+      const shopToggle =
+        document.getElementById("shop-menu-toggle");
 
-      function setCounter(idx){ if(counter) counter.textContent = (idx+1)+'/'+N; }
-      function go(idx, user=false){
-        i = (idx + N) % N;
-        track.style.transform = `translateX(-${i*100}%)`;
-        setCounter(i);
-        if(user) resetAuto();
+      const shopSubmenu =
+        document.getElementById("shop-menu-submenu");
+
+      if (yearElement) {
+        yearElement.textContent =
+          new Date().getFullYear();
       }
-      function resetAuto(){ clearInterval(timer); timer = setInterval(()=>go(i+1,false), 3000); }
 
-      document.getElementById('lxpNext')?.addEventListener('click', ()=>go(i+1,true));
-      document.getElementById('lxpPrev')?.addEventListener('click', ()=>go(i-1,true));
+      /* =====================================
+         SHOP SUBMENU
+      ===================================== */
 
-      let startX = 0;
-      track.addEventListener('touchstart', e => (startX = e.touches[0].clientX), {passive:true});
-      track.addEventListener('touchend',   e => {
-        const dx = e.changedTouches[0].clientX - startX;
-        if(Math.abs(dx) > 40) go(i + (dx < 0 ? 1 : -1), true);
-      });
+      const setShopMenu = (isOpen) => {
+        if (!shopToggle || !shopSubmenu) {
+          return;
+        }
 
-      setCounter(0);
-      resetAuto();
-    })();
-  </script>
-<script>
-  (() => {
-    const shopToggle = document.getElementById("shop-menu-toggle");
-    const shopSubmenu = document.getElementById("shop-menu-submenu");
-    const menuContainer = document.getElementById(
-      "Details-menu-drawer-container"
-    );
+        shopToggle.setAttribute(
+          "aria-expanded",
+          String(isOpen)
+        );
 
-    if (!shopToggle || !shopSubmenu) return;
+        shopSubmenu.setAttribute(
+          "aria-hidden",
+          String(!isOpen)
+        );
 
-    function setShopMenu(open) {
-      shopToggle.setAttribute("aria-expanded", String(open));
-      shopSubmenu.setAttribute("aria-hidden", String(!open));
-      shopSubmenu.classList.toggle("is-open", open);
-    }
+        shopSubmenu.classList.toggle(
+          "is-open",
+          isOpen
+        );
+      };
 
-    shopToggle.addEventListener("click", (event) => {
-      event.preventDefault();
-      event.stopPropagation();
+      if (shopToggle && shopSubmenu) {
+        shopToggle.addEventListener(
+          "click",
+          (event) => {
+            event.preventDefault();
+            event.stopPropagation();
 
-      const isOpen =
-        shopToggle.getAttribute("aria-expanded") === "true";
+            const isOpen =
+              shopToggle.getAttribute(
+                "aria-expanded"
+              ) === "true";
 
-      setShopMenu(!isOpen);
-    });
+            setShopMenu(!isOpen);
+          }
+        );
 
-    document.addEventListener("keydown", (event) => {
-      if (event.key === "Escape") {
-        setShopMenu(false);
+        shopToggle.addEventListener(
+          "keydown",
+          (event) => {
+            if (event.key === "ArrowDown") {
+              event.preventDefault();
+              setShopMenu(true);
+
+              shopSubmenu
+                .querySelector("a")
+                ?.focus();
+            }
+
+            if (event.key === "Escape") {
+              event.preventDefault();
+              setShopMenu(false);
+              shopToggle.focus();
+            }
+          }
+        );
+
+        shopSubmenu.addEventListener(
+          "keydown",
+          (event) => {
+            if (event.key === "Escape") {
+              event.preventDefault();
+              setShopMenu(false);
+              shopToggle.focus();
+            }
+          }
+        );
       }
-    });
 
-    if (menuContainer) {
-      menuContainer.addEventListener("toggle", () => {
-        if (!menuContainer.open) {
+      /* =====================================
+         MAIN DRAWER
+      ===================================== */
+
+      const syncMainDrawerState = () => {
+        const isOpen =
+          Boolean(mainDrawerDetails?.open);
+
+        document.documentElement.classList.toggle(
+          "no-scroll",
+          isOpen
+        );
+
+        document.body.classList.toggle(
+          "no-scroll",
+          isOpen
+        );
+
+        document.body.classList.toggle(
+          "menu-open",
+          isOpen
+        );
+
+        if (!isOpen) {
           setShopMenu(false);
         }
+      };
+
+      if (mainDrawerDetails) {
+        mainDrawerDetails.addEventListener(
+          "toggle",
+          syncMainDrawerState
+        );
+      }
+
+      document.addEventListener(
+        "keydown",
+        (event) => {
+          if (event.key !== "Escape") {
+            return;
+          }
+
+          if (
+            mainDrawerDetails &&
+            mainDrawerDetails.open
+          ) {
+            mainDrawerDetails.open = false;
+            syncMainDrawerState();
+          }
+
+          setShopMenu(false);
+        }
+      );
+
+      syncMainDrawerState();
+
+      /* =====================================
+         GALLERY ZOOM SETTINGS
+      ===================================== */
+
+      const root =
+        document.documentElement;
+
+      const isDesktop =
+        window.matchMedia(
+          "(min-width: 980px)"
+        ).matches;
+
+      root.style.setProperty(
+        "--g4-zoom-start",
+        isDesktop ? "1.02" : "1.07"
+      );
+
+      root.style.setProperty(
+        "--g4-zoom-end",
+        "1"
+      );
+
+      root.style.setProperty(
+        "--g4-zoom-dur",
+        isDesktop ? "16s" : "14s"
+      );
+
+      /* =====================================
+         GALLERY SLIDESHOW
+      ===================================== */
+
+      const track =
+        document.getElementById("lxpSlides");
+
+      if (!track) {
+        return;
+      }
+
+      const slides =
+        Array.from(track.children);
+
+      const counter =
+        document.getElementById("lxpCounter");
+
+      const errorMessage =
+        document.getElementById("imgErr");
+
+      const previousButton =
+        document.getElementById("lxpPrev");
+
+      const nextButton =
+        document.getElementById("lxpNext");
+
+      const slideCount =
+        slides.length;
+
+      let currentIndex = 0;
+      let timer = null;
+      let touchStartX = 0;
+
+      slides.forEach((figure) => {
+        const image =
+          figure.querySelector("img");
+
+        if (!image) {
+          return;
+        }
+
+        image.addEventListener(
+          "error",
+          () => {
+            if (errorMessage) {
+              errorMessage.style.display =
+                "inline-block";
+            }
+          }
+        );
+
+        image.addEventListener(
+          "load",
+          () => {
+            if (errorMessage) {
+              errorMessage.style.display =
+                "none";
+            }
+          }
+        );
       });
-    }
-  })();
-</script>
-  <div id="cart-drawer" class="cart-drawer" aria-hidden="true">
-    <div class="cart-drawer__overlay" data-cart-close></div>
-    <aside class="cart-drawer__panel" tabindex="-1">
-      <div class="cart-header">
-        <h2>Your Cart</h2>
-        <button type="button" title="Close" data-cart-close>✕</button>
-      </div>
 
-      <div class="cart-list" id="cart-items"></div>
-      <div id="cart-empty" class="cart-empty" hidden style="padding:16px;color:#9a9a9a">
-        Your cart is empty.
-      </div>
+      const setCounter = (index) => {
+        if (counter) {
+          counter.textContent =
+            `${index + 1}/${slideCount}`;
+        }
+      };
 
-      <div class="cart-footer">
-        <div class="cart-discount cart-discount--drawer">
-          <label for="discount-code-drawer" class="cart-discount__label">ADD DISCOUNT</label>
-          <div class="cart-discount__row">
-            <input id="discount-code-drawer" class="cart-discount__input" type="text" placeholder="Enter code" autocomplete="off"/>
-            <button id="discount-apply-drawer" class="cart-discount__button" type="button">APPLY</button>
-          </div>
-          <p id="discount-message-drawer" class="cart-discount__message" aria-live="polite"></p>
-        </div>
+      const goToSlide = (
+        requestedIndex,
+        userInitiated = false
+      ) => {
+        currentIndex =
+          (
+            requestedIndex +
+            slideCount
+          ) % slideCount;
 
-        <div class="cart-row">
-          <div class="label">Subtotal</div>
-          <div class="value" id="cart-subtotal">$0.00</div>
-        </div>
-        <button id="cart-checkout" type="button" disabled>Checkout</button>
-      </div>
-    </aside>
-  </div>
+        track.style.transform =
+          `translateX(-${currentIndex * 100}%)`;
+
+        setCounter(currentIndex);
+
+        if (userInitiated) {
+          resetAutoPlay();
+        }
+      };
+
+      const resetAutoPlay = () => {
+        window.clearInterval(timer);
+
+        timer = window.setInterval(
+          () => {
+            goToSlide(
+              currentIndex + 1,
+              false
+            );
+          },
+          3000
+        );
+      };
+
+      nextButton?.addEventListener(
+        "click",
+        () => {
+          goToSlide(
+            currentIndex + 1,
+            true
+          );
+        }
+      );
+
+      previousButton?.addEventListener(
+        "click",
+        () => {
+          goToSlide(
+            currentIndex - 1,
+            true
+          );
+        }
+      );
+
+      track.addEventListener(
+        "touchstart",
+        (event) => {
+          touchStartX =
+            event.touches[0].clientX;
+        },
+        {
+          passive: true
+        }
+      );
+
+      track.addEventListener(
+        "touchend",
+        (event) => {
+          const difference =
+            event.changedTouches[0].clientX -
+            touchStartX;
+
+          if (Math.abs(difference) > 40) {
+            goToSlide(
+              currentIndex +
+                (difference < 0 ? 1 : -1),
+              true
+            );
+          }
+        },
+        {
+          passive: true
+        }
+      );
+
+      document.addEventListener(
+        "visibilitychange",
+        () => {
+          if (document.hidden) {
+            window.clearInterval(timer);
+          } else {
+            resetAutoPlay();
+          }
+        }
+      );
+
+      setCounter(0);
+      resetAutoPlay();
+    });
+  </script>
 </body>
 </html>
