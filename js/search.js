@@ -105,7 +105,7 @@
 
     modal.setAttribute('aria-hidden', 'false');
     document.documentElement.classList.add('search-open');
-    document.body.style.overflow = 'hidden';
+document.body.classList.add('search-open');
     isOpen = true;
 
     // Prime results and focus
@@ -117,7 +117,7 @@
     if (!isOpen || !modal) return;
     modal.setAttribute('aria-hidden', 'true');
     document.documentElement.classList.remove('search-open');
-    document.body.style.overflow = '';
+document.body.classList.remove('search-open');
     isOpen = false;
 
     if (input) input.value = '';
