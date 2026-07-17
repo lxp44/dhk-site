@@ -992,42 +992,19 @@
         transform 0.55s cubic-bezier(0.2, 0.72, 0.2, 1),
         filter 0.42s ease;
     }
-    /* =========================================================
-   PRODUCT IMAGE SWAP
-========================================================= */
 
-.comic-product-card__media {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 1 / 1;
-  overflow: hidden;
-  background: #e5e0d7;
-  border: 1px solid rgba(17, 17, 17, 0.12);
-  box-shadow: 7px 7px 0 rgba(82, 22, 22, 0.07);
-}
+    .comic-product-card__image--primary {
+      z-index: 1;
+      opacity: 1;
+      visibility: visible;
+    }
 
-.comic-product-card__swap-image {
-  display: block;
-  width: 100% !important;
-  height: 100% !important;
-  max-width: none !important;
-  object-fit: cover;
-  object-position: center;
-  transition:
-    opacity 0.18s ease,
-    transform 0.5s ease,
-    filter 0.4s ease;
-}
-
-.comic-product-card:hover
-  .comic-product-card__swap-image {
-  transform: scale(1.018);
-  filter: contrast(1.025);
-}
-
-.comic-product-card__swap-image.is-changing {
-  opacity: 0.55;
-}
+    .comic-product-card__image--hover {
+      z-index: 2;
+      opacity: 0;
+      visibility: visible;
+      pointer-events: none;
+    }
 
     .comic-product-card:hover
       .comic-product-card__image--primary,
@@ -1704,113 +1681,131 @@
         class="comic-product-grid"
         aria-label="Comic Book Summer Collection products"
       >
-     <!-- BATMAN 4EVER -->
+        <!-- BATMAN 4EVER -->
 
-<article class="comic-product-card">
-  <a
-    class="comic-product-card__link"
-    href="product.html?id=batman-4ever"
-    aria-label="View Batman 4ever"
-  >
-    <div class="comic-product-card__media">
-      <img
-        class="comic-product-card__swap-image"
-        src="assets/img/products/dhk/campaign-2/product-shots/comic-summer/batman-front-2.jpeg"
-        data-primary="assets/img/products/dhk/campaign-2/product-shots/comic-summer/batman-front-2.jpeg"
-        data-hover="assets/img/products/dhk/campaign-2/for-website/hover-image/batman-4ever-hover.jpeg"
-        alt="Batman 4ever"
-        loading="eager"
-        decoding="async"
-      />
-    </div>
+        <article class="comic-product-card">
+          <a
+            class="comic-product-card__link"
+            href="product.html?id=batman-4ever"
+            aria-label="View Batman 4ever"
+          >
+            <div class="comic-product-card__media">
+              <img
+                class="comic-product-card__image comic-product-card__image--primary"
+                src="assets/img/products/dhk/campaign-2/product-shots/comic-summer/batman-front-2.jpeg"
+                alt="Batman 4ever"
+                loading="eager"
+                decoding="async"
+              />
 
-    <div class="comic-product-card__info">
-      <span class="comic-product-card__eyebrow">
-        DHK / Comic
-      </span>
+              <img
+                class="comic-product-card__image comic-product-card__image--hover"
+                src="assets/img/products/dhk/campaign-2/for-website/hover-image/batman-4ever-hover.jpeg"
+                alt="Batman 4ever alternate view"
+                loading="eager"
+                decoding="async"
+              />
+            </div>
 
-      <h3 class="comic-product-card__title">
-        Batman 4ever
-      </h3>
+            <div class="comic-product-card__info">
+              <span class="comic-product-card__eyebrow">
+                DHK / Comic
+              </span>
 
-      <p class="comic-product-card__price">
-        $110.00
-      </p>
-    </div>
-  </a>
-</article>
+              <h3 class="comic-product-card__title">
+                Batman 4ever
+              </h3>
 
-<!-- THE JOKER -->
+              <p class="comic-product-card__price">
+                $110.00
+              </p>
+            </div>
+          </a>
+        </article>
 
-<article class="comic-product-card">
-  <a
-    class="comic-product-card__link"
-    href="product.html?id=the-joker"
-    aria-label="View The Joker"
-  >
-    <div class="comic-product-card__media">
-      <img
-        class="comic-product-card__swap-image"
-        src="assets/img/products/dhk/campaign-2/product-shots/comic-summer/joker-front-2.jpeg"
-        data-primary="assets/img/products/dhk/campaign-2/product-shots/comic-summer/joker-front-2.jpeg"
-        data-hover="assets/img/products/dhk/campaign-2/for-website/hover-image/joker-hover.jpeg"
-        alt="The Joker"
-        loading="eager"
-        decoding="async"
-      />
-    </div>
+        <!-- THE JOKER -->
 
-    <div class="comic-product-card__info">
-      <span class="comic-product-card__eyebrow">
-        DHK / Comic
-      </span>
+        <article class="comic-product-card">
+          <a
+            class="comic-product-card__link"
+            href="product.html?id=the-joker"
+            aria-label="View The Joker"
+          >
+            <div class="comic-product-card__media">
+              <img
+                class="comic-product-card__image comic-product-card__image--primary"
+                src="assets/img/products/dhk/campaign-2/product-shots/comic-summer/joker-front-2.jpeg"
+                alt="The Joker"
+                loading="eager"
+                decoding="async"
+              />
 
-      <h3 class="comic-product-card__title">
-        The Joker
-      </h3>
+              <img
+                class="comic-product-card__image comic-product-card__image--hover"
+                src="assets/img/products/dhk/campaign-2/for-website/hover-image/joker-hover.jpeg"
+                alt="The Joker alternate view"
+                loading="eager"
+                decoding="async"
+              />
+            </div>
 
-      <p class="comic-product-card__price">
-        $110.00
-      </p>
-    </div>
-  </a>
-</article>
+            <div class="comic-product-card__info">
+              <span class="comic-product-card__eyebrow">
+                DHK / Comic
+              </span>
 
-<!-- SPAWN -->
+              <h3 class="comic-product-card__title">
+                The Joker
+              </h3>
 
-<article class="comic-product-card">
-  <a
-    class="comic-product-card__link"
-    href="product.html?id=spawn"
-    aria-label="View Spawn"
-  >
-    <div class="comic-product-card__media">
-      <img
-        class="comic-product-card__swap-image"
-        src="assets/img/products/dhk/campaign-2/product-shots/comic-summer/spawn-front-2.jpeg"
-        data-primary="assets/img/products/dhk/campaign-2/product-shots/comic-summer/spawn-front-2.jpeg"
-        data-hover="assets/img/products/dhk/campaign-2/for-website/hover-image/spawn-hover.jpeg"
-        alt="Spawn"
-        loading="eager"
-        decoding="async"
-      />
-    </div>
+              <p class="comic-product-card__price">
+                $110.00
+              </p>
+            </div>
+          </a>
+        </article>
 
-    <div class="comic-product-card__info">
-      <span class="comic-product-card__eyebrow">
-        DHK / Comic
-      </span>
+        <!-- SPAWN -->
 
-      <h3 class="comic-product-card__title">
-        Spawn
-      </h3>
+        <article class="comic-product-card">
+          <a
+            class="comic-product-card__link"
+            href="product.html?id=spawn"
+            aria-label="View Spawn"
+          >
+            <div class="comic-product-card__media">
+              <img
+                class="comic-product-card__image comic-product-card__image--primary"
+                src="assets/img/products/dhk/campaign-2/product-shots/comic-summer/spawn-front-2.jpeg"
+                alt="Spawn"
+                loading="eager"
+                decoding="async"
+              />
 
-      <p class="comic-product-card__price">
-        $110.00
-      </p>
-    </div>
-  </a>
-</article>
+              <img
+                class="comic-product-card__image comic-product-card__image--hover"
+                src="assets/img/products/dhk/campaign-2/for-website/hover-image/spawn-hover.jpeg"
+                alt="Spawn alternate view"
+                loading="eager"
+                decoding="async"
+              />
+            </div>
+
+            <div class="comic-product-card__info">
+              <span class="comic-product-card__eyebrow">
+                DHK / Comic
+              </span>
+
+              <h3 class="comic-product-card__title">
+                Spawn
+              </h3>
+
+              <p class="comic-product-card__price">
+                $110.00
+              </p>
+            </div>
+          </a>
+        </article>
       </div>
     </section>
   </main>
@@ -2267,102 +2262,6 @@
       );
     })();
   </script>
-  <script>
-  (() => {
-    "use strict";
-
-    const cards = document.querySelectorAll(
-      ".comic-product-card"
-    );
-
-    cards.forEach((card) => {
-      const image = card.querySelector(
-        ".comic-product-card__swap-image"
-      );
-
-      if (!image) return;
-
-      const primarySource =
-        image.getAttribute("data-primary");
-
-      const hoverSource =
-        image.getAttribute("data-hover");
-
-      if (!primarySource || !hoverSource) {
-        console.warn(
-          "Comic product is missing a primary or hover image path:",
-          card
-        );
-
-        return;
-      }
-
-      /*
-        Preload the hover image first.
-        Hover is enabled only after the image loads successfully.
-      */
-
-      const hoverPreload = new Image();
-
-      hoverPreload.onload = () => {
-        card.dataset.hoverReady = "true";
-      };
-
-      hoverPreload.onerror = () => {
-        card.dataset.hoverReady = "false";
-
-        console.error(
-          "Comic hover image failed to load:",
-          hoverSource
-        );
-      };
-
-      hoverPreload.src = hoverSource;
-
-      function showHoverImage() {
-        if (card.dataset.hoverReady !== "true") {
-          return;
-        }
-
-        image.classList.add("is-changing");
-        image.src = hoverSource;
-
-        window.requestAnimationFrame(() => {
-          image.classList.remove("is-changing");
-        });
-      }
-
-      function showPrimaryImage() {
-        image.classList.add("is-changing");
-        image.src = primarySource;
-
-        window.requestAnimationFrame(() => {
-          image.classList.remove("is-changing");
-        });
-      }
-
-      card.addEventListener(
-        "mouseenter",
-        showHoverImage
-      );
-
-      card.addEventListener(
-        "mouseleave",
-        showPrimaryImage
-      );
-
-      card.addEventListener(
-        "focusin",
-        showHoverImage
-      );
-
-      card.addEventListener(
-        "focusout",
-        showPrimaryImage
-      );
-    });
-  })();
-</script>
 
   <!-- =======================================================
        CART DRAWER
