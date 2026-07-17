@@ -2,7 +2,10 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1"
+    />
 
     <title>DHK — Shop Collections</title>
 
@@ -18,7 +21,10 @@
       sizes="any"
     />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      rel="preconnect"
+      href="https://fonts.googleapis.com"
+    />
 
     <link
       rel="preconnect"
@@ -31,12 +37,57 @@
       rel="stylesheet"
     />
 
-    <link rel="stylesheet" href="css/styles.css" />
+    <link
+      rel="stylesheet"
+      href="css/styles.css"
+    />
 
     <style>
-      /* ========================================
+      /* =========================================================
+         SHOP CATEGORIES — PAGE-SPECIFIC STYLES
+      ========================================================= */
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      html {
+        background: #020203;
+      }
+
+      body.shop-categories-page {
+        min-height: 100vh;
+        margin: 0;
+        color: #f4f4f4;
+        background:
+          radial-gradient(
+            circle at 50% 5%,
+            rgba(75, 75, 84, 0.18),
+            transparent 30%
+          ),
+          linear-gradient(
+            180deg,
+            #111216 0%,
+            #07080a 56%,
+            #020203 100%
+          );
+      }
+
+      body.shop-categories-page.search-open {
+        overflow: hidden;
+      }
+
+      .shop-categories-page .utility-bar,
+      .shop-categories-page .section-header,
+      .shop-categories-page .footer {
+        background: #000;
+      }
+
+      /* =========================================================
          ANNOUNCEMENT BAR
-      ======================================== */
+      ========================================================= */
 
       .utility-bar .page-width {
         max-width: none;
@@ -83,9 +134,9 @@
         text-shadow: 0 0 6px rgba(255, 255, 255, 0.12);
       }
 
-      /* ========================================
+      /* =========================================================
          HEADER
-      ======================================== */
+      ========================================================= */
 
       .header-grid {
         position: relative;
@@ -125,11 +176,14 @@
       }
 
       .header__icon--menu {
+        position: relative;
         z-index: 2147483647;
       }
 
       .header__icon--menu svg {
-        filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.28));
+        filter: drop-shadow(
+          0 0 6px rgba(255, 255, 255, 0.28)
+        );
       }
 
       .header__icon--summary {
@@ -165,19 +219,20 @@
         display: block;
       }
 
-      /* ========================================
-         FULL-SCREEN MENU DRAWER
-      ======================================== */
+      /* =========================================================
+         FULL-SCREEN MENU
+      ========================================================= */
 
       #menu-drawer {
         position: fixed;
         inset: 0;
         z-index: 2147483646;
         width: 100vw;
-        height: 100vh;
+        height: 100dvh;
         padding: 34px 28px 40px;
         overflow-y: auto;
         border: 0;
+        color: #f1f1f1;
         background: rgba(5, 5, 7, 0.97);
         box-shadow: none;
         backdrop-filter: blur(10px);
@@ -190,6 +245,11 @@
         min-height: 100%;
       }
 
+      .menu-drawer__navigation {
+        display: flex;
+        flex-direction: column;
+      }
+
       .menu-drawer__menu {
         display: flex;
         flex-direction: column;
@@ -199,9 +259,20 @@
         list-style: none;
       }
 
+      .menu-drawer__menu li {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
       .menu-drawer__menu-item,
       .menu-drawer__menu .list-menu__item.link,
       .menu-drawer__menu button {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        margin: 0;
         padding: 0;
         border: 0;
         color: #f1f1f1;
@@ -218,10 +289,11 @@
       }
 
       .menu-drawer__menu-item:hover,
-      .menu-drawer__menu .list-menu__item.link:hover,
       .menu-drawer__menu-item:focus-visible,
+      .menu-drawer__menu .list-menu__item.link:hover,
       .menu-drawer__menu button:hover {
-        color: #ffffff;
+        color: #fff;
+        text-decoration: none;
         text-shadow: 0 0 14px rgba(255, 255, 255, 0.18);
       }
 
@@ -229,9 +301,9 @@
         border-top: 0;
       }
 
-      /* ========================================
+      /* =========================================================
          SHOP ALL DROPDOWN
-      ======================================== */
+      ========================================================= */
 
       .menu-shop-group {
         display: flex;
@@ -303,12 +375,12 @@
       .menu-shop-submenu a:hover,
       .menu-shop-submenu a:focus-visible {
         padding-left: 5px;
-        color: #ffffff;
+        color: #fff;
       }
 
-      /* ========================================
-         STORM AND SEARCH LAYERS
-      ======================================== */
+      /* =========================================================
+         STORM LAYERS
+      ========================================================= */
 
       #storm-overlay {
         position: fixed;
@@ -317,55 +389,27 @@
         pointer-events: none;
       }
 
+      #rain-canvas {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+
       .section-header {
         position: relative;
         z-index: 20;
       }
 
-      #search-modal {
-        z-index: 2147483647;
-      }
-
-      body.search-open #storm-overlay {
+      body.search-open #storm-overlay,
+      body.drawer-open #storm-overlay {
         opacity: 0 !important;
         pointer-events: none !important;
         transition: opacity 0.15s ease;
       }
 
-      /* ========================================
-         PAGE BACKGROUND
-      ======================================== */
-
-      html {
-        background: #020203;
-      }
-
-      body.shop-categories-page {
-        min-height: 100vh;
-        color: #f4f4f4;
-        background:
-          radial-gradient(
-            circle at 50% 5%,
-            rgba(75, 75, 84, 0.18),
-            transparent 30%
-          ),
-          linear-gradient(
-            180deg,
-            #111216 0%,
-            #07080a 56%,
-            #020203 100%
-          );
-      }
-
-      .shop-categories-page .utility-bar,
-      .shop-categories-page .section-header,
-      .shop-categories-page .footer {
-        background: #000000;
-      }
-
-      /* ========================================
+      /* =========================================================
          COLLECTION HUB
-      ======================================== */
+      ========================================================= */
 
       .collection-hub {
         position: relative;
@@ -438,24 +482,27 @@
         line-height: 1.8;
       }
 
-      /* ========================================
-         FOUR COLLECTION BANNERS
-      ======================================== */
+      /* =========================================================
+         STACKED 16:9 COLLECTION BANNERS
+      ========================================================= */
 
       .collection-grid {
         display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: clamp(14px, 2vw, 26px);
+        grid-template-columns: 1fr;
+        gap: clamp(18px, 2.4vw, 34px);
+        width: 100%;
       }
 
       .collection-card {
         position: relative;
         isolation: isolate;
         display: block;
-        min-height: clamp(420px, 48vw, 690px);
+        width: 100%;
+        min-height: 0;
+        aspect-ratio: 16 / 9;
         overflow: hidden;
         border: 1px solid rgba(255, 255, 255, 0.09);
-        color: #ffffff;
+        color: #fff;
         background: #101114;
         text-decoration: none;
       }
@@ -464,9 +511,12 @@
         position: absolute;
         inset: 0;
         z-index: -3;
+        display: block;
         width: 100%;
         height: 100%;
+        max-width: none;
         object-fit: cover;
+        object-position: center center;
         filter:
           saturate(0.86)
           contrast(1.05)
@@ -482,12 +532,19 @@
         position: absolute;
         inset: 0;
         z-index: -2;
+        pointer-events: none;
         background:
           linear-gradient(
+            90deg,
+            rgba(0, 0, 0, 0.7) 0%,
+            rgba(0, 0, 0, 0.28) 48%,
+            rgba(0, 0, 0, 0.07) 100%
+          ),
+          linear-gradient(
             180deg,
-            rgba(0, 0, 0, 0.05) 10%,
-            rgba(0, 0, 0, 0.22) 52%,
-            rgba(0, 0, 0, 0.88) 100%
+            rgba(0, 0, 0, 0.04) 10%,
+            rgba(0, 0, 0, 0.17) 54%,
+            rgba(0, 0, 0, 0.8) 100%
           );
       }
 
@@ -511,7 +568,7 @@
           saturate(0.94)
           contrast(1.07)
           brightness(0.82);
-        transform: scale(1.045);
+        transform: scale(1.035);
       }
 
       .collection-card:hover::after,
@@ -527,41 +584,46 @@
 
       .collection-card__content {
         position: absolute;
-        right: clamp(24px, 3.3vw, 52px);
-        bottom: clamp(28px, 4vw, 58px);
-        left: clamp(24px, 3.3vw, 52px);
+        right: clamp(24px, 4vw, 68px);
+        bottom: clamp(24px, 4vw, 64px);
+        left: clamp(24px, 4vw, 68px);
         z-index: 3;
+        max-width: 900px;
       }
 
       .collection-card__number {
         display: block;
-        margin-bottom: 14px;
-        color: rgba(255, 255, 255, 0.55);
+        margin-bottom: 12px;
+        color: rgba(255, 255, 255, 0.62);
         font-family: "Roboto", sans-serif;
         font-size: 11px;
         font-weight: 500;
         letter-spacing: 0.24em;
+        line-height: 1;
         text-transform: uppercase;
       }
 
       .collection-card__title {
-        max-width: 760px;
+        max-width: 900px;
         margin: 0;
-        color: #ffffff;
+        color: #fff;
         font-family: "Cinzel", serif;
-        font-size: clamp(28px, 4vw, 61px);
+        font-size: clamp(30px, 4.2vw, 68px);
         font-weight: 500;
         letter-spacing: 0.02em;
-        line-height: 1.02;
+        line-height: 1;
         text-transform: uppercase;
+        text-shadow:
+          0 0 8px rgba(255, 255, 255, 0.32),
+          0 0 24px rgba(255, 255, 255, 0.1);
       }
 
       .collection-card__subtitle {
-        max-width: 580px;
+        max-width: 620px;
         margin: 15px 0 0;
-        color: rgba(255, 255, 255, 0.72);
+        color: rgba(255, 255, 255, 0.76);
         font-family: "Roboto", sans-serif;
-        font-size: clamp(13px, 1.1vw, 16px);
+        font-size: clamp(13px, 1.05vw, 16px);
         font-weight: 300;
         letter-spacing: 0.035em;
         line-height: 1.65;
@@ -571,8 +633,8 @@
         display: inline-flex;
         align-items: center;
         gap: 13px;
-        margin-top: 23px;
-        color: #ffffff;
+        margin-top: 22px;
+        color: #fff;
         font-family: "Roboto", sans-serif;
         font-size: 12px;
         font-weight: 500;
@@ -600,11 +662,243 @@
           brightness(0.65);
       }
 
-      /* ========================================
+      .collection-card--all:hover .collection-card__image,
+      .collection-card--all:focus-visible .collection-card__image {
+        filter:
+          grayscale(0.08)
+          saturate(0.82)
+          contrast(1.08)
+          brightness(0.74);
+      }
+
+      /* =========================================================
+         SEARCH MODAL
+      ========================================================= */
+
+      #search-modal {
+        position: fixed;
+        inset: 0;
+        z-index: 2147483647;
+        display: none;
+        padding: 20px;
+      }
+
+      #search-modal[aria-hidden="false"] {
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+      }
+
+      .search-modal__overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.78);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+      }
+
+      .search-modal__dialog {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        width: min(560px, calc(100vw - 40px));
+        max-height: min(680px, calc(100dvh - 80px));
+        margin-top: clamp(54px, 10vh, 110px);
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 4px;
+        background:
+          linear-gradient(
+            180deg,
+            rgba(14, 14, 16, 0.99) 0%,
+            rgba(7, 7, 8, 0.99) 100%
+          );
+        box-shadow:
+          0 30px 90px rgba(0, 0, 0, 0.72),
+          inset 0 1px 0 rgba(255, 255, 255, 0.035);
+      }
+
+      .search-modal__header {
+        display: flex;
+        flex: 0 0 auto;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+        padding: 22px 24px 18px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      #search-title {
+        margin: 0;
+        color: #f4f4f2;
+        font-family: "Cinzel", serif;
+        font-size: 20px;
+        font-weight: 400;
+        letter-spacing: 0.13em;
+        line-height: 1;
+        text-transform: uppercase;
+        text-shadow: none;
+      }
+
+      #search-close {
+        display: inline-flex;
+        flex: 0 0 auto;
+        align-items: center;
+        justify-content: center;
+        width: 34px;
+        height: 34px;
+        padding: 0;
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        border-radius: 50%;
+        color: rgba(255, 255, 255, 0.76);
+        background: transparent;
+        font-family: "Roboto", sans-serif;
+        font-size: 18px;
+        font-weight: 300;
+        line-height: 1;
+        cursor: pointer;
+      }
+
+      #search-close:hover {
+        border-color: rgba(255, 255, 255, 0.42);
+        color: #fff;
+        background: rgba(255, 255, 255, 0.055);
+        transform: none;
+      }
+
+      .search-modal__field {
+        flex: 0 0 auto;
+        padding: 18px 24px 16px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+      }
+
+      #search-input {
+        width: 100%;
+        height: 48px;
+        min-width: 0;
+        padding: 0 15px;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 2px;
+        outline: none;
+        color: #f5f5f5;
+        background: rgba(255, 255, 255, 0.035);
+        caret-color: #fff;
+        font-family: "Roboto", sans-serif;
+        font-size: 14px;
+        font-weight: 300;
+        letter-spacing: 0.025em;
+        box-shadow: none;
+      }
+
+      #search-input::placeholder {
+        color: rgba(255, 255, 255, 0.43);
+        opacity: 1;
+      }
+
+      #search-input:focus {
+        border-color: rgba(255, 255, 255, 0.42);
+        background: rgba(255, 255, 255, 0.055);
+      }
+
+      #search-results {
+        display: block;
+        flex: 1 1 auto;
+        min-height: 0;
+        max-height: 470px;
+        padding: 6px 24px 18px;
+        overflow-x: hidden;
+        overflow-y: auto;
+      }
+
+      #search-results .search-result {
+        display: grid;
+        grid-template-columns: 76px minmax(0, 1fr);
+        align-items: center;
+        gap: 16px;
+        width: 100%;
+        min-width: 0;
+        padding: 14px 0;
+        overflow: hidden;
+        border: 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.075);
+        border-radius: 0;
+        color: inherit;
+        background: transparent;
+        text-decoration: none;
+      }
+
+      #search-results .search-result:last-child {
+        border-bottom: 0;
+      }
+
+      #search-results .search-result:hover {
+        opacity: 0.82;
+        background: rgba(255, 255, 255, 0.025);
+        transform: none;
+      }
+
+      #search-results .sr__thumb {
+        width: 76px;
+        height: 94px;
+        overflow: hidden;
+        background: rgba(255, 255, 255, 0.035);
+      }
+
+      #search-results .sr__thumb img {
+        display: block;
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover;
+        object-position: center top;
+      }
+
+      #search-results .sr__meta {
+        display: grid;
+        align-content: center;
+        gap: 8px;
+        min-width: 0;
+      }
+
+      #search-results .sr__title {
+        color: #f2f2f0;
+        font-family: "Cinzel", serif;
+        font-size: 14px;
+        font-weight: 400;
+        letter-spacing: 0.045em;
+        line-height: 1.38;
+        text-transform: uppercase;
+      }
+
+      #search-results .sr__price {
+        color: rgba(255, 255, 255, 0.58);
+        font-family: "Roboto", sans-serif;
+        font-size: 12px;
+        font-weight: 300;
+        letter-spacing: 0.08em;
+      }
+
+      .search-empty {
+        margin: 0;
+        padding: 30px 0 16px;
+        color: rgba(255, 255, 255, 0.52);
+        font-family: "Roboto", sans-serif;
+        font-size: 13px;
+        font-weight: 300;
+        letter-spacing: 0.08em;
+        line-height: 1.5;
+        text-align: center;
+      }
+
+      /* =========================================================
          RESPONSIVE
-      ======================================== */
+      ========================================================= */
 
       @media (max-width: 900px) {
+        .header__heading-logo {
+          height: 30px !important;
+        }
+
         .menu-drawer__menu {
           gap: 20px;
           padding-top: 56px;
@@ -616,20 +910,46 @@
           font-size: 26px;
         }
 
-        .header__heading-logo {
-          height: 30px !important;
-        }
-
         .collection-hub__inner {
           width: min(100% - 28px, 1500px);
         }
 
         .collection-grid {
           grid-template-columns: 1fr;
+          gap: 18px;
         }
 
         .collection-card {
-          min-height: clamp(460px, 120vw, 680px);
+          width: 100%;
+          min-height: 0;
+          aspect-ratio: 16 / 9;
+        }
+
+        .collection-card__content {
+          right: 24px;
+          bottom: 26px;
+          left: 24px;
+        }
+
+        .collection-card__number {
+          margin-bottom: 9px;
+          font-size: 9px;
+        }
+
+        .collection-card__title {
+          font-size: clamp(26px, 7vw, 48px);
+        }
+
+        .collection-card__subtitle {
+          max-width: 540px;
+          margin-top: 10px;
+          font-size: 13px;
+          line-height: 1.5;
+        }
+
+        .collection-card__action {
+          margin-top: 15px;
+          font-size: 10px;
         }
       }
 
@@ -650,6 +970,10 @@
           padding-top: 42px;
         }
 
+        .collection-hub__inner {
+          width: calc(100% - 24px);
+        }
+
         .collection-hub__title {
           font-size: clamp(34px, 12vw, 52px);
         }
@@ -659,22 +983,94 @@
           line-height: 1.7;
         }
 
+        .collection-grid {
+          gap: 14px;
+        }
+
         .collection-card {
-          min-height: 500px;
+          min-height: 0;
+          aspect-ratio: 16 / 9;
+        }
+
+        .collection-card::after {
+          inset: 8px;
         }
 
         .collection-card__content {
-          right: 22px;
-          bottom: 28px;
-          left: 22px;
+          right: 17px;
+          bottom: 18px;
+          left: 17px;
+        }
+
+        .collection-card__number {
+          margin-bottom: 7px;
+          font-size: 8px;
+          letter-spacing: 0.2em;
         }
 
         .collection-card__title {
-          font-size: clamp(27px, 9vw, 42px);
+          max-width: 95%;
+          font-size: clamp(21px, 7.2vw, 34px);
+          line-height: 1.02;
         }
 
         .collection-card__subtitle {
+          display: none;
+        }
+
+        .collection-card__action {
+          gap: 8px;
+          margin-top: 10px;
+          font-size: 9px;
+          letter-spacing: 0.16em;
+        }
+
+        .collection-card__arrow {
           font-size: 14px;
+        }
+
+        #search-modal {
+          padding:
+            max(14px, env(safe-area-inset-top))
+            14px
+            max(14px, env(safe-area-inset-bottom));
+        }
+
+        .search-modal__dialog {
+          width: 100%;
+          margin-top: 42px;
+        }
+
+        .search-modal__header {
+          padding: 18px 18px 15px;
+        }
+
+        .search-modal__field {
+          padding: 15px 18px;
+        }
+
+        #search-results {
+          max-height: calc(100dvh - 230px);
+          padding: 4px 18px 14px;
+        }
+
+        #search-results .search-result {
+          grid-template-columns: 64px minmax(0, 1fr);
+          gap: 13px;
+          padding: 12px 0;
+        }
+
+        #search-results .sr__thumb {
+          width: 64px;
+          height: 80px;
+        }
+
+        #search-results .sr__title {
+          font-size: 12px;
+        }
+
+        #search-results .sr__price {
+          font-size: 11px;
         }
       }
 
@@ -697,9 +1093,9 @@
       <canvas id="rain-canvas"></canvas>
     </div>
 
-    <!-- ========================================
+    <!-- =======================================================
          ANNOUNCEMENT BAR
-    ========================================= -->
+    ======================================================== -->
 
     <div
       class="utility-bar color-scheme-4 gradient utility-bar--bottom-border"
@@ -742,9 +1138,9 @@
       </div>
     </div>
 
-    <!-- ========================================
-         HEADER AND HAMBURGER MENU
-    ========================================= -->
+    <!-- =======================================================
+         HEADER
+    ======================================================== -->
 
     <div
       class="section-header header-wrapper color-scheme-4 gradient"
@@ -764,14 +1160,22 @@
                 aria-label="Menu"
               >
                 <span aria-hidden="true">
-                  <svg width="22" height="22" viewBox="0 0 24 24">
+                  <svg
+                    width="22"
+                    height="22"
+                    viewBox="0 0 24 24"
+                  >
                     <path
                       d="M3 6h18v2H3zM3 11h18v2H3zM3 16h18v2H3z"
                       fill="currentColor"
                     />
                   </svg>
 
-                  <svg width="22" height="22" viewBox="0 0 24 24">
+                  <svg
+                    width="22"
+                    height="22"
+                    viewBox="0 0 24 24"
+                  >
                     <path
                       d="M18.3 5.7 12 12l6.3 6.3-1.4 1.4L10.6 13.4 4.3 19.7 2.9 18.3 9.2 12 2.9 5.7 4.3 4.3 10.6 10.6 16.9 4.3z"
                       fill="currentColor"
@@ -803,7 +1207,6 @@
                           </a>
                         </li>
 
-                        <!-- Expandable Shop All section -->
                         <li
                           class="menu-shop-group"
                           id="menuShopGroup"
@@ -902,6 +1305,7 @@
                             data-cart-open
                           >
                             Cart
+
                             <span
                               class="cart-count-bubble"
                               data-cart-count
@@ -946,9 +1350,9 @@
       </header>
     </div>
 
-    <!-- ========================================
-         COLLECTION CATEGORY LANDING PAGE
-    ========================================= -->
+    <!-- =======================================================
+         COLLECTION CATEGORY PAGE
+    ======================================================== -->
 
     <main id="MainContent">
       <section
@@ -969,14 +1373,15 @@
             </h1>
 
             <p class="collection-hub__copy">
-              Enter each division of Dark Harlem Knight. Explore the original
-              DHK uniform, the Comic Book Collection, comfort-driven DHK
-              Blanks, or view the complete catalog.
+              Enter each division of Dark Harlem Knight. Explore the
+              original DHK uniform, the Comic Book Collection,
+              comfort-driven DHK Blanks, or view the complete catalog.
             </p>
           </header>
 
           <div class="collection-grid">
             <!-- DHK COLLECTION -->
+
             <a
               href="dhk-collection.html"
               class="collection-card"
@@ -999,9 +1404,9 @@
                 </h2>
 
                 <p class="collection-card__subtitle">
-                  The original Dark Harlem Knight uniform. Heavyweight
-                  silhouettes, Swarovski® crystal emblems and storm-forged
-                  luxury.
+                  The original Dark Harlem Knight uniform.
+                  Heavyweight silhouettes, Swarovski® crystal
+                  emblems and storm-forged luxury.
                 </p>
 
                 <span class="collection-card__action">
@@ -1018,6 +1423,7 @@
             </a>
 
             <!-- COMIC BOOK COLLECTION -->
+
             <a
               href="comic-collection.html"
               class="collection-card"
@@ -1040,9 +1446,9 @@
                 </h2>
 
                 <p class="collection-card__subtitle">
-                  Graphic storytelling translated into wearable armor.
-                  Familiar comic energy rebuilt through the Dark Harlem Knight
-                  universe.
+                  Graphic storytelling translated into wearable
+                  armor. Familiar comic energy rebuilt through the
+                  Dark Harlem Knight universe.
                 </p>
 
                 <span class="collection-card__action">
@@ -1059,6 +1465,7 @@
             </a>
 
             <!-- DHK BLANKS -->
+
             <a
               href="blanks-collection.html"
               class="collection-card"
@@ -1081,8 +1488,9 @@
                 </h2>
 
                 <p class="collection-card__subtitle">
-                  Where comfort becomes the product. Premium weights, carefully
-                  structured fits and elevated everyday essentials.
+                  Where comfort becomes the product. Premium weights,
+                  carefully structured fits and elevated everyday
+                  essentials.
                 </p>
 
                 <span class="collection-card__action">
@@ -1099,6 +1507,7 @@
             </a>
 
             <!-- VIEW ALL -->
+
             <a
               href="shop.html"
               class="collection-card collection-card--all"
@@ -1121,8 +1530,8 @@
                 </h2>
 
                 <p class="collection-card__subtitle">
-                  Enter the complete shop and explore every available Dark
-                  Harlem Knight product in one place.
+                  Enter the complete shop and explore every available
+                  Dark Harlem Knight product in one place.
                 </p>
 
                 <span class="collection-card__action">
@@ -1142,9 +1551,9 @@
       </section>
     </main>
 
-    <!-- ========================================
+    <!-- =======================================================
          FOOTER
-    ========================================= -->
+    ======================================================== -->
 
     <footer
       class="footer color-scheme-4 gradient section footer--static"
@@ -1258,7 +1667,8 @@
 
             <div class="footer-block__details-content rte">
               <p>
-                Forged in the storm. Streetwear with thunder in its veins.
+                Forged in the storm. Streetwear with thunder in its
+                veins.
               </p>
             </div>
 
@@ -1341,7 +1751,10 @@
         <div class="footer__content-bottom-wrapper page-width">
           <div class="footer__column footer__column--info">
             <div class="footer__payment">
-              <ul class="list list-payment" role="list">
+              <ul
+                class="list list-payment"
+                role="list"
+              >
                 <li class="list-payment__item">Visa</li>
                 <li class="list-payment__item">Mastercard</li>
                 <li class="list-payment__item">Amex</li>
@@ -1381,9 +1794,9 @@
       </div>
     </footer>
 
-    <!-- ========================================
+    <!-- =======================================================
          SEARCH MODAL
-    ========================================= -->
+    ======================================================== -->
 
     <div
       id="search-modal"
@@ -1402,7 +1815,9 @@
         aria-labelledby="search-title"
       >
         <header class="search-modal__header">
-          <h2 id="search-title">Search</h2>
+          <h2 id="search-title">
+            Search
+          </h2>
 
           <button
             id="search-close"
@@ -1418,7 +1833,7 @@
           <input
             id="search-input"
             type="search"
-            placeholder="Search products…  ( /  or  ⌘/Ctrl+K )"
+            placeholder="Search products…"
             autocomplete="off"
           />
         </div>
@@ -1431,9 +1846,9 @@
       </div>
     </div>
 
-    <!-- ========================================
+    <!-- =======================================================
          STORM AUDIO
-    ========================================= -->
+    ======================================================== -->
 
     <audio
       id="rain-light"
@@ -1483,9 +1898,9 @@
       hidden
     ></audio>
 
-    <!-- ========================================
+    <!-- =======================================================
          CART DRAWER
-    ========================================= -->
+    ======================================================== -->
 
     <div
       id="cart-drawer"
@@ -1562,7 +1977,9 @@
           </div>
 
           <div class="cart-row">
-            <div class="label">Subtotal</div>
+            <div class="label">
+              Subtotal
+            </div>
 
             <div
               class="value"
@@ -1583,9 +2000,9 @@
       </aside>
     </div>
 
-    <!-- ========================================
-         EXISTING SITE SCRIPTS
-    ========================================= -->
+    <!-- =======================================================
+         SITE SCRIPTS
+    ======================================================== -->
 
     <script src="js/nav.js"></script>
     <script src="js/announce.js"></script>
@@ -1594,34 +2011,42 @@
     <script src="js/newsletter.js"></script>
     <script src="js/storm_shopify_style.js"></script>
 
-    <!-- shop.js intentionally removed.
-         This page is a category landing page,
-         not the full product grid. -->
-
     <script>
       document.getElementById("year").textContent =
         new Date().getFullYear();
 
-      (function () {
+      (() => {
         const shopGroup =
           document.getElementById("menuShopGroup");
 
         const shopToggle =
           document.getElementById("menuShopToggle");
 
-        if (!shopGroup || !shopToggle) {
-          return;
+        const menuDetails =
+          document.getElementById(
+            "Details-menu-drawer-container"
+          );
+
+        if (shopGroup && shopToggle) {
+          shopToggle.addEventListener("click", () => {
+            const isOpen =
+              shopGroup.classList.toggle("is-open");
+
+            shopToggle.setAttribute(
+              "aria-expanded",
+              String(isOpen)
+            );
+          });
         }
 
-        shopToggle.addEventListener("click", function () {
-          const isOpen =
-            shopGroup.classList.toggle("is-open");
-
-          shopToggle.setAttribute(
-            "aria-expanded",
-            String(isOpen)
-          );
-        });
+        if (menuDetails) {
+          menuDetails.addEventListener("toggle", () => {
+            document.body.classList.toggle(
+              "drawer-open",
+              menuDetails.open
+            );
+          });
+        }
       })();
     </script>
   </body>
