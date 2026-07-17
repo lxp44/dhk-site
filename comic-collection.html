@@ -937,6 +937,7 @@
     }
 
     .comic-product-card {
+      position: relative;
       width: 100%;
       min-width: 0;
       margin: 0;
@@ -944,6 +945,7 @@
 
     .comic-product-card__link {
       display: block;
+      width: 100%;
       color: inherit;
       text-decoration: none;
     }
@@ -956,6 +958,7 @@
       background: #e5e0d7;
       border: 1px solid rgba(17, 17, 17, 0.12);
       box-shadow: 7px 7px 0 rgba(82, 22, 22, 0.07);
+      isolation: isolate;
     }
 
     .comic-product-card__media::after {
@@ -979,8 +982,9 @@
       position: absolute;
       inset: 0;
       display: block;
-      width: 100%;
-      height: 100%;
+      width: 100% !important;
+      height: 100% !important;
+      max-width: none !important;
       object-fit: cover;
       object-position: center;
       transition:
@@ -992,11 +996,14 @@
     .comic-product-card__image--primary {
       z-index: 1;
       opacity: 1;
+      visibility: visible;
     }
 
     .comic-product-card__image--hover {
       z-index: 2;
       opacity: 0;
+      visibility: visible;
+      pointer-events: none;
     }
 
     .comic-product-card:hover
@@ -1639,9 +1646,6 @@
 
     <!-- =====================================================
          PRODUCT GRID
-
-         Replace the six image filenames below with your exact
-         campaign-2 filenames when necessary.
     ====================================================== -->
 
     <section
@@ -1691,14 +1695,15 @@
                 src="assets/img/products/dhk/campaign-2/product-shots/comic-summer/batman-front-2.jpeg"
                 alt="Batman 4ever"
                 loading="eager"
+                decoding="async"
               />
 
               <img
                 class="comic-product-card__image comic-product-card__image--hover"
                 src="assets/img/products/dhk/campaign-2/for-website/hover-image/batman-4ever-hover.jpeg"
-                alt=""
-                aria-hidden="true"
-                loading="lazy"
+                alt="Batman 4ever alternate view"
+                loading="eager"
+                decoding="async"
               />
             </div>
 
@@ -1732,14 +1737,15 @@
                 src="assets/img/products/dhk/campaign-2/product-shots/comic-summer/joker-front-2.jpeg"
                 alt="The Joker"
                 loading="eager"
+                decoding="async"
               />
 
               <img
                 class="comic-product-card__image comic-product-card__image--hover"
                 src="assets/img/products/dhk/campaign-2/for-website/hover-image/joker-hover.jpeg"
-                alt=""
-                aria-hidden="true"
-                loading="lazy"
+                alt="The Joker alternate view"
+                loading="eager"
+                decoding="async"
               />
             </div>
 
@@ -1773,14 +1779,15 @@
                 src="assets/img/products/dhk/campaign-2/product-shots/comic-summer/spawn-front-2.jpeg"
                 alt="Spawn"
                 loading="eager"
+                decoding="async"
               />
 
               <img
                 class="comic-product-card__image comic-product-card__image--hover"
                 src="assets/img/products/dhk/campaign-2/for-website/hover-image/spawn-hover.jpeg"
-                alt=""
-                aria-hidden="true"
-                loading="lazy"
+                alt="Spawn alternate view"
+                loading="eager"
+                decoding="async"
               />
             </div>
 
@@ -2135,13 +2142,6 @@
   <script src="js/newsletter.js"></script>
   <script src="js/storm_shopify_style.js"></script>
 
-  <!--
-    shop.js is intentionally not loaded on this page.
-
-    The three comic products are written directly into this page,
-    preventing the general shop renderer from replacing this grid.
-  -->
-
   <!-- =======================================================
        COMIC COLLECTION CONTROLS
   ======================================================== -->
@@ -2150,19 +2150,11 @@
     (() => {
       "use strict";
 
-      /* =====================================================
-         YEAR
-      ===================================================== */
-
       const yearElement = document.getElementById("year");
 
       if (yearElement) {
         yearElement.textContent = new Date().getFullYear();
       }
-
-      /* =====================================================
-         HAMBURGER OPEN + CLOSE
-      ===================================================== */
 
       const menuDetails = document.getElementById(
         "Details-menu-drawer-container"
@@ -2211,10 +2203,6 @@
         );
       }
 
-      /* =====================================================
-         SHOP ALL SUBMENU
-      ===================================================== */
-
       const shopMenuToggle = document.getElementById(
         "shop-menu-toggle"
       );
@@ -2245,10 +2233,6 @@
         );
       }
 
-      /* =====================================================
-         CLOSE MENU AFTER LINK CLICK
-      ===================================================== */
-
       document
         .querySelectorAll("#menu-drawer a")
         .forEach((link) => {
@@ -2263,10 +2247,6 @@
           );
         });
 
-      /* =====================================================
-         CLOSE MENU WITH ESCAPE
-      ===================================================== */
-
       document.addEventListener(
         "keydown",
         (event) => {
@@ -2280,26 +2260,6 @@
           }
         }
       );
-
-      /* =====================================================
-         HOVER IMAGE FALLBACK
-
-         If a hover-image path is wrong or missing, it is removed
-         so the primary product image remains visible.
-      ===================================================== */
-
-      document
-        .querySelectorAll(
-          ".comic-product-card__image--hover"
-        )
-        .forEach((hoverImage) => {
-          hoverImage.addEventListener(
-            "error",
-            () => {
-              hoverImage.remove();
-            }
-          );
-        });
     })();
   </script>
 
