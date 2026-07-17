@@ -50,6 +50,14 @@
       --comic-dark-line: rgba(17, 17, 17, 0.12);
     }
 
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
     html,
     body {
       margin: 0;
@@ -79,6 +87,11 @@
       z-index: 2;
     }
 
+    body.menu-open,
+    body.search-open {
+      overflow: hidden;
+    }
+
     /* =========================================================
        ANNOUNCEMENT BAR
     ========================================================= */
@@ -92,7 +105,6 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 0;
     }
 
     .utility-bar .list-social,
@@ -110,12 +122,11 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 24px;
     }
 
     .announcement-bar__message {
       margin: 0;
-      padding: 10px 0;
+      padding: 10px 20px;
     }
 
     .announcement-bar__message span {
@@ -233,6 +244,7 @@
 
     .header__icon--summary {
       list-style: none;
+      cursor: pointer;
     }
 
     .header__icon--summary::-webkit-details-marker {
@@ -273,7 +285,8 @@
       inset: 0;
       width: 100vw;
       height: 100vh;
-      box-sizing: border-box;
+      padding: 34px 28px 40px;
+      overflow-y: auto;
       background:
         linear-gradient(
           rgba(4, 4, 5, 0.985),
@@ -287,10 +300,7 @@
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
       border: 0;
-      box-shadow: none;
       z-index: 2147483646;
-      padding: 34px 28px 40px;
-      overflow-y: auto;
     }
 
     #menu-drawer::before {
@@ -344,7 +354,6 @@
     }
 
     .menu-drawer__menu-item:hover,
-    .menu-drawer__menu .list-menu__item.link:hover,
     .menu-drawer__menu-item:focus-visible,
     .menu-drawer__menu button:hover {
       color: #ffffff;
@@ -353,15 +362,8 @@
         0 0 26px rgba(185, 153, 91, 0.12);
     }
 
-    .menu-drawer__menu .list-menu__item + .list-menu__item {
-      border-top: 0;
-    }
-
-    body.menu-open {
-      overflow: hidden;
-    }
-
-    body.menu-open #storm-overlay {
+    body.menu-open #storm-overlay,
+    body.search-open #storm-overlay {
       opacity: 0 !important;
       pointer-events: none !important;
     }
@@ -373,7 +375,6 @@
     .shop-menu-parent {
       display: flex;
       flex-direction: column;
-      gap: 0;
     }
 
     .shop-menu-toggle {
@@ -459,11 +460,6 @@
       z-index: 2147483647;
     }
 
-    body.search-open #storm-overlay {
-      opacity: 0 !important;
-      pointer-events: none !important;
-    }
-
     /* =========================================================
        COMIC HERO
     ========================================================= */
@@ -537,12 +533,9 @@
         );
     }
 
-    /* luxury comic border */
-
     .comic-hero__frame {
       position: absolute;
-      inset:
-        clamp(14px, 2vw, 28px);
+      inset: clamp(14px, 2vw, 28px);
       z-index: 4;
       pointer-events: none;
       border: 1px solid rgba(232, 225, 212, 0.48);
@@ -573,8 +566,6 @@
       bottom: 28px;
     }
 
-    /* diagonal comic cut */
-
     .comic-hero__slash {
       position: absolute;
       z-index: 4;
@@ -589,8 +580,6 @@
         17px 0 0 rgba(255, 255, 255, 0.08);
       pointer-events: none;
     }
-
-    /* moving ink sheen */
 
     .comic-hero__ink-sweep {
       position: absolute;
@@ -640,7 +629,6 @@
         clamp(52px, 8vw, 112px)
         clamp(28px, 6vw, 88px)
         clamp(64px, 9vw, 112px);
-      box-sizing: border-box;
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
@@ -771,7 +759,7 @@
     }
 
     /* =========================================================
-       CHAPTER TRANSITION
+       CHAPTER STRIP
     ========================================================= */
 
     .comic-chapter-strip {
@@ -889,10 +877,6 @@
       gap: 24px;
     }
 
-    .comic-products__heading-wrap {
-      min-width: 0;
-    }
-
     .comic-products__chapter {
       margin: 0 0 10px;
       font-family: "Roboto", sans-serif;
@@ -938,77 +922,47 @@
     }
 
     /* =========================================================
-       PRODUCT GRID
+       PRODUCT GRID — THREE PRODUCTS / 1:1
     ========================================================= */
 
-    .comic-products #shop-grid,
-    .comic-products .product-grid {
+    .comic-product-grid {
       position: relative;
       z-index: 2;
       width: 100%;
-      box-sizing: border-box;
-      display: grid !important;
-      grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-      gap:
-        clamp(34px, 4vw, 58px)
-        clamp(14px, 2vw, 30px) !important;
-      padding: 0 clamp(18px, 3.4vw, 54px) !important;
-      margin: 0 !important;
-      list-style: none;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: clamp(18px, 2.4vw, 34px);
+      padding: 0 clamp(18px, 3.4vw, 54px);
+      margin: 0;
     }
 
-    .comic-products #shop-grid > *,
-    .comic-products .product-grid > * {
-      position: relative;
-      width: 100% !important;
-      max-width: none !important;
-      margin: 0 !important;
-      background: transparent !important;
-      border: 0 !important;
-      border-radius: 0 !important;
-      box-shadow: none !important;
-      color: #111111 !important;
+    .comic-product-card {
+      width: 100%;
+      min-width: 0;
+      margin: 0;
     }
 
-    .comic-products .product-card,
-    .comic-products .card-wrapper,
-    .comic-products .grid__item,
-    .comic-products .shop-card {
-      width: 100% !important;
-      min-width: 0 !important;
-    }
-
-    .comic-products .product-card a,
-    .comic-products .card-wrapper a,
-    .comic-products .shop-card a {
+    .comic-product-card__link {
+      display: block;
       color: inherit;
       text-decoration: none;
     }
 
-    .comic-products .product-card__image,
-    .comic-products .card__media,
-    .comic-products .card-media,
-    .comic-products .shop-card__media,
-    .comic-products .product-image-wrap {
+    .comic-product-card__media {
       position: relative;
       width: 100%;
-      aspect-ratio: 0.92 / 1;
+      aspect-ratio: 1 / 1;
       overflow: hidden;
-      background: #e5e0d7 !important;
-      border: 1px solid rgba(17, 17, 17, 0.12) !important;
-      border-radius: 0 !important;
-      box-shadow:
-        7px 7px 0 rgba(82, 22, 22, 0.07) !important;
+      background: #e5e0d7;
+      border: 1px solid rgba(17, 17, 17, 0.12);
+      box-shadow: 7px 7px 0 rgba(82, 22, 22, 0.07);
     }
 
-    .comic-products .product-card__image::after,
-    .comic-products .card__media::after,
-    .comic-products .card-media::after,
-    .comic-products .shop-card__media::after,
-    .comic-products .product-image-wrap::after {
+    .comic-product-card__media::after {
       content: "";
       position: absolute;
       inset: 0;
+      z-index: 4;
       pointer-events: none;
       opacity: 0.1;
       background-image:
@@ -1021,49 +975,54 @@
       mix-blend-mode: multiply;
     }
 
-    .comic-products #shop-grid img,
-    .comic-products .product-grid img {
+    .comic-product-card__image {
+      position: absolute;
+      inset: 0;
       display: block;
-      width: 100% !important;
-      max-width: 100%;
-    }
-
-    .comic-products .product-card__image img,
-    .comic-products .card__media img,
-    .comic-products .card-media img,
-    .comic-products .shop-card__media img,
-    .comic-products .product-image-wrap img {
-      width: 100% !important;
-      height: 100% !important;
-      object-fit: cover !important;
-      object-position: center !important;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
       transition:
-        transform 0.42s ease,
-        filter 0.35s ease;
+        opacity 0.42s ease,
+        transform 0.55s cubic-bezier(0.2, 0.72, 0.2, 1),
+        filter 0.42s ease;
     }
 
-    .comic-products .product-card:hover img,
-    .comic-products .card-wrapper:hover img,
-    .comic-products .shop-card:hover img {
+    .comic-product-card__image--primary {
+      z-index: 1;
+      opacity: 1;
+    }
+
+    .comic-product-card__image--hover {
+      z-index: 2;
+      opacity: 0;
+    }
+
+    .comic-product-card:hover
+      .comic-product-card__image--primary,
+    .comic-product-card:focus-within
+      .comic-product-card__image--primary {
+      opacity: 0;
+      transform: scale(1.02);
+    }
+
+    .comic-product-card:hover
+      .comic-product-card__image--hover,
+    .comic-product-card:focus-within
+      .comic-product-card__image--hover {
+      opacity: 1;
       transform: scale(1.018);
       filter: contrast(1.025);
     }
 
-    .comic-products .product-card__info,
-    .comic-products .card__content,
-    .comic-products .card-information,
-    .comic-products .shop-card__info {
+    .comic-product-card__info {
       position: relative;
-      padding: 17px 0 0 !important;
-      text-align: left !important;
-      background: transparent !important;
+      padding: 17px 0 0;
+      text-align: left;
     }
 
-    .comic-products .product-card__info::before,
-    .comic-products .card__content::before,
-    .comic-products .card-information::before,
-    .comic-products .shop-card__info::before {
-      content: "DHK / COMIC";
+    .comic-product-card__eyebrow {
       display: block;
       margin-bottom: 7px;
       font-family: "Roboto", sans-serif;
@@ -1074,54 +1033,22 @@
       color: var(--comic-oxblood);
     }
 
-    .comic-products .product-card__title,
-    .comic-products .card__heading,
-    .comic-products .card-information__text,
-    .comic-products .shop-card__title,
-    .comic-products .product-title {
-      margin: 0 0 7px !important;
-      font-family: Georgia, "Times New Roman", serif !important;
-      font-size: clamp(17px, 1.55vw, 23px) !important;
-      font-weight: 400 !important;
-      line-height: 1.24 !important;
-      letter-spacing: 0 !important;
-      text-transform: none !important;
-      color: #171717 !important;
-      text-shadow: none !important;
+    .comic-product-card__title {
+      margin: 0 0 7px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(17px, 1.55vw, 23px);
+      font-weight: 400;
+      line-height: 1.24;
+      color: #171717;
     }
 
-    .comic-products .price,
-    .comic-products .product-card__price,
-    .comic-products .shop-card__price,
-    .comic-products .product-price {
-      margin: 0 !important;
-      font-family: "Roboto", sans-serif !important;
-      font-size: 14px !important;
-      font-weight: 400 !important;
-      line-height: 1.4 !important;
-      letter-spacing: 0.01em !important;
-      color: rgba(17, 17, 17, 0.66) !important;
-      text-shadow: none !important;
-    }
-
-    .comic-products .button,
-    .comic-products button {
-      font-family: "Roboto", sans-serif;
-    }
-
-    .comic-products__empty {
-      position: relative;
-      z-index: 2;
-      display: none;
+    .comic-product-card__price {
       margin: 0;
-      padding: 44px 22px 78px;
-      text-align: center;
       font-family: "Roboto", sans-serif;
-      color: rgba(17, 17, 17, 0.64);
-    }
-
-    .comic-products__empty.is-visible {
-      display: block;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.4;
+      color: rgba(17, 17, 17, 0.66);
     }
 
     /* =========================================================
@@ -1138,20 +1065,6 @@
     /* =========================================================
        RESPONSIVE
     ========================================================= */
-
-    @media (min-width: 760px) {
-      .comic-products #shop-grid,
-      .comic-products .product-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-      }
-    }
-
-    @media (min-width: 1100px) {
-      .comic-products #shop-grid,
-      .comic-products .product-grid {
-        grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-      }
-    }
 
     @media (max-width: 900px) {
       .menu-drawer__menu {
@@ -1230,6 +1143,13 @@
       }
     }
 
+    @media (max-width: 700px) {
+      .comic-product-grid {
+        grid-template-columns: 1fr;
+        gap: 42px;
+      }
+    }
+
     @media (max-width: 560px) {
       .header-grid {
         grid-template-columns: 42px 1fr 42px !important;
@@ -1240,7 +1160,7 @@
       }
 
       .comic-hero__media img {
-        object-position: center center;
+        object-position: center;
       }
 
       .comic-hero__chapter {
@@ -1263,10 +1183,7 @@
       }
 
       .comic-products__header {
-        padding:
-          34px
-          18px
-          24px;
+        padding: 34px 18px 24px;
       }
 
       .comic-products__heading {
@@ -1278,47 +1195,27 @@
       }
 
       .comic-products__rule {
-        margin:
-          0
-          18px
-          30px;
+        margin: 0 18px 30px;
       }
 
-      .comic-products #shop-grid,
-      .comic-products .product-grid {
-        gap: 38px 15px !important;
-        padding: 0 18px !important;
+      .comic-product-grid {
+        padding: 0 18px;
       }
 
-      .comic-products .product-card__image,
-      .comic-products .card__media,
-      .comic-products .card-media,
-      .comic-products .shop-card__media,
-      .comic-products .product-image-wrap {
-        box-shadow:
-          5px 5px 0 rgba(82, 22, 22, 0.065) !important;
+      .comic-product-card__media {
+        box-shadow: 5px 5px 0 rgba(82, 22, 22, 0.065);
       }
 
-      .comic-products .product-card__info,
-      .comic-products .card__content,
-      .comic-products .card-information,
-      .comic-products .shop-card__info {
-        padding-top: 13px !important;
+      .comic-product-card__info {
+        padding-top: 14px;
       }
 
-      .comic-products .product-card__title,
-      .comic-products .card__heading,
-      .comic-products .card-information__text,
-      .comic-products .shop-card__title,
-      .comic-products .product-title {
-        font-size: 17px !important;
+      .comic-product-card__title {
+        font-size: 20px;
       }
 
-      .comic-products .price,
-      .comic-products .product-card__price,
-      .comic-products .shop-card__price,
-      .comic-products .product-price {
-        font-size: 13px !important;
+      .comic-product-card__price {
+        font-size: 13px;
       }
     }
 
@@ -1327,12 +1224,15 @@
       .comic-chapter-strip__track {
         animation: none !important;
       }
+
+      .comic-product-card__image {
+        transition: none !important;
+      }
     }
   </style>
 </head>
 
 <body class="template-page comic-collection-page">
-
   <div class="lightning-flash"></div>
 
   <div id="storm-overlay">
@@ -1396,7 +1296,6 @@
       class="site-header header header--middle-left header--mobile-center"
     >
       <div class="page-width header-grid">
-
         <header-drawer data-breakpoint="all">
           <details
             id="Details-menu-drawer-container"
@@ -1637,24 +1536,11 @@
   ======================================================== -->
 
   <main id="MainContent">
-
-    <!-- HERO -->
-
     <section
       class="comic-hero"
       aria-labelledby="comic-hero-title"
     >
       <div class="comic-hero__media">
-
-        <!--
-          TEMPORARY HERO IMAGE
-
-          Replace both paths below with the official
-          Comic Book Collection campaign image.
-
-          Desktop and mobile can use separate images later.
-        -->
-
         <picture>
           <source
             media="(max-width: 900px)"
@@ -1694,7 +1580,6 @@
 
       <div class="comic-hero__content">
         <div class="comic-hero__copy">
-
           <p class="comic-issue">
             Dark Harlem Archives
           </p>
@@ -1752,7 +1637,12 @@
       </div>
     </div>
 
-    <!-- PRODUCT GRID -->
+    <!-- =====================================================
+         PRODUCT GRID
+
+         Replace the six image filenames below with your exact
+         campaign-2 filenames when necessary.
+    ====================================================== -->
 
     <section
       class="comic-products"
@@ -1772,12 +1662,8 @@
           </h2>
         </div>
 
-        <p
-          id="comic-product-count"
-          class="comic-products__count"
-          aria-live="polite"
-        >
-          Loading
+        <p class="comic-products__count">
+          3 Pieces
         </p>
       </header>
 
@@ -1788,16 +1674,132 @@
 
       <div
         id="shop-grid"
-        class="product-grid"
-        aria-live="polite"
-      ></div>
-
-      <p
-        id="comic-products-empty"
-        class="comic-products__empty"
+        class="comic-product-grid"
+        aria-label="Comic Book Summer Collection products"
       >
-        The next issue is being prepared inside the storm.
-      </p>
+        <!-- BATMAN 4EVER -->
+
+        <article class="comic-product-card">
+          <a
+            class="comic-product-card__link"
+            href="product.html?id=batman-4ever"
+            aria-label="View Batman 4ever"
+          >
+            <div class="comic-product-card__media">
+              <img
+                class="comic-product-card__image comic-product-card__image--primary"
+                src="assets/img/products/dhk/campaign-2/for-website/comic-collection/batman-4ever.jpeg"
+                alt="Batman 4ever"
+                loading="eager"
+              />
+
+              <img
+                class="comic-product-card__image comic-product-card__image--hover"
+                src="assets/img/products/dhk/campaign-2/for-website/comic-collection/batman-4ever-hover.jpeg"
+                alt=""
+                aria-hidden="true"
+                loading="lazy"
+              />
+            </div>
+
+            <div class="comic-product-card__info">
+              <span class="comic-product-card__eyebrow">
+                DHK / Comic
+              </span>
+
+              <h3 class="comic-product-card__title">
+                Batman 4ever
+              </h3>
+
+              <p class="comic-product-card__price">
+                $110.00
+              </p>
+            </div>
+          </a>
+        </article>
+
+        <!-- THE JOKER -->
+
+        <article class="comic-product-card">
+          <a
+            class="comic-product-card__link"
+            href="product.html?id=the-joker"
+            aria-label="View The Joker"
+          >
+            <div class="comic-product-card__media">
+              <img
+                class="comic-product-card__image comic-product-card__image--primary"
+                src="assets/img/products/dhk/campaign-2/for-website/comic-collection/the-joker.jpeg"
+                alt="The Joker"
+                loading="eager"
+              />
+
+              <img
+                class="comic-product-card__image comic-product-card__image--hover"
+                src="assets/img/products/dhk/campaign-2/for-website/comic-collection/the-joker-hover.jpeg"
+                alt=""
+                aria-hidden="true"
+                loading="lazy"
+              />
+            </div>
+
+            <div class="comic-product-card__info">
+              <span class="comic-product-card__eyebrow">
+                DHK / Comic
+              </span>
+
+              <h3 class="comic-product-card__title">
+                The Joker
+              </h3>
+
+              <p class="comic-product-card__price">
+                $110.00
+              </p>
+            </div>
+          </a>
+        </article>
+
+        <!-- SPAWN -->
+
+        <article class="comic-product-card">
+          <a
+            class="comic-product-card__link"
+            href="product.html?id=spawn"
+            aria-label="View Spawn"
+          >
+            <div class="comic-product-card__media">
+              <img
+                class="comic-product-card__image comic-product-card__image--primary"
+                src="assets/img/products/dhk/campaign-2/for-website/comic-collection/spawn.jpeg"
+                alt="Spawn"
+                loading="eager"
+              />
+
+              <img
+                class="comic-product-card__image comic-product-card__image--hover"
+                src="assets/img/products/dhk/campaign-2/for-website/comic-collection/spawn-hover.jpeg"
+                alt=""
+                aria-hidden="true"
+                loading="lazy"
+              />
+            </div>
+
+            <div class="comic-product-card__info">
+              <span class="comic-product-card__eyebrow">
+                DHK / Comic
+              </span>
+
+              <h3 class="comic-product-card__title">
+                Spawn
+              </h3>
+
+              <p class="comic-product-card__price">
+                $110.00
+              </p>
+            </div>
+          </a>
+        </article>
+      </div>
     </section>
   </main>
 
@@ -2039,11 +2041,14 @@
       aria-labelledby="search-title"
     >
       <header class="search-modal__header">
-        <h2 id="search-title">Search</h2>
+        <h2 id="search-title">
+          Search
+        </h2>
 
         <button
           id="search-close"
           class="search-modal__close"
+          type="button"
           aria-label="Close search"
         >
           ×
@@ -2127,9 +2132,15 @@
   <script src="js/announce.js"></script>
   <script src="js/cart.js"></script>
   <script src="js/search.js"></script>
-  <script src="js/shop.js"></script>
   <script src="js/newsletter.js"></script>
   <script src="js/storm_shopify_style.js"></script>
+
+  <!--
+    shop.js is intentionally not loaded on this page.
+
+    The three comic products are written directly into this page,
+    preventing the general shop renderer from replacing this grid.
+  -->
 
   <!-- =======================================================
        COMIC COLLECTION CONTROLS
@@ -2253,237 +2264,42 @@
         });
 
       /* =====================================================
-         COMIC PRODUCT FILTER
+         CLOSE MENU WITH ESCAPE
       ===================================================== */
 
-      /*
-        Add the exact product IDs here after we enter the
-        Comic Book Collection products into products.json.
-
-        Example:
-
-        "joker-sleeveless-tank",
-        "batman-beyond-sleeveless-tank",
-        "spawn-sleeveless-tank"
-      */
-
-      const COMIC_PRODUCT_IDS = [
-        /*
-        "your-first-comic-product-id",
-        "your-second-comic-product-id",
-        "your-third-comic-product-id"
-        */
-      ];
-
-      /*
-        Temporary keyword filter.
-
-        Until exact IDs are entered above, these keywords help
-        identify products connected to the comic collection.
-      */
-
-      const COMIC_FALLBACK_KEYWORDS = [
-        "comic",
-        "joker",
-        "batman",
-        "batman beyond",
-        "spawn",
-        "chaos",
-        "dark knight tank",
-        "sleeveless",
-        "tank top",
-        "raw armhole",
-        "comic book summer"
-      ];
-
-      const shopGrid = document.getElementById(
-        "shop-grid"
-      );
-
-      const productCount = document.getElementById(
-        "comic-product-count"
-      );
-
-      const emptyMessage = document.getElementById(
-        "comic-products-empty"
-      );
-
-      let filteringScheduled = false;
-      let filteringComplete = false;
-
-      function normalize(value) {
-        return String(value || "")
-          .trim()
-          .toLowerCase();
-      }
-
-      function getProductCardId(card) {
-        if (!card) return "";
-
-        const directId =
-          card.getAttribute("data-product-id") ||
-          card.dataset.productId ||
-          "";
-
-        if (directId) {
-          return normalize(directId);
-        }
-
-        const productLink = card.querySelector(
-          'a[href*="product.html?id="]'
-        );
-
-        if (!productLink) return "";
-
-        try {
-          const url = new URL(
-            productLink.href,
-            window.location.href
-          );
-
-          return normalize(
-            url.searchParams.get("id")
-          );
-        } catch {
-          const href =
-            productLink.getAttribute("href") || "";
-
-          const match = href.match(
-            /[?&]id=([^&#]+)/
-          );
-
-          return match
-            ? normalize(
-                decodeURIComponent(match[1])
-              )
-            : "";
-        }
-      }
-
-      function cardMatchesComicCollection(card) {
-        const exactIds = COMIC_PRODUCT_IDS
-          .map(normalize)
-          .filter(Boolean);
-
-        const cardId = getProductCardId(card);
-
-        /*
-          Exact ID filtering takes over once product IDs
-          have been entered above.
-        */
-
-        if (exactIds.length > 0) {
-          return exactIds.includes(cardId);
-        }
-
-        const searchableText = normalize(
-          [
-            cardId,
-            card.textContent || "",
-            card.innerHTML || ""
-          ].join(" ")
-        );
-
-        return COMIC_FALLBACK_KEYWORDS.some(
-          (keyword) =>
-            searchableText.includes(
-              normalize(keyword)
-            )
-        );
-      }
-
-      function updateProductCount(count) {
-        if (!productCount) return;
-
-        productCount.textContent =
-          count === 1
-            ? "1 Piece"
-            : `${count} Pieces`;
-      }
-
-      function filterComicProducts() {
-        filteringScheduled = false;
-
-        if (!shopGrid) return;
-
-        const cards = Array.from(
-          shopGrid.children
-        );
-
-        if (cards.length === 0) {
-          if (!filteringComplete && productCount) {
-            productCount.textContent = "Loading";
+      document.addEventListener(
+        "keydown",
+        (event) => {
+          if (
+            event.key === "Escape" &&
+            menuDetails &&
+            menuDetails.open
+          ) {
+            menuDetails.open = false;
+            syncMenuState();
           }
-
-          return;
         }
+      );
 
-        let visibleCount = 0;
+      /* =====================================================
+         HOVER IMAGE FALLBACK
 
-        cards.forEach((card) => {
-          const shouldShow =
-            cardMatchesComicCollection(card);
+         If a hover-image path is wrong or missing, it is removed
+         so the primary product image remains visible.
+      ===================================================== */
 
-          card.hidden = !shouldShow;
-
-          card.style.display = shouldShow
-            ? ""
-            : "none";
-
-          if (shouldShow) {
-            visibleCount += 1;
-          }
-        });
-
-        filteringComplete = true;
-
-        updateProductCount(visibleCount);
-
-        if (emptyMessage) {
-          emptyMessage.classList.toggle(
-            "is-visible",
-            visibleCount === 0
+      document
+        .querySelectorAll(
+          ".comic-product-card__image--hover"
+        )
+        .forEach((hoverImage) => {
+          hoverImage.addEventListener(
+            "error",
+            () => {
+              hoverImage.remove();
+            }
           );
-        }
-      }
-
-      function scheduleFiltering() {
-        if (filteringScheduled) return;
-
-        filteringScheduled = true;
-
-        window.requestAnimationFrame(
-          filterComicProducts
-        );
-      }
-
-      if (shopGrid) {
-        const gridObserver = new MutationObserver(
-          scheduleFiltering
-        );
-
-        gridObserver.observe(shopGrid, {
-          childList: true,
-          subtree: true
         });
-
-        scheduleFiltering();
-
-        window.setTimeout(
-          scheduleFiltering,
-          250
-        );
-
-        window.setTimeout(
-          scheduleFiltering,
-          750
-        );
-
-        window.setTimeout(
-          scheduleFiltering,
-          1500
-        );
-      }
     })();
   </script>
 
