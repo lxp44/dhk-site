@@ -534,7 +534,7 @@
     "color": "Black",
     "thumbnail": "assets/img/products/dhk/campaign-2/product-shots/comic-summer/batman-front-2.jpeg",
     "hoverImage": "assets/img/products/dhk/campaign-2/for-website/hover-image/batman-4ever-hover.jpeg",
-    "bannerImage": "assets/img/products/dhk/campaign-2/for-website/comic-collection/batman-4ever.jpeg",
+    "bannerImage": "assets/img/products/dhk/campaign-2/product-shots/comic-summer/batman-front-1.jpeg",
     "images": [
       "assets/img/products/dhk/campaign-2/comic-summer/9-16/black-close-5.jpeg",
       "assets/img/products/dhk/campaign-2/comic-summer/9-16/black-close-1.jpeg",
@@ -563,7 +563,7 @@
     "color": "Cream",
     "thumbnail": "assets/img/products/dhk/campaign-2/product-shots/comic-summer/joker-front-2.jpeg",
     "hoverImage": "assets/img/products/dhk/campaign-2/for-website/hover-image/joker-hover.jpeg",
-    "bannerImage": "assets/img/products/dhk/campaign-2/for-website/comic-collection/the-joker.jpeg",
+    "bannerImage":"assets/img/products/dhk/campaign-2/product-shots/comic-summer/joker-front-1.jpeg",
     "images": [
       "assets/img/products/dhk/campaign-2/comic-summer/9-16/cream-close-1.jpeg",
       "assets/img/products/dhk/campaign-2/comic-summer/9-16/cream-close-5.jpeg",
@@ -592,7 +592,7 @@
     "color": "Dark Space Grey",
     "thumbnail": "assets/img/products/dhk/campaign-2/product-shots/comic-summer/spawn-front-2.jpeg",
     "hoverImage": "assets/img/products/dhk/campaign-2/for-website/hover-image/spawn-hover.jpeg",
-    "bannerImage": "assets/img/products/dhk/campaign-2/for-website/comic-collection/spawn.jpeg",
+    "bannerImage": "assets/img/products/dhk/campaign-2/product-shots/comic-summer/spawn-front-2.jpeg",
     "images": [
       "assets/img/products/dhk/campaign-2/comic-summer/9-16/grey-close-1.jpeg",
       "assets/img/products/dhk/campaign-2/comic-summer/9-16/grey-close-4.jpeg",
@@ -621,7 +621,7 @@
     "color": "Brown",
     "thumbnail": "assets/img/products/dhk/campaign-2/product-shots/crop-shirt/brown-shirt-front-2.jpeg",
     "hoverImage": "assets/img/products/dhk/campaign-2/for-website/hover-image/brown-crop-hover.jpeg",
-    "bannerImage": "assets/img/products/dhk/campaign-2/for-website/product-banner/brown-crop-banner.jpeg",
+    "bannerImage": "assets/img/products/dhk/campaign-2/product-shots/crop-shirt/brown-shirt-front-1.jpeg",
     "images": [
       "assets/img/products/dhk/campaign-2/crop-shirt-demin-shorts-blank/redo/brown-top-demin-1.jpeg",
       "assets/img/products/dhk/campaign-2/crop-shirt-demin-shorts-blank/9-16/brown-close-5.jpeg",
@@ -650,7 +650,7 @@
     "color": "Grey",
     "thumbnail": "assets/img/products/dhk/campaign-2/product-shots/crop-shirt/grey-shirt-front-2.jpeg",
     "hoverImage": "assets/img/products/dhk/campaign-2/for-website/hover-image/grey-crop-hover.jpeg",
-    "bannerImage": "assets/img/products/dhk/campaign-2/for-website/product-banner/grey-crop-banner.jpeg",
+    "bannerImage": "assets/img/products/dhk/campaign-2/product-shots/crop-shirt/grey-shirt-front-1.jpeg",
     "images": [
       "assets/img/products/dhk/campaign-2/crop-shirt-demin-shorts-blank/redo/grey-top-demin-1.1.jpeg",
       "assets/img/products/dhk/campaign-2/crop-shirt-demin-shorts-blank/9-16/grey-close-2.jpeg",
@@ -679,7 +679,7 @@
     "color": "White",
     "thumbnail": "assets/img/products/dhk/campaign-2/product-shots/crop-shirt/white-shirt-front-2.jpeg",
     "hoverImage": "assets/img/products/dhk/campaign-2/for-website/hover-image/white-crop-hover.jpeg",
-    "bannerImage": "assets/img/products/dhk/campaign-2/for-website/product-banner/white-crop-banner.jpeg",
+    "bannerImage": "assets/img/products/dhk/campaign-2/product-shots/crop-shirt/white-shirt-front-1.jpeg",
     "images": [
       "assets/img/products/dhk/campaign-2/crop-shirt-demin-shorts-blank/redo/white-top-demin-2.1.jpeg",
       "assets/img/products/dhk/campaign-2/crop-shirt-demin-shorts-blank/9-16/white-close-3.jpeg",
@@ -708,7 +708,7 @@
     "color": "Cream",
     "thumbnail": "assets/img/products/dhk/campaign-2/product-shots/shorts/beige-heavy-shorts-front-2.jpeg",
     "hoverImage": "assets/img/products/dhk/campaign-2/for-website/hover-image/beige-heavy-shorts-hover.jpeg",
-    "bannerImage": "assets/img/products/dhk/campaign-2/for-website/product-banner/beige-heavy-shorts-banner.jpeg",
+    "bannerImage": "assets/img/products/dhk/campaign-2/product-shots/shorts/beige-heavy-shorts-front-1.jpeg",
     "images": [
       "assets/img/products/dhk/campaign-2/comic-summer/cream-comic-set-3.jpeg",
       "assets/img/products/dhk/campaign-2/comic-summer/beige-heavy-shorts-3.jpeg",
@@ -736,7 +736,7 @@
     "color": "Washed Black",
     "thumbnail": "assets/img/products/dhk/campaign-2/product-shots/oversized-sweatsuit/dark-hoodie-front-2.jpeg",
     "hoverImage": "assets/img/products/dhk/campaign-2/for-website/hover-image/black-oversize-hoodie-hover.jpeg",
-    "bannerImage": "assets/img/products/dhk/campaign-2/for-website/product-banner/black-oversize-hoodie-banner.jpeg",
+    "bannerImage": "assets/img/products/dhk/campaign-2/product-shots/oversized-sweatsuit/dark-hoodie-front-1.jpeg",
     "images": [
       "assets/img/products/dhk/campaign-2/oversized-sweatsuit-blank/redo/black-oversize-sweatsuit-1.jpeg",
       "assets/img/products/dhk/campaign-2/oversized-sweatsuit-blank/9-16/black-oversizesuit-2.jpeg",
@@ -765,7 +765,7 @@
     "color": "Washed Grey",
     "thumbnail": "assets/img/products/dhk/campaign-2/product-shots/oversized-sweatsuit/grey-hoodie-front-2.jpeg",
     "hoverImage": "assets/img/products/dhk/campaign-2/for-website/hover-image/grey-oversize-hoodie-hover.jpeg",
-    "bannerImage": "assets/img/products/dhk/campaign-2/for-website/product-banner/grey-oversize-hoodie-banner.jpeg",
+    "bannerImage": "assets/img/products/dhk/campaign-2/product-shots/oversized-sweatsuit/grey-hoodie-front-1.jpeg",
     "images": [
       "assets/img/products/dhk/campaign-2/oversized-sweatsuit-blank/redo/grey-oversize-sweatsuit-1.jpeg",
       "assets/img/products/dhk/campaign-2/oversized-sweatsuit-blank/9-16/grey-oversizesuit-3.jpeg",
@@ -794,7 +794,7 @@
     "color": "Washed Black",
     "thumbnail": "assets/img/products/dhk/campaign-2/product-shots/oversized-sweatsuit/dark-sweats-front-2.jpeg",
     "hoverImage": "assets/img/products/dhk/campaign-2/for-website/hover-image/black-oversize-bottoms-hover.jpeg",
-    "bannerImage": "assets/img/products/dhk/campaign-2/for-website/product-banner/black-oversize-bottoms-banner.jpeg",
+    "bannerImage": "assets/img/products/dhk/campaign-2/product-shots/oversized-sweatsuit/dark-sweats-front-1.jpeg",
     "images": [
       "assets/img/products/dhk/campaign-2/oversized-sweatsuit-blank/redo/black-oversize-sweatsuit-2.jpeg",
       "assets/img/products/dhk/campaign-2/oversized-sweatsuit-blank/9-16/black-oversizesuit-3.jpeg",
@@ -822,7 +822,7 @@
     "color": "Washed Grey",
     "thumbnail": "assets/img/products/dhk/campaign-2/product-shots/oversized-sweatsuit/grey-sweats-front-2.jpeg",
     "hoverImage": "assets/img/products/dhk/campaign-2/for-website/hover-image/grey-oversize-bottoms-hover.jpeg",
-    "bannerImage": "assets/img/products/dhk/campaign-2/for-website/product-banner/grey-oversize-bottoms-banner.jpeg",
+    "bannerImage": "assets/img/products/dhk/campaign-2/product-shots/oversized-sweatsuit/grey-sweats-front-1.jpeg",
     "images": [
       "assets/img/products/dhk/campaign-2/oversized-sweatsuit-blank/redo/grey-oversize-sweatsuit-2.1.jpeg",
       "assets/img/products/dhk/campaign-2/oversized-sweatsuit-blank/redo/grey-oversize-sweatsuit-3.jpeg",
@@ -848,9 +848,9 @@
     "collection": "blanks",
     "collectionLabel": "DHK Blanks",
     "color": "Light Wash",
-    "thumbnail": "assets/img/products/dhk/campaign-2/for-website/product-image/blue-denim-shorts.jpeg",
+    "thumbnail": "assets/img/products/dhk/campaign-2/for-website/product-image/blue-denim-shorts-2.jpeg",
     "hoverImage": "assets/img/products/dhk/campaign-2/for-website/hover-image/blue-denim-shorts-hover.jpeg",
-    "bannerImage": "assets/img/products/dhk/campaign-2/for-website/product-banner/blue-denim-shorts-banner.jpeg",
+    "bannerImage": "assets/img/products/dhk/campaign-2/for-website/product-image/blue-denim-shorts-1.jpeg",
     "images": [
       "assets/img/products/dhk/campaign-2/comic-summer/grey-comic-set-1.jpeg",
       "assets/img/products/dhk/campaign-2/comic-summer/grey-comic-set-3.jpeg",
@@ -877,9 +877,9 @@
     "collection": "blanks",
     "collectionLabel": "DHK Blanks",
     "color": "Vintage Black",
-    "thumbnail": "assets/img/products/dhk/campaign-2/for-website/product-image/black-denim-shorts.jpeg",
+    "thumbnail": "assets/img/products/dhk/campaign-2/for-website/product-image/black-denim-shorts-2.jpeg",
     "hoverImage": "assets/img/products/dhk/campaign-2/for-website/hover-image/black-denim-shorts-hover.jpeg",
-    "bannerImage": "assets/img/products/dhk/campaign-2/for-website/product-banner/black-denim-shorts-banner.jpeg",
+    "bannerImage": "assets/img/products/dhk/campaign-2/for-website/product-image/black-denim-shorts-1.jpeg",
     "images": [
       "assets/img/products/dhk/campaign-2/crop-shirt-demin-shorts-blank/redo/brown-top-demin-2.jpeg",
       "assets/img/products/dhk/campaign-2/product-shots/shorts/black-denim-shorts-front-3.jpeg",
