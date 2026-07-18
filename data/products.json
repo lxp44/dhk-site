@@ -536,8 +536,11 @@
     "hoverImage": "assets/img/products/dhk/campaign-2/for-website/hover-image/batman-4ever-hover.jpeg",
     "bannerImage": "assets/img/products/dhk/campaign-2/for-website/comic-collection/batman-4ever.jpeg",
     "images": [
-      "assets/img/products/dhk/campaign-2/product-shots/comic-summer/batman-front-2.jpeg",
-      "assets/img/products/dhk/campaign-2/for-website/comic-collection/batman-4ever-hover.jpeg"
+      "assets/img/products/dhk/campaign-2/comic-summer/9-16/black-close-5.jpeg",
+      "assets/img/products/dhk/campaign-2/comic-summer/9-16/black-close-1.jpeg",
+      "assets/img/products/dhk/campaign-2/comic-summer/9-16/black-close-3.jpeg",
+      "assets/img/products/dhk/campaign-2/product-shots/comic-summer/batman-front-3.jpeg",
+      "assets/img/products/dhk/campaign-2/product-shots/comic-summer/batman-back-3.jpeg"
     ],
     "options": [
       "S",
@@ -562,8 +565,11 @@
     "hoverImage": "assets/img/products/dhk/campaign-2/for-website/hover-image/joker-hover.jpeg",
     "bannerImage": "assets/img/products/dhk/campaign-2/for-website/comic-collection/the-joker.jpeg",
     "images": [
-      "assets/img/products/dhk/campaign-2/product-shots/comic-summer/joker-front-2.jpeg",
-      "assets/img/products/dhk/campaign-2/for-website/comic-collection/the-joker-hover.jpeg"
+      "assets/img/products/dhk/campaign-2/comic-summer/9-16/cream-close-1.jpeg",
+      "assets/img/products/dhk/campaign-2/comic-summer/9-16/cream-close-5.jpeg",
+      "assets/img/products/dhk/campaign-2/comic-summer/9-16/cream-close-6.jpeg",
+      "assets/img/products/dhk/campaign-2/product-shots/comic-summer/joker-front-3.jpeg",
+      "assets/img/products/dhk/campaign-2/product-shots/comic-summer/joker-back-3.jpeg"
     ],
     "options": [
       "S",
@@ -588,6 +594,9 @@
     "hoverImage": "assets/img/products/dhk/campaign-2/for-website/hover-image/spawn-hover.jpeg",
     "bannerImage": "assets/img/products/dhk/campaign-2/for-website/comic-collection/spawn.jpeg",
     "images": [
+      "assets/img/products/dhk/campaign-2/comic-summer/9-16/grey-close-1.jpeg",
+      "assets/img/products/dhk/campaign-2/comic-summer/9-16/grey-close-4.jpeg",
+      "assets/img/products/dhk/campaign-2/comic-summer/9-16/grey-close-6.jpeg",
       "assets/img/products/dhk/campaign-2/product-shots/comic-summer/spawn-front-2.jpeg",
       "assets/img/products/dhk/campaign-2/product-shots/comic-summer/spawn-back-3.jpeg"
     ],
