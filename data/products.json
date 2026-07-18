@@ -563,7 +563,7 @@
     "color": "Cream",
     "thumbnail": "assets/img/products/dhk/campaign-2/product-shots/comic-summer/joker-front-2.jpeg",
     "hoverImage": "assets/img/products/dhk/campaign-2/for-website/hover-image/joker-hover.jpeg",
-    "bannerImage":"assets/img/products/dhk/campaign-2/product-shots/comic-summer/joker-front-1.jpeg",
+    "bannerImage":"assets/img/products/dhk/campaign-2/product-shots/comic-summer/joker-front.jpeg",
     "images": [
       "assets/img/products/dhk/campaign-2/comic-summer/9-16/cream-close-1.jpeg",
       "assets/img/products/dhk/campaign-2/comic-summer/9-16/cream-close-5.jpeg",
@@ -592,7 +592,7 @@
     "color": "Dark Space Grey",
     "thumbnail": "assets/img/products/dhk/campaign-2/product-shots/comic-summer/spawn-front-2.jpeg",
     "hoverImage": "assets/img/products/dhk/campaign-2/for-website/hover-image/spawn-hover.jpeg",
-    "bannerImage": "assets/img/products/dhk/campaign-2/product-shots/comic-summer/spawn-front-2.jpeg",
+    "bannerImage": "assets/img/products/dhk/campaign-2/product-shots/comic-summer/spawn-front-1.jpeg",
     "images": [
       "assets/img/products/dhk/campaign-2/comic-summer/9-16/grey-close-1.jpeg",
       "assets/img/products/dhk/campaign-2/comic-summer/9-16/grey-close-4.jpeg",
@@ -848,9 +848,9 @@
     "collection": "blanks",
     "collectionLabel": "DHK Blanks",
     "color": "Light Wash",
-    "thumbnail": "assets/img/products/dhk/campaign-2/for-website/product-image/blue-denim-shorts-2.jpeg",
+    "thumbnail": "assets/img/products/dhk/campaign-2/product-image/blue-denim-shorts-2.jpeg",
     "hoverImage": "assets/img/products/dhk/campaign-2/for-website/hover-image/blue-denim-shorts-hover.jpeg",
-    "bannerImage": "assets/img/products/dhk/campaign-2/for-website/product-image/blue-denim-shorts-1.jpeg",
+    "bannerImage": "assets/img/products/dhk/campaign-2/product-image/blue-denim-shorts-1.jpeg",
     "images": [
       "assets/img/products/dhk/campaign-2/comic-summer/grey-comic-set-1.jpeg",
       "assets/img/products/dhk/campaign-2/comic-summer/grey-comic-set-3.jpeg",
@@ -877,9 +877,9 @@
     "collection": "blanks",
     "collectionLabel": "DHK Blanks",
     "color": "Vintage Black",
-    "thumbnail": "assets/img/products/dhk/campaign-2/for-website/product-image/black-denim-shorts-2.jpeg",
+    "thumbnail": "assets/img/products/dhk/campaign-2/product-image/black-denim-shorts-2.jpeg",
     "hoverImage": "assets/img/products/dhk/campaign-2/for-website/hover-image/black-denim-shorts-hover.jpeg",
-    "bannerImage": "assets/img/products/dhk/campaign-2/for-website/product-image/black-denim-shorts-1.jpeg",
+    "bannerImage": "assets/img/products/dhk/campaign-/product-image/black-denim-shorts-1.jpeg",
     "images": [
       "assets/img/products/dhk/campaign-2/crop-shirt-demin-shorts-blank/redo/brown-top-demin-2.jpeg",
       "assets/img/products/dhk/campaign-2/product-shots/shorts/black-denim-shorts-front-3.jpeg",
