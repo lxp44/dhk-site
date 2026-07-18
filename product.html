@@ -223,75 +223,12 @@
       }
     }
 
-    /* Product sizing */
+    /* Product page shell — detailed layout lives in css/styles.css */
     #product-root {
-      max-width: 980px;
-      margin: 0 auto;
-      padding: 12px 16px;
-    }
-
-    #product-root .product-main img,
-    #product-root .product-main video,
-    #product-root .gallery-main img,
-    #product-root .gallery-main video {
-      max-width: 520px;
-      max-height: 520px;
       width: 100%;
-      height: auto;
-      object-fit: contain;
-      display: block;
-      margin: 0 auto 18px;
-      border-radius: 12px;
-      background: #0f0f0f;
-      box-shadow: 0 0 20px rgba(255,255,255,.08);
-    }
-
-    #product-root .product-main img[style],
-    #product-root .product-main video[style],
-    #product-root .gallery-main img[style],
-    #product-root .gallery-main video[style] {
-      max-width: 520px !important;
-      max-height: 520px !important;
-    }
-
-    #product-root .thumbnails img,
-    #product-root .thumbs img,
-    #product-root .gallery-thumbs img,
-    #product-root [class*="thumb"] img,
-    #product-root [class*="thumbnail"] img,
-    #product-root img[data-thumb],
-    #product-root img[aria-role="thumbnail"] {
-      width: 88px;
-      height: 88px;
-      object-fit: cover;
-      border-radius: 8px;
-      margin: 6px;
-      opacity: .9;
-      transition: transform .2s ease, opacity .2s ease, box-shadow .2s ease;
-    }
-
-    #product-root .thumbnails img:hover,
-    #product-root .thumbs img:hover,
-    #product-root .gallery-thumbs img:hover,
-    #product-root [class*="thumb"] img:hover,
-    #product-root [class*="thumbnail"] img:hover,
-    #product-root img[data-thumb]:hover,
-    #product-root img[aria-role="thumbnail"]:hover {
-      transform: translateY(-2px);
-      opacity: 1;
-      box-shadow: 0 0 10px rgba(255,255,255,.18);
-    }
-
-    #product-root .actions,
-    #product-root .options {
-      text-align: center;
-    }
-
-    @media (max-width: 900px) {
-      #product-root {
-        max-width: 100%;
-        padding: 0 0 24px;
-      }
+      max-width: none;
+      margin: 0;
+      padding: 0;
     }
 
     /* Product bats layer */
@@ -332,7 +269,7 @@
   </style>
 </head>
 
-<body class="template-page">
+<body class="template-page product-page">
   <div class="lightning-flash"></div>
   <div id="storm-overlay"><canvas id="rain-canvas"></canvas></div>
 
