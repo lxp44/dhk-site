@@ -419,7 +419,7 @@
         </button>
 
         <p class="pdv2-policy">
-          Final sale. No returns or exchanges.
+      
         </p>
 
         <div class="pdv2-tabs">
