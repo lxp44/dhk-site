@@ -524,6 +524,84 @@
     "url": "product.html?id=dark-harlem-nylon-knight-joggers",
     "stripePriceId": "price_1TJPUf0cfsBzY9CjnYrTt8z3"
   },
+   {
+    "id": "batman-4ever",
+    "title": "Batman 4ever",
+    "displayTitle": "Batman 4ever",
+    "price": 11000,
+    "collection": "comic",
+    "collectionLabel": "DHK Comic Book Summer Collection",
+    "color": "Black",
+    "thumbnail": "assets/img/products/dhk/campaign-2/product-shots/comic-summer/batman-front-2.jpeg",
+    "hoverImage": "assets/img/products/dhk/campaign-2/for-website/hover-image/batman-4ever-hover.jpeg",
+    "bannerImage": "assets/img/products/dhk/campaign-2/for-website/comic-collection/batman-4ever.jpeg",
+    "images": [
+      "assets/img/products/dhk/campaign-2/product-shots/comic-summer/batman-front-2.jpeg",
+      "assets/img/products/dhk/campaign-2/for-website/comic-collection/batman-4ever-hover.jpeg"
+    ],
+    "options": [
+      "S",
+      "M",
+      "L",
+      "XL",
+      "2XL"
+    ],
+    "description": "<div class=\"product-desc-wrap\"><p>A heavyweight sleeveless tank built with a boxy silhouette, raw armholes, and a vintage comic-inspired Batman 4ever graphic.</p><h3>Details</h3><ul><li>• 400 GSM heavyweight cotton</li><li>• 100% cotton</li><li>• Boxy sleeveless silhouette</li><li>• Raw-edge armholes</li><li>• Ribbed collar</li><li>• Vintage distressed finish</li><li>• Color: Black</li></ul></div>",
+    "url": "product.html?id=batman-4ever",
+    "stripePriceId": ""
+  },
+  {
+    "id": "the-joker",
+    "title": "The Joker",
+    "displayTitle": "The Joker",
+    "price": 11000,
+    "collection": "comic",
+    "collectionLabel": "DHK Comic Book Summer Collection",
+    "color": "Cream",
+    "thumbnail": "assets/img/products/dhk/campaign-2/product-shots/comic-summer/joker-front-2.jpeg",
+    "hoverImage": "assets/img/products/dhk/campaign-2/for-website/hover-image/joker-hover.jpeg",
+    "bannerImage": "assets/img/products/dhk/campaign-2/for-website/comic-collection/the-joker.jpeg",
+    "images": [
+      "assets/img/products/dhk/campaign-2/product-shots/comic-summer/joker-front-2.jpeg",
+      "assets/img/products/dhk/campaign-2/for-website/comic-collection/the-joker-hover.jpeg"
+    ],
+    "options": [
+      "S",
+      "M",
+      "L",
+      "XL",
+      "2XL"
+    ],
+    "description": "<div class=\"product-desc-wrap\"><p>A heavyweight sleeveless tank built with a boxy silhouette, raw armholes, and a distressed Joker graphic made for the DHK Comic Book Summer Collection.</p><h3>Details</h3><ul><li>• 400 GSM heavyweight cotton</li><li>• 100% cotton</li><li>• Boxy sleeveless silhouette</li><li>• Raw-edge armholes</li><li>• Ribbed collar</li><li>• Vintage distressed finish</li><li>• Color: Cream</li></ul></div>",
+    "url": "product.html?id=the-joker",
+    "stripePriceId": ""
+  },
+  {
+    "id": "spawn",
+    "title": "Spawn",
+    "displayTitle": "Spawn",
+    "price": 11000,
+    "collection": "comic",
+    "collectionLabel": "DHK Comic Book Summer Collection",
+    "color": "Dark Space Grey",
+    "thumbnail": "assets/img/products/dhk/campaign-2/product-shots/comic-summer/spawn-front-2.jpeg",
+    "hoverImage": "assets/img/products/dhk/campaign-2/for-website/hover-image/spawn-hover.jpeg",
+    "bannerImage": "assets/img/products/dhk/campaign-2/for-website/comic-collection/spawn.jpeg",
+    "images": [
+      "assets/img/products/dhk/campaign-2/product-shots/comic-summer/spawn-front-2.jpeg",
+      "assets/img/products/dhk/campaign-2/for-website/comic-collection/spawn-hover.jpeg"
+    ],
+    "options": [
+      "S",
+      "M",
+      "L",
+      "XL",
+      "2XL"
+    ],
+    "description": "<div class=\"product-desc-wrap\"><p>A heavyweight sleeveless tank in dark space grey, cut with a boxy shape and finished with a distressed Spawn graphic.</p><h3>Details</h3><ul><li>• 400 GSM heavyweight cotton</li><li>• 100% cotton</li><li>• Boxy sleeveless silhouette</li><li>• Raw-edge armholes</li><li>• Ribbed collar</li><li>• Vintage distressed finish</li><li>• Color: Dark Space Grey</li></ul></div>",
+    "url": "product.html?id=spawn",
+    "stripePriceId": ""
+  },
   {
     "id": "brown-raw-edge-crop-shirt",
     "title": "Brown Raw Edge Crop Shirt",
