@@ -1,556 +1,805 @@
 // js/product.js
-// Render product.html from data/products.json using ?handle=<id> or ?id=<id>
+// DHK product page renderer — banner + editorial gallery + sticky details.
 
 (() => {
+  "use strict";
+
   if ("scrollRestoration" in history) {
     history.scrollRestoration = "manual";
   }
 
   const PRICE = (cents) =>
-    (Number(cents || 0) / 100).toLocaleString(undefined, {
+    (Number(cents || 0) / 100).toLocaleString("en-US", {
       style: "currency",
       currency: "USD",
     });
 
-  const SALE_ACTIVE = false;
-  const SALE_PERCENT = 40;
-
-  function applySale(cents) {
-    if (!SALE_ACTIVE) return Number(cents || 0);
-    return Math.round(Number(cents || 0) * (1 - SALE_PERCENT / 100));
-  }
-
   function getHandle() {
-    const p = new URLSearchParams(location.search);
-    return p.get("handle") || p.get("id");
+    const params = new URLSearchParams(window.location.search);
+
+    return (
+      params.get("handle") ||
+      params.get("id")
+    );
   }
 
   function normalizeProducts(data) {
-    if (Array.isArray(data)) return data;
-    if (data && Array.isArray(data.products)) return data.products;
+    if (Array.isArray(data)) {
+      return data;
+    }
+
+    if (
+      data &&
+      Array.isArray(data.products)
+    ) {
+      return data.products;
+    }
+
     return [];
   }
 
   async function loadProducts() {
-    const res = await fetch("data/products.json?ts=" + Date.now(), {
-      cache: "no-cache",
-    });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const raw = await res.json();
-    return normalizeProducts(raw);
-  }
-
-  const BATS_SRC = "assets/video/bat.mp4";
-
-  function safePlay(video) {
-    try {
-      const p = video.play();
-      if (p && p.catch) p.catch(() => {});
-    } catch (e) {}
-  }
-
-  function absolutizeSrc(src) {
-    if (!src) return src;
-    if (/^(https?:)?\/\//i.test(src)) return src;
-    if (src.startsWith("/")) return src;
-    return "./" + src.replace(/^\.\//, "");
-  }
-
-  function forceVideoAttrs(video) {
-    if (!video.classList.contains("bats-bg")) video.classList.add("bats-bg");
-
-    try {
-      video.muted = true;
-      video.defaultMuted = true;
-      video.loop = true;
-      video.autoplay = true;
-      video.playsInline = true;
-
-      video.setAttribute("muted", "");
-      video.setAttribute("loop", "");
-      video.setAttribute("autoplay", "");
-      video.setAttribute("playsinline", "");
-      video.setAttribute("webkit-playsinline", "");
-      video.setAttribute("disablepictureinpicture", "");
-      video.setAttribute(
-        "controlslist",
-        "nodownload noplaybackrate noremoteplayback"
-      );
-
-      video.preload = "metadata";
-      video.setAttribute("preload", "metadata");
-      video.style.pointerEvents = "none";
-    } catch (e) {}
-  }
-
-  function buildBatsVideo() {
-    const v = document.createElement("video");
-    v.className = "bats-bg";
-    forceVideoAttrs(v);
-
-    const s = document.createElement("source");
-    s.src = absolutizeSrc(BATS_SRC);
-    s.type = "video/mp4";
-    v.appendChild(s);
-
-    return v;
-  }
-
-  function ensureBatsBackground(descEl) {
-    if (!descEl) return null;
-
-    let layer = descEl.querySelector(".bats-layer");
-    if (!layer) {
-      layer = document.createElement("div");
-      layer.className = "bats-layer";
-      descEl.insertBefore(layer, descEl.firstChild);
-    }
-
-    let v =
-      descEl.querySelector("video.bats-bg") ||
-      layer.querySelector("video.bats-bg");
-
-    if (v) {
-      forceVideoAttrs(v);
-
-      const source = v.querySelector("source");
-      if (source?.getAttribute("src")) {
-        source.setAttribute("src", absolutizeSrc(source.getAttribute("src")));
-      } else if (v.getAttribute("src")) {
-        v.setAttribute("src", absolutizeSrc(v.getAttribute("src")));
+    const response = await fetch(
+      `data/products.json?ts=${Date.now()}`,
+      {
+        cache: "no-cache",
       }
-
-      if (v.parentElement !== layer) layer.appendChild(v);
-
-      try {
-        v.load();
-      } catch (e) {}
-      return v;
-    }
-
-    v = buildBatsVideo();
-    layer.appendChild(v);
-
-    try {
-      v.load();
-    } catch (e) {}
-
-    return v;
-  }
-
-  function hydrateBats(descEl) {
-    const v = ensureBatsBackground(descEl);
-    if (!v) return;
-
-    const tryPlay = () => safePlay(v);
-
-    tryPlay();
-    setTimeout(tryPlay, 150);
-    setTimeout(tryPlay, 600);
-    setTimeout(tryPlay, 1400);
-
-    v.addEventListener("loadedmetadata", tryPlay, { once: true });
-    v.addEventListener("canplay", tryPlay, { once: true });
-
-    v.addEventListener(
-      "error",
-      () => {
-        const src =
-          v.getAttribute("src") ||
-          v.querySelector("source")?.getAttribute("src") ||
-          "(no src)";
-        console.warn("[BATS] video error for:", src, v.error);
-      },
-      { once: true }
     );
 
-    document.addEventListener("visibilitychange", () => {
-      if (document.visibilityState === "visible") tryPlay();
-    });
-
-    if ("IntersectionObserver" in window && descEl) {
-      const io = new IntersectionObserver(
-        (entries) => {
-          if (entries.some((e) => e.isIntersecting)) {
-            tryPlay();
-            io.disconnect();
-          }
-        },
-        { threshold: 0.15 }
+    if (!response.ok) {
+      throw new Error(
+        `Unable to load products: HTTP ${response.status}`
       );
-      io.observe(descEl);
     }
 
-    const gesture = () => {
-      tryPlay();
-      window.removeEventListener("pointerdown", gesture);
-      window.removeEventListener("touchstart", gesture);
-      window.removeEventListener("click", gesture);
-      window.removeEventListener("keydown", gesture);
-      window.removeEventListener("scroll", gesture);
-    };
+    const data = await response.json();
 
-    window.addEventListener("pointerdown", gesture, {
-      once: true,
-      passive: true,
-    });
-    window.addEventListener("touchstart", gesture, {
-      once: true,
-      passive: true,
-    });
-    window.addEventListener("click", gesture, { once: true });
-    window.addEventListener("keydown", gesture, { once: true });
-    window.addEventListener("scroll", gesture, {
-      once: true,
-      passive: true,
-    });
+    return normalizeProducts(data);
+  }
+
+  function escapeHTML(value) {
+    return String(value ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/\"/g, "&quot;")
+      .replace(/'/g, "&#039;");
   }
 
   function splitDescription(html) {
-    if (!html || typeof html !== "string") {
+    if (
+      !html ||
+      typeof html !== "string"
+    ) {
       return {
-        introHtml: "<p style='opacity:.8'>No description available.</p>",
+        introHtml:
+          "<p>No description available.</p>",
         detailsHtml: "",
       };
     }
 
-    const wrapper = document.createElement("div");
+    const wrapper =
+      document.createElement("div");
+
     wrapper.innerHTML = html;
 
-    const video = wrapper.querySelector("video.bats-bg, video");
-    if (video) video.remove();
+    wrapper
+      .querySelectorAll("video")
+      .forEach((video) => {
+        video.remove();
+      });
 
-    const heading = wrapper.querySelector("h3");
-    const list = wrapper.querySelector("ul");
+    const heading =
+      wrapper.querySelector("h3");
 
-    let introHtml = "";
-    let detailsHtml = "";
+    const list =
+      wrapper.querySelector("ul");
 
-    if (heading && list) {
-      heading.remove();
-      list.remove();
-      introHtml = wrapper.innerHTML.trim();
-      detailsHtml = `
-        <h3>${heading.outerHTML.replace(/^<h3[^>]*>|<\/h3>$/g, "").trim()}</h3>
-        ${list.outerHTML}
-      `;
-    } else {
-      introHtml = wrapper.innerHTML.trim();
-      detailsHtml = "";
+    if (!heading || !list) {
+      return {
+        introHtml:
+          wrapper.innerHTML.trim(),
+
+        detailsHtml: "",
+      };
     }
 
+    const headingText =
+      heading.textContent.trim();
+
+    const listHTML =
+      list.outerHTML;
+
+    heading.remove();
+    list.remove();
+
     return {
-      introHtml,
-      detailsHtml,
+      introHtml:
+        wrapper.innerHTML.trim(),
+
+      detailsHtml: `
+        <h3>
+          ${escapeHTML(headingText)}
+        </h3>
+
+        ${listHTML}
+      `,
     };
   }
 
-  function renderDesktopGallery(imgs, title) {
-    if (!imgs.length) {
+  function getGalleryImages(product) {
+    const source =
+      Array.isArray(product.images)
+        ? product.images
+        : [];
+
+    const images =
+      source.filter(Boolean);
+
+    if (
+      !images.length &&
+      product.thumbnail
+    ) {
+      images.push(
+        product.thumbnail
+      );
+    }
+
+    return [
+      ...new Set(images),
+    ];
+  }
+
+  function shouldShowBanner(product) {
+    const collection = String(
+      product.collection || ""
+    ).toLowerCase();
+
+    return (
+      Boolean(product.bannerImage) ||
+      collection === "comic" ||
+      collection === "blanks"
+    );
+  }
+
+  function renderBanner(
+    product,
+    fallbackImage
+  ) {
+    if (
+      !shouldShowBanner(product)
+    ) {
+      return "";
+    }
+
+    const bannerImage =
+      product.bannerImage ||
+      fallbackImage;
+
+    if (!bannerImage) {
+      return "";
+    }
+
+    const title =
+      product.displayTitle ||
+      product.title ||
+      "Product";
+
+    return `
+      <section
+        class="pdv2-banner"
+        aria-label="${escapeHTML(title)} campaign image"
+      >
+        <img
+          src="${escapeHTML(bannerImage)}"
+          alt="${escapeHTML(title)} campaign"
+          fetchpriority="high"
+        >
+      </section>
+    `;
+  }
+
+  function renderDesktopGallery(
+    images,
+    title
+  ) {
+    if (!images.length) {
       return `
-        <div class="fog-gallery">
-          <div class="fog-image-wrap">
-            <div style="height:600px;background:#111;border-radius:12px;"></div>
-          </div>
-        </div>
+        <div
+          class="pdv2-gallery-placeholder"
+          aria-hidden="true"
+        ></div>
+      `;
+    }
+
+    return images
+      .map(
+        (src, index) => `
+          <figure
+            class="pdv2-gallery-item"
+          >
+            <img
+              src="${escapeHTML(src)}"
+              alt="${escapeHTML(title)} view ${index + 1}"
+              loading="${index === 0 ? "eager" : "lazy"}"
+              decoding="async"
+            >
+          </figure>
+        `
+      )
+      .join("");
+  }
+
+  function renderMobileGallery(
+    images,
+    title
+  ) {
+    if (!images.length) {
+      return `
+        <div
+          class="pdv2-mobile-placeholder"
+          aria-hidden="true"
+        ></div>
       `;
     }
 
     return `
-      <div class="fog-gallery desktop-gallery">
-        ${imgs
+      <div
+        class="pdv2-mobile-track"
+        id="mobile-product-track"
+      >
+        ${images
           .map(
-            (src, i) => `
-          <div class="fog-image-wrap">
-            <img
-              src="${src}"
-              alt="${title} image ${i + 1}"
-              loading="${i === 0 ? "eager" : "lazy"}"
-              class="fog-image"
-            >
-          </div>
-        `
+            (src, index) => `
+              <figure
+                class="pdv2-mobile-slide"
+              >
+                <img
+                  src="${escapeHTML(src)}"
+                  alt="${escapeHTML(title)} view ${index + 1}"
+                  loading="${index === 0 ? "eager" : "lazy"}"
+                  decoding="async"
+                >
+              </figure>
+            `
           )
           .join("")}
       </div>
+
+      <div
+        class="pdv2-mobile-count"
+        aria-hidden="true"
+      >
+        <span id="pdv2-current-slide">
+          1
+        </span>
+
+        /
+
+        ${images.length}
+      </div>
     `;
   }
 
-  function renderMobileGallery(imgs, title) {
-    if (!imgs.length) {
-      return `
-        <div class="mobile-product-gallery">
-          <div class="mobile-product-track" id="mobile-product-track">
-            <div class="mobile-product-slide">
-              <div style="height:420px;background:#111;"></div>
-            </div>
-          </div>
-        </div>
-      `;
+  function renderOptions(
+    product,
+    suffix = ""
+  ) {
+    const options =
+      Array.isArray(product.options)
+        ? product.options
+        : [];
+
+    if (!options.length) {
+      return "";
     }
 
+    const selectId =
+      `pd-option${suffix}`;
+
     return `
-      <div class="mobile-product-gallery">
-        <div class="mobile-product-track" id="mobile-product-track">
-          ${imgs
+      <div class="pdv2-option-group">
+        <div class="pdv2-option-heading">
+          <label for="${selectId}">
+            Size
+          </label>
+
+          <button
+            class="pdv2-size-guide"
+            type="button"
+            data-size-guide
+          >
+            View size guide
+          </button>
+        </div>
+
+        <select
+          id="${selectId}"
+          class="pdv2-select"
+          aria-label="Choose size"
+        >
+          <option
+            value=""
+            selected
+            disabled
+          >
+            Select a size
+          </option>
+
+          ${options
             .map(
-              (src, i) => `
-            <div class="mobile-product-slide">
-              <img
-                src="${src}"
-                alt="${title} image ${i + 1}"
-                loading="${i === 0 ? "eager" : "lazy"}"
-                class="mobile-product-image"
-              >
-            </div>
-          `
+              (option) => `
+                <option
+                  value="${escapeHTML(option)}"
+                >
+                  ${escapeHTML(option)}
+                </option>
+              `
             )
             .join("")}
+        </select>
+      </div>
+    `;
+  }
+
+  function renderProductInfo(
+    product,
+    introHtml,
+    detailsHtml,
+    mobile = false
+  ) {
+    const suffix =
+      mobile
+        ? "-mobile"
+        : "";
+
+    const title =
+      product.displayTitle ||
+      product.title ||
+      "Product";
+
+    const brand =
+      product.brandLabel ||
+      "Dark Harlem Knight";
+
+    const collectionLabel =
+      product.collectionLabel ||
+      brand;
+
+    const hasOptions =
+      Array.isArray(product.options) &&
+      product.options.length > 0;
+
+    return `
+      <div class="pdv2-info-inner">
+        <p class="pdv2-eyebrow">
+          ${escapeHTML(collectionLabel)}
+        </p>
+
+        <h1 class="pdv2-title">
+          ${escapeHTML(title)}
+        </h1>
+
+        <p class="pdv2-price">
+          ${PRICE(product.price)}
+        </p>
+
+        <div class="pdv2-rule"></div>
+
+        ${
+          product.color
+            ? `
+              <p class="pdv2-color">
+                <span>Color:</span>
+
+                ${escapeHTML(product.color)}
+              </p>
+
+              <div class="pdv2-rule"></div>
+            `
+            : ""
+        }
+
+        ${renderOptions(
+          product,
+          suffix
+        )}
+
+        <button
+          id="add-to-cart${suffix}"
+          class="pdv2-add"
+          type="button"
+          data-id="${escapeHTML(product.id)}"
+        >
+          ${
+            hasOptions
+              ? "Select a size"
+              : "Add to cart"
+          }
+        </button>
+
+        <p class="pdv2-policy">
+          Final sale. No returns or exchanges.
+        </p>
+
+        <div class="pdv2-tabs">
+          <details open>
+            <summary>
+              Description
+            </summary>
+
+            <div class="pdv2-panel">
+              ${introHtml}
+            </div>
+          </details>
+
+          <details>
+            <summary>
+              Size &amp; Fit
+            </summary>
+
+            <div class="pdv2-panel">
+              ${
+                detailsHtml ||
+                `
+                  <p>
+                    See the selected product details
+                    for sizing and construction
+                    information.
+                  </p>
+                `
+              }
+            </div>
+          </details>
+
+          <details>
+            <summary>
+              Shipping &amp; Returns
+            </summary>
+
+            <div class="pdv2-panel">
+              <p>
+                Orders are processed after
+                payment confirmation. Tracking
+                is provided when the order ships.
+              </p>
+            </div>
+          </details>
         </div>
       </div>
     `;
   }
 
-  function bindMobileStickyBar(root) {
-    const buyBar = root.querySelector(".mobile-buybar");
-    const stopTarget = root.querySelector(".mobile-buybar-stop");
-    const mq = window.matchMedia("(max-width: 900px)");
-
-    if (!buyBar || !stopTarget) return;
-
-    let observer = null;
-
-    const setDesktopState = () => {
-      buyBar.classList.remove("is-fixed", "is-released");
-    };
-
-    const setMobileObserver = () => {
-      buyBar.classList.add("is-fixed");
-      buyBar.classList.remove("is-released");
-
-      if (observer) observer.disconnect();
-
-      observer = new IntersectionObserver(
-        (entries) => {
-          const entry = entries[0];
-          const shouldRelease = entry.isIntersecting;
-
-          buyBar.classList.toggle("is-fixed", !shouldRelease);
-          buyBar.classList.toggle("is-released", shouldRelease);
-        },
-        {
-          root: null,
-          threshold: 0,
-          rootMargin: "0px 0px -120px 0px",
-        }
+  function bindMobileCounter(root) {
+    const track =
+      root.querySelector(
+        "#mobile-product-track"
       );
 
-      observer.observe(stopTarget);
-    };
-
-    const updateMode = () => {
-      if (!mq.matches) {
-        if (observer) observer.disconnect();
-        setDesktopState();
-        return;
-      }
-      setMobileObserver();
-    };
-
-    updateMode();
-
-    if (typeof mq.addEventListener === "function") {
-      mq.addEventListener("change", updateMode);
-    } else if (typeof mq.addListener === "function") {
-      mq.addListener(updateMode);
-    }
-
-    window.addEventListener("resize", updateMode, { passive: true });
-  }
-
-  function render(root, p) {
-    const hasOptions = Array.isArray(p.options) && p.options.length > 0;
-    const imgs = Array.isArray(p.images) ? p.images : [];
-    const firstImg = imgs.length ? imgs[0] : "";
-
-    const brandLabel = p.brandLabel || "DarkHarlemKnight";
-    const displayTitle = p.displayTitle || "@ product title";
-
-    const originalPriceCents = Number(p.price) || 0;
-    const salePriceCents = applySale(originalPriceCents);
-    const showSale = SALE_ACTIVE && salePriceCents !== originalPriceCents;
-
-    const priceHtml = showSale
-      ? `
-        <span class="price-original" style="opacity:.55;text-decoration:line-through;margin-right:6px;">
-          ${PRICE(originalPriceCents)}
-        </span>
-        <span class="price-sale">
-          ${PRICE(salePriceCents)}
-        </span>
-      `
-      : `
-        <span class="price-regular">
-          ${PRICE(originalPriceCents)}
-        </span>
-      `;
-
-    const { introHtml, detailsHtml } = splitDescription(p.description);
-
-    root.innerHTML = `
-      <article class="product-detail fog-layout">
-        <div class="mobile-only-block">
-          ${renderMobileGallery(imgs, displayTitle)}
-        </div>
-
-        <div class="desktop-only-block">
-          ${renderDesktopGallery(imgs, displayTitle)}
-        </div>
-
-        <div class="fog-info">
-          <div class="pd__brand-glow">${brandLabel}</div>
-
-          <h1 class="pd__title mobile-title-only">${displayTitle}</h1>
-          <h1 class="pd__title desktop-title-only">${displayTitle}</h1>
-
-          <div class="pd__price">
-            ${priceHtml}
-          </div>
-
-          <div class="pd__intro mobile-intro-only">
-            ${introHtml || "<p style='opacity:.8'>No description available.</p>"}
-          </div>
-
-          <div class="pd__mobile-accordion mobile-only-block">
-            <details class="pd__accordion">
-              <summary>Details</summary>
-              <div class="pd__accordion-body">
-                ${detailsHtml || "<p style='opacity:.8'>No details available.</p>"}
-              </div>
-            </details>
-          </div>
-
-          <div class="mobile-buybar mobile-only-block">
-            ${
-              hasOptions
-                ? `
-              <label class="pd__opt-label mobile-buybar__field">
-                Size
-                <select id="pd-option-mobile" class="pd__select" aria-label="Choose size">
-                  ${p.options.map((o) => `<option value="${o}">${o}</option>`).join("")}
-                </select>
-              </label>
-            `
-                : ""
-            }
-
-            <button id="add-to-cart-mobile" class="button button--secondary mobile-buybar__button" data-id="${p.id}" type="button">
-              Add to cart
-            </button>
-          </div>
-
-          <div class="mobile-buybar-stop mobile-only-block" aria-hidden="true"></div>
-
-          ${
-            hasOptions
-              ? `
-            <label class="pd__opt-label desktop-only-block">
-              Size
-              <select id="pd-option" class="pd__select" aria-label="Choose size">
-                ${p.options.map((o) => `<option value="${o}">${o}</option>`).join("")}
-              </select>
-            </label>
-          `
-              : ""
-          }
-
-          <button id="add-to-cart" class="button button--secondary desktop-only-block" data-id="${p.id}" type="button">
-            Add to cart
-          </button>
-
-          <div class="pd__desktop-desc desktop-desc-only">
-            <div id="pd-desc" class="pd__desc">
-              ${introHtml || "<p style='opacity:.8'>No description available.</p>"}
-            </div>
-
-            <details class="pd__accordion pd__accordion--desktop">
-              <summary>Details</summary>
-              <div class="pd__accordion-body">
-                ${detailsHtml || "<p style='opacity:.8'>No details available.</p>"}
-              </div>
-            </details>
-          </div>
-        </div>
-      </article>
-    `;
-
-    const descEl = root.querySelector("#pd-desc");
-    if (descEl) hydrateBats(descEl);
-
-    root.querySelectorAll(".pd__accordion-body").forEach((el) => {
-      hydrateBats(el);
-    });
-
-    const priceForCart = showSale ? salePriceCents : originalPriceCents;
-
-    function addCurrentProductToCart(selectId) {
-      const sizeSel = root.querySelector(selectId);
-      const variant = sizeSel ? sizeSel.value : null;
-
-      window.Cart?.add(
-        {
-          id: p.id,
-          title: displayTitle,
-          priceCents: priceForCart,
-          thumbnail: p.thumbnail || firstImg || "",
-          variant,
-          url: `product.html?id=${p.id}`,
-          stripePriceId: p.stripePriceId || null,
-        },
-        { open: true }
+    const current =
+      root.querySelector(
+        "#pdv2-current-slide"
       );
-    }
 
-    root.querySelector("#add-to-cart")?.addEventListener("click", () => {
-      addCurrentProductToCart("#pd-option");
-    });
-
-    root.querySelector("#add-to-cart-mobile")?.addEventListener("click", () => {
-      addCurrentProductToCart("#pd-option-mobile");
-    });
-
-    bindMobileStickyBar(root);
-  }
-
-  document.addEventListener("DOMContentLoaded", async () => {
-    const root = document.getElementById("product-root");
-    if (!root) return;
-
-    const handle = getHandle();
-    if (!handle) {
-      root.innerHTML = '<p style="color:#ccc">Product not found.</p>';
+    if (!track || !current) {
       return;
     }
 
-    try {
-      const products = await loadProducts();
-      const p = products.find((x) => x.id === handle || x.handle === handle);
-      if (!p) {
-        root.innerHTML = '<p style="color:#ccc">Product not found.</p>';
+    const update = () => {
+      const width =
+        track.clientWidth || 1;
+
+      const slide =
+        Math.round(
+          track.scrollLeft / width
+        ) + 1;
+
+      current.textContent =
+        String(slide);
+    };
+
+    track.addEventListener(
+      "scroll",
+      update,
+      {
+        passive: true,
+      }
+    );
+
+    update();
+  }
+
+  function bindCart(
+    root,
+    product,
+    images
+  ) {
+    function addToCart(
+      suffix = ""
+    ) {
+      const select =
+        root.querySelector(
+          `#pd-option${suffix}`
+        );
+
+      const hasOptions =
+        Array.isArray(product.options) &&
+        product.options.length > 0;
+
+      const variant =
+        select
+          ? select.value
+          : null;
+
+      const button =
+        root.querySelector(
+          `#add-to-cart${suffix}`
+        );
+
+      if (
+        hasOptions &&
+        !variant
+      ) {
+        if (select) {
+          select.focus();
+        }
+
+        if (button) {
+          button.textContent =
+            "Select a size";
+        }
+
         return;
       }
 
-      render(root, p);
+      if (
+        !window.Cart ||
+        typeof window.Cart.add !== "function"
+      ) {
+        console.error(
+          "Cart system is unavailable."
+        );
 
-      window.scrollTo(0, 0);
-
-      const mobileTrack = document.getElementById("mobile-product-track");
-      if (mobileTrack) {
-        mobileTrack.scrollLeft = 0;
+        return;
       }
-    } catch (e) {
-      console.error("Error loading product:", e);
-      root.innerHTML = '<p style="color:#ccc">Error loading product.</p>';
+
+      window.Cart.add(
+        {
+          id: product.id,
+
+          title:
+            product.displayTitle ||
+            product.title,
+
+          priceCents:
+            Number(product.price) || 0,
+
+          thumbnail:
+            product.thumbnail ||
+            images[0] ||
+            "",
+
+          variant,
+
+          url:
+            `product.html?id=${encodeURIComponent(
+              product.id
+            )}`,
+
+          stripePriceId:
+            product.stripePriceId ||
+            null,
+        },
+        {
+          open: true,
+        }
+      );
     }
-  });
+
+    root
+      .querySelector(
+        "#add-to-cart"
+      )
+      ?.addEventListener(
+        "click",
+        () => {
+          addToCart("");
+        }
+      );
+
+    root
+      .querySelector(
+        "#add-to-cart-mobile"
+      )
+      ?.addEventListener(
+        "click",
+        () => {
+          addToCart("-mobile");
+        }
+      );
+
+    root
+      .querySelectorAll(
+        ".pdv2-select"
+      )
+      .forEach((select) => {
+        select.addEventListener(
+          "change",
+          () => {
+            const suffix =
+              select.id.endsWith(
+                "-mobile"
+              )
+                ? "-mobile"
+                : "";
+
+            const button =
+              root.querySelector(
+                `#add-to-cart${suffix}`
+              );
+
+            if (button) {
+              button.textContent =
+                "Add to cart";
+            }
+          }
+        );
+      });
+  }
+
+  function render(
+    root,
+    product
+  ) {
+    const images =
+      getGalleryImages(product);
+
+    const title =
+      product.displayTitle ||
+      product.title ||
+      "Product";
+
+    const {
+      introHtml,
+      detailsHtml,
+    } = splitDescription(
+      product.description
+    );
+
+    root.innerHTML = `
+      <article
+        class="pdv2-product"
+        data-collection="${escapeHTML(
+          product.collection || "dhk"
+        )}"
+      >
+        ${renderBanner(
+          product,
+          images[0]
+        )}
+
+        <section
+          class="pdv2-desktop"
+          aria-label="Product details"
+        >
+          <div class="pdv2-desktop-grid">
+            <div class="pdv2-gallery-column">
+              ${renderDesktopGallery(
+                images,
+                title
+              )}
+            </div>
+
+            <aside class="pdv2-info-column">
+              ${renderProductInfo(
+                product,
+                introHtml,
+                detailsHtml,
+                false
+              )}
+            </aside>
+          </div>
+        </section>
+
+        <section
+          class="pdv2-mobile"
+          aria-label="Product details"
+        >
+          <div class="pdv2-mobile-gallery">
+            ${renderMobileGallery(
+              images,
+              title
+            )}
+          </div>
+
+          <div class="pdv2-mobile-info">
+            ${renderProductInfo(
+              product,
+              introHtml,
+              detailsHtml,
+              true
+            )}
+          </div>
+        </section>
+      </article>
+    `;
+
+    bindMobileCounter(root);
+
+    bindCart(
+      root,
+      product,
+      images
+    );
+  }
+
+  document.addEventListener(
+    "DOMContentLoaded",
+    async () => {
+      const root =
+        document.getElementById(
+          "product-root"
+        );
+
+      if (!root) {
+        return;
+      }
+
+      const handle =
+        getHandle();
+
+      if (!handle) {
+        root.innerHTML = `
+          <p class="pdv2-error">
+            Product not found.
+          </p>
+        `;
+
+        return;
+      }
+
+      try {
+        const products =
+          await loadProducts();
+
+        const product =
+          products.find(
+            (item) =>
+              item.id === handle ||
+              item.handle === handle
+          );
+
+        if (!product) {
+          root.innerHTML = `
+            <p class="pdv2-error">
+              Product not found.
+            </p>
+          `;
+
+          return;
+        }
+
+        render(
+          root,
+          product
+        );
+
+        window.scrollTo(
+          0,
+          0
+        );
+      } catch (error) {
+        console.error(
+          "Error loading product:",
+          error
+        );
+
+        root.innerHTML = `
+          <p class="pdv2-error">
+            Error loading product.
+          </p>
+        `;
+      }
+    }
+  );
 })();
