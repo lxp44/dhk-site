@@ -629,6 +629,91 @@
       min-width: 0 !important;
     }
 
+    .blank-product-card {
+      width: 100%;
+      min-width: 0;
+    }
+
+    .blank-product-card__link {
+      display: block;
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .blank-product-card__media {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+      background: #e9e9e7;
+    }
+
+    .blank-product-card__image {
+      position: absolute;
+      inset: 0;
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      transition:
+        opacity 0.32s ease,
+        transform 0.42s ease;
+    }
+
+    .blank-product-card__image--primary {
+      opacity: 1;
+    }
+
+    .blank-product-card__image--hover {
+      opacity: 0;
+    }
+
+    .blank-product-card:hover
+      .blank-product-card__image--primary,
+    .blank-product-card:focus-within
+      .blank-product-card__image--primary {
+      opacity: 0;
+    }
+
+    .blank-product-card:hover
+      .blank-product-card__image--hover,
+    .blank-product-card:focus-within
+      .blank-product-card__image--hover {
+      opacity: 1;
+    }
+
+    .blank-product-card:hover
+      .blank-product-card__image,
+    .blank-product-card:focus-within
+      .blank-product-card__image {
+      transform: scale(1.012);
+    }
+
+    .blank-product-card__info {
+      padding: 15px 0 0;
+      text-align: left;
+    }
+
+    .blank-product-card__title {
+      margin: 0 0 7px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(17px, 1.55vw, 23px);
+      font-weight: 400;
+      line-height: 1.25;
+      letter-spacing: 0.005em;
+      color: #171717;
+    }
+
+    .blank-product-card__price {
+      margin: 0;
+      font-family: "Roboto", sans-serif;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.4;
+      color: rgba(17, 17, 17, 0.68);
+    }
+
     .blanks-products .product-card a,
     .blanks-products .card-wrapper a,
     .blanks-products .shop-card a {
@@ -1272,7 +1357,14 @@
         </p>
       </header>
 
-      <!-- shop.js renders products here -->
+      <!--
+        PRODUCT PHOTOS ARE CONTROLLED IN THE BLANK_PRODUCTS ARRAY
+        INSIDE THE PAGE SCRIPT NEAR THE BOTTOM OF THIS FILE.
+
+        Each product has:
+        image: "path/to/main-photo.jpeg"
+        hoverImage: "path/to/hover-photo.jpeg"
+      -->
 
       <div
         id="shop-grid"
@@ -1615,7 +1707,6 @@
   <script src="js/announce.js"></script>
   <script src="js/cart.js"></script>
   <script src="js/search.js"></script>
-  <script src="js/shop.js"></script>
   <script src="js/newsletter.js"></script>
   <script src="js/storm_shopify_style.js"></script>
 
@@ -1623,525 +1714,341 @@
        PAGE CONTROLS
   ======================================================== -->
 
-<script>
-  (() => {
-    "use strict";
+  <script>
+    (() => {
+      "use strict";
 
-    /* =====================================================
-       YEAR
-    ===================================================== */
+      /* =====================================================
+         YEAR
+      ===================================================== */
 
-    const yearElement = document.getElementById("year");
+      const yearElement = document.getElementById("year");
 
-    if (yearElement) {
-      yearElement.textContent = new Date().getFullYear();
-    }
+      if (yearElement) {
+        yearElement.textContent = new Date().getFullYear();
+      }
 
-    /* =====================================================
-       HAMBURGER OPEN + CLOSE
-    ===================================================== */
+      /* =====================================================
+         HAMBURGER OPEN + CLOSE
+      ===================================================== */
 
-    const menuDetails = document.getElementById(
-      "Details-menu-drawer-container"
-    );
-
-    const menuSummary = menuDetails
-      ? menuDetails.querySelector("summary")
-      : null;
-
-    function syncMenuState() {
-      if (!menuDetails || !menuSummary) return;
-
-      const isOpen = menuDetails.open;
-
-      menuSummary.setAttribute(
-        "aria-expanded",
-        isOpen ? "true" : "false"
+      const menuDetails = document.getElementById(
+        "Details-menu-drawer-container"
       );
 
-      menuSummary.setAttribute(
-        "aria-label",
-        isOpen ? "Close menu" : "Open menu"
-      );
+      const menuSummary = menuDetails
+        ? menuDetails.querySelector("summary")
+        : null;
 
-      document.body.classList.toggle(
-        "menu-open",
-        isOpen
-      );
-    }
+      function syncMenuState() {
+        if (!menuDetails || !menuSummary) return;
 
-    if (menuDetails) {
-      menuDetails.addEventListener(
-        "toggle",
-        syncMenuState
-      );
+        const isOpen = menuDetails.open;
 
-      syncMenuState();
-    }
+        menuSummary.setAttribute(
+          "aria-expanded",
+          isOpen ? "true" : "false"
+        );
 
-    if (menuSummary && menuDetails) {
-      menuSummary.addEventListener(
-        "click",
-        () => {
-          window.setTimeout(syncMenuState, 0);
-        }
-      );
-    }
+        menuSummary.setAttribute(
+          "aria-label",
+          isOpen ? "Close menu" : "Open menu"
+        );
 
-    /* =====================================================
-       SHOP ALL SUBMENU
-    ===================================================== */
+        document.body.classList.toggle(
+          "menu-open",
+          isOpen
+        );
+      }
 
-    const shopMenuToggle = document.getElementById(
-      "shop-menu-toggle"
-    );
+      if (menuDetails) {
+        menuDetails.addEventListener(
+          "toggle",
+          syncMenuState
+        );
 
-    const shopSubmenu = document.getElementById(
-      "shop-submenu"
-    );
+        syncMenuState();
+      }
 
-    if (shopMenuToggle && shopSubmenu) {
-      shopMenuToggle.addEventListener(
-        "click",
-        () => {
-          const isOpen =
-            shopMenuToggle.getAttribute(
-              "aria-expanded"
-            ) === "true";
-
-          shopMenuToggle.setAttribute(
-            "aria-expanded",
-            isOpen ? "false" : "true"
-          );
-
-          shopSubmenu.classList.toggle(
-            "is-open",
-            !isOpen
-          );
-        }
-      );
-    }
-
-    /* =====================================================
-       CLOSE MENU AFTER SELECTING A LINK
-    ===================================================== */
-
-    document
-      .querySelectorAll("#menu-drawer a")
-      .forEach((link) => {
-        link.addEventListener(
+      if (menuSummary && menuDetails) {
+        menuSummary.addEventListener(
           "click",
           () => {
-            if (!menuDetails) return;
-
-            menuDetails.open = false;
-            syncMenuState();
+            window.setTimeout(syncMenuState, 0);
           }
         );
-      });
-
-    /* =====================================================
-       DHK BLANKS PRODUCT CONFIG
-    ===================================================== */
-
-    const BLANK_PRODUCTS = [
-      {
-        title: "Brown Raw Edge Crop Shirt",
-        aliases: [
-          "brown raw edge crop shirt",
-          "brown raw edge cropped shirt",
-          "brown crop shirt"
-        ],
-        price: 90
-      },
-      {
-        title: "Grey Raw Edge Crop Shirt",
-        aliases: [
-          "grey raw edge crop shirt",
-          "gray raw edge crop shirt",
-          "grey raw edge cropped shirt",
-          "gray raw edge cropped shirt",
-          "grey crop shirt",
-          "gray crop shirt"
-        ],
-        price: 90
-      },
-      {
-        title: "White Raw Edge Crop Shirt",
-        aliases: [
-          "white raw edge crop shirt",
-          "white raw edge cropped shirt",
-          "white crop shirt"
-        ],
-        price: 90
-      },
-      {
-        title: "Heavyweight Cream Shorts",
-        aliases: [
-          "heavyweight cream shorts",
-          "heavy weight cream shorts",
-          "cream heavyweight shorts",
-          "beige heavy shorts",
-          "heavyweight beige shorts"
-        ],
-        price: 90
-      },
-      {
-        title: "Black Washed Oversized Hoodie",
-        aliases: [
-          "black washed oversized hoodie",
-          "black washed oversize hoodie",
-          "black oversized washed hoodie",
-          "black oversize hoodie"
-        ],
-        price: 120
-      },
-      {
-        title: "Grey Washed Oversized Hoodie",
-        aliases: [
-          "grey washed oversized hoodie",
-          "gray washed oversized hoodie",
-          "grey washed oversize hoodie",
-          "gray washed oversize hoodie",
-          "grey oversized washed hoodie",
-          "gray oversized washed hoodie",
-          "grey oversize hoodie",
-          "gray oversize hoodie"
-        ],
-        price: 120
-      },
-      {
-        title: "Black Washed Oversized Sweatpants",
-        aliases: [
-          "black washed oversized sweatpants",
-          "black washed oversize sweatpants",
-          "black oversized sweatpants",
-          "black oversize bottoms",
-          "black oversized bottoms"
-        ],
-        price: 110
-      },
-      {
-        title: "Grey Washed Oversized Sweatpants",
-        aliases: [
-          "grey washed oversized sweatpants",
-          "gray washed oversized sweatpants",
-          "grey washed oversize sweatpants",
-          "gray washed oversize sweatpants",
-          "grey oversized sweatpants",
-          "gray oversized sweatpants",
-          "grey oversize bottoms",
-          "gray oversize bottoms",
-          "grey oversized bottoms",
-          "gray oversized bottoms"
-        ],
-        price: 110
-      },
-      {
-        title: "Light Washed Denim Baggy Shorts",
-        aliases: [
-          "light washed denim baggy shorts",
-          "light wash denim baggy shorts",
-          "light washed baggy denim shorts",
-          "blue denim shorts"
-        ],
-        price: 90
-      },
-      {
-        title: "Black Vintage-Wash Denim Baggy Shorts",
-        aliases: [
-          "black vintage wash denim baggy shorts",
-          "black vintage-wash denim baggy shorts",
-          "black vintaged wash denim baggy shorts",
-          "black vintaged-wash denim baggy shorts",
-          "black washed denim baggy shorts",
-          "black denim shorts"
-        ],
-        price: 90
       }
-    ];
 
-    const shopGrid =
-      document.getElementById("shop-grid");
+      /* =====================================================
+         SHOP ALL SUBMENU
+      ===================================================== */
 
-    const productCount =
-      document.getElementById(
+      const shopMenuToggle = document.getElementById(
+        "shop-menu-toggle"
+      );
+
+      const shopSubmenu = document.getElementById(
+        "shop-submenu"
+      );
+
+      if (shopMenuToggle && shopSubmenu) {
+        shopMenuToggle.addEventListener(
+          "click",
+          () => {
+            const isOpen =
+              shopMenuToggle.getAttribute(
+                "aria-expanded"
+              ) === "true";
+
+            shopMenuToggle.setAttribute(
+              "aria-expanded",
+              isOpen ? "false" : "true"
+            );
+
+            shopSubmenu.classList.toggle(
+              "is-open",
+              !isOpen
+            );
+          }
+        );
+      }
+
+      document
+        .querySelectorAll("#menu-drawer a")
+        .forEach((link) => {
+          link.addEventListener(
+            "click",
+            () => {
+              if (!menuDetails) return;
+
+              menuDetails.open = false;
+              syncMenuState();
+            }
+          );
+        });
+
+      /* =====================================================
+         DHK BLANKS PRODUCTS
+         =====================================================
+
+         THIS IS WHERE YOU ADD OR CHANGE THE PRODUCT PHOTOS.
+
+         "image"      = the normal product photo
+         "hoverImage" = the second photo shown on hover
+
+         Change only the file path between the quotation marks.
+      ===================================================== */
+
+      const BLANK_PRODUCTS = [
+        {
+          id: "brown-raw-edge-crop-shirt",
+          title: "Brown Raw Edge Crop Shirt",
+          price: 90,
+          image:
+            "assets/img/products/dhk/campaign-2/for-website/product-image/brown-crop.jpeg",
+          hoverImage:
+            "assets/img/products/dhk/campaign-2/for-website/hover-image/brown-crop-hover.jpeg"
+        },
+        {
+          id: "grey-raw-edge-crop-shirt",
+          title: "Grey Raw Edge Crop Shirt",
+          price: 90,
+          image:
+            "assets/img/products/dhk/campaign-2/for-website/product-image/grey-crop.jpeg",
+          hoverImage:
+            "assets/img/products/dhk/campaign-2/for-website/hover-image/grey-crop-hover.jpeg"
+        },
+        {
+          id: "white-raw-edge-crop-shirt",
+          title: "White Raw Edge Crop Shirt",
+          price: 90,
+          image:
+            "assets/img/products/dhk/campaign-2/for-website/product-image/white-crop.jpeg",
+          hoverImage:
+            "assets/img/products/dhk/campaign-2/for-website/hover-image/white-crop-hover.jpeg"
+        },
+        {
+          id: "heavyweight-cream-shorts",
+          title: "Heavyweight Cream Shorts",
+          price: 90,
+          image:
+            "assets/img/products/dhk/campaign-2/for-website/product-image/beige-heavy-shorts.jpeg",
+          hoverImage:
+            "assets/img/products/dhk/campaign-2/for-website/hover-image/beige-heavy-shorts-hover.jpeg"
+        },
+        {
+          id: "black-washed-oversized-hoodie",
+          title: "Black Washed Oversized Hoodie",
+          price: 120,
+          image:
+            "assets/img/products/dhk/campaign-2/for-website/product-image/black-oversize-hoodie.jpeg",
+          hoverImage:
+            "assets/img/products/dhk/campaign-2/for-website/hover-image/black-oversize-hoodie-hover.jpeg"
+        },
+        {
+          id: "grey-washed-oversized-hoodie",
+          title: "Grey Washed Oversized Hoodie",
+          price: 120,
+          image:
+            "assets/img/products/dhk/campaign-2/for-website/product-image/grey-oversize-hoodie.jpeg",
+          hoverImage:
+            "assets/img/products/dhk/campaign-2/for-website/hover-image/grey-oversize-hoodie-hover.jpeg"
+        },
+        {
+          id: "black-washed-oversized-sweatpants",
+          title: "Black Washed Oversized Sweatpants",
+          price: 110,
+          image:
+            "assets/img/products/dhk/campaign-2/for-website/product-image/black-oversize-bottoms.jpeg",
+          hoverImage:
+            "assets/img/products/dhk/campaign-2/for-website/hover-image/black-oversize-bottoms-hover.jpeg"
+        },
+        {
+          id: "grey-washed-oversized-sweatpants",
+          title: "Grey Washed Oversized Sweatpants",
+          price: 110,
+          image:
+            "assets/img/products/dhk/campaign-2/for-website/product-image/grey-oversize-bottoms.jpeg",
+          hoverImage:
+            "assets/img/products/dhk/campaign-2/for-website/hover-image/grey-oversize-bottoms-hover.jpeg"
+        },
+        {
+          id: "light-washed-denim-baggy-shorts",
+          title: "Light Washed Denim Baggy Shorts",
+          price: 90,
+          image:
+            "assets/img/products/dhk/campaign-2/for-website/product-image/blue-denim-shorts.jpeg",
+          hoverImage:
+            "assets/img/products/dhk/campaign-2/for-website/hover-image/blue-denim-shorts-hover.jpeg"
+        },
+        {
+          id: "black-vintage-wash-denim-baggy-shorts",
+          title: "Black Vintage-Wash Denim Baggy Shorts",
+          price: 90,
+          image:
+            "assets/img/products/dhk/campaign-2/for-website/product-image/black-denim-shorts.jpeg",
+          hoverImage:
+            "assets/img/products/dhk/campaign-2/for-website/hover-image/black-denim-shorts-hover.jpeg"
+        }
+      ];
+
+      const shopGrid = document.getElementById(
+        "shop-grid"
+      );
+
+      const productCount = document.getElementById(
         "blanks-product-count"
       );
 
-    const emptyMessage =
-      document.getElementById(
+      const emptyMessage = document.getElementById(
         "blanks-products-empty"
       );
 
-    let filteringScheduled = false;
-    let filteringComplete = false;
-
-    function normalize(value) {
-      return String(value || "")
-        .toLowerCase()
-        .replace(/&amp;/g, "and")
-        .replace(/&/g, "and")
-        .replace(/[–—-]/g, " ")
-        .replace(/[^a-z0-9\s]/g, " ")
-        .replace(/\s+/g, " ")
-        .trim();
-    }
-
-    function getCardTitleElement(card) {
-      if (!card) return null;
-
-      return card.querySelector(
-        [
-          ".product-card__title",
-          ".card__heading",
-          ".card-information__text",
-          ".shop-card__title",
-          ".product-title",
-          "[data-product-title]"
-        ].join(",")
-      );
-    }
-
-    function getCardTitle(card) {
-      const titleElement =
-        getCardTitleElement(card);
-
-      if (titleElement) {
-        return normalize(
-          titleElement.textContent
-        );
-      }
-
-      const productLink =
-        card.querySelector(
-          'a[href*="product.html?id="]'
-        );
-
-      if (
-        productLink &&
-        productLink.getAttribute("aria-label")
-      ) {
-        return normalize(
-          productLink.getAttribute(
-            "aria-label"
-          )
-        );
-      }
-
-      return normalize(card.textContent);
-    }
-
-    function findBlankProduct(card) {
-      const cardTitle = getCardTitle(card);
-
-      if (!cardTitle) return null;
-
-      return (
-        BLANK_PRODUCTS.find((product) =>
-          product.aliases.some((alias) => {
-            const normalizedAlias =
-              normalize(alias);
-
-            return (
-              cardTitle === normalizedAlias ||
-              cardTitle.includes(
-                normalizedAlias
-              ) ||
-              normalizedAlias.includes(
-                cardTitle
-              )
-            );
-          })
-        ) || null
-      );
-    }
-
-    function formatMoney(amount) {
-      return new Intl.NumberFormat(
-        "en-US",
-        {
-          style: "currency",
-          currency: "USD",
-          minimumFractionDigits: 2
-        }
-      ).format(amount);
-    }
-
-    function updateCardPrice(
-      card,
-      amount
-    ) {
-      const formattedPrice =
-        formatMoney(amount);
-
-      const priceElements =
-        card.querySelectorAll(
-          [
-            ".price",
-            ".product-card__price",
-            ".shop-card__price",
-            ".product-price",
-            "[data-product-price]"
-          ].join(",")
-        );
-
-      priceElements.forEach(
-        (priceElement) => {
-          const amountElement =
-            priceElement.querySelector(
-              [
-                ".price-item",
-                ".money",
-                "[data-price]"
-              ].join(",")
-            );
-
-          if (amountElement) {
-            amountElement.textContent =
-              formattedPrice;
-          } else {
-            priceElement.textContent =
-              formattedPrice;
+      function formatMoney(amount) {
+        return new Intl.NumberFormat(
+          "en-US",
+          {
+            style: "currency",
+            currency: "USD",
+            minimumFractionDigits: 2
           }
-        }
-      );
-
-      card.setAttribute(
-        "data-collection-price",
-        String(amount)
-      );
-    }
-
-    function updateProductCount(count) {
-      if (!productCount) return;
-
-      productCount.textContent =
-        count === 1
-          ? "1 Piece"
-          : `${count} Pieces`;
-    }
-
-    function filterBlankProducts() {
-      filteringScheduled = false;
-
-      if (!shopGrid) return;
-
-      const cards = Array.from(
-        shopGrid.children
-      );
-
-      if (cards.length === 0) {
-        if (
-          !filteringComplete &&
-          productCount
-        ) {
-          productCount.textContent =
-            "Loading";
-        }
-
-        return;
+        ).format(amount);
       }
 
-      let visibleCount = 0;
+      function escapeHTML(value) {
+        return String(value || "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+      }
 
-      cards.forEach((card) => {
-        const product =
-          findBlankProduct(card);
+      function renderBlankProducts() {
+        if (!shopGrid) return;
 
-        const shouldShow =
-          Boolean(product);
+        if (!BLANK_PRODUCTS.length) {
+          shopGrid.innerHTML = "";
 
-        card.hidden = !shouldShow;
+          if (productCount) {
+            productCount.textContent = "0 Pieces";
+          }
 
-        card.style.display = shouldShow
-          ? ""
-          : "none";
-
-        if (!product) {
-          card.style.removeProperty(
-            "order"
-          );
+          if (emptyMessage) {
+            emptyMessage.classList.add(
+              "is-visible"
+            );
+          }
 
           return;
         }
 
-        const productIndex =
-          BLANK_PRODUCTS.indexOf(product);
+        shopGrid.innerHTML = BLANK_PRODUCTS
+          .map((product) => {
+            const href =
+              `product.html?id=${encodeURIComponent(
+                product.id
+              )}`;
 
-        card.style.order =
-          String(productIndex);
+            return `
+              <article
+                class="blank-product-card"
+                data-product-id="${escapeHTML(product.id)}"
+              >
+                <a
+                  class="blank-product-card__link"
+                  href="${href}"
+                  aria-label="View ${escapeHTML(product.title)}"
+                >
+                  <div class="blank-product-card__media">
+                    <img
+                      class="blank-product-card__image blank-product-card__image--primary"
+                      src="${escapeHTML(product.image)}"
+                      alt="${escapeHTML(product.title)}"
+                      loading="lazy"
+                      decoding="async"
+                    />
 
-        card.setAttribute(
-          "data-blank-product",
-          normalize(product.title)
-        );
+                    <img
+                      class="blank-product-card__image blank-product-card__image--hover"
+                      src="${escapeHTML(product.hoverImage || product.image)}"
+                      alt=""
+                      aria-hidden="true"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </div>
 
-        updateCardPrice(
-          card,
-          product.price
-        );
+                  <div class="blank-product-card__info">
+                    <h3 class="blank-product-card__title">
+                      ${escapeHTML(product.title)}
+                    </h3>
 
-        visibleCount += 1;
-      });
+                    <p class="blank-product-card__price">
+                      ${formatMoney(product.price)}
+                    </p>
+                  </div>
+                </a>
+              </article>
+            `;
+          })
+          .join("");
 
-      filteringComplete = true;
-
-      updateProductCount(
-        visibleCount
-      );
-
-      if (emptyMessage) {
-        emptyMessage.classList.toggle(
-          "is-visible",
-          visibleCount === 0
-        );
-      }
-    }
-
-    function scheduleFiltering() {
-      if (filteringScheduled) return;
-
-      filteringScheduled = true;
-
-      window.requestAnimationFrame(
-        filterBlankProducts
-      );
-    }
-
-    if (shopGrid) {
-      const gridObserver =
-        new MutationObserver(
-          scheduleFiltering
-        );
-
-      gridObserver.observe(
-        shopGrid,
-        {
-          childList: true,
-          subtree: true
+        if (productCount) {
+          productCount.textContent =
+            `${BLANK_PRODUCTS.length} Pieces`;
         }
-      );
 
-      scheduleFiltering();
+        if (emptyMessage) {
+          emptyMessage.classList.remove(
+            "is-visible"
+          );
+        }
+      }
 
-      window.setTimeout(
-        scheduleFiltering,
-        250
-      );
-
-      window.setTimeout(
-        scheduleFiltering,
-        750
-      );
-
-      window.setTimeout(
-        scheduleFiltering,
-        1500
-      );
-    }
-  })();
-</script>
+      renderBlankProducts();
+    })();
+  </script>
   <!-- =======================================================
        CART DRAWER
   ======================================================== -->
